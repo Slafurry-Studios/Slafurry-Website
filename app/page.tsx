@@ -7,7 +7,7 @@ export default async function Home() {
         <main className="w-screen h-screen flex relative overflow-hidden">
             
             <div className="absolute inset-0 flex justify-center items-center">
-                <div className="relative w-[700px] h-[500px] max-w-[90vw] max-h-[90vh]">
+                <div className="relative w-[800px] h-[500px] max-w-[90vw] max-h-[90vh]">
                     <Image 
                         src={centerImg}
                         alt="Main text"
@@ -19,7 +19,7 @@ export default async function Home() {
                 </div>
             </div>
 
-            <div className="absolute bottom-4 right-4 w-48 h-48"> 
+            <div className="absolute bottom-0 right-4 md:right-16 w-64 h-64"> 
                 <Image 
                     src={bottomRightImg}
                     alt="Gato"

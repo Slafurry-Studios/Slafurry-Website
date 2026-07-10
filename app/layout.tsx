@@ -19,8 +19,8 @@ const FALLBACK = {
     title: "SLAFURRY STUDIOS",
     description: "The joke went too far. Now we are going professional.",
     siteUrl: "https://slafurrystudios.com",
-    ogImage: "/images/og-preview.png",
-    twitterImage: "/images/og-preview.png",
+    ogImage: "/images/Slafurry Logo.png",
+    twitterImage: "/images/Slafurry Logo.png",
     googleVerifyId: "",
 }
 
