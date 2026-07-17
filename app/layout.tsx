@@ -16,7 +16,7 @@ const poppins = Poppins({
 });
 
 const FALLBACK = {
-    title: "SLAFURRY STUDIOS",
+    title: "Slafurry Studios",
     description: "The joke went too far. Now we are going professional.",
     siteUrl: "https://slafurrystudios.com",
     ogImage: "/images/Slafurry Logo.png",
