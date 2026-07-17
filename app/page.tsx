@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 import welcomeToOurTopSecretWebsite from "@/public/images/phase 2/welcome to our top secret website.png";
 import youCanMailUsAt from "@/public/images/phase 2/you can mail us at.png";
@@ -18,7 +18,7 @@ import businessInquiries from "@/public/images/phase 2/business inquiries.png";
 import zenWasHere from "@/public/images/phase 2/zen was here.png";
 import sorryFont from "@/public/images/phase 2/sorry font.png";
 
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
@@ -29,7 +29,7 @@ const containerVariants = {
     },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
     hidden: { opacity: 0, y: 15 },
     visible: {
         opacity: 1,
