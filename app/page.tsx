@@ -87,7 +87,7 @@ export default function Home() {
                             className="w-full h-auto"
                         />
                     </div>
-                    <div className="flex items-center gap-12 sm:gap-20 md:gap-24">
+                    <div className="flex items-center gap-12 md:gap-24">
                         <a 
                             href="https://slafurrystudios.itch.io/" 
                             target="_blank" 
