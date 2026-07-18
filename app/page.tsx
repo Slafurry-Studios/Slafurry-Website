@@ -43,7 +43,7 @@ const itemVariants: Variants = {
 
 export default function Home() {
     return (
-        <main className="w-screen h-screen flex flex-col items-center justify-center md:justify-start gap-4 md:gap-6 p-6 md:p-4 relative overflow-hidden bg-white selection:bg-none">
+        <main className="w-screen h-screen flex flex-col items-center justify-start md:justify-start gap-4 md:gap-6 p-6 md:p-4 relative overflow-hidden bg-white selection:bg-none">
 
             <motion.div 
                 initial={{ opacity: 0, y: -15 }}
