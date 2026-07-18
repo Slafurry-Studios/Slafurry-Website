@@ -49,7 +49,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: -15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: "easeOut" }}
-                className="w-[380px] sm:w-[680px] md:w-[860px] shrink-0 pt-10"
+                className="w-[380px] sm:w-[680px] md:w-[860px] shrink-0 pt-2 md:pt-10"
             >
                 <Image
                     src={welcomeToOurTopSecretWebsite}
