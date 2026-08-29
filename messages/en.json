@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "home": "Home",
+    "games": "Games",
+    "devlog": "Devlog",
+    "news": "News",
+    "press": "Press",
+    "contact": "Contact"
+  },
+  "settings": {
+    "language": "Language",
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode",
+    "seriousMode": "Serious Mode",
+    "muteSound": "Mute Sound",
+    "on": "ON",
+    "off": "OFF"
+  },
+  "home": {
+    "eyebrow": "Indie Game Developers",
+    "playOurGames": "Play Our Games",
+    "upcomingProject": "Upcoming Project",
+    "about": "About",
+    "projects": "Projects",
+    "joinCommunity": "Join Our Community",
+    "contactUs": "Contact Us",
+    "news": "News"
+  },
+  "contact": {
+    "heading": "Get in touch",
+    "headingSerious": "Contact us",
+    "sayHello": "Say Hello",
+    "sayHelloDesc": "General questions, fan mail",
+    "businessInquiries": "Business Inquiries",
+    "businessInquiriesDesc": "Partnerships, press, publishing",
+    "formDivider": "Or send a message directly",
+    "name": "Your name",
+    "email": "Your email",
+    "category": "Category",
+    "categoryGeneral": "General inquiry",
+    "categoryBusiness": "Business inquiry",
+    "categoryPress": "Press request",
+    "message": "What's on your mind",
+    "send": "Send message",
+    "sentSuccess": "Message sent! We'll get back to you soon."
+  },
+  "post": {
+    "by": "by",
+    "comments": "Comments",
+    "more": "More",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "new": "NEW!",
+    "unlocked": "Unlocked",
+    "locked": "Locked",
+    "secret": "???",
+    "redeemCode": "Got a code?",
+    "redeem": "Redeem",
+    "redeemSuccess": "Achievement unlocked!",
+    "redeemFail": "That code doesn't seem right."
+  },
+  "footer": {
+    "rights": "All Rights Reserved."
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "This page went unfinished too",
+    "body": "Looks like you're lost. Maybe this page got caught in a joke that went too far.",
+    "backHome": "Back to Home",
+    "viewGames": "View Our Games"
+  },
+  "serverError": {
+    "title": "500",
+    "heading": "Something broke behind the scenes",
+    "body": "Our server is having a moment. Try again in a bit.",
+    "backHome": "Back to Home"
+  },
+  "cookieConsent": {
+    "text": "We use functional cookies to remember your theme and preferences, and optional analytics cookies to understand how the site is used.",
+    "accept": "Accept",
+    "reject": "Reject"
+  }
+}
