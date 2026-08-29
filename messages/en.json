@@ -44,6 +44,12 @@
     "intro": "Official updates, unofficial rambling, and the occasional announcement we probably should have made sooner.",
     "readAtOwnRisk": "Read at your own risk."
   },
+  "press": {
+    "releasesHeading": "Press Releases",
+    "kitHeading": "Press Kit",
+    "download": "Download",
+    "inquiries": "For press inquiries, contact us at"
+  },
   "contact": {
     "heading": "Get in touch",
     "headingSerious": "Contact us",

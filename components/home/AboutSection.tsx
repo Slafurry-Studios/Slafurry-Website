@@ -23,10 +23,8 @@ export function AboutSection() {
               Milky Way
               <span className="joke-only">
                 {" "}
-                with an experience of <StudioAgeCounter />,
-              </span>{" "}
-              driven by passion and the urge to create unforgettable
-              journeys.
+                with an experience of <StudioAgeCounter />
+              </span>.
             </p>
             <p>
               We are a group of developers, artists, and creators brought
