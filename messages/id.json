@@ -39,6 +39,11 @@
     "intro": "Catatan semi-jujur soal apa yang kami bangun, apa yang kami rusak, dan apa yang kami janjikan diperbaiki \"update berikutnya.\"",
     "subIntro": "Progress gak dijamin, hiburan lumayan dijamin."
   },
+  "news": {
+    "heading": "Berita & Artikel",
+    "intro": "Update resmi, celotehan gak resmi, dan sesekali pengumuman yang harusnya udah kami kabarin dari kemarin.",
+    "readAtOwnRisk": "Baca dengan risiko sendiri."
+  },
   "contact": {
     "heading": "Hubungi Kami",
     "headingSerious": "Kontak",
