@@ -26,6 +26,14 @@
     "contactUs": "Contact Us",
     "news": "News"
   },
+  "games": {
+    "heading": "Check Out Our Games",
+    "status": {
+      "RELEASED": "Released",
+      "UPCOMING": "Upcoming",
+      "IN_DEVELOPMENT": "In Development"
+    }
+  },
   "contact": {
     "heading": "Get in touch",
     "headingSerious": "Contact us",

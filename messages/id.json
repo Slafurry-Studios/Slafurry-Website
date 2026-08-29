@@ -26,6 +26,14 @@
     "contactUs": "Hubungi Kami",
     "news": "Berita"
   },
+  "games": {
+    "heading": "Cek Game Kami",
+    "status": {
+      "RELEASED": "Rilis",
+      "UPCOMING": "Segera Hadir",
+      "IN_DEVELOPMENT": "Dalam Pengembangan"
+    }
+  },
   "contact": {
     "heading": "Hubungi Kami",
     "headingSerious": "Kontak",

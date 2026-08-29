@@ -7,6 +7,7 @@ type PillButtonProps = {
   onClick?: () => void;
   variant?: "outline" | "solid";
   icon?: ReactNode;
+  iconPosition?: "left" | "right";
   className?: string;
   type?: "button" | "submit";
 };
@@ -20,6 +21,7 @@ export function PillButton({
   onClick,
   variant = "outline",
   icon,
+  iconPosition = "left",
   className = "",
   type = "button",
 }: PillButtonProps) {
@@ -30,12 +32,18 @@ export function PillButton({
       ? "border-neutral-900 bg-neutral-900 text-white hover:bg-neutral-700 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
       : "border-neutral-900 text-neutral-900 hover:bg-neutral-900 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900";
 
-  const content = (
-    <>
-      {icon}
-      {children}
-    </>
-  );
+  const content =
+    iconPosition === "right" ? (
+      <>
+        {children}
+        {icon}
+      </>
+    ) : (
+      <>
+        {icon}
+        {children}
+      </>
+    );
 
   if (href) {
     return (
