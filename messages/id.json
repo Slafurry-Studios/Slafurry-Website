@@ -34,6 +34,11 @@
       "IN_DEVELOPMENT": "Dalam Pengembangan"
     }
   },
+  "devlog": {
+    "heading": "Devlog",
+    "intro": "Catatan semi-jujur soal apa yang kami bangun, apa yang kami rusak, dan apa yang kami janjikan diperbaiki \"update berikutnya.\"",
+    "subIntro": "Progress gak dijamin, hiburan lumayan dijamin."
+  },
   "contact": {
     "heading": "Hubungi Kami",
     "headingSerious": "Kontak",
