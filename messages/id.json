@@ -93,6 +93,7 @@
     "title": "404",
     "heading": "Halaman ini juga belum selesai",
     "body": "Kayaknya kamu nyasar. Mungkin halaman ini kena joke yang kebablasan juga.",
+    "bodySerious": "Halaman yang kamu cari tidak ada atau mungkin sudah dipindahkan.",
     "backHome": "Kembali ke Beranda",
     "viewGames": "Lihat Game Kami"
   },
@@ -100,6 +101,8 @@
     "title": "500",
     "heading": "Ada yang rusak di belakang layar",
     "body": "Server kami lagi bermasalah. Coba lagi sebentar lagi.",
+    "bodySerious": "Terjadi kesalahan tak terduga. Silakan coba lagi sesaat lagi.",
+    "tryAgain": "Coba lagi",
     "backHome": "Kembali ke Beranda"
   },
   "cookieConsent": {

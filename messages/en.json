@@ -93,6 +93,7 @@
     "title": "404",
     "heading": "This page went unfinished too",
     "body": "Looks like you're lost. Maybe this page got caught in a joke that went too far.",
+    "bodySerious": "The page you're looking for doesn't exist or may have been moved.",
     "backHome": "Back to Home",
     "viewGames": "View Our Games"
   },
@@ -100,6 +101,8 @@
     "title": "500",
     "heading": "Something broke behind the scenes",
     "body": "Our server is having a moment. Try again in a bit.",
+    "bodySerious": "An unexpected error occurred. Please try again shortly.",
+    "tryAgain": "Try again",
     "backHome": "Back to Home"
   },
   "cookieConsent": {

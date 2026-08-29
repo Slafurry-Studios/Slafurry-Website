@@ -37,3 +37,12 @@ body {
   display: none !important;
 }
 
+/* Kebalikannya — konten yang cuma muncul KETIKA Serious Mode aktif (misal
+   versi teks formal pengganti copy jokey). Disembunyikan secara default. */
+.serious-only {
+  display: none;
+}
+.serious .serious-only {
+  display: initial;
+}
+
