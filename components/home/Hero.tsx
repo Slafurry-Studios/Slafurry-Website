@@ -1,19 +1,18 @@
 import { useTranslations } from "next-intl";
+import type { Game } from "@prisma/client";
 import { PillButton } from "@/components/ui/PillButton";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 import { HeroMontage } from "@/components/home/HeroMontage";
-import { mockUpcomingGame } from "@/lib/mock/home";
 import { mockMontageVideos } from "@/lib/mock/montage";
 
-// Hero — di desain asli, background-nya video montage yang di-shuffle random
-// dari klip-klip game kami (lihat HeroMontage.tsx yang bakal gantiin div ini
-// begitu asetnya siap). Untuk sekarang pakai placeholder gradient blur biar
-// komposisi layout & teks di atasnya bisa divalidasi dulu.
-export function Hero() {
+export function Hero({ upcomingGame }: { upcomingGame: Game | null }) {
   const t = useTranslations("home");
 
   return (
     <section className="relative -mt-24 flex min-h-screen flex-col justify-center overflow-hidden bg-neutral-950 px-6 pb-16 pt-24 text-white md:px-10">
+      {/* TODO: mockMontageVideos masih placeholder — ganti ke query
+          MontageVideo dari database begitu ada video asli yang di-upload
+          (lihat GitHub issues Milestone 3). */}
       <HeroMontage videos={mockMontageVideos} />
       <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-neutral-950/40" />
 
@@ -37,20 +36,24 @@ export function Hero() {
           </div>
         </div>
 
-        <div>
-          <p className="font-body text-sm font-semibold uppercase tracking-wide underline underline-offset-4">
-            {t("upcomingProject")}
-          </p>
-          <div className="mt-3 overflow-hidden rounded-xl border border-white/30 bg-white">
-            <PlaceholderImage
-              label={mockUpcomingGame.title}
-              className="aspect-[16/9] w-full"
-            />
+        {/* Belum ada Game yang ditandai `featured` di database — sembunyiin
+            kolom ini daripada nampilin section kosong/pecah. */}
+        {upcomingGame && (
+          <div>
+            <p className="font-body text-sm font-semibold uppercase tracking-wide underline underline-offset-4">
+              {t("upcomingProject")}
+            </p>
+            <div className="mt-3 overflow-hidden rounded-xl border border-white/30 bg-white">
+              <PlaceholderImage
+                label={upcomingGame.title}
+                className="aspect-[16/9] w-full"
+              />
+            </div>
+            <p className="mt-3 max-w-sm font-body text-sm text-white/70">
+              {upcomingGame.shortDesc}
+            </p>
           </div>
-          <p className="mt-3 max-w-sm font-body text-sm text-white/70">
-            {mockUpcomingGame.shortDesc}
-          </p>
-        </div>
+        )}
       </div>
     </section>
   );

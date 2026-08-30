@@ -1,10 +1,14 @@
 import { useTranslations } from "next-intl";
 import { IconMail, IconCurrencyDollar } from "@tabler/icons-react";
+import type { SocialLink } from "@prisma/client";
 import { PillButton } from "@/components/ui/PillButton";
 import { BrandIcon } from "@/components/icons/BrandIcon";
-import { mockCommunityLinks } from "@/lib/mock/home";
 
-export function CommunityContact() {
+export function CommunityContact({
+  communityLinks,
+}: {
+  communityLinks: SocialLink[];
+}) {
   const t = useTranslations("home");
   const tContact = useTranslations("contact");
 
@@ -14,15 +18,22 @@ export function CommunityContact() {
         <div>
           <h2 className="font-heading text-3xl tracking-wide">{t("joinCommunity")}</h2>
           <div className="mt-5 flex flex-col items-start gap-3">
-            {mockCommunityLinks.map((link) => (
-              <PillButton
-                key={link.platform}
-                href={link.url}
-                icon={<BrandIcon slug={link.platform} className="h-4 w-4" />}
-              >
-                {link.label}
-              </PillButton>
-            ))}
+            {communityLinks.length === 0 ? (
+              <p className="font-body text-sm text-neutral-400">
+                {/* Belum ada SocialLink section COMMUNITY di database */}
+                Coming soon.
+              </p>
+            ) : (
+              communityLinks.map((link) => (
+                <PillButton
+                  key={link.id}
+                  href={link.url}
+                  icon={<BrandIcon slug={link.platform} className="h-4 w-4" />}
+                >
+                  {link.label}
+                </PillButton>
+              ))
+            )}
           </div>
         </div>
 
