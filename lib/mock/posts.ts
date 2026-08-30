@@ -148,6 +148,36 @@ export function getLatestPosts(category: "DEVLOG" | "NEWS", limit = 3): MockPost
   return getPostsByCategory(category, "PUBLISHED").slice(0, limit);
 }
 
+// dapatkan daftar tag unik dari posts
+export function getUniqueTags(posts: MockPost[]): string[] {
+  const allTags = posts.flatMap((p) => p.tags);
+  return [...new Set(allTags)];
+}
+
+// filter posts by tag and optional search query (case-insensitive)
+export function getFilteredPosts(
+  posts: MockPost[],
+  tag?: string,
+  searchQuery?: string,
+): MockPost[] {
+  let result = posts;
+
+  if (tag) {
+    result = result.filter((p) => p.tags.includes(tag));
+  }
+
+  if (searchQuery) {
+    const query = searchQuery.toLowerCase();
+    result = result.filter(
+      (p) =>
+        p.title.toLowerCase().includes(query) ||
+        p.excerpt.toLowerCase().includes(query),
+    );
+  }
+
+  return result;
+}
+
 // find post index by slug within category and status
 function getPostIndexBySlug(
   slug: string,

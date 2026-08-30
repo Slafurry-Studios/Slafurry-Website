@@ -36,7 +36,11 @@ export function PostCard({
         </h3>
         <p className="mt-1 font-body text-xs text-neutral-500 dark:text-neutral-400">
           {t("by")} {post.authorName} | {formatDate(post.publishedAt, locale)} |{" "}
-          {post.tags[0] ?? "update"} | {post.commentCount} {t("comments")}
+          {post.tags.map((tag) => (
+            <span key={tag} className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-xxs font-body mr-1">
+              {tag}
+            </span>
+          ))} | {post.commentCount} {t("comments")}
         </p>
         <p
           className={

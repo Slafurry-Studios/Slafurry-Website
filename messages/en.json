@@ -37,12 +37,14 @@
   "devlog": {
     "heading": "Devlog",
     "intro": "A semi-honest record of what we built, what we broke, and what we swore we'd fix \"next update.\"",
-    "subIntro": "Progress not guaranteed, entertainment mostly guaranteed."
+    "subIntro": "Progress not guaranteed, entertainment mostly guaranteed.",
+    "searchPlaceholder": "Search devlogs..."
   },
   "news": {
     "heading": "News & Articles",
     "intro": "Official updates, unofficial rambling, and the occasional announcement we probably should have made sooner.",
-    "readAtOwnRisk": "Read at your own risk."
+    "readAtOwnRisk": "Read at your own risk.",
+    "searchPlaceholder": "Search news..."
   },
   "press": {
     "releasesHeading": "Press Releases",

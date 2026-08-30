@@ -37,12 +37,14 @@
   "devlog": {
     "heading": "Devlog",
     "intro": "Catatan semi-jujur soal apa yang kami bangun, apa yang kami rusak, dan apa yang kami janjikan diperbaiki \"update berikutnya.\"",
-    "subIntro": "Progress gak dijamin, hiburan lumayan dijamin."
+    "subIntro": "Progress gak dijamin, hiburan lumayan dijamin.",
+    "searchPlaceholder": "Cari devlog..."
   },
   "news": {
     "heading": "Berita & Artikel",
     "intro": "Update resmi, celotehan gak resmi, dan sesekali pengumuman yang harusnya udah kami kabarin dari kemarin.",
-    "readAtOwnRisk": "Baca dengan risiko sendiri."
+    "readAtOwnRisk": "Baca dengan risiko sendiri.",
+    "searchPlaceholder": "Cari berita..."
   },
   "press": {
     "releasesHeading": "Press Release",
