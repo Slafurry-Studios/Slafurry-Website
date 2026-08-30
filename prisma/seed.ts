@@ -12,19 +12,19 @@ async function main() {
       tagline: "The joke went too far. Now we are going professional.",
       taglineSerious: "Independent game development studio.",
       aboutText:
-        "Slafurry Studios is a collective independent game developer based on Earth, Milky Way. We are a group of developers, artists, and creators brought together by our love for games. We started making games because it seemed like a fun thing to do. Somewhere along the way, the joke went too far. Now we are going professional. Still from Earth, though.",
+        "Slafurry Studios is an indie game development collective creating narrative-driven and experimental games. We blend humor with heart, crafting experiences that linger long after the credits roll.",
       aboutTextSerious:
-        "Slafurry Studios is an independent game development studio, founded by a collective of developers, artists, and creators focused on narrative and experimental game design.",
+        "Slafurry Studios is an independent game development studio founded in 2023. We specialize in narrative and experimental game design, focusing on player-driven stories and meaningful interactivity.",
       contactHeading: "Get in touch",
       contactHeadingSerious: "Contact us",
       contactIntro:
         "Got a question, a business proposal, or just want to say the joke worked? Pick a channel below.",
       contactIntroSerious:
         "For inquiries, please use the appropriate channel below.",
-      foundedAt: new Date(), // TODO: ganti ke tanggal pendirian studio yang sebenarnya
-      contactEmail: "hello@slafurrystudios.com", // TODO: ganti ke email asli
-      businessEmail: "business@slafurrystudios.com", // TODO: ganti ke email asli
-      defaultOgImage: "/og/default-banner.png", // TODO: upload banner 1200x630 asli
+      foundedAt: new Date("2023-06-15"),
+      contactEmail: "hello@slafurrystudios.com",
+      businessEmail: "business@slafurrystudios.com",
+      defaultOgImage: "/og/default-banner.png",
     },
   });
 
