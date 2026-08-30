@@ -1,12 +1,15 @@
 import { useTranslations } from "next-intl";
-import type { Game } from "@prisma/client";
+import type { Game, SiteSettings } from "@prisma/client";
 import { PillButton } from "@/components/ui/PillButton";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 import { HeroMontage } from "@/components/home/HeroMontage";
 import { mockMontageVideos } from "@/lib/mock/montage";
 
-export function Hero({ upcomingGame }: { upcomingGame: Game | null }) {
+export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; settings: SiteSettings | null }) {
   const t = useTranslations("home");
+
+  const tagline = settings?.tagline ?? "&ldquo;The joke went too far. Now we are going professional.&rdquo;";
+  const seriousTagline = settings?.taglineSerious ?? tagline;
 
   return (
     <section className="relative -mt-24 flex min-h-screen flex-col justify-center overflow-hidden bg-neutral-950 px-6 pb-16 pt-24 text-white md:px-10">
@@ -27,7 +30,10 @@ export function Hero({ upcomingGame }: { upcomingGame: Game | null }) {
             Studios
           </h1>
           <p className="mt-4 max-w-sm font-body text-sm italic text-white/70 joke-only">
-            &ldquo;The joke went too far. Now we are going professional.&rdquo;
+            {tagline}
+          </p>
+          <p className="mt-4 max-w-sm font-body text-sm italic text-white/70 serious-only">
+            {seriousTagline}
           </p>
           <div className="mt-6">
             <PillButton variant="solid" href="/games">
