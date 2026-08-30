@@ -7,8 +7,9 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { useSettings } from "./SettingsContext";
 
 // UI dropdown Settings — Language, Light/Dark, Serious Mode.
-// Persistence ke cookie/localStorage dikelola oleh SettingsProvider.
-// Dropdown ini toggle class visual; nilai asli disinkronkan dari context.
+// State dikelola oleh SettingsContext yang shared di seluruh app,
+// sehingga theme/serious/sound state konsisten seluruh komponen.
+// Persistence ke localStorage handled oleh SettingsProvider.
 export function SettingsDropdown() {
   const t = useTranslations("settings");
   const locale = useLocale();
@@ -18,11 +19,16 @@ export function SettingsDropdown() {
   const ref = useRef<HTMLDivElement>(null);
 
   const {
-    theme,
-    seriousMode,
-    soundMuted,
     dark,
+    setDark,
     serious,
+    setSerious,
+    theme,
+    setTheme,
+    seriousMode,
+    setSeriousMode,
+    soundMuted,
+    setSoundMuted,
   } = useSettings();
 
   useEffect(() => {
@@ -35,28 +41,12 @@ export function SettingsDropdown() {
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, []);
 
-  // Local toggle state, disinkronkan ke context saat effect run
-  const [localDark, setLocalDark] = useState(dark);
-  const [localSerious, setLocalSerious] = useState(serious);
-
-  useEffect(() => {
-    // Sync ke context ketika komponen mount atau state berubah
-    // (setter dari context sudah menangani localStorage persistensi)
-    // Hanya update visual CSS classes melalui HTML classes di layout.tsx
-  }, [dark, serious]);
-
-  // Apply local toggle to HTML classes immediately
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", localDark);
-    document.documentElement.classList.toggle("serious", localSerious);
-  }, [localDark, localSerious]);
-
   function toggleDark() {
-    setLocalDark((v) => !v);
+    setDark(!dark);
   }
 
   function toggleSerious() {
-    setLocalSerious((v) => !v);
+    setSerious(!serious);
   }
 
   function switchLocale(next: string) {
@@ -100,15 +90,15 @@ export function SettingsDropdown() {
           </div>
 
           <SettingsRow
-            icon={localDark ? <IconMoon size={16} /> : <IconSun size={16} />}
-            label={localDark ? t("darkMode") : t("lightMode")}
-            active={localDark}
+            icon={dark ? <IconMoon size={16} /> : <IconSun size={16} />}
+            label={dark ? t("darkMode") : t("lightMode")}
+            active={dark}
             onClick={toggleDark}
           />
           <SettingsRow
             icon={<span className="text-base leading-none">🙂</span>}
-            label={`${t("seriousMode")} | ${localSerious ? t("on") : t("off")}`}
-            active={localSerious}
+            label={`${t("seriousMode")} | ${serious ? t("on") : t("off")}`}
+            active={serious}
             onClick={toggleSerious}
           />
         </div>
