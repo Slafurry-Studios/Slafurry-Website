@@ -1,0 +1,113 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "games": "Games",
+    "devlog": "Devlog",
+    "news": "Berita",
+    "press": "Pers",
+    "contact": "Kontak"
+  },
+  "settings": {
+    "language": "Bahasa",
+    "lightMode": "Mode Terang",
+    "darkMode": "Mode Gelap",
+    "seriousMode": "Mode Serius",
+    "muteSound": "Bisukan Suara",
+    "on": "AKTIF",
+    "off": "MATI"
+  },
+  "home": {
+    "eyebrow": "Pengembang Game Indie",
+    "playOurGames": "Mainkan Game Kami",
+    "upcomingProject": "Proyek Mendatang",
+    "about": "Tentang Kami",
+    "projects": "Proyek",
+    "joinCommunity": "Gabung Komunitas Kami",
+    "contactUs": "Hubungi Kami",
+    "news": "Berita"
+  },
+  "games": {
+    "heading": "Cek Game Kami",
+    "status": {
+      "RELEASED": "Rilis",
+      "UPCOMING": "Segera Hadir",
+      "IN_DEVELOPMENT": "Dalam Pengembangan"
+    }
+  },
+  "devlog": {
+    "heading": "Devlog",
+    "intro": "Catatan semi-jujur soal apa yang kami bangun, apa yang kami rusak, dan apa yang kami janjikan diperbaiki \"update berikutnya.\"",
+    "subIntro": "Progress gak dijamin, hiburan lumayan dijamin."
+  },
+  "news": {
+    "heading": "Berita & Artikel",
+    "intro": "Update resmi, celotehan gak resmi, dan sesekali pengumuman yang harusnya udah kami kabarin dari kemarin.",
+    "readAtOwnRisk": "Baca dengan risiko sendiri."
+  },
+  "press": {
+    "releasesHeading": "Press Release",
+    "kitHeading": "Press Kit",
+    "download": "Unduh",
+    "inquiries": "Untuk keperluan pers, hubungi kami di"
+  },
+  "contact": {
+    "heading": "Hubungi Kami",
+    "headingSerious": "Kontak",
+    "sayHello": "Sapa Kami",
+    "sayHelloDesc": "Pertanyaan umum, pesan fans",
+    "businessInquiries": "Urusan Bisnis",
+    "businessInquiriesDesc": "Kerja sama, pers, publishing",
+    "formDivider": "Atau kirim pesan langsung",
+    "name": "Nama kamu",
+    "email": "Email kamu",
+    "category": "Kategori",
+    "categoryGeneral": "Pertanyaan umum",
+    "categoryBusiness": "Urusan bisnis",
+    "categoryPress": "Permintaan pers",
+    "message": "Apa yang ingin disampaikan",
+    "send": "Kirim pesan",
+    "sentSuccess": "Pesan terkirim! Kami akan segera membalas."
+  },
+  "post": {
+    "by": "oleh",
+    "comments": "Komentar",
+    "more": "Selengkapnya",
+    "previous": "Sebelumnya",
+    "next": "Selanjutnya"
+  },
+  "achievements": {
+    "title": "Achievement",
+    "new": "BARU!",
+    "unlocked": "Terbuka",
+    "locked": "Terkunci",
+    "secret": "???",
+    "redeemCode": "Punya kode?",
+    "redeem": "Tukar",
+    "redeemSuccess": "Achievement terbuka!",
+    "redeemFail": "Kodenya kayaknya salah."
+  },
+  "footer": {
+    "rights": "Seluruh Hak Cipta Dilindungi."
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Halaman ini juga belum selesai",
+    "body": "Kayaknya kamu nyasar. Mungkin halaman ini kena joke yang kebablasan juga.",
+    "bodySerious": "Halaman yang kamu cari tidak ada atau mungkin sudah dipindahkan.",
+    "backHome": "Kembali ke Beranda",
+    "viewGames": "Lihat Game Kami"
+  },
+  "serverError": {
+    "title": "500",
+    "heading": "Ada yang rusak di belakang layar",
+    "body": "Server kami lagi bermasalah. Coba lagi sebentar lagi.",
+    "bodySerious": "Terjadi kesalahan tak terduga. Silakan coba lagi sesaat lagi.",
+    "tryAgain": "Coba lagi",
+    "backHome": "Kembali ke Beranda"
+  },
+  "cookieConsent": {
+    "text": "Kami menggunakan cookie fungsional untuk mengingat tema dan preferensi kamu, serta cookie analitik opsional untuk memahami penggunaan situs.",
+    "accept": "Terima",
+    "reject": "Tolak"
+  }
+}
