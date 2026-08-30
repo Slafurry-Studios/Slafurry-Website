@@ -1,7 +1,9 @@
 import { useTranslations } from "next-intl";
 import { PillButton } from "@/components/ui/PillButton";
-import { PlaceholderVideoBg, PlaceholderImage } from "@/components/ui/PlaceholderMedia";
+import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
+import { HeroMontage } from "@/components/home/HeroMontage";
 import { mockUpcomingGame } from "@/lib/mock/home";
+import { mockMontageVideos } from "@/lib/mock/montage";
 
 // Hero — di desain asli, background-nya video montage yang di-shuffle random
 // dari klip-klip game kami (lihat HeroMontage.tsx yang bakal gantiin div ini
@@ -12,7 +14,7 @@ export function Hero() {
 
   return (
     <section className="relative -mt-24 flex min-h-screen flex-col justify-center overflow-hidden bg-neutral-950 px-6 pb-16 pt-24 text-white md:px-10">
-      <PlaceholderVideoBg label="hero video montage placeholder" />
+      <HeroMontage videos={mockMontageVideos} />
       <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-neutral-950/40" />
 
       <div className="relative mx-auto grid w-full max-w-6xl gap-10 md:grid-cols-2 md:items-center">
