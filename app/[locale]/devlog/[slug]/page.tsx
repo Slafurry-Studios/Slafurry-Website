@@ -10,7 +10,11 @@ export default async function DevlogArticlePage({
   const { slug } = await params;
   const post = getPostBySlug(slug);
 
-  if (!post || post.category !== "DEVLOG") {
+  if (
+    !post ||
+    post.category !== "DEVLOG" ||
+    post.status !== "PUBLISHED"
+  ) {
     notFound();
   }
 

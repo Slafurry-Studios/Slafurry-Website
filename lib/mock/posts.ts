@@ -1,6 +1,6 @@
 // Mock data buat Devlog & News page — dua-duanya satu model (Post) yang
-// dibedain field `category`, sesuai spec. Ganti ke query Prisma beneran
-// di step 4 (filter by category, status PUBLISHED).
+// dibedain field `category`. Ganti ke query Prisma beneran di step 4
+// (filter by category & status PUBLISHED, ordered by publishedAt).
 
 export type MockPost = {
   slug: string;
@@ -13,6 +13,7 @@ export type MockPost = {
   authorName: string;
   publishedAt: string;
   commentCount: number;
+  status: "DRAFT" | "PUBLISHED";
 };
 
 export const mockPosts: MockPost[] = [
@@ -33,6 +34,7 @@ export const mockPosts: MockPost[] = [
     authorName: "Slafurry Studios",
     publishedAt: "2026-03-01",
     commentCount: 0,
+    status: "PUBLISHED",
   },
   {
     slug: "devlog-2",
@@ -50,6 +52,7 @@ export const mockPosts: MockPost[] = [
     authorName: "Slafurry Studios",
     publishedAt: "2026-02-18",
     commentCount: 3,
+    status: "PUBLISHED",
   },
   {
     slug: "devlog-3",
@@ -67,6 +70,7 @@ export const mockPosts: MockPost[] = [
     authorName: "Slafurry Studios",
     publishedAt: "2026-01-30",
     commentCount: 1,
+    status: "DRAFT",
   },
   {
     slug: "news-1",
@@ -84,6 +88,7 @@ export const mockPosts: MockPost[] = [
     authorName: "Slafurry Studios",
     publishedAt: "2026-03-01",
     commentCount: 12,
+    status: "PUBLISHED",
   },
   {
     slug: "news-2",
@@ -100,6 +105,7 @@ export const mockPosts: MockPost[] = [
     authorName: "Slafurry Studios",
     publishedAt: "2026-02-10",
     commentCount: 2,
+    status: "PUBLISHED",
   },
   {
     slug: "news-3",
@@ -116,28 +122,70 @@ export const mockPosts: MockPost[] = [
     authorName: "Slafurry Studios",
     publishedAt: "2026-01-05",
     commentCount: 7,
+    status: "PUBLISHED",
   },
 ];
 
-// Helpers — nanti diganti Prisma query (findUnique + findFirst by
-// publishedAt lebih/kurang dari post ini, di dalam category yang sama).
+// Helpers — nanti diganti Prisma query
 
+// find post by slug from mock data
 export function getPostBySlug(slug: string): MockPost | undefined {
   return mockPosts.find((p) => p.slug === slug);
 }
 
-export function getAdjacentPosts(slug: string): {
+// find posts by category and status, ordered by publishedAt descending
+export function getPostsByCategory(
+  category: "DEVLOG" | "NEWS",
+  status: "DRAFT" | "PUBLISHED"
+): MockPost[] {
+  return mockPosts
+    .filter((p) => p.category === category && p.status === status)
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+}
+
+// Helper — ambil post terbitan terbaru (hanya PUBLISHED) per kategori
+export function getLatestPosts(category: "DEVLOG" | "NEWS", limit = 3): MockPost[] {
+  return getPostsByCategory(category, "PUBLISHED").slice(0, limit);
+}
+
+// find post index by slug within category and status
+function getPostIndexBySlug(
+  slug: string,
+  category: "DEVLOG" | "NEWS",
+  status: "DRAFT" | "PUBLISHED"
+): number {
+  const sameCategoryStatus = mockPosts.filter(
+    (p) => p.category === category && p.status === status,
+  );
+  return sameCategoryStatus.findIndex((p) => p.slug === slug);
+}
+
+// Helper — dapatkan post prev/next dalam kategori (hanya status yang sama)
+export function getAdjacentPosts(
+  slug: string,
+  category?: "DEVLOG" | "NEWS",
+  status?: "DRAFT" | "PUBLISHED"
+): {
   prev: MockPost | null;
   next: MockPost | null;
 } {
+  const cat = category || "DEVLOG";
+  const stat = status || "PUBLISHED";
+
   const post = getPostBySlug(slug);
   if (!post) return { prev: null, next: null };
 
-  const sameCategory = mockPosts.filter((p) => p.category === post.category);
-  const index = sameCategory.findIndex((p) => p.slug === slug);
+  const index = getPostIndexBySlug(slug, cat, stat);
+  if (index === -1) return { prev: null, next: null };
+
+  const sameCategoryStatus = mockPosts.filter(
+    (p) => p.category === cat && p.status === stat,
+  );
 
   return {
-    prev: index > 0 ? sameCategory[index - 1] : null,
-    next: index < sameCategory.length - 1 ? sameCategory[index + 1] : null,
+    prev:
+      index > 0 ? sameCategoryStatus[index - 1] : null,
+    next:
+      index < sameCategoryStatus.length - 1 ? sameCategoryStatus[index + 1] : null,
   };
 }

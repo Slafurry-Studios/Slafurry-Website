@@ -10,7 +10,11 @@ export default async function NewsArticlePage({
   const { slug } = await params;
   const post = getPostBySlug(slug);
 
-  if (!post || post.category !== "NEWS") {
+  if (
+    !post ||
+    post.category !== "NEWS" ||
+    post.status !== "PUBLISHED"
+  ) {
     notFound();
   }
 
