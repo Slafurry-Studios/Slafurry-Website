@@ -6,7 +6,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useSettings } from "./SettingsContext";
 
-// UI dropdown Settings — Language, Light/Dark, Serious Mode.
+// UI dropdown Settings — Language, Light/Dark, Serious Mode, Sound Mute.
 // State dikelola oleh SettingsContext yang shared di seluruh app,
 // sehingga theme/serious/sound state konsisten seluruh komponen.
 // Persistence ke localStorage handled oleh SettingsProvider.
@@ -23,12 +23,10 @@ export function SettingsDropdown() {
     setDark,
     serious,
     setSerious,
-    theme,
-    setTheme,
-    seriousMode,
-    setSeriousMode,
     soundMuted,
     setSoundMuted,
+    theme,
+    setTheme,
   } = useSettings();
 
   useEffect(() => {
@@ -47,6 +45,10 @@ export function SettingsDropdown() {
 
   function toggleSerious() {
     setSerious(!serious);
+  }
+
+  function toggleSound() {
+    setSoundMuted(soundMuted === "on" ? "off" : "on");
   }
 
   function switchLocale(next: string) {
@@ -100,6 +102,12 @@ export function SettingsDropdown() {
             label={`${t("seriousMode")} | ${serious ? t("on") : t("off")}`}
             active={serious}
             onClick={toggleSerious}
+          />
+          <SettingsRow
+            icon={soundMuted ? <IconSun size={16} /> : <IconSettings size={16} />}
+            label={soundMuted ? t("unmute") : t("muteSound")}
+            active={soundMuted === "on"}
+            onClick={toggleSound}
           />
         </div>
       )}
