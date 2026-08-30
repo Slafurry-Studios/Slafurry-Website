@@ -1,7 +1,7 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { IconExternalLink, IconDownload } from "@tabler/icons-react";
 import { formatDate } from "@/lib/format";
-import { mockPressReleases, mockPressKitAssets } from "@/lib/mock/press";
+import { getPressReleases, getPressKitAssets } from "@/lib/queries/press";
 
 // TODO: contactEmail dari SiteSettings pas step 4 (hook database).
 const PRESS_CONTACT_EMAIL = "press@slafurrystudios.com";
@@ -12,11 +12,16 @@ const ASSET_TYPE_LABEL: Record<string, string> = {
   CHARACTER: "Character",
 };
 
-export default function PressPage() {
-  const t = useTranslations("press");
+export default async function PressPage() {
+  const t = await getTranslations("press");
 
-  const releasesByOutlet = groupBy(mockPressReleases, (r) => r.outlet);
-  const assetsByTarget = groupBy(mockPressKitAssets, (a) => a.target);
+  const [releases, assets] = await Promise.all([
+    getPressReleases(),
+    getPressKitAssets(),
+  ]);
+
+  const releasesByOutlet = groupBy(releases, (r) => r.outlet);
+  const assetsByLabel = groupBy(assets, (a) => a.label);
 
   return (
     <div className="px-6 py-16 md:px-10">
@@ -58,12 +63,12 @@ export default function PressPage() {
         <div>
           <h1 className="font-heading text-4xl tracking-wide">{t("kitHeading")}</h1>
           <div className="mt-6 space-y-8">
-            {Object.entries(assetsByTarget).map(([target, assets]) => (
-              <div key={target}>
-                <h2 className="font-body text-lg font-bold">{target}</h2>
+            {Object.entries(assetsByLabel).map(([label, assets]) => (
+              <div key={label}>
+                <h2 className="font-body text-lg font-bold">{label}</h2>
                 <ul className="mt-2 space-y-1.5">
                   {assets.map((asset) => (
-                    <li key={target + asset.type}>
+                    <li key={label + asset.type}>
                       <a
                         href={asset.fileUrl}
                         className="inline-flex items-center gap-1.5 font-body text-sm text-neutral-700 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
