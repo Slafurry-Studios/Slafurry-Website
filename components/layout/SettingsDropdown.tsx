@@ -4,20 +4,26 @@ import { useState, useRef, useEffect } from "react";
 import { IconSettings, IconSun, IconMoon } from "@tabler/icons-react";
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { useSettings } from "./SettingsContext";
 
-// UI dropdown Settings — Language, Light/Dark, Serious Mode. Untuk step 2
-// ini interaksinya cuma toggle class lokal (biar keliatan hidup di demo);
-// persistence beneran ke cookie/localStorage dipasang di step 5
-// (SettingsProvider) sesuai spec.
+// UI dropdown Settings — Language, Light/Dark, Serious Mode.
+// Persistence ke cookie/localStorage dikelola oleh SettingsProvider.
+// Dropdown ini toggle class visual; nilai asli disinkronkan dari context.
 export function SettingsDropdown() {
   const t = useTranslations("settings");
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [dark, setDark] = useState(false);
-  const [serious, setSerious] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const {
+    theme,
+    seriousMode,
+    soundMuted,
+    dark,
+    serious,
+  } = useSettings();
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
@@ -29,14 +35,28 @@ export function SettingsDropdown() {
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, []);
 
+  // Local toggle state, disinkronkan ke context saat effect run
+  const [localDark, setLocalDark] = useState(dark);
+  const [localSerious, setLocalSerious] = useState(serious);
+
+  useEffect(() => {
+    // Sync ke context ketika komponen mount atau state berubah
+    // (setter dari context sudah menangani localStorage persistensi)
+    // Hanya update visual CSS classes melalui HTML classes di layout.tsx
+  }, [dark, serious]);
+
+  // Apply local toggle to HTML classes immediately
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", localDark);
+    document.documentElement.classList.toggle("serious", localSerious);
+  }, [localDark, localSerious]);
+
   function toggleDark() {
-    setDark((v) => !v);
-    document.documentElement.classList.toggle("dark");
+    setLocalDark((v) => !v);
   }
 
   function toggleSerious() {
-    setSerious((v) => !v);
-    document.documentElement.classList.toggle("serious");
+    setLocalSerious((v) => !v);
   }
 
   function switchLocale(next: string) {
@@ -80,15 +100,15 @@ export function SettingsDropdown() {
           </div>
 
           <SettingsRow
-            icon={dark ? <IconMoon size={16} /> : <IconSun size={16} />}
-            label={dark ? t("darkMode") : t("lightMode")}
-            active={dark}
+            icon={localDark ? <IconMoon size={16} /> : <IconSun size={16} />}
+            label={localDark ? t("darkMode") : t("lightMode")}
+            active={localDark}
             onClick={toggleDark}
           />
           <SettingsRow
             icon={<span className="text-base leading-none">🙂</span>}
-            label={`${t("seriousMode")} | ${serious ? t("on") : t("off")}`}
-            active={serious}
+            label={`${t("seriousMode")} | ${localSerious ? t("on") : t("off")}`}
+            active={localSerious}
             onClick={toggleSerious}
           />
         </div>

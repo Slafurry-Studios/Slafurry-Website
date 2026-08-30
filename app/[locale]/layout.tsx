@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import { bebasNeue, poppins } from "@/lib/fonts";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { SettingsProvider } from "@/components/layout/SettingsContext";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -38,14 +39,14 @@ export default async function LocaleLayout({
   // Nilai ini nanti disinkronkan lagi ke localStorage oleh SettingsProvider (client).
   const cookieStore = await cookies();
   const theme = cookieStore.get("theme")?.value === "dark" ? "dark" : "light";
-  const seriousMode = cookieStore.get("serious_mode")?.value === "on";
-  const soundMuted = cookieStore.get("sound_muted")?.value === "on";
+  const seriousModeRaw = cookieStore.get("serious_mode")?.value === "on";
+  const soundMutedRaw = cookieStore.get("sound_muted")?.value === "on";
 
   const htmlClassNames = [
     bebasNeue.variable,
     poppins.variable,
     theme,
-    seriousMode ? "serious" : "",
+    seriousModeRaw ? "serious" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -54,27 +55,28 @@ export default async function LocaleLayout({
     <html lang={locale} className={htmlClassNames}>
       <body
         className="min-h-screen flex flex-col font-body bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50"
-        data-sound-muted={soundMuted}
+        data-sound-muted={soundMutedRaw}
       >
-        <NextIntlClientProvider messages={messages}>
-          {/*
-            TODO (step berikutnya):
-            - <SettingsProvider initialTheme={theme} initialSeriousMode={seriousMode} initialSoundMuted={soundMuted}>
-            - <AchievementProvider>
-          */}
-          <Navbar />
-          {/* pt-24 = ruang buat Navbar yang sekarang "fixed" (gak makan document flow).
-              Hero.tsx nge-cancel ini pakai -mt-24 biar background-nya full-bleed dari
-              y=0, sementara halaman lain (belum ada background khusus di atas) otomatis
-              dapet clearance yang bener dari padding ini. */}
-          <main className="flex-1 pt-24">{children}</main>
-          <Footer />
-          {/*
-            - <AchievementToastContainer />
-            - <AchievementCTA />
-            - <CookieConsentBanner />
-          */}
-        </NextIntlClientProvider>
+        <SettingsProvider
+          initialTheme={theme}
+          initialSeriousMode={seriousModeRaw ? "on" : "off"}
+          initialSoundMuted={soundMutedRaw ? "on" : "off"}
+        >
+          <NextIntlClientProvider messages={messages}>
+            <Navbar />
+            {/* pt-24 = ruang buat Navbar yang sekarang "fixed" (gak makan document flow).
+                Hero.tsx nge-cancel ini pakai -mt-24 biar background-nya full-bleed dari
+                y=0, sementara halaman lain (belum ada background khusus di atas) otomatis
+                dapet clearance yang bener dari padding ini. */}
+            <main className="flex-1 pt-24">{children}</main>
+            <Footer />
+            {/*
+              - <AchievementToastContainer />
+              - <AchievementCTA />
+              - <CookieConsentBanner />
+            */}
+          </NextIntlClientProvider>
+        </SettingsProvider>
       </body>
     </html>
   );
