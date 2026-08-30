@@ -2,14 +2,23 @@ import { useTranslations } from "next-intl";
 import { IconChevronDown } from "@tabler/icons-react";
 import { PillButton } from "@/components/ui/PillButton";
 import { GameCard } from "@/components/games/GameCard";
-import { mockGames } from "@/lib/mock/games";
+import { mockGames, getGameBySlug } from "@/lib/mock/games";
+
+const ACTIVE_GAME_STATUS = ["RELEASED", "UPCOMING"];
 
 export default function GamesPage() {
   const t = useTranslations("games");
   const tPost = useTranslations("post");
 
-  const featured = mockGames.find((g) => g.featured) ?? mockGames[0];
-  const rest = mockGames.filter((g) => g.slug !== featured.slug);
+  const activeGames = mockGames.filter(
+    (g) => ACTIVE_GAME_STATUS.includes(g.status),
+  );
+  const sortedGames = activeGames.sort(
+    (a, b) => a.order - b.order,
+  );
+
+  const featured = sortedGames.find((g) => g.featured) ?? sortedGames[0];
+  const rest = sortedGames.filter((g) => g.slug !== featured.slug);
 
   return (
     <div className="px-6 py-16 md:px-10">
