@@ -25,7 +25,7 @@ export default async function Home() {
 
   return (
     <>
-      <Hero upcomingGame={featuredGame} />
+      <Hero upcomingGame={featuredGame} settings={settings} />
       <AboutSection settings={settings} />
       <ProjectCarousel projects={carouselGames} />
       <CommunityContact communityLinks={communityLinks} />
