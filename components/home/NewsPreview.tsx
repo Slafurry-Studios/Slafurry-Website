@@ -1,38 +1,40 @@
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import type { Post } from "@prisma/client";
 import { Link } from "@/i18n/navigation";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
-import { mockNewsPosts } from "@/lib/mock/home";
+import { formatDate } from "@/lib/format";
 
-export function NewsPreview() {
+export function NewsPreview({ posts }: { posts: Post[] }) {
   const t = useTranslations("home");
-  const tPost = useTranslations("post");
-  const [featured, ...rest] = mockNewsPosts;
+
+  // Belum ada Post kategori NEWS yang PUBLISHED — sembunyiin section
+  // daripada nampilin grid kosong.
+  if (posts.length === 0) return null;
+
+  const [featured, ...rest] = posts;
 
   return (
     <section className="flex min-h-screen flex-col justify-center border-t border-neutral-200 px-6 py-16 dark:border-neutral-800 md:px-10">
       <h2 className="text-center font-heading text-4xl tracking-wide">{t("news")}</h2>
 
       <div className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-2">
-        <NewsCard post={featured} tPost={tPost} large />
-        <div className="grid gap-6">
-          {rest.map((post) => (
-            <NewsCard key={post.slug} post={post} tPost={tPost} />
-          ))}
-        </div>
+        <NewsCard post={featured} large />
+        {rest.length > 0 && (
+          <div className="grid gap-6">
+            {rest.map((post) => (
+              <NewsCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
-function NewsCard({
-  post,
-  tPost,
-  large,
-}: {
-  post: (typeof mockNewsPosts)[number];
-  tPost: ReturnType<typeof useTranslations>;
-  large?: boolean;
-}) {
+function NewsCard({ post, large }: { post: Post; large?: boolean }) {
+  const tPost = useTranslations("post");
+  const locale = useLocale();
+
   return (
     <Link
       href={`/news/${post.slug}`}
@@ -45,7 +47,8 @@ function NewsCard({
       <div className="flex flex-1 flex-col p-4">
         <h3 className="font-body text-base font-semibold leading-snug">{post.title}</h3>
         <p className="mt-1 font-body text-xs text-neutral-500 dark:text-neutral-400">
-          {tPost("by")} {post.author} | {post.date}
+          {tPost("by")} {post.authorName}
+          {post.publishedAt && ` | ${formatDate(post.publishedAt, locale)}`}
         </p>
         <p className="mt-2 line-clamp-3 font-body text-sm text-neutral-600 dark:text-neutral-400">
           {post.excerpt}

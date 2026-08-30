@@ -1,11 +1,20 @@
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import type { SiteSettings } from "@prisma/client";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
+import { formatDate } from "@/lib/format";
 import { StudioAgeCounter } from "./StudioAgeCounter";
 
-// Teks di bawah ini sementara hardcode, bakal ditarik dari
-// SiteSettings.aboutText / aboutTextSerious pas hook ke database (step 4).
-export function AboutSection() {
+export function AboutSection({ settings }: { settings: SiteSettings | null }) {
   const t = useTranslations("home");
+  const locale = useLocale();
+
+  // Fallback kalau SiteSettings somehow belum ke-seed — jarang kejadian
+  // (seed.ts selalu bikin row id=1), tapi jaga-jaga daripada section-nya
+  // kosong blas.
+  const aboutText =
+    settings?.aboutText ??
+    "Slafurry Studios is an independent game development studio.";
+  const aboutTextSerious = settings?.aboutTextSerious ?? aboutText;
 
   return (
     <section className="flex min-h-screen items-center border-t border-neutral-200 px-6 py-16 dark:border-neutral-800 md:px-10">
@@ -15,32 +24,22 @@ export function AboutSection() {
         <div>
           <h2 className="font-heading text-4xl tracking-wide">{t("about")}</h2>
           <div className="mt-4 space-y-4 font-body text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
-            <p>
-              <strong className="text-neutral-900 dark:text-white">
-                Slafurry Studios
-              </strong>{" "}
-              is a collective independent game developer based on Earth,
-              Milky Way
-              <span className="joke-only">
-                {" "}
-                with an experience of <StudioAgeCounter />
-              </span>.
-            </p>
-            <p>
-              We are a group of developers, artists, and creators brought
-              together by our love for games and the ideas that turn into
-              something real. We create games across different genres and
-              styles, from small experiments to ambitious worlds, always
-              looking for something new to explore.
-            </p>
-            <p className="joke-only">
-              We started making games because it seemed like a fun thing to
-              do. Somewhere along the way, the joke went too far. Now we are
-              going professional.
-            </p>
-            <p className="joke-only text-neutral-500 dark:text-neutral-400">
-              Still from Earth, though.
-            </p>
+            {/* Dua versi teks (normal vs serious) di-render dua-duanya,
+                CSS `.joke-only`/`.serious-only` yang nentuin mana yang
+                keliatan — biar gak ada flash/mismatch pas toggle. */}
+            <p className="joke-only whitespace-pre-line">{aboutText}</p>
+            <p className="serious-only whitespace-pre-line">{aboutTextSerious}</p>
+
+            {settings && (
+              <>
+                <p className="joke-only text-neutral-500 dark:text-neutral-400">
+                  Founded <StudioAgeCounter foundedAt={settings.foundedAt} /> ago.
+                </p>
+                <p className="serious-only text-neutral-500 dark:text-neutral-400">
+                  Founded {formatDate(settings.foundedAt, locale)}.
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>

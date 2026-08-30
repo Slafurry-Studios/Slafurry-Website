@@ -3,22 +3,26 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import type { Game } from "@prisma/client";
 import { Link } from "@/i18n/navigation";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
-import { mockProjects } from "@/lib/mock/home";
 
-export function ProjectCarousel() {
+export function ProjectCarousel({ projects }: { projects: Game[] }) {
   const t = useTranslations("home");
   const [index, setIndex] = useState(0);
-  const count = mockProjects.length;
+  const count = projects.length;
 
   function go(delta: number) {
     setIndex((i) => (i + delta + count) % count);
   }
 
-  const prev = mockProjects[(index - 1 + count) % count];
-  const current = mockProjects[index];
-  const next = mockProjects[(index + 1) % count];
+  // Belum ada Game sama sekali di database — sembunyiin section ini
+  // daripada nampilin carousel kosong/pecah.
+  if (count === 0) return null;
+
+  const prev = projects[(index - 1 + count) % count];
+  const current = projects[index];
+  const next = projects[(index + 1) % count];
 
   return (
     <section className="flex min-h-screen flex-col justify-center px-6 py-16 md:px-10">
@@ -27,49 +31,56 @@ export function ProjectCarousel() {
       </h2>
 
       <div className="mx-auto mt-10 flex max-w-5xl items-center justify-center gap-3 md:gap-6">
-        <button
-          type="button"
-          onClick={() => go(-1)}
-          aria-label="Previous project"
-          className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:flex"
-        >
-          <IconChevronLeft size={20} />
-        </button>
+        {count > 1 && (
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            aria-label="Previous project"
+            className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:flex"
+          >
+            <IconChevronLeft size={20} />
+          </button>
+        )}
 
-        {/* Peek card kiri — dipotong sebagian, cuma keliatan di desktop */}
-        <ProjectCard project={prev} peek="left" />
+        {/* Peek card kiri — dipotong sebagian, cuma keliatan di desktop.
+            Disembunyikan kalau cuma ada 1 game (prev/current/next bakal
+            sama semua, gak ada gunanya dipeek-in). */}
+        {count > 1 && <ProjectCard project={prev} peek="left" />}
 
         <ProjectCard project={current} />
 
-        <ProjectCard project={next} peek="right" />
+        {count > 1 && <ProjectCard project={next} peek="right" />}
 
-        <button
-          type="button"
-          onClick={() => go(1)}
-          aria-label="Next project"
-          className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:flex"
-        >
-          <IconChevronRight size={20} />
-        </button>
+        {count > 1 && (
+          <button
+            type="button"
+            onClick={() => go(1)}
+            aria-label="Next project"
+            className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:flex"
+          >
+            <IconChevronRight size={20} />
+          </button>
+        )}
       </div>
 
-      {/* Mobile controls (peek card disembunyikan di layar kecil lewat hidden sm:block) */}
-      <div className="mt-6 flex justify-center gap-3 sm:hidden">
-        <button
-          onClick={() => go(-1)}
-          aria-label="Previous project"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
-        >
-          <IconChevronLeft size={20} />
-        </button>
-        <button
-          onClick={() => go(1)}
-          aria-label="Next project"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
-        >
-          <IconChevronRight size={20} />
-        </button>
-      </div>
+      {count > 1 && (
+        <div className="mt-6 flex justify-center gap-3 sm:hidden">
+          <button
+            onClick={() => go(-1)}
+            aria-label="Previous project"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
+          >
+            <IconChevronLeft size={20} />
+          </button>
+          <button
+            onClick={() => go(1)}
+            aria-label="Next project"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
+          >
+            <IconChevronRight size={20} />
+          </button>
+        </div>
+      )}
     </section>
   );
 }
@@ -78,14 +89,12 @@ function ProjectCard({
   project,
   peek,
 }: {
-  project: (typeof mockProjects)[number];
+  project: Game;
   peek?: "left" | "right";
 }) {
   if (peek) {
     return (
-      <div
-        className={`hidden w-16 shrink-0 overflow-hidden rounded-xl border border-neutral-300 opacity-50 dark:border-neutral-700 sm:block md:w-24`}
-      >
+      <div className="hidden w-16 shrink-0 overflow-hidden rounded-xl border border-neutral-300 opacity-50 dark:border-neutral-700 sm:block md:w-24">
         <PlaceholderImage label={project.title} className="aspect-[4/5] w-full" />
       </div>
     );

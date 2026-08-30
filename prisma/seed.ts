@@ -58,9 +58,67 @@ async function main() {
     },
   });
 
+  // --- Starter game (biar Hero "Upcoming Project" & Project Carousel ada isinya) ---
+  await prisma.game.upsert({
+    where: { slug: "an-unfinished-game" },
+    update: {},
+    create: {
+      slug: "an-unfinished-game",
+      title: "An Unfinished Game",
+      coverImage: "/placeholder/an-unfinished-game.png", // TODO: ganti asset asli
+      coverImageAlt: "Cover art for An Unfinished Game",
+      shortDesc:
+        "2D Narrative Horror Platformer about a Game Developer trapped in his unfinished game.",
+      longDesc:
+        "2D Narrative Horror Platformer about a Game Developer trapped in his unfinished game.",
+      status: "UPCOMING",
+      featured: true,
+      order: 0,
+    },
+  });
+
+  await prisma.game.upsert({
+    where: { slug: "pandoras-snake" },
+    update: {},
+    create: {
+      slug: "pandoras-snake",
+      title: "Pandora's Snake",
+      coverImage: "/placeholder/pandoras-snake.png", // TODO: ganti asset asli
+      coverImageAlt: "Cover art for Pandora's Snake",
+      shortDesc:
+        "A snake cursed by a crazy witch grows infinitely, destroy entire planets, livestream apocalypse across the multiverse.",
+      longDesc:
+        "A snake cursed by a crazy witch grows infinitely, destroy entire planets, livestream apocalypse across the multiverse.",
+      status: "RELEASED",
+      featured: false,
+      order: 1,
+    },
+  });
+
+  // --- Starter post (biar News Preview section ada isinya) ---
+  await prisma.post.upsert({
+    where: { slug: "welcome-to-slafurry-studios" },
+    update: {},
+    create: {
+      slug: "welcome-to-slafurry-studios",
+      title: "Welcome to the new Slafurry Studios website",
+      coverImage: "/placeholder/welcome-post.png", // TODO: ganti asset asli
+      coverImageAlt: "Welcome banner",
+      excerpt:
+        "We rebuilt the whole site from scratch. Here's what's new, and what's still held together with tape.",
+      content:
+        "<p>We rebuilt the whole site from scratch. Here's what's new, and what's still held together with tape.</p>",
+      category: "NEWS",
+      tags: ["announcement"],
+      authorName: "Slafurry Studios",
+      status: "PUBLISHED",
+      publishedAt: new Date(),
+    },
+  });
+
   // --- Starter social links (placeholder URL, ganti di admin panel nanti) ---
   const socialLinks = [
-    { platform: "itchdotio", label: "Itch.io", url: "https://itch.io", section: LinkSection.COMMUNITY, order: 0 },
+    { platform: "itch", label: "Itch.io", url: "https://itch.io", section: LinkSection.COMMUNITY, order: 0 },
     { platform: "discord", label: "Discord Server", url: "https://discord.gg", section: LinkSection.COMMUNITY, order: 1 },
     { platform: "steam", label: "Steam Community", url: "https://steamcommunity.com", section: LinkSection.COMMUNITY, order: 2 },
     { platform: "mail", label: "Say Hello", url: "mailto:hello@slafurrystudios.com", section: LinkSection.CONTACT, order: 0 },
