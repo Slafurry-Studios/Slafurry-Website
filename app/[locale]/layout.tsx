@@ -8,6 +8,7 @@ import { bebasNeue, poppins } from "@/lib/fonts";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SettingsProvider } from "@/components/layout/SettingsContext";
+import { CookieConsentBanner } from "@/components/layout/CookieConsentBanner";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -73,8 +74,10 @@ export default async function LocaleLayout({
             {/*
               - <AchievementToastContainer />
               - <AchievementCTA />
-              - <CookieConsentBanner />
             */}
+<CookieConsentBanner
+  onConsentChange={() => {}}
+/>
           </NextIntlClientProvider>
         </SettingsProvider>
       </body>
