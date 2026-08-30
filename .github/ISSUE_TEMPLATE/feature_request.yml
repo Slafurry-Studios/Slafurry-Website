@@ -1,0 +1,64 @@
+name: Feature Request
+description: Suggest a new feature or improvement for the website
+title: "[Feature]: "
+labels:
+
+* enhancement
+  body:
+
+* type: markdown
+  attributes:
+  value: |
+  Thanks for suggesting an improvement!
+
+  ```
+  Please describe the problem or goal behind the feature, not just the implementation you have in mind.
+  ```
+
+* type: textarea
+  id: summary
+  attributes:
+  label: Summary
+  description: Briefly describe the feature or improvement.
+  placeholder: What would you like to see added or changed?
+  validations:
+  required: true
+
+* type: textarea
+  id: motivation
+  attributes:
+  label: Motivation
+  description: Why would this feature be useful? What problem does it solve?
+  placeholder: Explain the problem or use case...
+  validations:
+  required: true
+
+* type: textarea
+  id: proposed
+  attributes:
+  label: Proposed Behavior
+  description: Describe how you think the feature should work.
+  placeholder: |
+  Describe the expected behavior, user flow, or interaction...
+  validations:
+  required: true
+
+* type: textarea
+  id: scope
+  attributes:
+  label: Scope
+  description: What should be included in this change?
+  placeholder: |
+  Included:
+  -
+
+  ```
+  Not included:
+  -
+  ```
+
+* type: textarea
+  id: context
+  attributes:
+  label: Additional Context
+  description: Add screenshots, references, related issues, or implementation ideas.
