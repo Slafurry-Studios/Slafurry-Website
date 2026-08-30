@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { PlaceholderVideoBg } from "@/components/ui/PlaceholderMedia";
 import type { MockMontageVideo } from "@/lib/mock/montage";
 
 // TODO (step 3, remaining sub-issues — sudah tercatat di GitHub issues plan):
-// - crossfade antar klip (sekarang hard cut)
 // - fallback ke poster image di koneksi lambat (navigator.connection)
 // - ganti mockMontageVideos ke query MontageVideo dari database (step 4)
 
@@ -25,6 +25,7 @@ export function HeroMontage({ videos }: { videos: MockMontageVideo[] }) {
 
   useEffect(() => {
     if (videos.length === 0) return;
+
     playlistRef.current = shuffle(videos);
     indexRef.current = 0;
     setCurrentSrc(playlistRef.current[0].videoUrl);
@@ -41,9 +42,14 @@ export function HeroMontage({ videos }: { videos: MockMontageVideo[] }) {
       // biar gak berasa "nge-loop" balik ke video yang sama dua kali beruntun.
       const reshuffled = shuffle(videos);
       const lastPlayed = playlistRef.current[playlistRef.current.length - 1];
-      if (reshuffled.length > 1 && reshuffled[0].id === lastPlayed.id) {
+
+      if (
+        reshuffled.length > 1 &&
+        reshuffled[0].id === lastPlayed.id
+      ) {
         [reshuffled[0], reshuffled[1]] = [reshuffled[1], reshuffled[0]];
       }
+
       playlistRef.current = reshuffled;
       indexRef.current = 0;
     }
@@ -58,18 +64,24 @@ export function HeroMontage({ videos }: { videos: MockMontageVideo[] }) {
   }
 
   return (
-    <video
-      // `key` dipaksa berubah tiap ganti video, biar elemen di-remount dan
-      // autoplay-nya jalan lagi dari awal buat klip berikutnya.
-      key={currentSrc}
-      src={currentSrc}
-      autoPlay
-      muted
-      loop={videos.length <= 1}
-      playsInline
-      onEnded={handleEnded}
-      className="absolute inset-0 h-full w-full scale-110 object-cover opacity-80 blur-2xl"
-      aria-hidden="true"
-    />
+    <div className="absolute inset-0 overflow-hidden">
+      <AnimatePresence initial={false} mode="sync">
+        <motion.video
+          key={currentSrc}
+          src={currentSrc}
+          autoPlay
+          muted
+          loop={videos.length <= 1}
+          playsInline
+          onEnded={handleEnded}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.8 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="absolute inset-0 h-full w-full scale-110 object-cover"
+          aria-hidden="true"
+        />
+      </AnimatePresence>
+    </div>
   );
 }

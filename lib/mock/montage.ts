@@ -16,15 +16,29 @@ export type MockMontageVideo = {
 
 export const mockMontageVideos: MockMontageVideo[] = [
   {
-    id: "sample-1",
-    label: "sample clip 1 (placeholder)",
+    id: "1",
+    label: "Directive",
     videoUrl:
-      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "https://mcaqgxrqzwsjyrwgrnmq.supabase.co/storage/v1/object/public/montage-videos/Directive.mp4",
   },
   {
-    id: "sample-2",
-    label: "sample clip 2 (placeholder)",
-    videoUrl:
-      "https://www.w3schools.com/html/mov_bbb.mp4",
+    id: "3",
+    label: "Omni Gear Protocol",
+    videoUrl: "https://mcaqgxrqzwsjyrwgrnmq.supabase.co/storage/v1/object/public/montage-videos/OmniGearProtocol.mp4"
+  },
+  {
+    id: "4",
+    label: "Pandora's Snake",
+    videoUrl: "https://mcaqgxrqzwsjyrwgrnmq.supabase.co/storage/v1/object/public/montage-videos/PandorasSnake.mp4"
+  },
+  {
+    id: "5",
+    label: "Solar Siege",
+    videoUrl: "https://mcaqgxrqzwsjyrwgrnmq.supabase.co/storage/v1/object/public/montage-videos/SolarSiege.mp4"
+  },
+  {
+    id: "6",
+    label: "The Puppet Pioneer",
+    videoUrl: "https://mcaqgxrqzwsjyrwgrnmq.supabase.co/storage/v1/object/public/montage-videos/ThePuppetPioneer.mp4"
   },
 ];
