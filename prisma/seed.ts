@@ -139,6 +139,40 @@ async function main() {
     }
   }
 
+  // --- Press releases ---
+  const pressReleases = [
+    { outlet: "IGN", title: "Pandora's Snake is a cosmic horror comedy about a cursed snake", url: "https://ign.com", publishedAt: new Date("2026-03-02") },
+    { outlet: "IGN", title: "5 indie games to watch this quarter", url: "https://ign.com", publishedAt: new Date("2026-02-14") },
+    { outlet: "Gamejolt", title: "Slafurry Studios announces An Unfinished Game", url: "https://gamejolt.com", publishedAt: new Date("2026-01-20") },
+    { outlet: "Gamejolt", title: "Interview: the team behind Pandora's Snake", url: "https://gamejolt.com", publishedAt: new Date("2025-12-05") },
+  ];
+
+  for (const release of pressReleases) {
+    const existing = await prisma.pressRelease.findFirst({ where: { title: release.title } });
+    if (!existing) {
+      await prisma.pressRelease.create({ data: release });
+    }
+  }
+
+  // --- Press kit assets ---
+  const pressKitAssets = [
+    { label: "Slafurry Studios", type: "LOGO" as const, fileUrl: "/press/slafurry-logo.png" },
+    { label: "Slafurry Studios", type: "BANNER" as const, fileUrl: "/press/slafurry-banner.png" },
+    { label: "An Unfinished Game", type: "LOGO" as const, fileUrl: "/press/unfinished-game-logo.png" },
+    { label: "An Unfinished Game", type: "BANNER" as const, fileUrl: "/press/unfinished-game-banner.png" },
+    { label: "An Unfinished Game", type: "CHARACTER" as const, fileUrl: "/press/unfinished-game-character.png" },
+    { label: "Pandora's Snake", type: "LOGO" as const, fileUrl: "/press/pandoras-snake-logo.png" },
+    { label: "Pandora's Snake", type: "BANNER" as const, fileUrl: "/press/pandoras-snake-banner.png" },
+    { label: "Pandora's Snake", type: "CHARACTER" as const, fileUrl: "/press/pandoras-snake-character.png" },
+  ];
+
+  for (const asset of pressKitAssets) {
+    const existing = await prisma.pressKitAsset.findFirst({ where: { label: asset.label, type: asset.type } });
+    if (!existing) {
+      await prisma.pressKitAsset.create({ data: asset });
+    }
+  }
+
   console.log("Seed selesai ✅");
 }
 
