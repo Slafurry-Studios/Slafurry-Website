@@ -6,7 +6,7 @@ import { Bebas_Neue, Poppins } from "next/font/google";
 export const bebasNeue = Bebas_Neue({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-heading",
+  variable: "--font-heading-family",
   display: "swap",
 });
 
@@ -14,6 +14,6 @@ export const bebasNeue = Bebas_Neue({
 export const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-body-family",
   display: "swap",
 });

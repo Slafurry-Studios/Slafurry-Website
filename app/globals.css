@@ -19,10 +19,12 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Brand fonts — variable ini di-set oleh next/font di lib/fonts.ts,
-     dipetakan ke class Tailwind: font-heading / font-body */
-  --font-heading: var(--font-heading);
-  --font-body: var(--font-body);
+  /* Brand fonts — variable di-set oleh next/font di lib/fonts.ts
+     (--font-heading-family / --font-body-family), dipetakan ke utility
+     Tailwind: font-heading / font-body. Nama di-theme beda dari nama
+     CSS variable biar gak circular reference. */
+  --font-heading: var(--font-heading-family);
+  --font-body: var(--font-body-family);
 }
 
 body {
