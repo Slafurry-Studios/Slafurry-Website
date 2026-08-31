@@ -36,6 +36,24 @@ let state: AchievementState = {
 let hydrated = false;
 
 // ---------------------------------------------------------------------------
+// Subscription — lets React components re-render on state changes
+// ---------------------------------------------------------------------------
+
+type StorageListener = () => void;
+let storageListeners: StorageListener[] = [];
+
+function notifyListeners(): void {
+  for (const fn of storageListeners) fn();
+}
+
+export function subscribeStorage(listener: StorageListener): () => void {
+  storageListeners.push(listener);
+  return () => {
+    storageListeners = storageListeners.filter((fn) => fn !== listener);
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -136,6 +154,7 @@ export function hydrate(): {
 export function persist(): void {
   const payload = serialize();
   safeSetItem(STORAGE_KEY, JSON.stringify(payload));
+  notifyListeners();
 }
 
 // ---------------------------------------------------------------------------
