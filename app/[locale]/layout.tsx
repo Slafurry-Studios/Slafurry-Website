@@ -10,6 +10,8 @@ import { Footer } from "@/components/layout/Footer";
 import { SettingsProvider } from "@/components/layout/SettingsContext";
 import { CookieConsentBanner } from "@/components/layout/CookieConsentBanner";
 import { AchievementToastContainer } from "@/components/achievements/AchievementToast";
+import { AchievementCTA } from "@/components/achievements/AchievementCTA";
+import { AchievementInit } from "@/components/achievements/AchievementInit";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -73,6 +75,8 @@ export default async function LocaleLayout({
             <main className="flex-1 pt-24">{children}</main>
             <Footer />
             <AchievementToastContainer />
+            <AchievementCTA />
+            <AchievementInit />
 <CookieConsentBanner />
           </NextIntlClientProvider>
         </SettingsProvider>

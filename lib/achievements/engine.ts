@@ -26,7 +26,7 @@ type TriggerConfig =
 // Achievement record (client-side relevant fields only)
 // ---------------------------------------------------------------------------
 
-type Achievement = {
+export type Achievement = {
   key: string;
   title: string;
   description: string;
