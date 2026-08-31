@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createHash } from "crypto";
-import { prisma } from "@/lib/prisma";
 
 type RedeemSuccess = {
   success: true;
@@ -11,6 +10,15 @@ type RedeemFailure = {
   error: string;
 };
 type RedeemResponse = RedeemSuccess | RedeemFailure;
+
+// Hardcoded flag code — no DB query needed.
+const EXPECTED_HASH = "d69819f2523f6f081845590e45c1959a49307a8f51fbd7cbe4beeda1383853f1"; // sha256("slafury-flag-2024")
+const ACHIEVEMENT = {
+  key: "cheating",
+  title: "Flag Hunter",
+  description: "Find and redeem a hidden flag code.",
+  icon: "/mascot-default.png",
+};
 
 const MAX_ATTEMPTS = 20;
 const RETA_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
@@ -27,9 +35,26 @@ function parseAttemptsCookie(value: string | null) {
   return { count, timestamp };
 }
 
-function buildAttemptsCookie(count: number): string {
-  const timestamp = Date.now();
-  return `${count}|${timestamp}`;
+function isRateLimited(count: number, timestamp: number) {
+  const now = Date.now();
+  if (now - timestamp > RETA_WINDOW_MS) {
+    return { limited: false, remaining: MAX_ATTEMPTS };
+  }
+  return {
+    limited: count >= MAX_ATTEMPTS,
+    remaining: Math.max(0, MAX_ATTEMPTS - count),
+  };
+}
+
+function setRateLimitHeaders(resp: NextResponse, newCount: number, resetAt: number) {
+  resp.cookies.set("redeem_attempts", `${newCount}|${Date.now()}`, {
+    httpOnly: false,
+    maxAge: 600,
+    path: "/",
+    sameSite: "lax",
+  });
+  resp.headers.set("X-RateLimit-Remaining", String(MAX_ATTEMPTS - newCount));
+  resp.headers.set("X-RateLimit-Reset", new Date(resetAt).toISOString());
 }
 
 export async function POST(
@@ -46,86 +71,42 @@ export async function POST(
       );
     }
 
-    // --- Rate limiting via cookie ---
-    const cookieStore = await import("next/headers").then((mod) => mod.cookies());
-    const attemptCookie = cookieStore.get("redeem_attempts")?.value || "";
-    const { count, timestamp } = parseAttemptsCookie(attemptCookie);
-
+    // Rate limiting via cookie
+    const cookieStore = await import("next/headers").then((m) => m.cookies());
+    const { count, timestamp } = parseAttemptsCookie(
+      cookieStore.get("redeem_attempts")?.value ?? null
+    );
     const now = Date.now();
-    let limited = false;
-    let remaining = MAX_ATTEMPTS;
-    let resetAt = now + RETA_WINDOW_MS;
+    const rateInfo = isRateLimited(count, timestamp);
 
-    if (now - timestamp > RETA_WINDOW_MS) {
-      limited = false;
-      remaining = MAX_ATTEMPTS;
-    } else {
-      limited = count >= MAX_ATTEMPTS;
-      remaining = MAX_ATTEMPTS - count;
-    }
-
-    // Helper to build a failure response with rate-limit headers
-    function failureResp(message: string, status: number): NextResponse<RedeemFailure> {
+    if (rateInfo.limited) {
       const resp = NextResponse.json<RedeemFailure>(
-        { success: false, error: message },
-        { status }
+        { success: false, error: "Too many attempts. Try again later." },
+        { status: 429 }
       );
-      resp.cookies.set("redeem_attempts", `${count + 1}|${Date.now()}`, {
-        httpOnly: false,
-        maxAge: 60,
-        path: "/",
-        sameSite: "lax",
-      });
-      resp.headers.set("X-RateLimit-Remaining", String(MAX_ATTEMPTS - count - 1));
-      resp.headers.set("X-RateLimit-Reset", new Date(resetAt).toISOString());
+      setRateLimitHeaders(resp, count, now + RETA_WINDOW_MS);
       return resp;
     }
 
-    // Helper to build a success response with rate-limit headers
-    function successResp(achievement: RedeemSuccess["achievement"]): NextResponse<RedeemSuccess> {
-      const newCount = count + 1;
-      const resp = NextResponse.json<RedeemSuccess>(
-        { success: true, achievement },
-        { status: 200 }
-      );
-      resp.cookies.set("redeem_attempts", `${newCount}|${Date.now()}`, {
-        httpOnly: false,
-        maxAge: 60,
-        path: "/",
-        sameSite: "lax",
-      });
-      resp.headers.set("X-RateLimit-Remaining", String(MAX_ATTEMPTS - newCount));
-      resp.headers.set("X-RateLimit-Reset", new Date(Date.now() + RETA_WINDOW_MS).toISOString());
-      return resp;
-    }
-
+    // Pure hash check — no database query
     const codeHash = sha256(code);
-
-    const achievement = await prisma.achievement.findFirst({
-      where: {
-        triggerType: "FLAG_CODE",
-        isActive: true,
-        flagHash: codeHash,
-      },
-      select: {
-        id: true,
-        key: true,
-        title: true,
-        description: true,
-        icon: true,
-      },
-    });
-
-    if (!achievement) {
-      return failureResp("That code doesn't seem right.", 404);
+    if (codeHash !== EXPECTED_HASH) {
+      const resp = NextResponse.json<RedeemFailure>(
+        { success: false, error: "That code doesn't seem right." },
+        { status: 404 }
+      );
+      setRateLimitHeaders(resp, count + 1, now + RETA_WINDOW_MS);
+      return resp;
     }
 
-    return successResp({
-      key: achievement.key,
-      title: achievement.title,
-      description: achievement.description,
-      icon: achievement.icon,
-    });
+    // Code is valid — respond with achievement data
+    // Client-side handles unlock() + pushAchievementToast()
+    const resp = NextResponse.json<RedeemSuccess>(
+      { success: true, achievement: ACHIEVEMENT },
+      { status: 200 }
+    );
+    setRateLimitHeaders(resp, count + 1, now + RETA_WINDOW_MS);
+    return resp;
   } catch (error) {
     console.error("Achievement redeem error:", error);
     return NextResponse.json<RedeemFailure>(

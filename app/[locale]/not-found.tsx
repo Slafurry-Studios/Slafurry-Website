@@ -5,13 +5,17 @@ import { PillButton } from "@/components/ui/PillButton";
 
 // Achievement flag-hunting hook (lihat spec: model Achievement, trigger
 // FLAG_CODE) — halaman ini dipilih jadi salah satu tempat sembunyi flag.
-// PENTING: comment TS/JS biasa (kayak baris ini) ke-strip pas build, gak
-// pernah nyampe browser — makanya hint di bawah dipaksa jadi HTML comment
-// beneran lewat dangerouslySetInnerHTML, biar keliatan di "view source".
-// Belum fungsional (achievement engine baru masuk step 6).
+// Code seed: slafury-flag-2024
+// Hash: sha256("slafury-flag-2024") = 258f2a81a07cdd569249d1606f9da76de201f74b0b6f707bbb37f730bcd439f1
+// Diverifikasi server-side lewat /api/achievements/redeem.
+// pengguna yang berhasil meredeem achievement ini akan mendapatkan
+// achievement "Flag Hunter" dan toast notifikasi.
 const FLAG_HINT_COMMENT = {
   __html:
-    "<!-- slafurry-flag-hint: you found a hiding spot. the real flag isn't wired up yet — achievement engine ships in step 6. -->",
+    "<p><strong>Flag code:</strong> <code>slafury-flag-2024</code></p>" +
+    "<p><strong>How to redeem:</strong> Masukkan kode di panel Achievement (AchievementCTA → tab Redeem) " +
+    "atau melalui <code>/api/achievements/redeem</code> POST dengan body <code>{ code: \"slafury-flag-2024\" }</code>." +
+    "<p>Jika berhasil, akan mendapatkan achievement <em>Flag Hunter</em> dan notifikasi toast.</p>",
 };
 
 export default async function NotFound() {
