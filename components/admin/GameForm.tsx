@@ -10,6 +10,7 @@ import {
   IconArrowLeft,
 } from "@tabler/icons-react";
 import { Link } from "@/i18n/navigation";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 type PlayLinkRow = { id?: string; label: string; url: string };
 
@@ -170,26 +171,20 @@ export function GameForm({ initial }: { initial?: GameData }) {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className={hintClass}>
-            <label className={labelClass}>Cover Image URL</label>
-            <input
-              type="text"
-              value={game.coverImage}
-              onChange={(e) => update("coverImage", e.target.value)}
-              className={inputClass}
-              placeholder="https://..."
-            />
-          </div>
-          <div className={hintClass}>
-            <label className={labelClass}>Cover Image Alt Text</label>
-            <input
-              type="text"
-              value={game.coverImageAlt}
-              onChange={(e) => update("coverImageAlt", e.target.value)}
-              className={inputClass}
-            />
-          </div>
+        <div className={hintClass}>
+          <ImageUploader
+            bucket="game-covers"
+            label="Cover Image"
+            value={
+              game.coverImage
+                ? { url: game.coverImage, altText: game.coverImageAlt }
+                : null
+            }
+            onChange={(val) => {
+              update("coverImage", val?.url ?? "");
+              update("coverImageAlt", val?.altText ?? "");
+            }}
+          />
         </div>
 
         <div className={hintClass}>
@@ -324,13 +319,13 @@ export function GameForm({ initial }: { initial?: GameData }) {
           />
         </div>
         <div className={hintClass}>
-          <label className={labelClass}>OG Image URL</label>
-          <input
-            type="text"
-            value={game.ogImage}
-            onChange={(e) => update("ogImage", e.target.value)}
-            className={inputClass}
-            placeholder="Defaults to cover image"
+          <ImageUploader
+            bucket="game-covers"
+            label="OG Image"
+            value={
+              game.ogImage ? { url: game.ogImage, altText: "" } : null
+            }
+            onChange={(val) => update("ogImage", val?.url ?? "")}
           />
         </div>
       </section>

@@ -34,6 +34,13 @@ export function getLatestNewsPosts(limit = 3) {
   });
 }
 
+export function getActiveMontageVideos() {
+  return prisma.montageVideo.findMany({
+    where: { isActive: true },
+    orderBy: { order: "asc" },
+  });
+}
+
 export function getSiteSettings() {
   return prisma.siteSettings.findUnique({ where: { id: 1 } });
 }

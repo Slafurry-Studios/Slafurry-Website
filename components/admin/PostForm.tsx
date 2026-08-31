@@ -12,6 +12,7 @@ import {
   IconCopy,
 } from "@tabler/icons-react";
 import { Link } from "@/i18n/navigation";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 const TiptapEditor = dynamic(
   () => import("@/components/admin/TiptapEditor").then((m) => m.TiptapEditor),
@@ -244,26 +245,20 @@ export function PostForm({ initial }: { initial?: PostData }) {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className={hintClass}>
-            <label className={labelClass}>Cover Image URL</label>
-            <input
-              type="text"
-              value={post.coverImage}
-              onChange={(e) => update("coverImage", e.target.value)}
-              className={inputClass}
-              placeholder="https://..."
-            />
-          </div>
-          <div className={hintClass}>
-            <label className={labelClass}>Cover Image Alt Text</label>
-            <input
-              type="text"
-              value={post.coverImageAlt}
-              onChange={(e) => update("coverImageAlt", e.target.value)}
-              className={inputClass}
-            />
-          </div>
+        <div className={hintClass}>
+          <ImageUploader
+            bucket="post-covers"
+            label="Cover Image"
+            value={
+              post.coverImage
+                ? { url: post.coverImage, altText: post.coverImageAlt }
+                : null
+            }
+            onChange={(val) => {
+              update("coverImage", val?.url ?? "");
+              update("coverImageAlt", val?.altText ?? "");
+            }}
+          />
         </div>
 
         <div className={hintClass}>
@@ -444,13 +439,13 @@ export function PostForm({ initial }: { initial?: PostData }) {
           />
         </div>
         <div className={hintClass}>
-          <label className={labelClass}>OG Image URL</label>
-          <input
-            type="text"
-            value={post.ogImage}
-            onChange={(e) => update("ogImage", e.target.value)}
-            className={inputClass}
-            placeholder="Defaults to cover image"
+          <ImageUploader
+            bucket="post-covers"
+            label="OG Image"
+            value={
+              post.ogImage ? { url: post.ogImage, altText: "" } : null
+            }
+            onChange={(val) => update("ogImage", val?.url ?? "")}
           />
         </div>
       </section>

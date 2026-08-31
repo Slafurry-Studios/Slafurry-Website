@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { IconPlus, IconLoader2, IconX } from "@tabler/icons-react";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 type GameOption = { id: string; title: string };
 
@@ -13,6 +14,8 @@ type AssetData = {
   fileUrl: string;
   gameId: string | null;
 };
+
+type AssetUploaderValue = { url: string; altText: string };
 
 const EMPTY: AssetData = {
   label: "",
@@ -33,6 +36,9 @@ export function AssetForm({
   const router = useRouter();
   const isEdit = Boolean(initial?.id);
   const [form, setForm] = useState<AssetData>(initial ?? EMPTY);
+  const [assetImage, setAssetImage] = useState<AssetUploaderValue | null>(
+    initial?.fileUrl ? { url: initial.fileUrl, altText: "" } : null
+  );
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -45,6 +51,11 @@ export function AssetForm({
     setError("");
     setSaving(true);
 
+    const payload = {
+      ...form,
+      fileUrl: assetImage?.url ?? form.fileUrl,
+    };
+
     try {
       const url = isEdit
         ? `/api/admin/press/assets/${form.id}`
@@ -52,7 +63,7 @@ export function AssetForm({
       const res = await fetch(url, {
         method: isEdit ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -109,13 +120,14 @@ export function AssetForm({
           ))}
         </select>
       </div>
-      <input
-        type="url"
-        placeholder="File URL (https://...)"
-        required
-        value={form.fileUrl}
-        onChange={(e) => update("fileUrl", e.target.value)}
-        className={inputClass}
+      <ImageUploader
+        bucket="press-kit"
+        label="Asset File"
+        value={assetImage}
+        onChange={(val) => {
+          setAssetImage(val);
+          if (val) update("fileUrl", val.url);
+        }}
       />
       <div className="flex gap-2">
         <button

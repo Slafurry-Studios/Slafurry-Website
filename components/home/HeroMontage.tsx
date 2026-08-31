@@ -3,11 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { PlaceholderVideoBg } from "@/components/ui/PlaceholderMedia";
-import type { MockMontageVideo } from "@/lib/mock/montage";
-
-// TODO (step 3, remaining sub-issues — sudah tercatat di GitHub issues plan):
-// - fallback ke poster image di koneksi lambat (navigator.connection)
-// - ganti mockMontageVideos ke query MontageVideo dari database (step 4)
+import type { MontageVideo } from "@prisma/client";
 
 function shuffle<T>(items: T[]): T[] {
   const copy = [...items];
@@ -18,8 +14,8 @@ function shuffle<T>(items: T[]): T[] {
   return copy;
 }
 
-export function HeroMontage({ videos }: { videos: MockMontageVideo[] }) {
-  const playlistRef = useRef<MockMontageVideo[]>([]);
+export function HeroMontage({ videos }: { videos: MontageVideo[] }) {
+  const playlistRef = useRef<MontageVideo[]>([]);
   const indexRef = useRef(0);
   const [currentSrc, setCurrentSrc] = useState<string | null>(null);
 
