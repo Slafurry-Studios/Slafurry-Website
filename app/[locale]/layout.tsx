@@ -75,9 +75,7 @@ export default async function LocaleLayout({
               - <AchievementToastContainer />
               - <AchievementCTA />
             */}
-<CookieConsentBanner
-  onConsentChange={() => {}}
-/>
+<CookieConsentBanner />
           </NextIntlClientProvider>
         </SettingsProvider>
       </body>
