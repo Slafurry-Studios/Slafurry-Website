@@ -39,24 +39,31 @@ export async function proxy(request: NextRequest) {
 
   // 3. Redirect lookup — check for stale slugs before they hit 404.
   //    `from` stores paths WITHOUT locale prefix (e.g. "/devlog/old-slug").
+  //    Wrapped in try-catch: if the DB is unreachable, skip the lookup
+  //    instead of crashing every request on the site.
   const pathnameWithoutLocale = request.nextUrl.pathname.replace(
     /^\/(en|id)/,
     ""
   );
-  const redirect = await prisma.redirect.findUnique({
-    where: { from: pathnameWithoutLocale },
-  });
 
-  if (redirect) {
-    const locale =
-      request.nextUrl.pathname.split("/")[1] || routing.defaultLocale;
-    // If `to` is already a full path with locale, use as-is; otherwise prepend locale.
-    const dest = redirect.to.startsWith(`/${locale}/`)
-      ? redirect.to
-      : `/${locale}${redirect.to.startsWith("/") ? "" : "/"}${redirect.to}`;
-    return NextResponse.redirect(new URL(dest, request.url), {
-      status: 308, // Permanent redirect — search engines update their index
+  try {
+    const redirect = await prisma.redirect.findUnique({
+      where: { from: pathnameWithoutLocale },
     });
+
+    if (redirect) {
+      const locale =
+        request.nextUrl.pathname.split("/")[1] || routing.defaultLocale;
+      const dest = redirect.to.startsWith(`/${locale}/`)
+        ? redirect.to
+        : `/${locale}${redirect.to.startsWith("/") ? "" : "/"}${redirect.to}`;
+      return NextResponse.redirect(new URL(dest, request.url), {
+        status: 308,
+      });
+    }
+  } catch {
+    // DB unreachable — skip redirect lookup, continue to the page.
+    // The catch-all [...rest]/page.tsx will handle 404 if needed.
   }
 
   // 4. Admin route matching.
