@@ -1,11 +1,10 @@
 import { useTranslations } from "next-intl";
-import type { Game, SiteSettings } from "@prisma/client";
+import type { Game, MontageVideo, SiteSettings } from "@prisma/client";
 import { PillButton } from "@/components/ui/PillButton";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 import { HeroMontage } from "@/components/home/HeroMontage";
-import { mockMontageVideos } from "@/lib/mock/montage";
 
-export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; settings: SiteSettings | null }) {
+export function Hero({ upcomingGame, montageVideos, settings }: { upcomingGame: Game | null; montageVideos: MontageVideo[]; settings: SiteSettings | null }) {
   const t = useTranslations("home");
 
   const tagline = settings?.tagline ?? "&ldquo;The joke went too far. Now we are going professional.&rdquo;";
@@ -13,10 +12,7 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
 
   return (
     <section className="relative -mt-24 flex min-h-screen flex-col justify-center overflow-hidden bg-neutral-950 px-6 pb-16 pt-24 text-white md:px-10">
-      {/* TODO: mockMontageVideos masih placeholder — ganti ke query
-          MontageVideo dari database begitu ada video asli yang di-upload
-          (lihat GitHub issues Milestone 3). */}
-      <HeroMontage videos={mockMontageVideos} />
+      <HeroMontage videos={montageVideos} />
       <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-neutral-950/40" />
 
       <div className="relative mx-auto grid w-full max-w-6xl gap-10 md:grid-cols-2 md:items-center">

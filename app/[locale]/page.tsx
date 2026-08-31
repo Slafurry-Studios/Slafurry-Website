@@ -8,24 +8,26 @@ import {
   getCarouselGames,
   getCommunityLinks,
   getLatestNewsPosts,
+  getActiveMontageVideos,
   getSiteSettings,
 } from "@/lib/queries/home";
 
 export default async function Home() {
   // Semua query jalan paralel (bukan await berurutan) — page load-nya
   // secepat query yang paling lambat, bukan total semuanya dijumlah.
-  const [featuredGame, carouselGames, communityLinks, newsPosts, settings] =
+  const [featuredGame, carouselGames, communityLinks, newsPosts, montageVideos, settings] =
     await Promise.all([
       getFeaturedGame(),
       getCarouselGames(),
       getCommunityLinks(),
       getLatestNewsPosts(),
+      getActiveMontageVideos(),
       getSiteSettings(),
     ]);
 
   return (
     <>
-      <Hero upcomingGame={featuredGame} settings={settings} />
+      <Hero upcomingGame={featuredGame} montageVideos={montageVideos} settings={settings} />
       <AboutSection settings={settings} />
       <ProjectCarousel projects={carouselGames} />
       <CommunityContact communityLinks={communityLinks} />
