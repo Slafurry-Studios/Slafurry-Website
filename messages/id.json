@@ -108,6 +108,17 @@
     "tryAgain": "Coba lagi",
     "backHome": "Kembali ke Beranda"
   },
+  "adminLogin": {
+    "heading": "Login Admin",
+    "subheading": "Masuk untuk mengelola dashboard studio.",
+    "email": "Email",
+    "emailPlaceholder": "kamu@contoh.com",
+    "password": "Password",
+    "passwordPlaceholder": "Password kamu",
+    "signIn": "Masuk",
+    "signingIn": "Sedang masuk...",
+    "invalidCredentials": "Email atau password salah."
+  },
   "cookieConsent": {
     "text": "Kami menggunakan cookie fungsional untuk mengingat tema dan preferensi kamu, serta cookie analitik opsional untuk memahami penggunaan situs.",
     "accept": "Terima",
