@@ -1,35 +1,61 @@
-import { IconLayoutGrid } from "@tabler/icons-react";
 import { PillButton } from "@/components/ui/PillButton";
+import { headers, cookies } from "next/headers";
+import Link from "next/link";
 
 function formatBytes(n: number) {
   return `${n} views`;
 }
 
+const VALID_PERIODS = ["7d", "30d", "90d"] as const;
+type Period = (typeof VALID_PERIODS)[number];
+
+function normalizePeriod(value: string | undefined): Period {
+  return (VALID_PERIODS as readonly string[]).includes(value ?? "")
+    ? (value as Period)
+    : "30d";
+}
+
 async function fetchAnalytics(period: string) {
+  const headersList = await headers();
+  const host = headersList.get("host");
+  const protocol = headersList.get("x-forwarded-proto") ?? "https";
+
   const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL ||
-    process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000";
+    process.env.NEXT_PUBLIC_APP_URL || (host ? `${protocol}://${host}` : "http://localhost:3000");
 
   const url = `${baseUrl}/api/analytics?period=${encodeURIComponent(period)}`;
 
-  const res = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    cache: "no-store",
-  });
+  const cookieHeader = (await cookies()).toString();
+
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+      },
+      cache: "no-store",
+    });
+  } catch (err) {
+    console.error("Analytics fetch network error:", err);
+    return { topPages: [], topReferrers: [], deviceBreakdown: [] };
+  }
 
   if (!res.ok) {
-    throw new Error("Analytics fetch failed");
+    console.error(`Analytics fetch failed: ${res.status} ${res.statusText} (${url})`);
+    return { topPages: [], topReferrers: [], deviceBreakdown: [] };
   }
 
   return res.json();
 }
 
-export default async function AdminAnalyticsPage() {
-  const period = "30d";
+export default async function AdminAnalyticsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ period?: string }>;
+}) {
+  const params = await searchParams;
+  const period = normalizePeriod(params.period);
 
   const analytics = await fetchAnalytics(period);
 
@@ -43,40 +69,27 @@ export default async function AdminAnalyticsPage() {
 
       {/* Period selector */}
       <div className="grid gap-2 sm:grid-cols-4 md:grid-cols-5">
-        <PillButton
-          variant="outline"
-          className={period === "30d" ? "bg-neutral-900 text-white" : ""}
-        >
-          30d
-        </PillButton>
-
-        <PillButton
-          variant="outline"
-          className={period === "7d" ? "bg-neutral-900 text-white" : ""}
-        >
-          7d
-        </PillButton>
-
-        <PillButton
-          variant="outline"
-          className={period === "90d" ? "bg-neutral-900 text-white" : ""}
-        >
-          90d
-        </PillButton>
+        {VALID_PERIODS.map((p) => (
+          <Link key={p} href={`?period=${p}`} scroll={false}>
+            <PillButton
+              variant="outline"
+              className={period === p ? "w-full bg-neutral-900 text-white" : "w-full"}
+            >
+              {p}
+            </PillButton>
+          </Link>
+        ))}
       </div>
 
       {/* Top 10 pages */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <div className="rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
-          <h2 className="mb-4 font-heading text-lg font-medium">
-            Top 10 Pages
-          </h2>
+          <h2 className="mb-4 font-heading text-lg font-medium">Top 10 Pages</h2>
 
           <ul className="space-y-2 text-sm">
             {topPages.map((page: any, i: number) => {
               const path = page.path === "/" ? "Home" : page.path;
-              const label =
-                path.length > 30 ? `${path.slice(0, 27)}…` : path;
+              const label = path.length > 30 ? `${path.slice(0, 27)}…` : path;
 
               return (
                 <li key={i} className="flex items-center gap-2">
@@ -104,9 +117,7 @@ export default async function AdminAnalyticsPage() {
 
         {/* Top Referrers */}
         <div className="rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
-          <h2 className="mb-4 font-heading text-lg font-medium">
-            Top Referrers
-          </h2>
+          <h2 className="mb-4 font-heading text-lg font-medium">Top Referrers</h2>
 
           <ul className="space-y-2 text-sm">
             {topReferrers.map((ref: any, i: number) => {
@@ -141,36 +152,19 @@ export default async function AdminAnalyticsPage() {
 
         {/* Device Breakdown */}
         <div className="rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
-          <h2 className="mb-4 font-heading text-lg font-medium">
-            Device Breakdown
-          </h2>
+          <h2 className="mb-4 font-heading text-lg font-medium">Device Breakdown</h2>
 
           <div className="grid grid-cols-2 gap-2">
-            {deviceBreakdown.map((d: any) => {
-              const label =
-                d.device === "desktop"
-                  ? "Desktop"
-                  : d.device === "mobile"
-                  ? "Mobile"
-                  : d.device === "tablet"
-                  ? "Tablet"
-                  : "Other";
-
-              return (
-                <div
-                  key={d.device}
-                  className="flex items-center justify-between rounded-md px-3 py-1"
-                >
-                  <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">
-                    {label}
-                  </span>
-
-                  <span className="text-right font-mono text-xs dark:text-neutral-400">
-                    {formatBytes(d.count)}
-                  </span>
-                </div>
-              );
-            })}
+            {deviceBreakdown.map((d: any) => (
+              <div key={d.device} className="flex items-center justify-between rounded-md px-3 py-1">
+                <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">
+                  {d.device}
+                </span>
+                <span className="text-right font-mono text-xs dark:text-neutral-400">
+                  {formatBytes(d.count)}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
