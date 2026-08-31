@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { withAudit } from "@/lib/audit";
 
 export async function GET() {
   try {
@@ -13,33 +14,41 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
+export const POST = withAudit(
+  async (request: Request) => {
+    try {
+      const body = await request.json();
 
-    const outlet = typeof body.outlet === "string" ? body.outlet.trim() : "";
-    const title = typeof body.title === "string" ? body.title.trim() : "";
-    const url = typeof body.url === "string" ? body.url.trim() : "";
+      const outlet = typeof body.outlet === "string" ? body.outlet.trim() : "";
+      const title = typeof body.title === "string" ? body.title.trim() : "";
+      const url = typeof body.url === "string" ? body.url.trim() : "";
 
-    if (!outlet || !title || !url) {
-      return NextResponse.json(
-        { error: "Outlet, title, and URL are required." },
-        { status: 400 }
-      );
+      if (!outlet || !title || !url) {
+        return NextResponse.json(
+          { error: "Outlet, title, and URL are required." },
+          { status: 400 }
+        );
+      }
+
+      const release = await prisma.pressRelease.create({
+        data: {
+          outlet,
+          title,
+          url,
+          publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
+        },
+      });
+
+      return NextResponse.json(release, { status: 201 });
+    } catch (error) {
+      console.error("Create press release error:", error);
+      return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
     }
-
-    const release = await prisma.pressRelease.create({
-      data: {
-        outlet,
-        title,
-        url,
-        publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
-      },
-    });
-
-    return NextResponse.json(release, { status: 201 });
-  } catch (error) {
-    console.error("Create press release error:", error);
-    return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
+  },
+  {
+    action: "CREATE",
+    entityType: "PressRelease",
+    getEntityId: () => null,
+    getAfter: async (_id, body) => body as Record<string, unknown>,
   }
-}
+);
