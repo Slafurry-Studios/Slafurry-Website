@@ -9,6 +9,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SettingsProvider } from "@/components/layout/SettingsContext";
 import { CookieConsentBanner } from "@/components/layout/CookieConsentBanner";
+import { AchievementToastContainer } from "@/components/achievements/AchievementToast";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -71,10 +72,7 @@ export default async function LocaleLayout({
                 dapet clearance yang bener dari padding ini. */}
             <main className="flex-1 pt-24">{children}</main>
             <Footer />
-            {/*
-              - <AchievementToastContainer />
-              - <AchievementCTA />
-            */}
+            <AchievementToastContainer />
 <CookieConsentBanner />
           </NextIntlClientProvider>
         </SettingsProvider>
