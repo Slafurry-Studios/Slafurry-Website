@@ -38,6 +38,15 @@ export function CommentForm({
 
       {state?.ok !== true && (
         <form action={formAction} className="mt-4 space-y-4">
+          <input
+            type="text"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            className="absolute -left-[9999px] h-0 w-0 opacity-0"
+            aria-hidden="true"
+          />
+
           <input type="hidden" name="postId" value={postId ?? ""} />
           <input type="hidden" name="gameId" value={gameId ?? ""} />
 

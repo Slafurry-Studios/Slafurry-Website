@@ -10,6 +10,7 @@ type PillButtonProps = {
   iconPosition?: "left" | "right";
   className?: string;
   type?: "button" | "submit";
+  disabled?: boolean;
 };
 
 // Tombol pill outline yang muncul berulang di seluruh desain: "Play Our
