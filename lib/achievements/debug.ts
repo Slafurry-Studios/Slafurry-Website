@@ -34,6 +34,7 @@ type AchievementDebugAPI = {
   incrementEventCount: (name: string) => number;
   hydrate: () => ReturnType<typeof hydrate>;
   toast: (entry: { key: string; title: string; description: string; icon: string }) => void;
+  redeem: (code: string) => Promise<{ success: boolean; message: string }>;
 };
 
 declare global {
@@ -64,6 +65,31 @@ export function initDebugAPI(): void {
     incrementEventCount,
     hydrate,
     toast: pushAchievementToast,
+
+    redeem: async (code: string) => {
+      try {
+        const res = await fetch("/api/achievements/redeem", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code }),
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          const isNew = unlock(data.achievement.key);
+          pushAchievementToast({
+            key: data.achievement.key,
+            title: data.achievement.title,
+            description: data.achievement.description,
+            icon: data.achievement.icon,
+          });
+          return { success: true, message: `Unlocked: ${data.achievement.title}` };
+        }
+        return { success: false, message: data.error || "Invalid code." };
+      } catch (e) {
+        return { success: false, message: `Redeem failed: ${e}` };
+      }
+    },
   };
 
   console.log(
