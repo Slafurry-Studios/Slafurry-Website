@@ -1,64 +1,63 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   IconSearch,
   IconChevronUp,
   IconChevronDown,
   IconSelector,
   IconX,
+  IconCheck,
+  IconLoader2,
 } from "@tabler/icons-react";
 
 // ─── Types ──────────────────────────────────────────────────────
 export type FilterOption = { value: string; label: string };
 
 export type Column<T> = {
-  /** Unique key — matches a field on the item or a custom sort key. */
   key: string;
-  /** Header label. */
   label: string;
-  /** Can be sorted by this column? Default false. */
   sortable?: boolean;
-  /** Override sort accessor — when the display value differs from the sort value. */
   sortAccessor?: (item: T) => string | number | boolean | null;
-  /** Column alignment. Default "left". */
   align?: "left" | "center" | "right";
 };
 
 export type DataTableFilter = {
-  /** Query-param / state key for this filter. */
   key: string;
-  /** Dropdown label. */
   label: string;
-  /** Available options. First option is typically "All". */
   options: FilterOption[];
 };
 
+export type BulkAction<T> = {
+  /** Unique key for this action. */
+  key: string;
+  /** Button label. */
+  label: string;
+  /** Icon component (Tabler). */
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  /** Called with the selected row objects. Must return a promise. */
+  onAction: (selected: T[]) => Promise<void>;
+  /** Button variant. Default "default". */
+  variant?: "default" | "danger";
+};
+
 export type DataTableProps<T> = {
-  /** The full data array (already fetched server-side). */
   data: T[];
-  /** Placeholder text for the search input. */
   searchPlaceholder?: string;
-  /** Which object keys to search against when the user types. */
   searchKeys: (keyof T & string)[];
-  /** Optional filter dropdowns (rendered left-to-right). */
   filters?: DataTableFilter[];
-  /** Active filter values — controlled from outside (e.g. URL search params). */
   activeFilters?: Record<string, string>;
-  /** Called when a filter dropdown value changes. Receives filter key + new value. */
   onFilterChange?: (key: string, value: string) => void;
-  /** Column definitions for the sort-bar header row. */
   columns: Column<T>[];
-  /** Render each row. Receives the item and its filtered/sorted index. */
   renderRow: (item: T, index: number) => React.ReactNode;
-  /** Empty-state message. */
   emptyMessage?: string;
-  /** Default sort column + direction. */
   defaultSort?: { key: string; direction: "asc" | "desc" };
-  /** Extra content to render between the search bar and the list (e.g. tab bar, pills). */
   headerExtra?: React.ReactNode;
-  /** Content to render at the top (before search bar), e.g. an inline add form. */
   topContent?: React.ReactNode;
+  /** Extract a unique string ID from each row for selection tracking. Required when bulkActions is set. */
+  getRowId?: (item: T) => string;
+  /** Bulk actions shown when rows are selected. Omit to disable selection. */
+  bulkActions?: BulkAction<T>[];
 };
 
 // ─── Component ──────────────────────────────────────────────────
@@ -75,10 +74,19 @@ export function DataTable<T extends Record<string, unknown>>({
   defaultSort,
   headerExtra,
   topContent,
+  getRowId,
+  bulkActions,
 }: DataTableProps<T>) {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<string | null>(defaultSort?.key ?? null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">(defaultSort?.direction ?? "asc");
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  const enableSelection = Boolean(bulkActions && bulkActions.length > 0 && getRowId);
+
+  // Safe fallback so downstream code can always call getRowId when selection is enabled
+  const getId = getRowId ?? ((item: T) => String(item.id ?? ""));
 
   // ─── Sort ────────────────────────────────────────────────────
   function handleSort(key: string) {
@@ -90,11 +98,10 @@ export function DataTable<T extends Record<string, unknown>>({
     }
   }
 
-  // ─── Derived data: search → filter → sort ────────────────────
+  // ─── Selection ───────────────────────────────────────────────
   const processed = useMemo(() => {
     let result = [...data];
 
-    // Search
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter((item) =>
@@ -106,7 +113,6 @@ export function DataTable<T extends Record<string, unknown>>({
       );
     }
 
-    // External filters (controlled via activeFilters prop)
     if (activeFilters && filters) {
       for (const f of filters) {
         const val = activeFilters[f.key];
@@ -116,17 +122,14 @@ export function DataTable<T extends Record<string, unknown>>({
       }
     }
 
-    // Sort
     if (sortKey) {
       const col = columns.find((c) => c.key === sortKey);
       result.sort((a, b) => {
         const aVal = col?.sortAccessor ? col.sortAccessor(a) : a[sortKey];
         const bVal = col?.sortAccessor ? col.sortAccessor(b) : b[sortKey];
-
         if (aVal == null && bVal == null) return 0;
         if (aVal == null) return 1;
         if (bVal == null) return -1;
-
         let cmp: number;
         if (typeof aVal === "number" && typeof bVal === "number") {
           cmp = aVal - bVal;
@@ -140,6 +143,61 @@ export function DataTable<T extends Record<string, unknown>>({
     return result;
   }, [data, search, searchKeys, activeFilters, filters, sortKey, sortDir, columns]);
 
+  const processedIds = useMemo(
+    () => processed.map((item) => getId(item)),
+    [processed, getId]
+  );
+
+  const allOnPageSelected =
+    enableSelection &&
+    processedIds.length > 0 &&
+    processedIds.every((id) => selectedIds.has(id));
+
+  const someOnPageSelected =
+    enableSelection &&
+    processedIds.some((id) => selectedIds.has(id)) &&
+    !allOnPageSelected;
+
+  function toggleSelectAll() {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (allOnPageSelected) {
+        processedIds.forEach((id) => next.delete(id));
+      } else {
+        processedIds.forEach((id) => next.add(id));
+      }
+      return next;
+    });
+  }
+
+  function toggleSelect(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
+
+  const selectedItems = useMemo(
+    () => data.filter((item) => selectedIds.has(getId(item))),
+    [data, selectedIds, getId]
+  );
+
+  async function runBulkAction(action: BulkAction<T>) {
+    if (selectedItems.length === 0) return;
+    setActionLoading(action.key);
+    try {
+      await action.onAction(selectedItems);
+      setSelectedIds(new Set());
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
   const hasSearch = search.trim().length > 0;
   const hasActiveFilters =
     activeFilters && filters?.some((f) => activeFilters[f.key] && activeFilters[f.key] !== "ALL");
@@ -150,7 +208,6 @@ export function DataTable<T extends Record<string, unknown>>({
 
       {/* Search + Filters bar */}
       <div className="flex flex-wrap items-center gap-3">
-        {/* Search */}
         <div className="relative flex-1 sm:max-w-xs">
           <IconSearch
             size={16}
@@ -173,7 +230,6 @@ export function DataTable<T extends Record<string, unknown>>({
           )}
         </div>
 
-        {/* Filter dropdowns */}
         {filters?.map((f) => {
           const val = activeFilters?.[f.key] ?? "ALL";
           return (
@@ -192,7 +248,6 @@ export function DataTable<T extends Record<string, unknown>>({
           );
         })}
 
-        {/* Reset button */}
         {(hasSearch || hasActiveFilters) && (
           <button
             onClick={() => {
@@ -208,7 +263,6 @@ export function DataTable<T extends Record<string, unknown>>({
           </button>
         )}
 
-        {/* Result count */}
         <span className="ml-auto text-xs text-neutral-500 dark:text-neutral-400">
           {processed.length} {processed.length === 1 ? "result" : "results"}
         </span>
@@ -216,37 +270,106 @@ export function DataTable<T extends Record<string, unknown>>({
 
       {headerExtra}
 
-      {/* Column sort bar */}
-      {columns.some((c) => c.sortable) && (
-        <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
-          <span className="mr-1">Sort:</span>
-          {columns
-            .filter((c) => c.sortable)
-            .map((col) => {
-              const active = sortKey === col.key;
+      {/* Sort bar + select-all row */}
+      <div className="flex items-center gap-3">
+        {enableSelection && processed.length > 0 && (
+          <label className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+            <span
+              onClick={toggleSelectAll}
+              className={`flex h-4 w-4 cursor-pointer items-center justify-center rounded border transition-colors ${
+                allOnPageSelected
+                  ? "border-neutral-900 bg-neutral-900 dark:border-white dark:bg-white"
+                  : someOnPageSelected
+                    ? "border-neutral-400 bg-neutral-200 dark:border-neutral-500 dark:bg-neutral-700"
+                    : "border-neutral-300 bg-white dark:border-neutral-600 dark:bg-neutral-900"
+              }`}
+            >
+              {(allOnPageSelected || someOnPageSelected) && (
+                <IconCheck
+                  size={10}
+                  className={allOnPageSelected ? "text-white dark:text-neutral-900" : "text-neutral-600 dark:text-neutral-300"}
+                />
+              )}
+            </span>
+            {allOnPageSelected
+              ? "Deselect all"
+              : someOnPageSelected
+                ? `Select all ${processedIds.length}`
+                : `Select all ${processedIds.length}`}
+          </label>
+        )}
+
+        {columns.some((c) => c.sortable) && (
+          <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
+            <span className="mr-1">Sort:</span>
+            {columns
+              .filter((c) => c.sortable)
+              .map((col) => {
+                const active = sortKey === col.key;
+                return (
+                  <button
+                    key={col.key}
+                    onClick={() => handleSort(col.key)}
+                    className={`inline-flex items-center gap-0.5 rounded-full px-2.5 py-1 font-medium transition-colors ${
+                      active
+                        ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
+                        : "border border-neutral-300 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                    }`}
+                  >
+                    {col.label}
+                    {active ? (
+                      sortDir === "asc" ? (
+                        <IconChevronUp size={12} />
+                      ) : (
+                        <IconChevronDown size={12} />
+                      )
+                    ) : (
+                      <IconSelector size={12} className="opacity-40" />
+                    )}
+                  </button>
+                );
+              })}
+          </div>
+        )}
+      </div>
+
+      {/* Bulk action bar */}
+      {enableSelection && selectedIds.size > 0 && (
+        <div className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 dark:border-neutral-700 dark:bg-neutral-900">
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            {selectedIds.size} selected
+          </span>
+          <div className="flex gap-2">
+            {bulkActions!.map((action) => {
+              const IconComp = action.icon;
+              const loading = actionLoading === action.key;
               return (
                 <button
-                  key={col.key}
-                  onClick={() => handleSort(col.key)}
-                  className={`inline-flex items-center gap-0.5 rounded-full px-2.5 py-1 font-medium transition-colors ${
-                    active
-                      ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
-                      : "border border-neutral-300 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                  key={action.key}
+                  onClick={() => runBulkAction(action)}
+                  disabled={loading}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 ${
+                    action.variant === "danger"
+                      ? "border border-red-300 text-red-700 hover:bg-red-100 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950"
+                      : "border border-neutral-300 text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-800"
                   }`}
                 >
-                  {col.label}
-                  {active ? (
-                    sortDir === "asc" ? (
-                      <IconChevronUp size={12} />
-                    ) : (
-                      <IconChevronDown size={12} />
-                    )
+                  {loading ? (
+                    <IconLoader2 size={12} className="animate-spin" />
                   ) : (
-                    <IconSelector size={12} className="opacity-40" />
+                    <IconComp size={12} />
                   )}
+                  {action.label}
                 </button>
               );
             })}
+          </div>
+          <button
+            onClick={() => setSelectedIds(new Set())}
+            className="ml-auto text-xs text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+          >
+            Clear selection
+          </button>
         </div>
       )}
 
@@ -257,7 +380,30 @@ export function DataTable<T extends Record<string, unknown>>({
         </div>
       ) : (
         <div className="space-y-2">
-          {processed.map((item, i) => renderRow(item, i))}
+          {processed.map((item, i) => {
+            const id = getId(item);
+            return (
+              <div key={id} className="flex items-start gap-3">
+                {enableSelection && (
+                  <div className="pt-4">
+                    <span
+                      onClick={() => toggleSelect(id)}
+                      className={`flex h-4 w-4 cursor-pointer items-center justify-center rounded border transition-colors ${
+                        selectedIds.has(id)
+                          ? "border-neutral-900 bg-neutral-900 dark:border-white dark:bg-white"
+                          : "border-neutral-300 bg-white dark:border-neutral-600 dark:bg-neutral-900"
+                      }`}
+                    >
+                      {selectedIds.has(id) && (
+                        <IconCheck size={10} className="text-white dark:text-neutral-900" />
+                      )}
+                    </span>
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">{renderRow(item, i)}</div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

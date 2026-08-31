@@ -1,9 +1,10 @@
 "use client";
 
-import { IconMessage, IconClock, IconMail } from "@tabler/icons-react";
+import { useRouter } from "@/i18n/navigation";
+import { IconMessage, IconClock, IconMail, IconCheck, IconX, IconTrash } from "@tabler/icons-react";
 import { CommentActions } from "@/components/admin/CommentActions";
 import { DataTable } from "@/components/admin/DataTable";
-import type { Column, DataTableFilter } from "@/components/admin/DataTable";
+import type { Column, DataTableFilter, BulkAction } from "@/components/admin/DataTable";
 
 const TABS: { key: string; label: string }[] = [
   { key: "PENDING", label: "Pending" },
@@ -64,6 +65,60 @@ export function CommentsList({
   countMap: Record<string, number>;
   total: number;
 }) {
+  const router = useRouter();
+
+  const bulkActions: BulkAction<CommentRow>[] = [
+    {
+      key: "approve",
+      label: "Approve",
+      icon: IconCheck,
+      onAction: async (selected) => {
+        await Promise.all(
+          selected.map((c) =>
+            fetch(`/api/admin/comments/${c.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ status: "APPROVED" }),
+            })
+          )
+        );
+        router.refresh();
+      },
+    },
+    {
+      key: "reject",
+      label: "Reject",
+      icon: IconX,
+      onAction: async (selected) => {
+        await Promise.all(
+          selected.map((c) =>
+            fetch(`/api/admin/comments/${c.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ status: "REJECTED" }),
+            })
+          )
+        );
+        router.refresh();
+      },
+    },
+    {
+      key: "delete",
+      label: "Delete",
+      icon: IconTrash,
+      variant: "danger",
+      onAction: async (selected) => {
+        if (!confirm(`Delete ${selected.length} comment${selected.length > 1 ? "s" : ""}?`)) return;
+        await Promise.all(
+          selected.map((c) =>
+            fetch(`/api/admin/comments/${c.id}`, { method: "DELETE" })
+          )
+        );
+        router.refresh();
+      },
+    },
+  ];
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-10">
       <div className="flex items-center justify-between">
@@ -80,6 +135,8 @@ export function CommentsList({
         filters={FILTERS}
         columns={COLUMNS}
         defaultSort={{ key: "createdAt", direction: "desc" }}
+        getRowId={(c) => c.id}
+        bulkActions={bulkActions}
         emptyMessage={
           activeTab === "PENDING"
             ? "No pending comments. All caught up!"
