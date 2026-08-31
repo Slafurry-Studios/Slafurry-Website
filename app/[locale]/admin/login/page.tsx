@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
@@ -9,6 +10,7 @@ import { IconMail, IconLock, IconAlertCircle } from "@tabler/icons-react";
 export default function AdminLoginPage() {
   const t = useTranslations("adminLogin");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
   const [email, setEmail] = useState("");
@@ -32,7 +34,8 @@ export default function AdminLoginPage() {
       return;
     }
 
-    router.push("/admin");
+    const returnTo = searchParams.get("returnTo");
+    router.push(returnTo || "/admin");
     router.refresh();
   }
 
