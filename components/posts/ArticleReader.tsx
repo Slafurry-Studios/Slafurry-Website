@@ -3,18 +3,23 @@ import { IconChevronLeft, IconArrowLeft, IconArrowRight } from "@tabler/icons-re
 import { Link } from "@/i18n/navigation";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 import { formatDate } from "@/lib/format";
-import type { MockPost } from "@/lib/mock/posts";
+import { CommentForm } from "@/components/posts/CommentForm";
+import { CommentList } from "@/components/posts/CommentList";
+import type { PostArticleData, PostCardData } from "@/lib/queries/posts";
+import type { PublicComment } from "@/lib/queries/comments";
 
 export function ArticleReader({
   post,
   prevPost,
   nextPost,
   basePath,
+  comments,
 }: {
-  post: MockPost;
-  prevPost: MockPost | null;
-  nextPost: MockPost | null;
+  post: PostArticleData;
+  prevPost: PostCardData | null;
+  nextPost: PostCardData | null;
   basePath: string;
+  comments: PublicComment[];
 }) {
   const t = useTranslations("post");
   const locale = useLocale();
@@ -34,22 +39,36 @@ export function ArticleReader({
       </h1>
 
       <p className="mt-2 font-body text-xs text-neutral-500 dark:text-neutral-400">
-        {t("by")} {post.authorName} | {formatDate(post.publishedAt, locale)} |{" "}
+        {t("by")} {post.authorName} |{" "}
+        {post.publishedAt ? formatDate(post.publishedAt, locale) : ""} |{" "}
         {post.tags[0] ?? "update"} | {post.commentCount} {t("comments")}
       </p>
 
       <div className="mt-6 overflow-hidden rounded-xl">
-        <PlaceholderImage label={post.title} className="aspect-[16/9] w-full" />
+        {post.coverImage ? (
+          <img
+            src={post.coverImage}
+            alt={post.coverImageAlt}
+            className="aspect-[16/9] w-full object-cover"
+          />
+        ) : (
+          <PlaceholderImage label={post.title} className="aspect-[16/9] w-full" />
+        )}
       </div>
-      <p className="mt-3 font-body text-xs italic text-neutral-500 dark:text-neutral-400">
-        {post.imageCaption}
-      </p>
+      {post.coverImageAlt && (
+        <p className="mt-3 font-body text-xs italic text-neutral-500 dark:text-neutral-400">
+          {post.coverImageAlt}
+        </p>
+      )}
 
-      <div className="mt-8 space-y-5 font-body text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
-        {post.content.map((paragraph, i) => (
-          <p key={i}>{paragraph}</p>
-        ))}
-      </div>
+      <div
+        className="mt-8 space-y-5 font-body text-sm leading-relaxed text-neutral-700 dark:text-neutral-300 prose prose-neutral dark:prose-invert max-w-none"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      />
+
+      <CommentList comments={comments} />
+
+      <CommentForm postId={post.id} />
 
       <div className="mt-12 grid gap-4 sm:grid-cols-2">
         <NavCard
@@ -75,13 +94,12 @@ function NavCard({
   direction,
   label,
 }: {
-  post: MockPost | null;
+  post: PostCardData | null;
   basePath: string;
   direction: "prev" | "next";
   label: string;
 }) {
   if (!post) {
-    // Placeholder kosong biar grid gak "loncat" pas di ujung awal/akhir list.
     return <div />;
   }
 
