@@ -58,6 +58,26 @@ async function main() {
     },
   });
 
+  // --- FLAG_CODE achievement (Milestone 7) ---
+  // Code: slafury-flag-2024
+  // Hash: sha256(code) stored in DB, never sent to client.
+  // Users can redeem via /api/achievements/redeem or the Achievement panel.
+  await prisma.achievement.upsert({
+    where: { key: "flag_code_1" },
+    update: {},
+    create: {
+      key: "flag_code_1",
+      title: "Flag Hunter",
+      description: "Find and redeem a hidden flag code.",
+      triggerType: AchievementTrigger.FLAG_CODE,
+      triggerConfig: {},
+      flagHash: "d69819f2523f6f081845590e45c1959a49307a8f51fbd7cbe4beeda1383853f1",
+      isSecret: true,
+      category: "Secret",
+      order: 998,
+    },
+  });
+
   // --- Starter game (biar Hero "Upcoming Project" & Project Carousel ada isinya) ---
   await prisma.game.upsert({
     where: { slug: "an-unfinished-game" },
