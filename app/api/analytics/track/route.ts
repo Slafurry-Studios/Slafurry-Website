@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createHash } from "crypto";
+import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
 const WHITELISTED_PATHS = [
@@ -18,28 +19,26 @@ function isWhitelisted(pathname: string): boolean {
   return WHITELISTED_PATHS.some((p) => p.replace(/\/+$/, "") === normalized);
 }
 
+const MAX_FIELD_LEN = 512;
+function clip(value: string | undefined, max = MAX_FIELD_LEN) {
+  return value ? value.slice(0, max) : value;
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const path = (body?.path || "").trim();
-    const referrer = (body?.referrer || "").trim() || undefined;
-    const country = body?.country ? String(body.country).trim() : undefined;
-    const device = body?.device ? String(body.device).trim() : undefined;
+    const path = String(body?.path ?? "").trim();
+    const referrer = clip(String(body?.referrer ?? "").trim() || undefined);
+    const country = clip(body?.country ? String(body.country).trim() : undefined, 8);
+    const device = clip(body?.device ? String(body.device).trim() : undefined, 32);
 
     if (!path) {
-      return NextResponse.json(
-        { error: "Path is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Path is required." }, { status: 400 });
     }
 
-    // Whitelist check
     if (!isWhitelisted(path)) {
-      return NextResponse.json(
-        { error: "Path not tracked." },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Path not tracked." }, { status: 403 });
     }
 
     // Rate limit: max 100 pings per IP per hour
@@ -47,53 +46,42 @@ export async function POST(request: Request) {
     const ipHash = createHash("sha256").update(ip).digest("hex").slice(0, 16);
 
     const rateKey = `track-visit-${ipHash}`;
-    const now = Date.now();
     const windowMs = 60 * 60 * 1000; // 1 hour
     const maxAttempts = 100;
 
-    const cookieStore = await import("next/headers").then((m) => m.cookies);
-    const cookies = await cookieStore();
-    const cookieValue = cookies.get(rateKey)?.value;
+    const cookieStore = await cookies();
+    const cookieValue = cookieStore.get(rateKey)?.value;
     const cookieCount = cookieValue ? parseInt(cookieValue, 10) : 0;
 
-    let allowed = true;
-    let remaining = maxAttempts - cookieCount;
-    let reason = "";
-
-    if (cookieCount >= maxAttempts) {
-      allowed = false;
-      reason = "Rate limited.";
-    }
+    const allowed = cookieCount < maxAttempts;
+    const reason = allowed ? "" : "Rate limited.";
 
     if (allowed) {
-      // Increment counter via cookie
-      const newCount = cookieCount + 1;
-      const expires = new Date(Date.now() + windowMs).toUTCString();
-      const newCookie = `${rateKey}=${newCount}; Expires=${expires}; Path=/; SameSite=Strict; Secure`;
-      const headers = new Headers(request.headers);
-      headers.set("set-cookie", newCookie);
-
-      // Write PageView row
       await prisma.pageView.create({
-        data: {
-          path,
-          referrer,
-          country,
-          device,
-        },
+        data: { path, referrer, country, device },
       });
     }
 
-    return NextResponse.json({
-      ok: allowed,
-      remaining,
-      reason,
+    const newCount = allowed ? cookieCount + 1 : cookieCount;
+    const remaining = Math.max(0, maxAttempts - newCount);
+
+    const response = NextResponse.json(
+      { ok: allowed, remaining, reason },
+      { status: allowed ? 200 : 429 }
+    );
+
+    // Set/refresh the counter cookie directly on the response.
+    response.cookies.set(rateKey, String(newCount), {
+      expires: new Date(Date.now() + windowMs),
+      path: "/",
+      sameSite: "strict",
+      secure: true,
+      httpOnly: true, // client JS doesn't need to read this
     });
+
+    return response;
   } catch (error) {
     console.error("Analytics track error:", error);
-    return NextResponse.json(
-      { error: "Something went wrong." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
   }
 }
