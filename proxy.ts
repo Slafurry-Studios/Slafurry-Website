@@ -2,6 +2,7 @@ import createMiddleware from "next-intl/middleware";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "@/i18n/routing";
+import { prisma } from "@/lib/prisma";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -36,15 +37,33 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 3. Strip locale prefix for admin route matching.
+  // 3. Redirect lookup — check for stale slugs before they hit 404.
+  //    `from` stores paths WITHOUT locale prefix (e.g. "/devlog/old-slug").
   const pathnameWithoutLocale = request.nextUrl.pathname.replace(
     /^\/(en|id)/,
     ""
   );
+  const redirect = await prisma.redirect.findUnique({
+    where: { from: pathnameWithoutLocale },
+  });
+
+  if (redirect) {
+    const locale =
+      request.nextUrl.pathname.split("/")[1] || routing.defaultLocale;
+    // If `to` is already a full path with locale, use as-is; otherwise prepend locale.
+    const dest = redirect.to.startsWith(`/${locale}/`)
+      ? redirect.to
+      : `/${locale}${redirect.to.startsWith("/") ? "" : "/"}${redirect.to}`;
+    return NextResponse.redirect(new URL(dest, request.url), {
+      status: 308, // Permanent redirect — search engines update their index
+    });
+  }
+
+  // 4. Admin route matching.
   const isAdminRoute = pathnameWithoutLocale.startsWith("/admin");
   const isLoginRoute = pathnameWithoutLocale.startsWith("/admin/login");
 
-  // 4. Protect /admin/* — need valid session, except login page.
+  // 5. Protect /admin/* — need valid session, except login page.
   if (isAdminRoute && !isLoginRoute && !user) {
     const locale =
       request.nextUrl.pathname.split("/")[1] || routing.defaultLocale;
@@ -62,7 +81,7 @@ export async function proxy(request: NextRequest) {
     return redirectResponse;
   }
 
-  // 5. If already logged in and hitting /admin/login, redirect to /admin
+  // 6. If already logged in and hitting /admin/login, redirect to /admin
   //    (or the returnTo destination).
   if (isLoginRoute && user) {
     const locale =
