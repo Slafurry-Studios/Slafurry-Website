@@ -1,111 +1,213 @@
-// Slafurry Studios — Prisma Schema
-// Prisma 6.x, classic prisma-client-js generator (stable, no driver adapter needed)
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")   // pooled connection (pgbouncer), dipakai runtime
-  directUrl = env("DIRECT_URL")     // direct connection, dipakai `prisma migrate`/`db push`
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-// ============================================================
-// GAMES
-// ============================================================
-
 model Game {
-  id             String          @id @default(cuid())
-  slug           String          @unique
-  title          String
-  coverImage     String
-  coverImageAlt  String          // alt text — wajib
-  shortDesc      String
-  longDesc       String
-  status         GameStatus      @default(IN_DEVELOPMENT)
-  featured       Boolean         @default(false) // nentuin game yang muncul di "Upcoming Project" Home
-  order          Int             @default(0)
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-
-  // SEO
+  id              String          @id @default(cuid())
+  slug            String          @unique
+  title           String
+  coverImage      String
+  coverImageAlt   String
+  shortDesc       String
+  longDesc        String
+  status          GameStatus      @default(IN_DEVELOPMENT)
+  featured        Boolean         @default(false)
+  order           Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
   metaTitle       String?
   metaDescription String?
   ogImage         String?
+  comments        Comment[]
+  montageVideos   MontageVideo[]
+  playLinks       PlayLink[]
+  pressKitAssets  PressKitAsset[]
+}
 
-  playLinks      PlayLink[]
-  pressKitAssets PressKitAsset[]
-  montageVideos  MontageVideo[]
+model PlayLink {
+  id     String @id @default(cuid())
+  label  String
+  url    String
+  gameId String
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+}
+
+model MontageVideo {
+  id       String  @id @default(cuid())
+  label    String
+  videoUrl String
+  gameId   String?
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+  game     Game?   @relation(fields: [gameId], references: [id])
+}
+
+model Post {
+  id              String       @id @default(cuid())
+  slug            String       @unique
+  title           String
+  coverImage      String
+  coverImageAlt   String
+  excerpt         String
+  content         String
+  category        PostCategory
+  tags            String[]     @default([])
+  authorName      String       @default("Slafurry Studios")
+  status          PostStatus   @default(DRAFT)
+  publishedAt     DateTime?
+  autosavedAt     DateTime?
+  viewCount       Int          @default(0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  previewToken    String?      @unique
+  prevPostId      String?
+  nextPostId      String?
+  comments        Comment[]
+  nextPost        Post?        @relation("PostSequenceNext", fields: [nextPostId], references: [id])
+  nextOf          Post[]       @relation("PostSequenceNext")
+  prevPost        Post?        @relation("PostSequencePrev", fields: [prevPostId], references: [id])
+  prevOf          Post[]       @relation("PostSequencePrev")
+}
+
+model Comment {
+  id          String        @id @default(cuid())
+  postId      String?
+  authorName  String
+  authorEmail String
+  content     String
+  status      CommentStatus @default(PENDING)
+  ipHash      String?
+  createdAt   DateTime      @default(now())
+  gameId      String?
+  targetType  CommentTarget
+  game        Game?         @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  post        Post?         @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([targetType, postId])
+  @@index([targetType, gameId])
+}
+
+model PressRelease {
+  id          String   @id @default(cuid())
+  outlet      String
+  title       String
+  url         String
+  publishedAt DateTime @default(now())
+}
+
+model PressKitAsset {
+  id      String         @id @default(cuid())
+  label   String
+  type    PressAssetType
+  fileUrl String
+  gameId  String?
+  game    Game?          @relation(fields: [gameId], references: [id])
+}
+
+model ContactMessage {
+  id        String          @id @default(cuid())
+  name      String
+  email     String
+  category  ContactCategory @default(GENERAL)
+  message   String
+  status    ContactStatus   @default(NEW)
+  ipHash    String?
+  createdAt DateTime        @default(now())
+}
+
+model Achievement {
+  id            String             @id @default(cuid())
+  key           String             @unique
+  title         String
+  description   String
+  hint          String?
+  icon          String             @default("/mascot-default.png")
+  triggerType   AchievementTrigger
+  triggerConfig Json
+  flagHash      String?
+  isSecret      Boolean            @default(false)
+  category      String?
+  order         Int                @default(0)
+  isActive      Boolean            @default(true)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+model SocialLink {
+  id       String      @id @default(cuid())
+  platform String
+  label    String
+  url      String
+  section  LinkSection
+  order    Int         @default(0)
+}
+
+model Redirect {
+  id        String   @id @default(cuid())
+  from      String   @unique
+  to        String
+  createdAt DateTime @default(now())
+}
+
+model SiteSettings {
+  id                    Int      @id @default(1)
+  tagline               String
+  taglineSerious        String
+  aboutText             String
+  aboutTextSerious      String
+  contactHeading        String   @default("Get in touch")
+  contactHeadingSerious String   @default("Contact us")
+  contactIntro          String
+  contactIntroSerious   String
+  foundedAt             DateTime
+  contactEmail          String
+  businessEmail         String
+  defaultOgImage        String
+}
+
+model AdminUser {
+  id             String     @id @default(cuid())
+  supabaseUserId String     @unique
+  name           String
+  createdAt      DateTime   @default(now())
+  auditLogs      AuditLog[]
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  country   String?
+  device    String?
+  createdAt DateTime @default(now())
+
+  @@index([path, createdAt])
+}
+
+model AuditLog {
+  id          String    @id @default(cuid())
+  adminUserId String
+  action      String
+  entityType  String
+  entityId    String
+  changes     Json
+  createdAt   DateTime  @default(now())
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id])
 }
 
 enum GameStatus {
   UPCOMING
   RELEASED
   IN_DEVELOPMENT
-}
-
-model PlayLink {
-  id     String @id @default(cuid())
-  label  String // "Steam", "Itch.io"
-  url    String
-  gameId String
-  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
-}
-
-// ============================================================
-// HERO VIDEO MONTAGE
-// ============================================================
-
-model MontageVideo {
-  id       String  @id @default(cuid())
-  label    String
-  videoUrl String  // Supabase Storage bucket "montage-videos"
-  gameId   String?
-  game     Game?   @relation(fields: [gameId], references: [id])
-  order    Int     @default(0)
-  isActive Boolean @default(true)
-}
-
-// ============================================================
-// CONTENT (DEVLOG / NEWS)
-// ============================================================
-
-model Post {
-  id          String       @id @default(cuid())
-  slug        String       @unique
-  title       String
-  coverImage  String
-  coverImageAlt String     // alt text — wajib, accessibility + SEO
-  excerpt     String
-  content     String       @db.Text // HTML dari Tiptap WYSIWYG
-  category    PostCategory
-  tags        String[]     @default([]) // ["feature", "update", "announcement"] — filter publik
-  authorName  String       @default("Slafurry Studios")
-  status      PostStatus   @default(DRAFT)
-  publishedAt DateTime?
-  autosavedAt DateTime?    // timestamp autosave terakhir, beda dari updatedAt (publish manual)
-  viewCount   Int          @default(0) // buat sort "Most Popular"
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-
-  // SEO — diisi manual, gak auto-generate dari title/excerpt
-  metaTitle       String?
-  metaDescription String?
-  ogImage         String?
-
-  // Draft preview — share link ke non-admin sebelum publish, tanpa perlu login
-  previewToken String? @unique
-
-  // Previous/Next manual override — kalau kosong, fallback ke urutan by publishedAt
-  prevPostId String?
-  nextPostId String?
-  prevPost   Post?  @relation("PostSequencePrev", fields: [prevPostId], references: [id])
-  nextPost   Post?  @relation("PostSequenceNext", fields: [nextPostId], references: [id])
-  prevOf     Post[] @relation("PostSequencePrev")
-  nextOf     Post[] @relation("PostSequenceNext")
-
-  comments    Comment[]
 }
 
 enum PostCategory {
@@ -118,16 +220,9 @@ enum PostStatus {
   PUBLISHED
 }
 
-model Comment {
-  id          String        @id @default(cuid())
-  postId      String
-  post        Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
-  authorName  String
-  authorEmail String
-  content     String        @db.Text
-  status      CommentStatus @default(PENDING)
-  ipHash      String?       // hashed IP — rate-limit & abuse trace, bukan identify individu
-  createdAt   DateTime      @default(now())
+enum CommentTarget {
+  POST
+  GAME
 }
 
 enum CommentStatus {
@@ -136,46 +231,10 @@ enum CommentStatus {
   REJECTED
 }
 
-// ============================================================
-// PRESS
-// ============================================================
-
-model PressRelease {
-  id          String   @id @default(cuid())
-  outlet      String   // "IGN", "Gamejolt"
-  title       String
-  url         String
-  publishedAt DateTime @default(now())
-}
-
-model PressKitAsset {
-  id      String         @id @default(cuid())
-  label   String         // "Slafurry Studios", "An Unfinished Game"
-  type    PressAssetType
-  fileUrl String
-  gameId  String?
-  game    Game?          @relation(fields: [gameId], references: [id])
-}
-
 enum PressAssetType {
   LOGO
   BANNER
   CHARACTER
-}
-
-// ============================================================
-// CONTACT
-// ============================================================
-
-model ContactMessage {
-  id        String          @id @default(cuid())
-  name      String
-  email     String
-  category  ContactCategory @default(GENERAL)
-  message   String          @db.Text
-  status    ContactStatus   @default(NEW)
-  ipHash    String?         // pola anti-spam sama seperti Comment
-  createdAt DateTime        @default(now())
 }
 
 enum ContactCategory {
@@ -190,111 +249,19 @@ enum ContactStatus {
   REPLIED
 }
 
-// ============================================================
-// ACHIEVEMENT SYSTEM (server config, client-side state)
-// ============================================================
-
-model Achievement {
-  id            String             @id @default(cuid())
-  key           String             @unique // "welcome", "read_5_devlogs", "cheating"
-  title         String
-  description   String
-  hint          String?
-  icon          String             @default("/mascot-default.png")
-  triggerType   AchievementTrigger
-  triggerConfig Json               // fleksibel per tipe trigger
-  flagHash      String?            // sha256(kode) — HANYA untuk FLAG_CODE, tidak pernah dikirim ke client
-  isSecret      Boolean            @default(false)
-  category      String?            // "Exploration", "Story", "Secret", "Meta" — grouping di panel
-  order         Int                @default(0)
-  isActive      Boolean            @default(true)
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
-}
-
 enum AchievementTrigger {
-  PAGE_VISIT       // { path: "/press" }
-  EVENT            // { eventName: "toggled_serious_mode" }
-  VISIT_COUNT      // { count: 3 }
-  SCROLL_DEPTH     // { path: "/", percent: 100 }
-  TIME_ON_SITE     // { seconds: 300 }
-  META_ALL         // unlock kalau semua achievement lain kebuka
-  FLAG_CODE        // butuh input manual, diverifikasi server
-  CHEAT_DETECTED   // tidak pernah dipanggil lewat jalur normal — hanya via integrity-check mismatch
-}
-
-// ============================================================
-// SETTINGS / SOCIAL / MISC
-// ============================================================
-
-model SocialLink {
-  id      String      @id @default(cuid())
-  platform String     // slug simple-icons: "discord", "steam", "itchdotio", "tiktok", "mail", dll — dipakai langsung sbg icon key
-  label   String      // teks tampil: "Discord Server", "Say Hello"
-  url     String
-  section LinkSection
-  order   Int         @default(0)
+  PAGE_VISIT
+  EVENT
+  VISIT_COUNT
+  SCROLL_DEPTH
+  TIME_ON_SITE
+  META_ALL
+  FLAG_CODE
+  CHEAT_DETECTED
 }
 
 enum LinkSection {
-  COMMUNITY // Itch.io, Discord, Steam
-  CONTACT   // Say Hello, Business Inquiries
-  FOOTER    // social icons
-}
-
-model Redirect {
-  id        String   @id @default(cuid())
-  from      String   @unique // slug/path lama, e.g. "/devlog/old-slug"
-  to        String             // path baru
-  createdAt DateTime @default(now())
-}
-
-model SiteSettings {
-  id               Int      @id @default(1) // singleton
-  tagline          String
-  taglineSerious   String
-  aboutText        String   @db.Text
-  aboutTextSerious String   @db.Text
-  contactHeading        String  @default("Get in touch")
-  contactHeadingSerious String  @default("Contact us")
-  contactIntro          String  @db.Text
-  contactIntroSerious   String  @db.Text
-  foundedAt        DateTime // basis hitung "X months, X days..." (skip kalau serious mode)
-  contactEmail     String
-  businessEmail    String
-  defaultOgImage   String   // 1200x630px — fallback OG banner utk halaman/post tanpa ogImage sendiri
-}
-
-model AdminUser {
-  id             String     @id @default(cuid())
-  supabaseUserId String     @unique
-  name           String
-  createdAt      DateTime   @default(now())
-  auditLogs      AuditLog[]
-}
-
-// ============================================================
-// ANALYTICS & AUDIT
-// ============================================================
-
-model PageView {
-  id        String   @id @default(cuid())
-  path      String
-  referrer  String?
-  country   String?
-  device    String?  // "mobile" | "desktop"
-  createdAt DateTime @default(now())
-
-  @@index([path, createdAt])
-}
-
-model AuditLog {
-  id          String    @id @default(cuid())
-  adminUserId String
-  adminUser   AdminUser @relation(fields: [adminUserId], references: [id])
-  action      String    // "CREATE" | "UPDATE" | "DELETE"
-  entityType  String    // "Achievement", "Post", "Game", dst
-  entityId    String
-  changes     Json      // diff before/after
-  createdAt   DateTime  @default(now())
+  COMMUNITY
+  CONTACT
+  FOOTER
 }

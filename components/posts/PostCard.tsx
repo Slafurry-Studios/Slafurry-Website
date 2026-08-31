@@ -2,13 +2,13 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 import { formatDate } from "@/lib/format";
-import type { MockPost } from "@/lib/mock/posts";
+import type { PostCardData } from "@/lib/queries/posts";
 
 export function PostCard({
   post,
   compact = false,
 }: {
-  post: MockPost;
+  post: PostCardData;
   compact?: boolean;
 }) {
   const t = useTranslations("post");
@@ -20,10 +20,18 @@ export function PostCard({
       href={`${basePath}/${post.slug}`}
       className="block overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
     >
-      <PlaceholderImage
-        label={post.title}
-        className={compact ? "aspect-[16/9] w-full" : "aspect-[21/9] w-full"}
-      />
+      {post.coverImage ? (
+        <img
+          src={post.coverImage}
+          alt={post.coverImageAlt}
+          className={compact ? "aspect-[16/9] w-full object-cover" : "aspect-[21/9] w-full object-cover"}
+        />
+      ) : (
+        <PlaceholderImage
+          label={post.title}
+          className={compact ? "aspect-[16/9] w-full" : "aspect-[21/9] w-full"}
+        />
+      )}
       <div className={compact ? "p-3" : "p-5"}>
         <h3
           className={
@@ -35,7 +43,8 @@ export function PostCard({
           {post.title}
         </h3>
         <p className="mt-1 font-body text-xs text-neutral-500 dark:text-neutral-400">
-          {t("by")} {post.authorName} | {formatDate(post.publishedAt, locale)} |{" "}
+          {t("by")} {post.authorName} |{" "}
+          {post.publishedAt ? formatDate(post.publishedAt, locale) : ""} |{" "}
           {post.tags.map((tag) => (
             <span key={tag} className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-xxs font-body mr-1">
               {tag}

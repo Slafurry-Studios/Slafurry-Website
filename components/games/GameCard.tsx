@@ -1,15 +1,15 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
-import type { MockGame } from "@/lib/mock/games";
+import type { GameData } from "@/lib/queries/games";
 
-const STATUS_STYLE: Record<MockGame["status"], string> = {
+const STATUS_STYLE: Record<GameData["status"], string> = {
   RELEASED: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
   UPCOMING: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
   IN_DEVELOPMENT: "bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300",
 };
 
-function StatusBadge({ status }: { status: MockGame["status"] }) {
+function StatusBadge({ status }: { status: GameData["status"] }) {
   const t = useTranslations("games");
   return (
     <span
@@ -24,7 +24,7 @@ export function GameCard({
   game,
   featured = false,
 }: {
-  game: MockGame;
+  game: GameData;
   featured?: boolean;
 }) {
   return (
@@ -32,10 +32,18 @@ export function GameCard({
       href={`/games/${game.slug}`}
       className="flex flex-col overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
     >
-      <PlaceholderImage
-        label={game.title}
-        className={featured ? "aspect-[21/9] w-full" : "aspect-[16/9] w-full"}
-      />
+      {game.coverImage ? (
+        <img
+          src={game.coverImage}
+          alt={game.coverImageAlt}
+          className={featured ? "aspect-[21/9] w-full object-cover" : "aspect-[16/9] w-full object-cover"}
+        />
+      ) : (
+        <PlaceholderImage
+          label={game.title}
+          className={featured ? "aspect-[21/9] w-full" : "aspect-[16/9] w-full"}
+        />
+      )}
       <div className={featured ? "p-6" : "p-4"}>
         <h3 className={featured ? "font-heading text-3xl tracking-wide" : "font-heading text-2xl tracking-wide"}>
           {game.title}

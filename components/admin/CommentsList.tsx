@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "@/i18n/navigation";
-import { IconMessage, IconClock, IconMail, IconCheck, IconX, IconTrash } from "@tabler/icons-react";
+import { IconMessage, IconClock, IconMail, IconCheck, IconX, IconTrash, IconDeviceGamepad } from "@tabler/icons-react";
 import { CommentActions } from "@/components/admin/CommentActions";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter, BulkAction } from "@/components/admin/DataTable";
@@ -22,22 +22,56 @@ const STATUS_STYLE: Record<string, string> = {
     "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
 };
 
+const TARGET_STYLE: Record<string, string> = {
+  POST: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
+  GAME: "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
+};
+
 type CommentRow = {
   id: string;
+  targetType: string;
   authorName: string;
   authorEmail: string;
   content: string;
   status: string;
   createdAt: string;
-  postId: string;
-  postTitle: string;
+  postId: string | null;
+  postTitle: string | null;
+  gameId: string | null;
+  gameTitle: string | null;
 };
+
+function TargetLink({ comment }: { comment: CommentRow }) {
+  if (comment.targetType === "GAME" && comment.gameId && comment.gameTitle) {
+    return (
+      <a
+        href={`/admin/games/${comment.gameId}/edit`}
+        className="flex items-center gap-1 hover:text-neutral-600 dark:hover:text-neutral-300"
+      >
+        <IconDeviceGamepad size={12} />
+        {comment.gameTitle}
+      </a>
+    );
+  }
+  if (comment.postId && comment.postTitle) {
+    return (
+      <a
+        href={`/admin/posts/${comment.postId}/edit`}
+        className="flex items-center gap-1 hover:text-neutral-600 dark:hover:text-neutral-300"
+      >
+        <IconMessage size={12} />
+        {comment.postTitle}
+      </a>
+    );
+  }
+  return <span className="text-neutral-400">Deleted</span>;
+}
 
 const COLUMNS: Column<CommentRow>[] = [
   { key: "authorName", label: "Author", sortable: true },
   { key: "content", label: "Comment" },
+  { key: "targetType", label: "Target", sortable: true },
   { key: "status", label: "Status", sortable: true },
-  { key: "postTitle", label: "Post", sortable: true },
   { key: "createdAt", label: "Date", sortable: true },
 ];
 
@@ -50,6 +84,15 @@ const FILTERS: DataTableFilter[] = [
       { value: "PENDING", label: "Pending" },
       { value: "APPROVED", label: "Approved" },
       { value: "REJECTED", label: "Rejected" },
+    ],
+  },
+  {
+    key: "targetType",
+    label: "Target",
+    options: [
+      { value: "ALL", label: "All targets" },
+      { value: "POST", label: "Posts" },
+      { value: "GAME", label: "Games" },
     ],
   },
 ];
@@ -188,6 +231,11 @@ export function CommentsList({
                   >
                     {comment.status}
                   </span>
+                  <span
+                    className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-medium uppercase ${TARGET_STYLE[comment.targetType]}`}
+                  >
+                    {comment.targetType}
+                  </span>
                 </div>
 
                 <p className="mt-2 whitespace-pre-wrap text-sm text-neutral-700 dark:text-neutral-300">
@@ -195,13 +243,7 @@ export function CommentsList({
                 </p>
 
                 <div className="mt-2 flex items-center gap-3 text-xs text-neutral-400">
-                  <a
-                    href={`/admin/posts/${comment.postId}/edit`}
-                    className="flex items-center gap-1 hover:text-neutral-600 dark:hover:text-neutral-300"
-                  >
-                    <IconMessage size={12} />
-                    {comment.postTitle}
-                  </a>
+                  <TargetLink comment={comment} />
                   <span className="flex items-center gap-1">
                     <IconClock size={12} />
                     {new Date(comment.createdAt).toLocaleString("en-US", {

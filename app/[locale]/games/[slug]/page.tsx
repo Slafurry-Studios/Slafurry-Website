@@ -1,5 +1,9 @@
 import { notFound } from "next/navigation";
-import { getGameBySlug } from "@/lib/mock/games";
+import { Link } from "@/i18n/navigation";
+import { getGameBySlug } from "@/lib/queries/games";
+import { getApprovedGameComments } from "@/lib/queries/comments";
+import { CommentForm } from "@/components/posts/CommentForm";
+import { CommentList } from "@/components/posts/CommentList";
 
 export default async function GameDetailPage({
   params,
@@ -7,11 +11,13 @@ export default async function GameDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const game = getGameBySlug(slug);
+  const game = await getGameBySlug(slug);
 
   if (!game) {
     notFound();
   }
+
+  const comments = await getApprovedGameComments(game.id);
 
   return (
     <div className="prose lg:prose-xl max-w-2xl mx-auto px-4 py-12">
@@ -35,7 +41,7 @@ export default async function GameDetailPage({
         {game.shortDesc}
       </p>
 
-      {game.playLinks && game.playLinks.length > 0 && (
+      {game.playLinks.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-heading mb-4">Play on</h2>
           <div className="grid grid-cols-2 gap-2">
@@ -63,13 +69,17 @@ export default async function GameDetailPage({
       )}
 
       <div className="mt-8">
-        <a
-          href={`/games`}
+        <Link
+          href="/games"
           className="inline-flex items-center rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
         >
           ← Kembali ke daftar game
-        </a>
+        </Link>
       </div>
+
+      <CommentList comments={comments} />
+
+      <CommentForm gameId={game.id} />
     </div>
   );
 }

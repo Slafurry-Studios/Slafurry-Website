@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { IconMail, IconBriefcase } from "@tabler/icons-react";
 import { ContactForm } from "@/components/contact/ContactForm";
 
@@ -11,8 +11,8 @@ const BUSINESS_EMAIL = "business@slafurrystudios.com";
 const MOCK_INTRO =
   "Got a question, a business proposal, or just want to say the joke worked? Pick a channel below.";
 
-export default function ContactPage() {
-  const t = useTranslations("contact");
+export default async function ContactPage() {
+  const t = await getTranslations("contact");
 
   return (
     <div className="mx-auto max-w-xl px-6 py-16 md:px-10">

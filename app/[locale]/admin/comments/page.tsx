@@ -21,7 +21,8 @@ export default async function AdminCommentsPage({
       where,
       orderBy: { createdAt: "desc" },
       include: {
-        post: { select: { id: true, title: true, slug: true, category: true } },
+        post: { select: { id: true, title: true, slug: true } },
+        game: { select: { id: true, title: true, slug: true } },
       },
     }),
     prisma.comment.groupBy({
@@ -42,13 +43,16 @@ export default async function AdminCommentsPage({
       total={total}
       comments={comments.map((c) => ({
         id: c.id,
+        targetType: c.targetType,
         authorName: c.authorName,
         authorEmail: c.authorEmail,
         content: c.content,
         status: c.status,
         createdAt: c.createdAt.toISOString(),
-        postId: c.post.id,
-        postTitle: c.post.title,
+        postId: c.postId,
+        postTitle: c.post?.title ?? null,
+        gameId: c.gameId,
+        gameTitle: c.game?.title ?? null,
       }))}
     />
   );
