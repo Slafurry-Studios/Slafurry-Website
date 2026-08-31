@@ -1,9 +1,10 @@
 "use client";
 
-import { IconClock } from "@tabler/icons-react";
+import { useRouter } from "@/i18n/navigation";
+import { IconClock, IconMailOpened, IconCheck, IconTrash } from "@tabler/icons-react";
 import { ContactActions } from "@/components/admin/ContactActions";
 import { DataTable } from "@/components/admin/DataTable";
-import type { Column, DataTableFilter } from "@/components/admin/DataTable";
+import type { Column, DataTableFilter, BulkAction } from "@/components/admin/DataTable";
 
 const STATUS_TABS: { key: string; label: string }[] = [
   { key: "NEW", label: "New" },
@@ -92,12 +93,66 @@ export function ContactsList({
   categoryMap: Record<string, number>;
   total: number;
 }) {
+  const router = useRouter();
+
   function statusHref(s: string) {
     return `/admin/contacts?status=${s}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}`;
   }
   function categoryHref(c: string) {
     return `/admin/contacts?category=${c}${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}`;
   }
+
+  const bulkActions: BulkAction<ContactRow>[] = [
+    {
+      key: "mark-read",
+      label: "Mark read",
+      icon: IconMailOpened,
+      onAction: async (selected) => {
+        await Promise.all(
+          selected.map((m) =>
+            fetch(`/api/admin/contacts/${m.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ status: "READ" }),
+            })
+          )
+        );
+        router.refresh();
+      },
+    },
+    {
+      key: "mark-replied",
+      label: "Mark replied",
+      icon: IconCheck,
+      onAction: async (selected) => {
+        await Promise.all(
+          selected.map((m) =>
+            fetch(`/api/admin/contacts/${m.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ status: "REPLIED" }),
+            })
+          )
+        );
+        router.refresh();
+      },
+    },
+    {
+      key: "delete",
+      label: "Delete",
+      icon: IconTrash,
+      variant: "danger",
+      onAction: async (selected) => {
+        if (!confirm(`Delete ${selected.length} message${selected.length > 1 ? "s" : ""}?`)) return;
+        await Promise.all(
+          selected.map((m) =>
+            fetch(`/api/admin/contacts/${m.id}`, { method: "DELETE" })
+          )
+        );
+        router.refresh();
+      },
+    },
+  ];
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-10">
@@ -115,6 +170,8 @@ export function ContactsList({
         filters={FILTERS}
         columns={COLUMNS}
         defaultSort={{ key: "createdAt", direction: "desc" }}
+        getRowId={(m) => m.id}
+        bulkActions={bulkActions}
         emptyMessage="No messages match these filters."
         headerExtra={
           <>
