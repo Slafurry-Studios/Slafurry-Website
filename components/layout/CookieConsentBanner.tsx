@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { redirect } from "@/i18n/navigation";
 
@@ -17,6 +17,7 @@ export function CookieConsentBanner() {
   const [showBanner, setShowBanner] = useState(true);
   const [hasHydrated, setHasHydrated] = useState(false);
   const t = useTranslations("cookieConsent");
+  const locale = useLocale();
 
   useEffect(() => {
     const checkConsent = () => {
@@ -53,7 +54,7 @@ export function CookieConsentBanner() {
           <button
             onClick={() => {
               document.cookie = "cookie_consent=accept; path=/";
-              redirect("/");
+              redirect({ href: "/", locale });
             }}
             className="px-6 py-3 rounded-full border bg-neutral-900 text-white font-body font-medium hover:bg-neutral-700 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
           >
@@ -62,7 +63,7 @@ export function CookieConsentBanner() {
           <button
             onClick={() => {
               document.cookie = "cookie_consent=reject; path=/";
-              redirect("/");
+              redirect({ href: "/", locale });
             }}
             className="px-6 py-3 rounded-full border border-neutral-900 text-neutral-900 font-body font-medium hover:bg-neutral-900 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900"
           >
