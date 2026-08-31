@@ -8,7 +8,7 @@ const intlMiddleware = createMiddleware(routing);
 export async function proxy(request: NextRequest) {
   // 1. Jalanin locale routing dulu (redirect /foo -> /en/foo kalau perlu,
   //    nentuin locale dari Accept-Language header, dst).
-  const response = intlMiddleware(request);
+  let response = intlMiddleware(request);
 
   // 2. Refresh session Supabase — WAJIB dipanggil di tiap request biar
   //    token gak expired diam-diam pas admin lagi kerja lama.
@@ -36,9 +36,7 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 3. Proteksi /admin/* — semua path yang mengandung segment "admin"
-  //    (setelah locale prefix, misal /en/admin/games) butuh session valid,
-  //    kecuali halaman login itu sendiri.
+  // 3. Strip locale prefix for admin route matching.
   const pathnameWithoutLocale = request.nextUrl.pathname.replace(
     /^\/(en|id)/,
     ""
@@ -46,10 +44,34 @@ export async function proxy(request: NextRequest) {
   const isAdminRoute = pathnameWithoutLocale.startsWith("/admin");
   const isLoginRoute = pathnameWithoutLocale.startsWith("/admin/login");
 
+  // 4. Protect /admin/* — need valid session, except login page.
   if (isAdminRoute && !isLoginRoute && !user) {
-    const locale = request.nextUrl.pathname.split("/")[1] || routing.defaultLocale;
-    const loginUrl = new URL(`/${locale}/admin/login`, request.url);
-    return NextResponse.redirect(loginUrl);
+    const locale =
+      request.nextUrl.pathname.split("/")[1] || routing.defaultLocale;
+    const returnTo = request.nextUrl.pathname;
+    const loginUrl = new URL(
+      `/${locale}/admin/login${returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : ""}`,
+      request.url
+    );
+    // Carry cookies from intl middleware (e.g. NEXT_LOCALE) into the redirect
+    // so they aren't lost when we replace the response.
+    const redirectResponse = NextResponse.redirect(loginUrl);
+    response.cookies.getAll().forEach((c) =>
+      redirectResponse.cookies.set(c.name, c.value, c)
+    );
+    return redirectResponse;
+  }
+
+  // 5. If already logged in and hitting /admin/login, redirect to /admin
+  //    (or the returnTo destination).
+  if (isLoginRoute && user) {
+    const locale =
+      request.nextUrl.pathname.split("/")[1] || routing.defaultLocale;
+    const returnTo = request.nextUrl.searchParams.get("returnTo");
+    const dest = returnTo && returnTo.startsWith(`/${locale}/admin`)
+      ? returnTo
+      : `/${locale}/admin`;
+    return NextResponse.redirect(new URL(dest, request.url));
   }
 
   return response;
