@@ -6,6 +6,7 @@ export type GameData = {
   id: string;
   slug: string;
   title: string;
+  ogImage: string | null;
   coverImage: string;
   coverImageAlt: string;
   shortDesc: string;
@@ -41,12 +42,14 @@ export async function getGameBySlug(slug: string): Promise<GameData | null> {
 function toGameData(
   row: Awaited<ReturnType<typeof prisma.game.findUnique>> & {
     playLinks: { label: string; url: string }[];
+    ogImage: string | null;
   }
 ): GameData {
   return {
     id: row.id,
     slug: row.slug,
     title: row.title,
+    ogImage: row.ogImage,
     coverImage: row.coverImage,
     coverImageAlt: row.coverImageAlt,
     shortDesc: row.shortDesc,
