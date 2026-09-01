@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
-import { Link } from "@/i18n/navigation";
 import { getGameBySlug } from "@/lib/queries/games";
 import { getApprovedGameComments } from "@/lib/queries/comments";
+import { getSiteSettings } from "@/lib/queries/home";
+import { Link } from "@/i18n/navigation";
 import { CommentForm } from "@/components/posts/CommentForm";
 import { CommentList } from "@/components/posts/CommentList";
 
@@ -83,3 +84,37 @@ export default async function GameDetailPage({
     </div>
   );
 }
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
+  const { slug } = await params;
+  const game = await getGameBySlug(slug);
+
+  if (!game) {
+    notFound();
+  }
+
+  const settings = await getSiteSettings();
+  const ogImage = game.ogImage || (settings?.defaultOgImage || "/og/default-banner.png");
+
+  return {
+    title: game.title,
+    description: game.shortDesc,
+    openGraph: {
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: game.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
+  };
+};
