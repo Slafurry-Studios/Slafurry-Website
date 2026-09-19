@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import { IconPlus, IconLoader2 } from "@tabler/icons-react";
 
 type GameOption = { id: string; title: string };

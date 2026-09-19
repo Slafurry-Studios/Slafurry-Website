@@ -1,6 +1,5 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { IconChevronDown } from "@tabler/icons-react";
 import { PillButton } from "@/components/ui/PillButton";
@@ -22,7 +21,7 @@ export function PostListClient({
   subIntro?: string;
   searchPlaceholder: string;
 }) {
-  const tPost = useTranslations("post");
+
   const [tagFilter, setTagFilter] = useState<string | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -108,7 +107,7 @@ export function PostListClient({
 
       <div className="mt-10 flex justify-center">
         <PillButton icon={<IconChevronDown size={16} />} iconPosition="right">
-          {tPost("more")}
+          More
         </PillButton>
       </div>
     </div>

@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import { useLocale, useTranslations } from "next-intl";
 
-import { redirect } from "@/i18n/navigation";
+import { redirect } from "next/navigation";
 
 function getCookie(name: string): string | null {
   return document.cookie
@@ -16,9 +15,7 @@ function getCookie(name: string): string | null {
 export function CookieConsentBanner() {
   const [showBanner, setShowBanner] = useState(true);
   const [hasHydrated, setHasHydrated] = useState(false);
-  const t = useTranslations("cookieConsent");
-  const locale = useLocale();
-
+    
   useEffect(() => {
     const checkConsent = () => {
       const consent = getCookie("cookie_consent");
@@ -47,27 +44,27 @@ export function CookieConsentBanner() {
         className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-8 max-w-sm w-full mx-4 transform transition-transform scale-100"
       >
         <p className="text-neutral-700 dark:text-neutral-300 text-sm mb-6 line-height-relaxed">
-          {t("text")}
+          We use functional cookies to remember your theme and preferences, and optional analytics cookies to understand how the site is used.
         </p>
 
         <div className="flex gap-4 justify-end">
           <button
             onClick={() => {
               document.cookie = "cookie_consent=accept; path=/";
-              redirect({ href: "/", locale });
+              redirect("/");
             }}
             className="px-6 py-3 rounded-full border bg-neutral-900 text-white font-body font-medium hover:bg-neutral-700 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
           >
-            {t("accept")}
+            Accept
           </button>
           <button
             onClick={() => {
               document.cookie = "cookie_consent=reject; path=/";
-              redirect({ href: "/", locale });
+              redirect("/");
             }}
             className="px-6 py-3 rounded-full border border-neutral-900 text-neutral-900 font-body font-medium hover:bg-neutral-900 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900"
           >
-            {t("reject")}
+            Reject
           </button>
         </div>
       </div>

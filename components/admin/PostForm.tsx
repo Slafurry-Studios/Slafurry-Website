@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, type FormEvent } from "react";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import {
   IconAlertCircle,
@@ -11,7 +11,7 @@ import {
   IconEye,
   IconCopy,
 } from "@tabler/icons-react";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 
 const TiptapEditor = dynamic(

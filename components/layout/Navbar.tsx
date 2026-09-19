@@ -1,7 +1,7 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { SettingsDropdown } from "./SettingsDropdown";
 
@@ -15,8 +15,7 @@ const NAV_ITEMS = [
 ] as const;
 
 export function Navbar() {
-  const t = useTranslations("nav");
-  const pathname = usePathname();
+    const pathname = usePathname();
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-8">
@@ -39,7 +38,7 @@ export function Navbar() {
                     active ? "font-semibold underline underline-offset-4" : ""
                   }`}
                 >
-                  {t(item.key)}
+                  {item.key.charAt(0).toUpperCase() + item.key.slice(1)}
                 </Link>
               </li>
             );

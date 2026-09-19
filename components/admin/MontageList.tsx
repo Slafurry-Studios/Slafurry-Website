@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { IconPlayerPlay, IconGripVertical, IconEyeOff, IconEye, IconTrash } from "@tabler/icons-react";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import { MontageForm } from "@/components/admin/MontageForm";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";

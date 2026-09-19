@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter, Link } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { IconClock, IconMailOpened, IconCheck, IconTrash } from "@tabler/icons-react";
 import { ContactActions } from "@/components/admin/ContactActions";
 import { DataTable } from "@/components/admin/DataTable";

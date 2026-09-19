@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import { IconMailOpened, IconMail, IconCheck, IconTrash } from "@tabler/icons-react";
 
 export function ContactActions({

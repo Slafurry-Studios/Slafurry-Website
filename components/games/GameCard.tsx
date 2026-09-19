@@ -1,5 +1,4 @@
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 import type { GameData } from "@/lib/queries/games";
 
@@ -10,12 +9,11 @@ const STATUS_STYLE: Record<GameData["status"], string> = {
 };
 
 function StatusBadge({ status }: { status: GameData["status"] }) {
-  const t = useTranslations("games");
-  return (
+    return (
     <span
       className={`inline-block rounded-full px-2.5 py-0.5 font-body text-xs font-medium ${STATUS_STYLE[status]}`}
     >
-      {t(`status.${status}`)}
+      {status.replace('_', ' ')}
     </span>
   );
 }

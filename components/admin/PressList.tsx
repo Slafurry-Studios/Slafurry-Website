@@ -11,7 +11,7 @@ import {
   IconEye,
   IconTrash,
 } from "@tabler/icons-react";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import { ReleaseForm } from "@/components/admin/ReleaseForm";
 import { AssetForm } from "@/components/admin/AssetForm";
 import { DataTable } from "@/components/admin/DataTable";

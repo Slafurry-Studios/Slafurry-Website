@@ -1,36 +1,21 @@
 import type { Metadata } from "next";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
-import { routing } from "@/i18n/routing";
+
 import { bebasNeue, poppins } from "@/lib/fonts";
 import { SettingsProvider } from "@/components/layout/SettingsContext";
-import "../globals.css";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Slafurry Studios",
   description: "Indie game developers. The joke went too far. Now we are going professional.",
 };
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
-
-export default async function LocaleLayout({
+export default async function RootLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
-
-  const messages = await getMessages();
 
   // Baca preference dari cookie di server SEBELUM render pertama,
   // biar gak ada flash dari default -> dark/serious pas hydrate.
@@ -50,7 +35,7 @@ export default async function LocaleLayout({
     .join(" ");
 
   return (
-    <html lang={locale} className={htmlClassNames}>
+    <html lang="en" className={htmlClassNames}>
       <body
         className="min-h-screen flex flex-col font-body bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50"
         data-sound-muted={soundMutedRaw}
@@ -60,9 +45,7 @@ export default async function LocaleLayout({
           initialSeriousMode={seriousModeRaw ? "on" : "off"}
           initialSoundMuted={soundMutedRaw ? "on" : "off"}
         >
-          <NextIntlClientProvider messages={messages}>
-            {children}
-          </NextIntlClientProvider>
+          {children}
         </SettingsProvider>
       </body>
     </html>

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getGameBySlug } from "@/lib/queries/games";
 import { getApprovedGameComments } from "@/lib/queries/comments";
 import { getSiteSettings } from "@/lib/queries/home";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { CommentForm } from "@/components/posts/CommentForm";
 import { CommentList } from "@/components/posts/CommentList";
 

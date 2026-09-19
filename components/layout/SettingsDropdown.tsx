@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { IconSettings, IconSun, IconMoon } from "@tabler/icons-react";
-import { useTranslations } from "next-intl";
 import { useSettings } from "./SettingsContext";
 
 // UI dropdown Settings — Light/Dark, Serious Mode, Sound Mute.
@@ -10,8 +9,7 @@ import { useSettings } from "./SettingsContext";
 // sehingga theme/serious/sound state konsisten seluruh komponen.
 // Persistence ke localStorage + cookie handled oleh SettingsProvider.
 export function SettingsDropdown() {
-  const t = useTranslations("settings");
-  const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const {
@@ -50,7 +48,7 @@ export function SettingsDropdown() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label={t("language")}
+        aria-label="Language"
         aria-expanded={open}
         className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-900 text-neutral-900 transition-colors hover:bg-neutral-900 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900"
       >
@@ -61,19 +59,19 @@ export function SettingsDropdown() {
         <div className="absolute right-0 z-50 mt-2 w-56 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg dark:border-neutral-700 dark:bg-neutral-900">
           <SettingsRow
             icon={dark ? <IconMoon size={16} /> : <IconSun size={16} />}
-            label={dark ? t("darkMode") : t("lightMode")}
+            label={dark ? "Dark Mode" : "Light Mode"}
             active={dark}
             onClick={toggleDark}
           />
           <SettingsRow
             icon={<span className="text-base leading-none">🙂</span>}
-            label={`${t("seriousMode")} | ${serious ? t("on") : t("off")}`}
+            label={`$"Serious Mode" | ${serious ? "ON" : "OFF"}`}
             active={serious}
             onClick={toggleSerious}
           />
           <SettingsRow
             icon={soundMuted ? <IconSun size={16} /> : <IconSettings size={16} />}
-            label={soundMuted ? t("unmute") : t("muteSound")}
+            label={soundMuted ? "Unmute" : "Mute Sound"}
             active={soundMuted === "on"}
             onClick={toggleSound}
           />
