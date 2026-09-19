@@ -41,9 +41,9 @@ export default function AdminLoginPage() {
     <section className="flex min-h-[calc(100vh-6rem)] items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-8">
         <div className="text-center">
-          <h1 className="font-heading text-4xl tracking-tight">"Check Out Our Games"</h1>
+          <h1 className="font-heading text-4xl tracking-tight">Admin Login</h1>
           <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-            "Sign in to manage the studio dashboard."
+            Sign in to manage the studio dashboard.
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function AdminLoginPage() {
 
           <div>
             <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
-              "Your email"
+              Email
             </label>
             <div className="relative">
               <IconMail
@@ -79,7 +79,7 @@ export default function AdminLoginPage() {
 
           <div>
             <label htmlFor="password" className="mb-1.5 block text-sm font-medium">
-              "Password"
+              Password
             </label>
             <div className="relative">
               <IconLock

@@ -36,9 +36,9 @@ export function ArticleReader({
       </h1>
 
       <p className="mt-2 font-body text-xs text-neutral-500 dark:text-neutral-400">
-        "by" {post.authorName} |{" "}
+        By {post.authorName} |{" "}
         {post.publishedAt ? formatDate(post.publishedAt) : ""} |{" "}
-        {post.tags[0] ?? "update"} | {post.commentCount} "Comments"
+        {post.tags[0] ?? "update"} | {post.commentCount} Comments
       </p>
 
       <div className="mt-6 overflow-hidden rounded-xl">

@@ -16,7 +16,7 @@ export function Hero({ upcomingGame, montageVideos, settings }: { upcomingGame: 
       <div className="relative mx-auto grid w-full max-w-6xl gap-10 md:grid-cols-2 md:items-center">
         <div>
           <p className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-            "Indie Game Developers"
+            Indie Game Developers
           </p>
           <h1 className="mt-2 font-heading text-6xl leading-[0.95] tracking-wide sm:text-7xl">
             Slafurry
@@ -31,7 +31,7 @@ export function Hero({ upcomingGame, montageVideos, settings }: { upcomingGame: 
           </p>
           <div className="mt-6">
             <PillButton variant="solid" href="/games">
-              "Play Our Games"
+              Play Our Games
             </PillButton>
           </div>
         </div>
@@ -41,7 +41,7 @@ export function Hero({ upcomingGame, montageVideos, settings }: { upcomingGame: 
         {upcomingGame && (
           <div>
             <p className="font-body text-sm font-semibold uppercase tracking-wide underline underline-offset-4">
-              "Upcoming Project"
+              Upcoming Project
             </p>
             <div className="mt-3 overflow-hidden rounded-xl border border-white/30 bg-white">
               <PlaceholderImage

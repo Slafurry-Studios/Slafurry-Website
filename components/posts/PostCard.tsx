@@ -40,13 +40,13 @@ export function PostCard({
           {post.title}
         </h3>
         <p className="mt-1 font-body text-xs text-neutral-500 dark:text-neutral-400">
-          "by" {post.authorName} |{" "}
+          By {post.authorName} |{" "}
           {post.publishedAt ? formatDate(post.publishedAt) : ""} |{" "}
           {post.tags.map((tag) => (
             <span key={tag} className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-xxs font-body mr-1">
               {tag}
             </span>
-          ))} | {post.commentCount} "Comments"
+          ))} | {post.commentCount} Comments
         </p>
         <p
           className={
