@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
-import { IconChevronDown } from "@tabler/icons-react";
-import { PillButton } from "@/components/ui/PillButton";
+
 import { GameCard } from "@/components/games/GameCard";
+import { GameListClient } from "@/components/games/GameListClient";
 import { getActiveGames } from "@/lib/queries/games";
 
 export default async function GamesPage() {
@@ -23,17 +23,7 @@ export default async function GamesPage() {
         {featured && <GameCard game={featured} featured />}
       </div>
 
-      <div className="mx-auto mt-8 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {rest.map((game) => (
-          <GameCard key={game.id} game={game} />
-        ))}
-      </div>
-
-      <div className="mt-10 flex justify-center">
-        <PillButton icon={<IconChevronDown size={16} />} iconPosition="right">
-          {tPost("more")}
-        </PillButton>
-      </div>
+      <GameListClient games={rest} moreText={tPost("more")} />
     </div>
   );
 }
