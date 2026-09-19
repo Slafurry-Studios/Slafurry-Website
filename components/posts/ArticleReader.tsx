@@ -1,6 +1,5 @@
-import { useTranslations, useLocale } from "next-intl";
 import { IconChevronLeft, IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 import { formatDate } from "@/lib/format";
 import { CommentForm } from "@/components/posts/CommentForm";
@@ -21,9 +20,7 @@ export function ArticleReader({
   basePath: string;
   comments: PublicComment[];
 }) {
-  const t = useTranslations("post");
-  const locale = useLocale();
-
+    
   return (
     <article className="mx-auto max-w-3xl px-6 py-12 md:px-10">
       <Link
@@ -39,9 +36,9 @@ export function ArticleReader({
       </h1>
 
       <p className="mt-2 font-body text-xs text-neutral-500 dark:text-neutral-400">
-        {t("by")} {post.authorName} |{" "}
-        {post.publishedAt ? formatDate(post.publishedAt, locale) : ""} |{" "}
-        {post.tags[0] ?? "update"} | {post.commentCount} {t("comments")}
+        "by" {post.authorName} |{" "}
+        {post.publishedAt ? formatDate(post.publishedAt) : ""} |{" "}
+        {post.tags[0] ?? "update"} | {post.commentCount} "Comments"
       </p>
 
       <div className="mt-6 overflow-hidden rounded-xl">
@@ -75,13 +72,13 @@ export function ArticleReader({
           post={prevPost}
           basePath={basePath}
           direction="prev"
-          label={t("previous")}
+          label="Previous"
         />
         <NavCard
           post={nextPost}
           basePath={basePath}
           direction="next"
-          label={t("next")}
+          label="Next"
         />
       </div>
     </article>

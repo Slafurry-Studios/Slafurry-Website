@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useTranslations } from "next-intl";
 import { useSettings } from "@/components/layout/SettingsContext";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { getAchievements } from "@/lib/achievements/engine";
@@ -154,8 +153,7 @@ export function AchievementCTA() {
 // ---------------------------------------------------------------------------
 
 function AchievementPanel({ onClose }: { onClose: () => void }) {
-  const t = useTranslations("achievements");
-  const [unlockedKeys, setUnlockedKeys] = useState(() => getUnlockedKeys());
+    const [unlockedKeys, setUnlockedKeys] = useState(() => getUnlockedKeys());
   const [unseenKeys, setUnseenKeys] = useState(() => getUnseenKeys());
 
   const achievements = useMemo(() => getAchievements(), []);
@@ -212,7 +210,7 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
           <div>
-            <h2 className="font-heading text-xl leading-tight">{t("title")}</h2>
+            <h2 className="font-heading text-xl leading-tight">"Achievements"</h2>
             <p className="font-body text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
               {totalUnlocked} / {totalAchievements}
             </p>
@@ -277,16 +275,16 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
                                 : "text-neutral-500 dark:text-neutral-400"
                             }`}
                           >
-                            {hidden ? t("secret") : achievement.title}
+                            {hidden ? "???" : achievement.title}
                           </p>
                           {isNew && (
                             <span className="shrink-0 rounded-full bg-yellow-400 px-1.5 py-0.5 font-body text-[10px] font-bold text-neutral-900">
-                              {t("new")}
+                              "NEW!"
                             </span>
                           )}
                         </div>
                         <p className="font-body text-xs text-neutral-400 dark:text-neutral-500 truncate mt-0.5">
-                          {hidden ? t("secret") : achievement.description}
+                          {hidden ? "???" : achievement.description}
                         </p>
                       </div>
 
@@ -328,8 +326,7 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
 // ---------------------------------------------------------------------------
 
 function RedeemSection() {
-  const t = useTranslations("achievements");
-  const [code, setCode] = useState("");
+    const [code, setCode] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -359,30 +356,30 @@ function RedeemSection() {
           });
 
           setStatus("success");
-          setMessage(t("redeemSuccess"));
+          setMessage("Achievement unlocked!");
           setCode("");
 
           // Auto-clear success message after 3s
           setTimeout(() => setStatus("idle"), 3000);
         } else {
           setStatus("error");
-          setMessage(result.error || t("redeemFail"));
+          setMessage(result.error || "That code doesn't seem right.");
           // Shake the input, then clear error
           setTimeout(() => setStatus("idle"), 3000);
         }
       } catch {
         setStatus("error");
-        setMessage(t("redeemFail"));
+        setMessage("That code doesn't seem right.");
         setTimeout(() => setStatus("idle"), 3000);
       }
     },
-    [code, t]
+    [code]
   );
 
   return (
     <div className="border-t border-neutral-200 pt-4 dark:border-neutral-700">
       <p className="font-body text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-2.5 px-1">
-        {t("redeemCode")}
+        "Got a code?"
       </p>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
@@ -402,7 +399,7 @@ function RedeemSection() {
           disabled={status === "loading" || !code.trim()}
           className="shrink-0 rounded-xl bg-neutral-900 px-4 py-2 font-body text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:opacity-50 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
-          {status === "loading" ? "..." : t("redeem")}
+          {status === "loading" ? "..." : "Redeem"}
         </button>
       </form>
 

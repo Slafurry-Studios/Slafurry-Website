@@ -1,5 +1,4 @@
-import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { PillButton } from "@/components/ui/PillButton";
 
@@ -19,30 +18,29 @@ const FLAG_HINT_COMMENT = {
 };
 
 export default async function NotFound() {
-  const t = await getTranslations("notFound");
-
+  
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-16 text-center">
       <span aria-hidden="true" dangerouslySetInnerHTML={FLAG_HINT_COMMENT} />
       <SlafurryMark className="h-16 w-16 text-neutral-300 dark:text-neutral-700" />
 
       <p className="mt-6 font-heading text-7xl tracking-wide text-neutral-300 dark:text-neutral-700">
-        {t("title")}
+        "Achievements"
       </p>
-      <h1 className="mt-1 font-heading text-3xl tracking-wide">{t("heading")}</h1>
+      <h1 className="mt-1 font-heading text-3xl tracking-wide">"Check Out Our Games"</h1>
 
       <p className="joke-only mt-3 max-w-sm font-body text-sm text-neutral-500 dark:text-neutral-400">
-        {t("body")}
+        "Looks like you're lost. Maybe this page got caught in a joke that went too far."
       </p>
       <p className="serious-only mt-3 max-w-sm font-body text-sm text-neutral-500 dark:text-neutral-400">
-        {t("bodySerious")}
+        "The page you're looking for doesn't exist or may have been moved."
       </p>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <PillButton href="/" variant="solid">
-          {t("backHome")}
+          "Back to Home"
         </PillButton>
-        <PillButton href="/games">{t("viewGames")}</PillButton>
+        <PillButton href="/games">"View Our Games"</PillButton>
       </div>
     </div>
   );

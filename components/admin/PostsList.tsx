@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import {
   IconPlus,
   IconPencil,
@@ -11,7 +11,7 @@ import {
   IconEye,
   IconTrash,
 } from "@tabler/icons-react";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
 

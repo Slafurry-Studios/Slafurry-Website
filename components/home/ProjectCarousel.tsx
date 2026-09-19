@@ -1,15 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import type { Game } from "@prisma/client";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 
 export function ProjectCarousel({ projects }: { projects: Game[] }) {
-  const t = useTranslations("home");
-  const [index, setIndex] = useState(0);
+    const [index, setIndex] = useState(0);
   const count = projects.length;
 
   function go(delta: number) {
@@ -27,7 +25,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
   return (
     <section className="flex min-h-screen flex-col justify-center px-6 py-16 md:px-10">
       <h2 className="text-center font-heading text-4xl tracking-wide">
-        {t("projects")}
+        "Projects"
       </h2>
 
       <div className="mx-auto mt-10 flex max-w-5xl items-center justify-center gap-3 md:gap-6">

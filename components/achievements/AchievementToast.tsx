@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useTranslations } from "next-intl";
 import { useSettings } from "@/components/layout/SettingsContext";
 import { playUnlockSound } from "@/lib/achievements/sound";
 import { markSeen } from "@/lib/achievements/storage";
@@ -88,8 +87,7 @@ function AchievementToast({
   entry: ToastEntry;
   onDismiss: () => void;
 }) {
-  const t = useTranslations("achievements");
-  const { soundMuted } = useSettings();
+    const { soundMuted } = useSettings();
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
@@ -133,13 +131,13 @@ function AchievementToast({
       {/* Text */}
       <div className="min-w-0 flex-1">
         <p className="text-[11px] font-body font-semibold uppercase tracking-wider text-yellow-400 dark:text-yellow-500 mb-0.5">
-          {t("new")}
+          "NEW!"
         </p>
         <p className="font-heading text-lg leading-tight truncate">
           {entry.title}
         </p>
         <p className="text-xs text-neutral-400 dark:text-neutral-500 font-body mt-0.5">
-          {t("unlocked")}
+          "Unlocked"
         </p>
       </div>
 

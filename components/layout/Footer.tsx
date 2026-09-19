@@ -1,5 +1,4 @@
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { BrandIcon } from "@/components/icons/BrandIcon";
 
@@ -12,8 +11,7 @@ const FOOTER_LINKS = [
 ] as const;
 
 export function Footer() {
-  const t = useTranslations("footer");
-
+  
   return (
     <footer className="mt-auto bg-neutral-950 px-6 py-8 text-white">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 sm:flex-row sm:justify-between">
@@ -41,7 +39,7 @@ export function Footer() {
       </div>
 
       <p className="mt-6 text-center font-body text-xs text-white/50">
-        © {new Date().getFullYear()} Slafurry Studios. {t("rights")}
+        © {new Date().getFullYear()} Slafurry Studios. "All Rights Reserved."
       </p>
     </footer>
   );

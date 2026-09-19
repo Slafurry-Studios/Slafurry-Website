@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter, Link } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { IconMessage, IconClock, IconMail, IconCheck, IconX, IconTrash, IconDeviceGamepad } from "@tabler/icons-react";
 import { CommentActions } from "@/components/admin/CommentActions";
 import { DataTable } from "@/components/admin/DataTable";

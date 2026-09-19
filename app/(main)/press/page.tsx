@@ -1,4 +1,3 @@
-import { getTranslations } from "next-intl/server";
 import { IconExternalLink, IconDownload } from "@tabler/icons-react";
 import { formatDate } from "@/lib/format";
 import { getPressReleases, getPressKitAssets } from "@/lib/queries/press";
@@ -13,8 +12,7 @@ const ASSET_TYPE_LABEL: Record<string, string> = {
 };
 
 export default async function PressPage() {
-  const t = await getTranslations("press");
-
+  
   const [releases, assets] = await Promise.all([
     getPressReleases(),
     getPressKitAssets(),
@@ -27,14 +25,14 @@ export default async function PressPage() {
     <div className="px-6 py-16 md:px-10">
       <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-2">
         <div>
-          <h1 className="font-heading text-4xl tracking-wide">{t("releasesHeading")}</h1>
+          <h1 className="font-heading text-4xl tracking-wide">Press Releases</h1>
           <div className="mt-6 space-y-8">
             {Object.entries(releasesByOutlet).map(([outlet, releases]) => (
               <div key={outlet}>
                 <h2 className="font-body text-lg font-bold">{outlet}</h2>
                 <ul className="mt-2 space-y-2">
                   {releases.map((release) => (
-                    <li key={release.url + release.title}>
+                    <li key={release.id}>
                       <a
                         href={release.url}
                         target="_blank"
@@ -61,7 +59,7 @@ export default async function PressPage() {
         </div>
 
         <div>
-          <h1 className="font-heading text-4xl tracking-wide">{t("kitHeading")}</h1>
+          <h1 className="font-heading text-4xl tracking-wide">"Press Kit"</h1>
           <div className="mt-6 space-y-8">
             {Object.entries(assetsByLabel).map(([label, assets]) => (
               <div key={label}>
@@ -76,7 +74,7 @@ export default async function PressPage() {
                         <IconDownload size={14} className="text-neutral-400" />
                         <span className="font-medium">{ASSET_TYPE_LABEL[asset.type]}:</span>
                         <span className="text-neutral-500 dark:text-neutral-400">
-                          {t("download")}
+                          "Download"
                         </span>
                       </a>
                     </li>
@@ -89,7 +87,7 @@ export default async function PressPage() {
       </div>
 
       <p className="mx-auto mt-16 max-w-5xl border-t border-neutral-200 pt-8 text-center font-body text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-        {t("inquiries")}{" "}
+        "For press inquiries, contact us at"{" "}
         <a
           href={`mailto:${PRESS_CONTACT_EMAIL}`}
           className="font-semibold text-neutral-900 underline underline-offset-2 dark:text-white"

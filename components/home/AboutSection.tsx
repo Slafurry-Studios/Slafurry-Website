@@ -1,13 +1,10 @@
-import { useTranslations, useLocale } from "next-intl";
 import type { SiteSettings } from "@prisma/client";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { formatDate } from "@/lib/format";
 import { StudioAgeCounter } from "./StudioAgeCounter";
 
 export function AboutSection({ settings }: { settings: SiteSettings | null }) {
-  const t = useTranslations("home");
-  const locale = useLocale();
-
+    
   // Fallback kalau SiteSettings somehow belum ke-seed — jarang kejadian
   // (seed.ts selalu bikin row id=1), tapi jaga-jaga daripada section-nya
   // kosong blas.
@@ -22,7 +19,7 @@ export function AboutSection({ settings }: { settings: SiteSettings | null }) {
         <SlafurryMark className="mx-auto h-40 w-40 text-neutral-900 dark:text-white md:mx-0" />
 
         <div>
-          <h2 className="font-heading text-4xl tracking-wide">{t("about")}</h2>
+          <h2 className="font-heading text-4xl tracking-wide">"About"</h2>
           <div className="mt-4 space-y-4 font-body text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
             {/* Dua versi teks (normal vs serious) di-render dua-duanya,
                 CSS `.joke-only`/`.serious-only` yang nentuin mana yang
@@ -36,7 +33,7 @@ export function AboutSection({ settings }: { settings: SiteSettings | null }) {
                   Founded <StudioAgeCounter foundedAt={settings.foundedAt} /> ago.
                 </p>
                 <p className="serious-only text-neutral-500 dark:text-neutral-400">
-                  Founded {formatDate(settings.foundedAt, locale)}.
+                  Founded {formatDate(settings.foundedAt)}.
                 </p>
               </>
             )}

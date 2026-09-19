@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import {
   IconAlertCircle,
   IconLoader2,
@@ -9,7 +9,7 @@ import {
   IconEyeOff,
   IconLock,
 } from "@tabler/icons-react";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 
 type AchievementData = {
   id?: string;
