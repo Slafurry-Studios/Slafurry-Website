@@ -59,7 +59,7 @@ export default async function PressPage() {
         </div>
 
         <div>
-          <h1 className="font-heading text-4xl tracking-wide">"Press Kit"</h1>
+          <h1 className="font-heading text-4xl tracking-wide">Press Kit</h1>
           <div className="mt-6 space-y-8">
             {Object.entries(assetsByLabel).map(([label, assets]) => (
               <div key={label}>

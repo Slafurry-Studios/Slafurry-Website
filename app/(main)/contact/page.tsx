@@ -14,7 +14,7 @@ export default async function ContactPage() {
   
   return (
     <div className="mx-auto max-w-xl px-6 py-16 md:px-10">
-      <h1 className="font-heading text-5xl tracking-wide">"Check Out Our Games"</h1>
+      <h1 className="font-heading text-5xl tracking-wide">Contact Us</h1>
       <p className="mt-3 font-body text-sm text-neutral-600 dark:text-neutral-400">
         {MOCK_INTRO}
       </p>
@@ -25,9 +25,9 @@ export default async function ContactPage() {
           className="rounded-xl border border-neutral-300 p-4 transition-colors hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-white"
         >
           <IconMail size={20} className="text-neutral-700 dark:text-neutral-300" />
-          <p className="mt-2 font-body text-sm font-semibold">"Say Hello"</p>
+          <p className="mt-2 font-body text-sm font-semibold">Say Hello</p>
           <p className="mt-0.5 font-body text-xs text-neutral-500 dark:text-neutral-400">
-            "General questions, fan mail"
+            General questions, fan mail
           </p>
         </a>
         <a
@@ -35,9 +35,9 @@ export default async function ContactPage() {
           className="rounded-xl border border-neutral-300 p-4 transition-colors hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-white"
         >
           <IconBriefcase size={20} className="text-neutral-700 dark:text-neutral-300" />
-          <p className="mt-2 font-body text-sm font-semibold">"Business Inquiries"</p>
+          <p className="mt-2 font-body text-sm font-semibold">Business Inquiries</p>
           <p className="mt-0.5 font-body text-xs text-neutral-500 dark:text-neutral-400">
-            "Partnerships, press, publishing"
+            Partnerships, press, publishing
           </p>
         </a>
       </div>

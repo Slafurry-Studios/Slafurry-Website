@@ -25,22 +25,22 @@ export default async function NotFound() {
       <SlafurryMark className="h-16 w-16 text-neutral-300 dark:text-neutral-700" />
 
       <p className="mt-6 font-heading text-7xl tracking-wide text-neutral-300 dark:text-neutral-700">
-        "Achievements"
+        404
       </p>
-      <h1 className="mt-1 font-heading text-3xl tracking-wide">"Check Out Our Games"</h1>
+      <h1 className="mt-1 font-heading text-3xl tracking-wide">Page Not Found</h1>
 
       <p className="joke-only mt-3 max-w-sm font-body text-sm text-neutral-500 dark:text-neutral-400">
-        "Looks like you're lost. Maybe this page got caught in a joke that went too far."
+        Looks like you're lost. Maybe this page got caught in a joke that went too far.
       </p>
       <p className="serious-only mt-3 max-w-sm font-body text-sm text-neutral-500 dark:text-neutral-400">
-        "The page you're looking for doesn't exist or may have been moved."
+        The page you're looking for doesn't exist or may have been moved.
       </p>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <PillButton href="/" variant="solid">
-          "Back to Home"
+          Back to Home
         </PillButton>
-        <PillButton href="/games">"View Our Games"</PillButton>
+        <PillButton href="/games">View Our Games</PillButton>
       </div>
     </div>
   );

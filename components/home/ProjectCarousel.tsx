@@ -25,7 +25,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
   return (
     <section className="flex min-h-screen flex-col justify-center px-6 py-16 md:px-10">
       <h2 className="text-center font-heading text-4xl tracking-wide">
-        "Projects"
+        Projects
       </h2>
 
       <div className="mx-auto mt-10 flex max-w-5xl items-center justify-center gap-3 md:gap-6">

@@ -210,7 +210,7 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
           <div>
-            <h2 className="font-heading text-xl leading-tight">"Achievements"</h2>
+            <h2 className="font-heading text-xl leading-tight">Achievements</h2>
             <p className="font-body text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
               {totalUnlocked} / {totalAchievements}
             </p>
