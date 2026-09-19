@@ -30,7 +30,6 @@ type ReleaseRow = {
   id: string;
   title: string;
   outlet: string;
-  outlet: string;
   url: string;
   isHidden: boolean;
   publishedAt: string;

@@ -22,7 +22,6 @@ type GameRow = {
   slug: string;
   status: string;
   featured: boolean;
-  featured: boolean;
   order: number;
   isHidden: boolean;
   playLinkCount: number;
