@@ -59,12 +59,7 @@ export const PUT = withAudit(
         publishedAt = null;
       }
 
-      if (body.coverImage && body.coverImage !== existing.coverImage) {
-        await deleteStorageFile(existing.coverImage);
-      }
-      if (body.ogImage && body.ogImage !== existing.ogImage) {
-        await deleteStorageFile(existing.ogImage);
-      }
+
 
       const post = await prisma.post.update({
         where: { id },
@@ -103,6 +98,13 @@ export const PUT = withAudit(
           nextPost: { select: { id: true, title: true, slug: true } },
         },
       });
+
+      if (body.coverImage !== undefined && body.coverImage !== existing.coverImage) {
+        await deleteStorageFile(existing.coverImage).catch(console.error);
+      }
+      if (body.ogImage !== undefined && body.ogImage !== existing.ogImage) {
+        await deleteStorageFile(existing.ogImage).catch(console.error);
+      }
 
       return NextResponse.json(post);
     } catch (error) {

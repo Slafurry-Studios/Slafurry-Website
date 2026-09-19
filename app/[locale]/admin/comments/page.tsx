@@ -6,7 +6,8 @@ export default async function AdminCommentsPage(props: {
   searchParams: Promise<{ page?: string; status?: string }>;
 }) {
   const { page, status: rawStatus } = await props.searchParams;
-  const currentPage = parseInt(page || "1", 10);
+  const parsedPage = Number.parseInt(page ?? "1", 10);
+  const currentPage = Number.isFinite(parsedPage) ? Math.max(1, parsedPage) : 1;
   const pageSize = 20;
 
   const activeStatus =

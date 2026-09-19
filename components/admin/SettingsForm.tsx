@@ -387,13 +387,15 @@ export function SettingsForm({
                         {link.isHidden ? <IconEye size={16} /> : <IconEyeOff size={16} />}
                       </button>
 
-                      <button
-                        type="button"
-                        onClick={() => deleteLink(link.id)}
-                        className="shrink-0 rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400"
-                      >
-                        <IconTrash size={14} />
-                      </button>
+                      {link.isHidden && (
+                        <button
+                          type="button"
+                          onClick={() => deleteLink(link.id)}
+                          className="shrink-0 rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400"
+                        >
+                          <IconTrash size={14} />
+                        </button>
+                      )}
                     </div>
                   );
                 })}

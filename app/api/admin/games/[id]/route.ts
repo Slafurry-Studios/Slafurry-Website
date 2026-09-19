@@ -50,12 +50,7 @@ export const PUT = withAudit(
           await tx.playLink.deleteMany({ where: { gameId: id } });
         }
 
-        if (body.coverImage && body.coverImage !== existing.coverImage) {
-          await deleteStorageFile(existing.coverImage);
-        }
-        if (body.ogImage && body.ogImage !== existing.ogImage) {
-          await deleteStorageFile(existing.ogImage);
-        }
+
 
         return tx.game.update({
           where: { id },
@@ -80,6 +75,13 @@ export const PUT = withAudit(
           include: { playLinks: true },
         });
       });
+
+      if (body.coverImage !== undefined && body.coverImage !== existing.coverImage) {
+        await deleteStorageFile(existing.coverImage).catch(console.error);
+      }
+      if (body.ogImage !== undefined && body.ogImage !== existing.ogImage) {
+        await deleteStorageFile(existing.ogImage).catch(console.error);
+      }
 
       return NextResponse.json(game);
     } catch (error) {

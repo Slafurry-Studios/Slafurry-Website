@@ -22,9 +22,7 @@ export const PUT = withAudit(
           ? body.type
           : existing.type;
 
-      if (body.fileUrl && body.fileUrl !== existing.fileUrl) {
-        await deleteStorageFile(existing.fileUrl);
-      }
+
 
       const asset = await prisma.pressKitAsset.update({
         where: { id },
@@ -37,6 +35,10 @@ export const PUT = withAudit(
         },
         include: { game: { select: { id: true, title: true } } },
       });
+
+      if (body.fileUrl !== undefined && body.fileUrl !== existing.fileUrl) {
+        await deleteStorageFile(existing.fileUrl).catch(console.error);
+      }
 
       return NextResponse.json(asset);
     } catch (error) {
