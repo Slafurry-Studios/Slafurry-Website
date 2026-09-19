@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { withAudit, snapshot, extractIdFromUrl } from "@/lib/audit";
+import { deleteStorageFile } from "@/lib/supabase/storage";
 
 export const PUT = withAudit(
   async (
@@ -21,16 +22,23 @@ export const PUT = withAudit(
           ? body.type
           : existing.type;
 
+
+
       const asset = await prisma.pressKitAsset.update({
         where: { id },
         data: {
           label: body.label ?? existing.label,
           type,
           fileUrl: body.fileUrl ?? existing.fileUrl,
+          isHidden: typeof body.isHidden === "boolean" ? body.isHidden : existing.isHidden,
           gameId: body.gameId !== undefined ? (body.gameId || null) : existing.gameId,
         },
         include: { game: { select: { id: true, title: true } } },
       });
+
+      if (body.fileUrl !== undefined && body.fileUrl !== existing.fileUrl) {
+        await deleteStorageFile(existing.fileUrl).catch(console.error);
+      }
 
       return NextResponse.json(asset);
     } catch (error) {
@@ -61,6 +69,8 @@ export const DELETE = withAudit(
       }
 
       await prisma.pressKitAsset.delete({ where: { id } });
+      await deleteStorageFile(existing.fileUrl);
+
       return NextResponse.json({ success: true });
     } catch (error) {
       console.error("Delete press kit asset error:", error);

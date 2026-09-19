@@ -27,6 +27,7 @@ export async function PUT(
         url: body.url ?? existing.url,
         section,
         order: typeof body.order === "number" ? body.order : existing.order,
+        isHidden: typeof body.isHidden === "boolean" ? body.isHidden : existing.isHidden,
       },
     });
 

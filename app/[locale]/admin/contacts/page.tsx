@@ -1,13 +1,14 @@
 import { prisma } from "@/lib/prisma";
-import { ContactStatus, ContactCategory } from "@prisma/client";
+import { Prisma, ContactStatus, ContactCategory } from "@prisma/client";
 import { ContactsList } from "@/components/admin/ContactsList";
 
-export default async function AdminContactsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ status?: string; category?: string }>;
+export default async function AdminContactsPage(props: {
+  searchParams: Promise<{ page?: string; status?: string; category?: string; search?: string }>;
 }) {
-  const { status: rawStatus, category: rawCategory } = await searchParams;
+  const { page, status: rawStatus, category: rawCategory, search } = await props.searchParams;
+  const parsedPage = Number.parseInt(page ?? "1", 10);
+  const currentPage = Number.isFinite(parsedPage) ? Math.max(1, parsedPage) : 1;
+  const pageSize = 20;
 
   const activeStatus =
     rawStatus === "READ" || rawStatus === "REPLIED" || rawStatus === "ALL"
@@ -21,17 +22,27 @@ export default async function AdminContactsPage({
       ? rawCategory
       : "ALL";
 
-  const where: Record<string, unknown> = {};
-  if (activeStatus !== "ALL") where.status = activeStatus;
-  if (activeCategory !== "ALL") where.category = activeCategory;
+  const where: Prisma.ContactMessageWhereInput = {};
+  if (activeStatus !== "ALL") where.status = activeStatus as ContactStatus;
+  if (activeCategory !== "ALL") where.category = activeCategory as ContactCategory;
+  if (search) {
+    where.OR = [
+      { name: { contains: search, mode: "insensitive" } },
+      { email: { contains: search, mode: "insensitive" } },
+      { message: { contains: search, mode: "insensitive" } },
+    ];
+  }
 
-  const [messages, statusCounts, categoryCounts] = await Promise.all([
+  const [messages, statusCounts, categoryCounts, totalCount] = await Promise.all([
     prisma.contactMessage.findMany({
       where,
       orderBy: { createdAt: "desc" },
+      skip: (currentPage - 1) * pageSize,
+      take: pageSize,
     }),
     prisma.contactMessage.groupBy({ by: ["status"], _count: { id: true } }),
     prisma.contactMessage.groupBy({ by: ["category"], _count: { id: true } }),
+    prisma.contactMessage.count({ where }),
   ]);
 
   const statusMap = Object.fromEntries(
@@ -40,15 +51,19 @@ export default async function AdminContactsPage({
   const categoryMap = Object.fromEntries(
     categoryCounts.map((c) => [c.category, c._count.id])
   );
-  const total = Object.values(statusMap).reduce((a, b) => a + b, 0);
+  const absoluteTotal = Object.values(statusMap).reduce((a, b) => a + b, 0);
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
     <ContactsList
-      activeStatus={activeStatus}
-      activeCategory={activeCategory}
       statusMap={statusMap}
       categoryMap={categoryMap}
-      total={total}
+      total={absoluteTotal}
+      page={currentPage}
+      totalPages={totalPages}
+      activeStatus={activeStatus}
+      activeCategory={activeCategory}
+      searchQuery={search}
       messages={messages.map((m) => ({
         id: m.id,
         name: m.name,
@@ -61,3 +76,4 @@ export default async function AdminContactsPage({
     />
   );
 }
+

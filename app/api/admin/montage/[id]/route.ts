@@ -24,6 +24,7 @@ export const PUT = withAudit(
           gameId: body.gameId !== undefined ? (body.gameId || null) : existing.gameId,
           order: typeof body.order === "number" ? body.order : existing.order,
           isActive: typeof body.isActive === "boolean" ? body.isActive : existing.isActive,
+          isHidden: typeof body.isHidden === "boolean" ? body.isHidden : existing.isHidden,
         },
         include: { game: { select: { id: true, title: true } } },
       });

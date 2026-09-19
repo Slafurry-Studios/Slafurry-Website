@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter } from "@/i18n/navigation";
+import { useState, useTransition } from "react";
+import { useRouter, Link } from "@/i18n/navigation";
 import { IconClock, IconMailOpened, IconCheck, IconTrash } from "@tabler/icons-react";
 import { ContactActions } from "@/components/admin/ContactActions";
 import { DataTable } from "@/components/admin/DataTable";
@@ -80,26 +81,33 @@ const FILTERS: DataTableFilter[] = [
 
 export function ContactsList({
   messages,
-  activeStatus,
-  activeCategory,
   statusMap,
   categoryMap,
   total,
+  page,
+  totalPages,
+  activeStatus,
+  activeCategory,
+  searchQuery,
 }: {
   messages: ContactRow[];
-  activeStatus: string;
-  activeCategory: string;
   statusMap: Record<string, number>;
   categoryMap: Record<string, number>;
   total: number;
+  page: number;
+  totalPages: number;
+  activeStatus: string;
+  activeCategory: string;
+  searchQuery?: string;
 }) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   function statusHref(s: string) {
-    return `/admin/contacts?status=${s}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}`;
+    return `/admin/contacts?status=${s}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}${searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : ""}`;
   }
   function categoryHref(c: string) {
-    return `/admin/contacts?category=${c}${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}`;
+    return `/admin/contacts?category=${c}${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}${searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : ""}`;
   }
 
   const bulkActions: BulkAction<ContactRow>[] = [
@@ -165,14 +173,28 @@ export function ContactsList({
 
       <DataTable
         data={messages}
-        searchPlaceholder="Search by name or email..."
         searchKeys={["name", "email", "message"]}
+        searchValue={searchQuery || ""}
+        onSearchChange={(q) => {
+          startTransition(() => {
+            router.push(
+              `/admin/contacts?page=1${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}${q ? `&search=${encodeURIComponent(q)}` : ""}`
+            );
+          });
+        }}
         filters={FILTERS}
         columns={COLUMNS}
         defaultSort={{ key: "createdAt", direction: "desc" }}
         getRowId={(m) => m.id}
         bulkActions={bulkActions}
         emptyMessage="No messages match these filters."
+        page={page}
+        totalPages={totalPages}
+        onPageChange={(p) =>
+          router.push(
+            `/admin/contacts?page=${p}${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}${searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : ""}`
+          )
+        }
         headerExtra={
           <>
             <div className="flex gap-1 rounded-lg border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-800 dark:bg-neutral-900">
@@ -180,7 +202,7 @@ export function ContactsList({
                 const count =
                   tab.key === "ALL" ? total : (statusMap[tab.key] ?? 0);
                 return (
-                  <a
+                  <Link
                     key={tab.key}
                     href={statusHref(tab.key)}
                     className={`flex-1 rounded-md px-4 py-2 text-center text-sm font-medium transition-colors ${
@@ -195,7 +217,7 @@ export function ContactsList({
                         {count}
                       </span>
                     )}
-                  </a>
+                  </Link>
                 );
               })}
             </div>
@@ -205,7 +227,7 @@ export function ContactsList({
                 const count =
                   tab.key === "ALL" ? total : (categoryMap[tab.key] ?? 0);
                 return (
-                  <a
+                  <Link
                     key={tab.key}
                     href={categoryHref(tab.key)}
                     className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
@@ -216,7 +238,7 @@ export function ContactsList({
                   >
                     {tab.label}
                     {count > 0 && <span className="opacity-60">{count}</span>}
-                  </a>
+                  </Link>
                 );
               })}
             </div>

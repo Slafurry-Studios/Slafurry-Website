@@ -54,21 +54,11 @@ async function getSupabaseUserId(): Promise<string | null> {
 
 /**
  * Find the AdminUser record by Supabase user ID.
- * If not found, create a stub record so audit logs can still reference an admin.
  */
-async function getOrCreateAdminUser(supabaseUserId: string) {
-  let admin = await prisma.adminUser.findUnique({
+async function getAdminUser(supabaseUserId: string) {
+  return await prisma.adminUser.findUnique({
     where: { supabaseUserId },
   });
-  if (!admin) {
-    admin = await prisma.adminUser.create({
-      data: {
-        supabaseUserId,
-        name: "Admin",
-      },
-    });
-  }
-  return admin;
 }
 
 /** Shallow-compute a diff between two objects. Only includes changed keys. */
@@ -144,6 +134,33 @@ export function withAudit<TContext>(
     request: Request,
     context?: TContext
   ): Promise<NextResponse> => {
+    // 0. Enforce authorization IMMEDIATELY before doing anything else
+    const supabaseUserId = await getSupabaseUserId();
+    if (!supabaseUserId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // 0.1 Check admin allowlist (AdminUser table)
+    let adminUser = await getAdminUser(supabaseUserId);
+
+    if (!adminUser) {
+      const adminCount = await prisma.adminUser.count();
+      if (adminCount === 0) {
+        // Provision the first administrator automatically
+        adminUser = await prisma.adminUser.create({
+          data: {
+            supabaseUserId,
+            name: "Initial Admin",
+          },
+        });
+      } else {
+        return NextResponse.json(
+          { error: "Forbidden: User is not an authorized administrator" },
+          { status: 403 }
+        );
+      }
+    }
+
     const { action, entityType, getBefore, getAfter, getEntityId } = options;
 
     // 1. Pre-resolve entity ID from the request URL
@@ -188,11 +205,7 @@ export function withAudit<TContext>(
     // 9. Skip audit if nothing changed (e.g. UPDATE with identical data)
     if (action === "UPDATE" && !diff.before && !diff.after) return response;
 
-    // 10. Get admin user (non-blocking — failures don't break the response)
-    const supabaseUserId = await getSupabaseUserId();
-    if (!supabaseUserId) return response;
 
-    const adminUser = await getOrCreateAdminUser(supabaseUserId);
 
     // 11. Write audit log (fire-and-forget)
     prisma.auditLog

@@ -22,7 +22,10 @@ export type GameData = {
 /** Fetch all active games (RELEASED + UPCOMING) for the public list. */
 export async function getActiveGames(): Promise<GameData[]> {
   const rows = await prisma.game.findMany({
-    where: { status: { in: [GameStatus.RELEASED, GameStatus.UPCOMING] } },
+    where: { 
+      status: { in: [GameStatus.RELEASED, GameStatus.UPCOMING] },
+      isHidden: false
+    },
     orderBy: { order: "asc" },
     include: { playLinks: { select: { label: true, url: true } } },
   });
@@ -31,8 +34,8 @@ export async function getActiveGames(): Promise<GameData[]> {
 
 /** Fetch a single game by slug. */
 export async function getGameBySlug(slug: string): Promise<GameData | null> {
-  const row = await prisma.game.findUnique({
-    where: { slug },
+  const row = await prisma.game.findFirst({
+    where: { slug, isHidden: false },
     include: { playLinks: { select: { label: true, url: true } } },
   });
   if (!row) return null;

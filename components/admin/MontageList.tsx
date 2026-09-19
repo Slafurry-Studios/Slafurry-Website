@@ -1,8 +1,9 @@
 "use client";
 
-import { IconPlayerPlay, IconGripVertical } from "@tabler/icons-react";
+import { useState } from "react";
+import { IconPlayerPlay, IconGripVertical, IconEyeOff, IconEye, IconTrash } from "@tabler/icons-react";
+import { useRouter } from "@/i18n/navigation";
 import { MontageForm } from "@/components/admin/MontageForm";
-import { DeleteButton } from "@/components/admin/DeleteButton";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
 
@@ -12,6 +13,7 @@ type MontageRow = {
   videoUrl: string;
   order: number;
   isActive: boolean;
+  isHidden: boolean;
   gameTitle: string | null;
 };
 
@@ -45,6 +47,28 @@ export function MontageList({
   games: GameOption[];
   totalCount: number;
 }) {
+  const router = useRouter();
+  const [visibility, setVisibility] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
+
+  const visibleVideos = videos.filter(v => !v.isHidden);
+  const hiddenVideos = videos.filter(v => v.isHidden);
+  const filteredVideos = visibility === "VISIBLE" ? visibleVideos : hiddenVideos;
+
+  async function toggleHide(id: string, isHidden: boolean) {
+    await fetch(`/api/admin/montage/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isHidden }),
+    });
+    router.refresh();
+  }
+
+  async function deleteVideo(id: string) {
+    if (!confirm("Are you sure you want to permanently delete this video? This cannot be undone.")) return;
+    await fetch(`/api/admin/montage/${id}`, { method: "DELETE" });
+    router.refresh();
+  }
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-10">
       <div className="flex items-center justify-between">
@@ -55,13 +79,38 @@ export function MontageList({
       </div>
 
       <DataTable
-        data={videos}
+        data={filteredVideos}
         searchPlaceholder="Search videos..."
         searchKeys={["label", "gameTitle"]}
         filters={FILTERS}
         columns={COLUMNS}
         defaultSort={{ key: "order", direction: "asc" }}
-        emptyMessage="No montage videos yet."
+        emptyMessage={`No ${visibility.toLowerCase()} montage videos yet.`}
+        headerExtra={
+          <div className="flex gap-1 rounded-lg border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-800 dark:bg-neutral-900">
+            <button
+              onClick={() => setVisibility("VISIBLE")}
+              className={`rounded-md px-4 py-2 text-center text-sm font-medium transition-colors ${
+                visibility === "VISIBLE"
+                  ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-800 dark:text-white"
+                  : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+              }`}
+            >
+              Visible <span className="ml-1.5 text-xs text-neutral-400 dark:text-neutral-500">{visibleVideos.length}</span>
+            </button>
+            <button
+              onClick={() => setVisibility("HIDDEN")}
+              className={`rounded-md px-4 py-2 text-center text-sm font-medium transition-colors ${
+                visibility === "HIDDEN"
+                  ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-800 dark:text-white"
+                  : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+              }`}
+            >
+              Hidden
+              {hiddenVideos.length > 0 && <span className="ml-1.5 text-xs text-neutral-400 dark:text-neutral-500">{hiddenVideos.length}</span>}
+            </button>
+          </div>
+        }
         topContent={
           <div className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
             <h2 className="mb-3 text-sm font-medium">Add Video</h2>
@@ -71,10 +120,10 @@ export function MontageList({
         renderRow={(v) => (
           <div
             key={v.id}
-            className={`flex items-center gap-4 rounded-xl border bg-white p-4 transition-shadow hover:shadow-sm dark:bg-neutral-900 ${
-              v.isActive
-                ? "border-neutral-200 dark:border-neutral-800"
-                : "border-neutral-200 opacity-60 dark:border-neutral-800"
+            className={`flex items-center gap-4 rounded-xl border p-4 transition-shadow hover:shadow-sm ${
+              v.isHidden
+                ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50"
+                : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
             }`}
           >
             <IconGripVertical
@@ -108,14 +157,37 @@ export function MontageList({
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
+              title="Open Link"
             >
               <IconPlayerPlay size={16} />
             </a>
 
-            <DeleteButton
-              endpoint={`/api/admin/montage/${v.id}`}
-              label="video"
-            />
+            {visibility === "VISIBLE" ? (
+              <button
+                onClick={() => toggleHide(v.id, true)}
+                className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
+                title="Hide"
+              >
+                <IconEyeOff size={16} />
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => toggleHide(v.id, false)}
+                  className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
+                  title="Restore"
+                >
+                  <IconEye size={16} />
+                </button>
+                <button
+                  onClick={() => deleteVideo(v.id)}
+                  className="rounded-lg p-2 text-red-400 transition-colors hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950 dark:hover:text-red-300"
+                  title="Permanently Delete"
+                >
+                  <IconTrash size={16} />
+                </button>
+              </>
+            )}
           </div>
         )}
       />

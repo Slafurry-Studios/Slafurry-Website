@@ -5,13 +5,7 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { routing } from "@/i18n/routing";
 import { bebasNeue, poppins } from "@/lib/fonts";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 import { SettingsProvider } from "@/components/layout/SettingsContext";
-import { CookieConsentBanner } from "@/components/layout/CookieConsentBanner";
-import { AchievementToastContainer } from "@/components/achievements/AchievementToast";
-import { AchievementCTA } from "@/components/achievements/AchievementCTA";
-import { AchievementInit } from "@/components/achievements/AchievementInit";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -67,17 +61,7 @@ export default async function LocaleLayout({
           initialSoundMuted={soundMutedRaw ? "on" : "off"}
         >
           <NextIntlClientProvider messages={messages}>
-            <Navbar />
-            {/* pt-24 = ruang buat Navbar yang sekarang "fixed" (gak makan document flow).
-                Hero.tsx nge-cancel ini pakai -mt-24 biar background-nya full-bleed dari
-                y=0, sementara halaman lain (belum ada background khusus di atas) otomatis
-                dapet clearance yang bener dari padding ini. */}
-            <main className="flex-1 pt-24">{children}</main>
-            <Footer />
-            <AchievementToastContainer />
-            <AchievementCTA />
-            <AchievementInit />
-<CookieConsentBanner />
+            {children}
           </NextIntlClientProvider>
         </SettingsProvider>
       </body>

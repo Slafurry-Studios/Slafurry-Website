@@ -14,6 +14,7 @@ export default async function AdminAchievementsPage() {
       category: true,
       order: true,
       isActive: true,
+      isHidden: true,
       flagHash: true,
     },
   });
@@ -30,6 +31,7 @@ export default async function AdminAchievementsPage() {
         category: a.category || "Uncategorized",
         order: a.order,
         isActive: a.isActive,
+        isHidden: a.isHidden,
         hasFlag: !!a.flagHash,
       }))}
     />

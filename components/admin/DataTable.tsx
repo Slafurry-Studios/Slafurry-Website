@@ -44,7 +44,7 @@ export type BulkAction<T> = {
 export type DataTableProps<T> = {
   data: T[];
   searchPlaceholder?: string;
-  searchKeys: (keyof T & string)[];
+  searchKeys?: (keyof T & string)[];
   filters?: DataTableFilter[];
   activeFilters?: Record<string, string>;
   onFilterChange?: (key: string, value: string) => void;
@@ -58,6 +58,11 @@ export type DataTableProps<T> = {
   getRowId?: (item: T) => string;
   /** Bulk actions shown when rows are selected. Omit to disable selection. */
   bulkActions?: BulkAction<T>[];
+  page?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+  searchValue?: string;
+  onSearchChange?: (search: string) => void;
 };
 
 // ─── Component ──────────────────────────────────────────────────
@@ -76,8 +81,14 @@ export function DataTable<T extends Record<string, unknown>>({
   topContent,
   getRowId,
   bulkActions,
+  page,
+  totalPages,
+  onPageChange,
+  searchValue,
+  onSearchChange,
 }: DataTableProps<T>) {
-  const [search, setSearch] = useState("");
+  const [internalSearch, setInternalSearch] = useState("");
+  const search = searchValue ?? internalSearch;
   const [sortKey, setSortKey] = useState<string | null>(defaultSort?.key ?? null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">(defaultSort?.direction ?? "asc");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -102,7 +113,7 @@ export function DataTable<T extends Record<string, unknown>>({
   const processed = useMemo(() => {
     let result = [...data];
 
-    if (search.trim()) {
+    if (search.trim() && searchKeys) {
       const q = search.toLowerCase();
       result = result.filter((item) =>
         searchKeys.some((k) => {
@@ -208,27 +219,36 @@ export function DataTable<T extends Record<string, unknown>>({
 
       {/* Search + Filters bar */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 sm:max-w-xs">
-          <IconSearch
-            size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-          />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={searchPlaceholder}
-            className="w-full rounded-lg border border-neutral-300 bg-white py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
-          />
-          {hasSearch && (
-            <button
-              onClick={() => setSearch("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
-            >
-              <IconX size={14} />
-            </button>
-          )}
-        </div>
+        {searchKeys && searchKeys.length > 0 && (
+          <div className="relative flex-1 sm:max-w-xs">
+            <IconSearch
+              size={16}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+            />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => {
+                const val = e.target.value;
+                setInternalSearch(val);
+                if (onSearchChange) onSearchChange(val);
+              }}
+              placeholder={searchPlaceholder}
+              className="w-full rounded-lg border border-neutral-300 bg-white py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
+            />
+            {hasSearch && (
+              <button
+                onClick={() => {
+                  setInternalSearch("");
+                  if (onSearchChange) onSearchChange("");
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+              >
+                <IconX size={14} />
+              </button>
+            )}
+          </div>
+        )}
 
         {filters?.map((f) => {
           const val = activeFilters?.[f.key] ?? "ALL";
@@ -251,7 +271,8 @@ export function DataTable<T extends Record<string, unknown>>({
         {(hasSearch || hasActiveFilters) && (
           <button
             onClick={() => {
-              setSearch("");
+              setInternalSearch("");
+              if (onSearchChange) onSearchChange("");
               if (onFilterChange) {
                 filters?.forEach((f) => onFilterChange(f.key, "ALL"));
               }
@@ -404,6 +425,31 @@ export function DataTable<T extends Record<string, unknown>>({
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {page !== undefined && totalPages !== undefined && totalPages > 1 && (
+        <div className="flex items-center justify-between pt-4 border-t border-neutral-200 dark:border-neutral-800">
+          <span className="text-sm text-neutral-500 dark:text-neutral-400">
+            Page {page} of {totalPages}
+          </span>
+          <div className="flex gap-2">
+            <button
+              disabled={page <= 1}
+              onClick={() => onPageChange?.(page - 1)}
+              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+            >
+              Previous
+            </button>
+            <button
+              disabled={page >= totalPages}
+              onClick={() => onPageChange?.(page + 1)}
+              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+            >
+              Next
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -7,13 +7,14 @@ import { LinkSection, PostCategory, PostStatus } from "@prisma/client";
 
 export function getFeaturedGame() {
   return prisma.game.findFirst({
-    where: { featured: true },
+    where: { featured: true, isHidden: false },
     orderBy: { order: "asc" },
   });
 }
 
 export function getCarouselGames(limit = 6) {
   return prisma.game.findMany({
+    where: { isHidden: false },
     orderBy: { order: "asc" },
     take: limit,
   });
@@ -21,14 +22,14 @@ export function getCarouselGames(limit = 6) {
 
 export function getCommunityLinks() {
   return prisma.socialLink.findMany({
-    where: { section: LinkSection.COMMUNITY },
+    where: { section: LinkSection.COMMUNITY, isHidden: false },
     orderBy: { order: "asc" },
   });
 }
 
 export function getLatestNewsPosts(limit = 3) {
   return prisma.post.findMany({
-    where: { category: PostCategory.NEWS, status: PostStatus.PUBLISHED },
+    where: { category: PostCategory.NEWS, status: PostStatus.PUBLISHED, isHidden: false },
     orderBy: { publishedAt: "desc" },
     take: limit,
   });
@@ -36,7 +37,7 @@ export function getLatestNewsPosts(limit = 3) {
 
 export function getActiveMontageVideos() {
   return prisma.montageVideo.findMany({
-    where: { isActive: true },
+    where: { isActive: true, isHidden: false },
     orderBy: { order: "asc" },
   });
 }

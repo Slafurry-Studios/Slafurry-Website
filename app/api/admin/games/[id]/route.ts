@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { withAudit, snapshot, extractIdFromUrl } from "@/lib/audit";
+import { deleteStorageFile } from "@/lib/supabase/storage";
 
 export const PUT = withAudit(
   async (
@@ -49,6 +50,8 @@ export const PUT = withAudit(
           await tx.playLink.deleteMany({ where: { gameId: id } });
         }
 
+
+
         return tx.game.update({
           where: { id },
           data: {
@@ -61,6 +64,7 @@ export const PUT = withAudit(
             status: body.status ?? existing.status,
             featured: typeof body.featured === "boolean" ? body.featured : existing.featured,
             order: typeof body.order === "number" ? body.order : existing.order,
+            isHidden: typeof body.isHidden === "boolean" ? body.isHidden : existing.isHidden,
             metaTitle: body.metaTitle !== undefined ? body.metaTitle || null : existing.metaTitle,
             metaDescription: body.metaDescription !== undefined ? body.metaDescription || null : existing.metaDescription,
             ogImage: body.ogImage !== undefined ? body.ogImage || null : existing.ogImage,
@@ -71,6 +75,13 @@ export const PUT = withAudit(
           include: { playLinks: true },
         });
       });
+
+      if (body.coverImage !== undefined && body.coverImage !== existing.coverImage) {
+        await deleteStorageFile(existing.coverImage).catch(console.error);
+      }
+      if (body.ogImage !== undefined && body.ogImage !== existing.ogImage) {
+        await deleteStorageFile(existing.ogImage).catch(console.error);
+      }
 
       return NextResponse.json(game);
     } catch (error) {
@@ -100,7 +111,23 @@ export const DELETE = withAudit(
         return NextResponse.json({ error: "Game not found." }, { status: 404 });
       }
 
+      const pressKitAssets = await prisma.pressKitAsset.findMany({
+        where: { gameId: id },
+        select: { fileUrl: true },
+      });
+
       await prisma.game.delete({ where: { id } });
+
+      await deleteStorageFile(existing.coverImage);
+      if (existing.ogImage) {
+        await deleteStorageFile(existing.ogImage);
+      }
+
+      for (const asset of pressKitAssets) {
+        if (asset.fileUrl) {
+          await deleteStorageFile(asset.fileUrl);
+        }
+      }
 
       return NextResponse.json({ success: true });
     } catch (error) {
