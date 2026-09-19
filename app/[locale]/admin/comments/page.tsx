@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { CommentStatus } from "@prisma/client";
+import { CommentStatus, Prisma } from "@prisma/client";
 import { CommentsList } from "@/components/admin/CommentsList";
 
 export default async function AdminCommentsPage(props: {
@@ -15,7 +15,7 @@ export default async function AdminCommentsPage(props: {
       ? rawStatus
       : "PENDING";
 
-  const where: Record<string, unknown> = {};
+  const where: Prisma.CommentWhereInput = {};
   if (activeStatus !== "ALL") where.status = activeStatus;
 
   const [comments, counts, totalCount] = await Promise.all([

@@ -177,8 +177,6 @@ export function CommentsList({
 
       <DataTable
         data={comments}
-        searchPlaceholder="Search by author or content..."
-        searchKeys={["authorName", "authorEmail", "content"]}
         filters={FILTERS}
         columns={COLUMNS}
         defaultSort={{ key: "createdAt", direction: "desc" }}

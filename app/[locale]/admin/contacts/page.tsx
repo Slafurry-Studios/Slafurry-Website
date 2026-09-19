@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { ContactStatus, ContactCategory } from "@prisma/client";
+import { ContactStatus, ContactCategory, Prisma } from "@prisma/client";
 import { ContactsList } from "@/components/admin/ContactsList";
 
 export default async function AdminContactsPage(props: {
@@ -22,7 +22,7 @@ export default async function AdminContactsPage(props: {
       ? rawCategory
       : "ALL";
 
-  const where: Record<string, unknown> = {};
+  const where: Prisma.ContactMessageWhereInput = {};
   if (activeStatus !== "ALL") where.status = activeStatus;
   if (activeCategory !== "ALL") where.category = activeCategory;
 

@@ -66,16 +66,22 @@ async function main() {
   });
 
   // 5. MontageVideo
-  await prisma.montageVideo.create({
-    data: {
+  await prisma.montageVideo.upsert({
+    where: { id: "test-montage" },
+    update: {},
+    create: {
+      id: "test-montage",
       label: TEST_STRING,
       videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
   });
 
   // 6. PressRelease
-  await prisma.pressRelease.create({
-    data: {
+  await prisma.pressRelease.upsert({
+    where: { id: "test-press-release" },
+    update: {},
+    create: {
+      id: "test-press-release",
       title: TEST_STRING,
       outlet: "Test Outlet",
       url: "https://example.com",
@@ -83,8 +89,11 @@ async function main() {
   });
 
   // 7. PressKitAsset
-  await prisma.pressKitAsset.create({
-    data: {
+  await prisma.pressKitAsset.upsert({
+    where: { id: "test-press-kit-asset" },
+    update: {},
+    create: {
+      id: "test-press-kit-asset",
       label: TEST_STRING,
       type: "LOGO",
       fileUrl: "https://example.com/logo.png",
@@ -92,8 +101,11 @@ async function main() {
   });
 
   // 8. ContactMessage
-  await prisma.contactMessage.create({
-    data: {
+  await prisma.contactMessage.upsert({
+    where: { id: "test-contact-message" },
+    update: {},
+    create: {
+      id: "test-contact-message",
       name: "Tester",
       email: "test@example.com",
       message: TEST_STRING,
@@ -101,8 +113,11 @@ async function main() {
   });
 
   // 9. Comment (for Game)
-  await prisma.comment.create({
-    data: {
+  await prisma.comment.upsert({
+    where: { id: "test-comment-game" },
+    update: {},
+    create: {
+      id: "test-comment-game",
       authorName: "Test Commenter",
       authorEmail: "comment@example.com",
       content: TEST_STRING,
@@ -113,8 +128,11 @@ async function main() {
   });
 
   // 10. Comment (for Post)
-  await prisma.comment.create({
-    data: {
+  await prisma.comment.upsert({
+    where: { id: "test-comment-post" },
+    update: {},
+    create: {
+      id: "test-comment-post",
       authorName: "Test Commenter",
       authorEmail: "comment@example.com",
       content: TEST_STRING,

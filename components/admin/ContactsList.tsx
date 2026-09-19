@@ -169,8 +169,6 @@ export function ContactsList({
 
       <DataTable
         data={messages}
-        searchPlaceholder="Search by name or email..."
-        searchKeys={["name", "email", "message"]}
         filters={FILTERS}
         columns={COLUMNS}
         defaultSort={{ key: "createdAt", direction: "desc" }}

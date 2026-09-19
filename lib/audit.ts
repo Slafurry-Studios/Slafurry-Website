@@ -188,9 +188,11 @@ export function withAudit<TContext>(
     // 9. Skip audit if nothing changed (e.g. UPDATE with identical data)
     if (action === "UPDATE" && !diff.before && !diff.after) return response;
 
-    // 10. Get admin user (non-blocking — failures don't break the response)
+    // 10. Get admin user and ENFORCE authorization
     const supabaseUserId = await getSupabaseUserId();
-    if (!supabaseUserId) return response;
+    if (!supabaseUserId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     const adminUser = await getOrCreateAdminUser(supabaseUserId);
 

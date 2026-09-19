@@ -111,11 +111,22 @@ export const DELETE = withAudit(
         return NextResponse.json({ error: "Game not found." }, { status: 404 });
       }
 
+      const pressKitAssets = await prisma.pressKitAsset.findMany({
+        where: { gameId: id },
+        select: { fileUrl: true },
+      });
+
       await prisma.game.delete({ where: { id } });
 
       await deleteStorageFile(existing.coverImage);
       if (existing.ogImage) {
         await deleteStorageFile(existing.ogImage);
+      }
+
+      for (const asset of pressKitAssets) {
+        if (asset.fileUrl) {
+          await deleteStorageFile(asset.fileUrl);
+        }
       }
 
       return NextResponse.json({ success: true });

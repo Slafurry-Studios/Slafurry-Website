@@ -44,7 +44,7 @@ export type BulkAction<T> = {
 export type DataTableProps<T> = {
   data: T[];
   searchPlaceholder?: string;
-  searchKeys: (keyof T & string)[];
+  searchKeys?: (keyof T & string)[];
   filters?: DataTableFilter[];
   activeFilters?: Record<string, string>;
   onFilterChange?: (key: string, value: string) => void;
@@ -108,7 +108,7 @@ export function DataTable<T extends Record<string, unknown>>({
   const processed = useMemo(() => {
     let result = [...data];
 
-    if (search.trim()) {
+    if (search.trim() && searchKeys) {
       const q = search.toLowerCase();
       result = result.filter((item) =>
         searchKeys.some((k) => {
