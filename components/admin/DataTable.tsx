@@ -214,27 +214,29 @@ export function DataTable<T extends Record<string, unknown>>({
 
       {/* Search + Filters bar */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 sm:max-w-xs">
-          <IconSearch
-            size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-          />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={searchPlaceholder}
-            className="w-full rounded-lg border border-neutral-300 bg-white py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
-          />
-          {hasSearch && (
-            <button
-              onClick={() => setSearch("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
-            >
-              <IconX size={14} />
-            </button>
-          )}
-        </div>
+        {searchKeys && searchKeys.length > 0 && (
+          <div className="relative flex-1 sm:max-w-xs">
+            <IconSearch
+              size={16}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+            />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={searchPlaceholder}
+              className="w-full rounded-lg border border-neutral-300 bg-white py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
+            />
+            {hasSearch && (
+              <button
+                onClick={() => setSearch("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+              >
+                <IconX size={14} />
+              </button>
+            )}
+          </div>
+        )}
 
         {filters?.map((f) => {
           const val = activeFilters?.[f.key] ?? "ALL";

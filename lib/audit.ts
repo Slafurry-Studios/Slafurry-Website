@@ -144,6 +144,12 @@ export function withAudit<TContext>(
     request: Request,
     context?: TContext
   ): Promise<NextResponse> => {
+    // 0. Enforce authorization IMMEDIATELY before doing anything else
+    const supabaseUserId = await getSupabaseUserId();
+    if (!supabaseUserId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { action, entityType, getBefore, getAfter, getEntityId } = options;
 
     // 1. Pre-resolve entity ID from the request URL
@@ -187,12 +193,6 @@ export function withAudit<TContext>(
 
     // 9. Skip audit if nothing changed (e.g. UPDATE with identical data)
     if (action === "UPDATE" && !diff.before && !diff.after) return response;
-
-    // 10. Get admin user and ENFORCE authorization
-    const supabaseUserId = await getSupabaseUserId();
-    if (!supabaseUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
 
     const adminUser = await getOrCreateAdminUser(supabaseUserId);
 
