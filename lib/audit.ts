@@ -141,12 +141,24 @@ export function withAudit<TContext>(
     }
 
     // 0.1 Check admin allowlist (AdminUser table)
-    const adminUser = await getAdminUser(supabaseUserId);
+    let adminUser = await getAdminUser(supabaseUserId);
+
     if (!adminUser) {
-      return NextResponse.json(
-        { error: "Forbidden: User is not an authorized administrator" },
-        { status: 403 }
-      );
+      const adminCount = await prisma.adminUser.count();
+      if (adminCount === 0) {
+        // Provision the first administrator automatically
+        adminUser = await prisma.adminUser.create({
+          data: {
+            supabaseUserId,
+            name: "Initial Admin",
+          },
+        });
+      } else {
+        return NextResponse.json(
+          { error: "Forbidden: User is not an authorized administrator" },
+          { status: 403 }
+        );
+      }
     }
 
     const { action, entityType, getBefore, getAfter, getEntityId } = options;

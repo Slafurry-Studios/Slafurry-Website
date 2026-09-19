@@ -88,6 +88,7 @@ export function ContactsList({
   totalPages,
   activeStatus,
   activeCategory,
+  searchQuery,
 }: {
   messages: ContactRow[];
   statusMap: Record<string, number>;

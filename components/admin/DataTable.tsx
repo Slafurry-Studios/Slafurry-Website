@@ -239,8 +239,8 @@ export function DataTable<T extends Record<string, unknown>>({
             {hasSearch && (
               <button
                 onClick={() => {
+                  setInternalSearch("");
                   if (onSearchChange) onSearchChange("");
-                  else setInternalSearch("");
                 }}
                 className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
               >
@@ -271,7 +271,8 @@ export function DataTable<T extends Record<string, unknown>>({
         {(hasSearch || hasActiveFilters) && (
           <button
             onClick={() => {
-              setSearch("");
+              setInternalSearch("");
+              if (onSearchChange) onSearchChange("");
               if (onFilterChange) {
                 filters?.forEach((f) => onFilterChange(f.key, "ALL"));
               }

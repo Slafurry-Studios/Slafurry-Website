@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma, CommentStatus } from "@prisma/client";
 import { CommentsList } from "@/components/admin/CommentsList";
 
 export default async function AdminCommentsPage(props: {
@@ -16,7 +16,7 @@ export default async function AdminCommentsPage(props: {
       : "PENDING";
 
   const where: Prisma.CommentWhereInput = {};
-  if (activeStatus !== "ALL") where.status = activeStatus;
+  if (activeStatus !== "ALL") where.status = activeStatus as CommentStatus;
   if (search) {
     where.OR = [
       { authorName: { contains: search, mode: "insensitive" } },

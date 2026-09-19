@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma, ContactStatus, ContactCategory } from "@prisma/client";
 import { ContactsList } from "@/components/admin/ContactsList";
 
 export default async function AdminContactsPage(props: {
@@ -23,8 +23,8 @@ export default async function AdminContactsPage(props: {
       : "ALL";
 
   const where: Prisma.ContactMessageWhereInput = {};
-  if (activeStatus !== "ALL") where.status = activeStatus;
-  if (activeCategory !== "ALL") where.category = activeCategory;
+  if (activeStatus !== "ALL") where.status = activeStatus as ContactStatus;
+  if (activeCategory !== "ALL") where.category = activeCategory as ContactCategory;
   if (search) {
     where.OR = [
       { name: { contains: search, mode: "insensitive" } },

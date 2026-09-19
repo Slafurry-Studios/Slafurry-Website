@@ -105,6 +105,7 @@ export function CommentsList({
   page,
   totalPages,
   activeStatus,
+  searchQuery,
 }: {
   comments: CommentRow[];
   countMap: Record<string, number>;
