@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { CommentStatus, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { CommentsList } from "@/components/admin/CommentsList";
 
 export default async function AdminCommentsPage(props: {
-  searchParams: Promise<{ page?: string; status?: string }>;
+  searchParams: Promise<{ page?: string; status?: string; search?: string }>;
 }) {
-  const { page, status: rawStatus } = await props.searchParams;
+  const { page, status: rawStatus, search } = await props.searchParams;
   const parsedPage = Number.parseInt(page ?? "1", 10);
   const currentPage = Number.isFinite(parsedPage) ? Math.max(1, parsedPage) : 1;
   const pageSize = 20;
@@ -17,6 +17,13 @@ export default async function AdminCommentsPage(props: {
 
   const where: Prisma.CommentWhereInput = {};
   if (activeStatus !== "ALL") where.status = activeStatus;
+  if (search) {
+    where.OR = [
+      { authorName: { contains: search, mode: "insensitive" } },
+      { authorEmail: { contains: search, mode: "insensitive" } },
+      { content: { contains: search, mode: "insensitive" } },
+    ];
+  }
 
   const [comments, counts, totalCount] = await Promise.all([
     prisma.comment.findMany({
@@ -49,6 +56,7 @@ export default async function AdminCommentsPage(props: {
       page={currentPage}
       totalPages={totalPages}
       activeStatus={activeStatus}
+      searchQuery={search}
       comments={comments.map((c) => ({
         id: c.id,
         targetType: c.targetType,

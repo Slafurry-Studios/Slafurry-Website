@@ -14,7 +14,6 @@ import {
 import { useRouter } from "@/i18n/navigation";
 import { ReleaseForm } from "@/components/admin/ReleaseForm";
 import { AssetForm } from "@/components/admin/AssetForm";
-import { DeleteButton } from "@/components/admin/DeleteButton";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
 

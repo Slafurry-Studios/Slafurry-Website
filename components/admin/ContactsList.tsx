@@ -1,6 +1,7 @@
 "use client";
 
-import { Link, useRouter } from "@/i18n/navigation";
+import { useState, useTransition } from "react";
+import { useRouter, Link } from "@/i18n/navigation";
 import { IconClock, IconMailOpened, IconCheck, IconTrash } from "@tabler/icons-react";
 import { ContactActions } from "@/components/admin/ContactActions";
 import { DataTable } from "@/components/admin/DataTable";
@@ -96,14 +97,16 @@ export function ContactsList({
   totalPages: number;
   activeStatus: string;
   activeCategory: string;
+  searchQuery?: string;
 }) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   function statusHref(s: string) {
-    return `/admin/contacts?status=${s}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}`;
+    return `/admin/contacts?status=${s}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}${searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : ""}`;
   }
   function categoryHref(c: string) {
-    return `/admin/contacts?category=${c}${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}`;
+    return `/admin/contacts?category=${c}${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}${searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : ""}`;
   }
 
   const bulkActions: BulkAction<ContactRow>[] = [
@@ -169,6 +172,15 @@ export function ContactsList({
 
       <DataTable
         data={messages}
+        searchKeys={["name", "email", "message"]}
+        searchValue={searchQuery || ""}
+        onSearchChange={(q) => {
+          startTransition(() => {
+            router.push(
+              `/admin/contacts?page=1${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}${q ? `&search=${encodeURIComponent(q)}` : ""}`
+            );
+          });
+        }}
         filters={FILTERS}
         columns={COLUMNS}
         defaultSort={{ key: "createdAt", direction: "desc" }}
@@ -179,7 +191,7 @@ export function ContactsList({
         totalPages={totalPages}
         onPageChange={(p) =>
           router.push(
-            `/admin/contacts?page=${p}${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}`
+            `/admin/contacts?page=${p}${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}${searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : ""}`
           )
         }
         headerExtra={

@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { ContactStatus, ContactCategory, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { ContactsList } from "@/components/admin/ContactsList";
 
 export default async function AdminContactsPage(props: {
-  searchParams: Promise<{ page?: string; status?: string; category?: string }>;
+  searchParams: Promise<{ page?: string; status?: string; category?: string; search?: string }>;
 }) {
-  const { page, status: rawStatus, category: rawCategory } = await props.searchParams;
+  const { page, status: rawStatus, category: rawCategory, search } = await props.searchParams;
   const parsedPage = Number.parseInt(page ?? "1", 10);
   const currentPage = Number.isFinite(parsedPage) ? Math.max(1, parsedPage) : 1;
   const pageSize = 20;
@@ -25,6 +25,13 @@ export default async function AdminContactsPage(props: {
   const where: Prisma.ContactMessageWhereInput = {};
   if (activeStatus !== "ALL") where.status = activeStatus;
   if (activeCategory !== "ALL") where.category = activeCategory;
+  if (search) {
+    where.OR = [
+      { name: { contains: search, mode: "insensitive" } },
+      { email: { contains: search, mode: "insensitive" } },
+      { message: { contains: search, mode: "insensitive" } },
+    ];
+  }
 
   const [messages, statusCounts, categoryCounts, totalCount] = await Promise.all([
     prisma.contactMessage.findMany({
@@ -56,6 +63,7 @@ export default async function AdminContactsPage(props: {
       totalPages={totalPages}
       activeStatus={activeStatus}
       activeCategory={activeCategory}
+      searchQuery={search}
       messages={messages.map((m) => ({
         id: m.id,
         name: m.name,

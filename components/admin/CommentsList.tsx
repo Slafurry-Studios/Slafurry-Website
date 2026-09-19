@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import { useRouter, Link } from "@/i18n/navigation";
 import { IconMessage, IconClock, IconMail, IconCheck, IconX, IconTrash, IconDeviceGamepad } from "@tabler/icons-react";
 import { CommentActions } from "@/components/admin/CommentActions";
@@ -111,8 +112,10 @@ export function CommentsList({
   page: number;
   totalPages: number;
   activeStatus: string;
+  searchQuery?: string;
 }) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const bulkActions: BulkAction<CommentRow>[] = [
     {
@@ -177,6 +180,13 @@ export function CommentsList({
 
       <DataTable
         data={comments}
+        searchKeys={["authorName", "authorEmail", "content"]}
+        searchValue={searchQuery || ""}
+        onSearchChange={(q) => {
+          startTransition(() => {
+            router.push(`/admin/comments?status=${activeStatus}&page=1${q ? `&search=${encodeURIComponent(q)}` : ""}`);
+          });
+        }}
         filters={FILTERS}
         columns={COLUMNS}
         defaultSort={{ key: "createdAt", direction: "desc" }}
@@ -189,7 +199,7 @@ export function CommentsList({
         }
         page={page}
         totalPages={totalPages}
-        onPageChange={(p) => router.push(`/admin/comments?status=${activeStatus}&page=${p}`)}
+        onPageChange={(p) => router.push(`/admin/comments?status=${activeStatus}&page=${p}${searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : ""}`)}
         headerExtra={
           <div className="flex gap-1 rounded-lg border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-800 dark:bg-neutral-900">
             {TABS.map((tab) => {

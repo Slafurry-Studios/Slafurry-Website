@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { IconPlus, IconPencil, IconEyeOff, IconEye, IconLock, IconTrash } from "@tabler/icons-react";
-import { DeleteAchievementButton } from "@/components/admin/DeleteAchievementButton";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
 

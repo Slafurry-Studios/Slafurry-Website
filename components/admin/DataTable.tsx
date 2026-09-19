@@ -61,6 +61,8 @@ export type DataTableProps<T> = {
   page?: number;
   totalPages?: number;
   onPageChange?: (page: number) => void;
+  searchValue?: string;
+  onSearchChange?: (search: string) => void;
 };
 
 // ─── Component ──────────────────────────────────────────────────
@@ -82,8 +84,11 @@ export function DataTable<T extends Record<string, unknown>>({
   page,
   totalPages,
   onPageChange,
+  searchValue,
+  onSearchChange,
 }: DataTableProps<T>) {
-  const [search, setSearch] = useState("");
+  const [internalSearch, setInternalSearch] = useState("");
+  const search = searchValue ?? internalSearch;
   const [sortKey, setSortKey] = useState<string | null>(defaultSort?.key ?? null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">(defaultSort?.direction ?? "asc");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -223,13 +228,20 @@ export function DataTable<T extends Record<string, unknown>>({
             <input
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setInternalSearch(val);
+                if (onSearchChange) onSearchChange(val);
+              }}
               placeholder={searchPlaceholder}
               className="w-full rounded-lg border border-neutral-300 bg-white py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
             />
             {hasSearch && (
               <button
-                onClick={() => setSearch("")}
+                onClick={() => {
+                  if (onSearchChange) onSearchChange("");
+                  else setInternalSearch("");
+                }}
                 className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
               >
                 <IconX size={14} />
