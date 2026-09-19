@@ -1,7 +1,8 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
-import { IconPlus, IconPencil, IconStar, IconGripVertical } from "@tabler/icons-react";
+import { useState } from "react";
+import { useRouter, Link } from "@/i18n/navigation";
+import { IconPlus, IconPencil, IconStar, IconGripVertical, IconEyeOff, IconEye, IconTrash } from "@tabler/icons-react";
 import { DeleteGameButton } from "@/components/admin/DeleteGameButton";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
@@ -21,7 +22,9 @@ type GameRow = {
   slug: string;
   status: string;
   featured: boolean;
+  featured: boolean;
   order: number;
+  isHidden: boolean;
   playLinkCount: number;
 };
 
@@ -46,6 +49,31 @@ const FILTERS: DataTableFilter[] = [
 ];
 
 export function GamesList({ games }: { games: GameRow[] }) {
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
+
+  const visibleCount = games.filter((g) => !g.isHidden).length;
+  const hiddenCount = games.filter((g) => g.isHidden).length;
+
+  const filteredGames = games.filter((g) =>
+    activeTab === "VISIBLE" ? !g.isHidden : g.isHidden
+  );
+
+  async function toggleHide(id: string, isHidden: boolean) {
+    await fetch(`/api/admin/games/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isHidden }),
+    });
+    router.refresh();
+  }
+
+  async function deleteGame(id: string) {
+    if (!confirm("Are you sure you want to permanently delete this game? This cannot be undone.")) return;
+    await fetch(`/api/admin/games/${id}`, { method: "DELETE" });
+    router.refresh();
+  }
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-10">
       <div className="flex items-center justify-between">
@@ -60,17 +88,47 @@ export function GamesList({ games }: { games: GameRow[] }) {
       </div>
 
       <DataTable
-        data={games}
+        data={filteredGames}
         searchPlaceholder="Search games..."
         searchKeys={["title", "slug"]}
         filters={FILTERS}
         columns={COLUMNS}
         defaultSort={{ key: "order", direction: "asc" }}
-        emptyMessage="No games yet. Create your first one!"
+        emptyMessage={activeTab === "VISIBLE" ? "No games yet. Create your first one!" : "No hidden games."}
+        headerExtra={
+          <div className="flex gap-1 rounded-lg border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-800 dark:bg-neutral-900">
+            <button
+              onClick={() => setActiveTab("VISIBLE")}
+              className={`flex-1 rounded-md px-4 py-2 text-center text-sm font-medium transition-colors ${
+                activeTab === "VISIBLE"
+                  ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-800 dark:text-white"
+                  : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+              }`}
+            >
+              Visible
+              <span className="ml-1.5 text-xs text-neutral-400 dark:text-neutral-500">{visibleCount}</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("HIDDEN")}
+              className={`flex-1 rounded-md px-4 py-2 text-center text-sm font-medium transition-colors ${
+                activeTab === "HIDDEN"
+                  ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-800 dark:text-white"
+                  : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+              }`}
+            >
+              Hidden
+              {hiddenCount > 0 && <span className="ml-1.5 text-xs text-neutral-400 dark:text-neutral-500">{hiddenCount}</span>}
+            </button>
+          </div>
+        }
         renderRow={(game) => (
           <div
             key={game.id}
-            className="flex items-center gap-4 rounded-xl border border-neutral-200 bg-white p-4 transition-shadow hover:shadow-sm dark:border-neutral-800 dark:bg-neutral-900"
+            className={`flex items-center gap-4 rounded-xl border p-4 transition-shadow hover:shadow-sm ${
+              game.isHidden 
+                ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
+                : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+            }`}
           >
             <IconGripVertical
               size={16}
@@ -106,10 +164,36 @@ export function GamesList({ games }: { games: GameRow[] }) {
               <Link
                 href={`/admin/games/${game.id}/edit`}
                 className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
+                title="Edit"
               >
                 <IconPencil size={16} />
               </Link>
-              <DeleteGameButton gameId={game.id} />
+              {activeTab === "VISIBLE" ? (
+                <button
+                  onClick={() => toggleHide(game.id, true)}
+                  className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
+                  title="Hide"
+                >
+                  <IconEyeOff size={16} />
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => toggleHide(game.id, false)}
+                    className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
+                    title="Restore"
+                  >
+                    <IconEye size={16} />
+                  </button>
+                  <button
+                    onClick={() => deleteGame(game.id)}
+                    className="rounded-lg p-2 text-red-400 transition-colors hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950 dark:hover:text-red-300"
+                    title="Permanently Delete"
+                  >
+                    <IconTrash size={16} />
+                  </button>
+                </>
+              )}
             </div>
           </div>
         )}

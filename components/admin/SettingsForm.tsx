@@ -16,6 +16,8 @@ import {
   IconBrandGithub,
   IconMail,
   IconLink,
+  IconEye,
+  IconEyeOff,
 } from "@tabler/icons-react";
 
 // ─── Tabler icon map for social links ──────────────────────────
@@ -63,6 +65,7 @@ type SocialLink = {
   url: string;
   section: "COMMUNITY" | "CONTACT" | "FOOTER";
   order: number;
+  isHidden: boolean;
 };
 
 const SECTIONS: { key: SocialLink["section"]; label: string }[] = [
@@ -127,6 +130,7 @@ export function SettingsForm({
         label: "",
         url: "",
         section,
+        isHidden: false,
         order: links.filter((l) => l.section === section).length,
       }),
     });
@@ -136,7 +140,7 @@ export function SettingsForm({
     }
   }
 
-  async function updateLink(id: string, field: keyof SocialLink, value: string | number) {
+  async function updateLink(id: string, field: keyof SocialLink, value: string | number | boolean) {
     setLinks((prev) =>
       prev.map((l) => (l.id === id ? { ...l, [field]: value } : l))
     );
@@ -327,7 +331,11 @@ export function SettingsForm({
                   return (
                     <div
                       key={link.id}
-                      className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900"
+                      className={`flex items-center gap-3 rounded-xl border p-3 ${
+                        link.isHidden 
+                          ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
+                          : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+                      }`}
                     >
                       <IconComp size={18} className="shrink-0 text-neutral-400" />
 
@@ -369,6 +377,15 @@ export function SettingsForm({
                         className={`${inputClass} !py-1.5 text-xs w-16`}
                         title="Order"
                       />
+
+                      <button
+                        type="button"
+                        onClick={() => updateLink(link.id, "isHidden", !link.isHidden)}
+                        className="shrink-0 rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
+                        title={link.isHidden ? "Restore" : "Hide"}
+                      >
+                        {link.isHidden ? <IconEye size={16} /> : <IconEyeOff size={16} />}
+                      </button>
 
                       <button
                         type="button"

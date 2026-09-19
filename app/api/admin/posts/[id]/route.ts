@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { withAudit, snapshot, extractIdFromUrl } from "@/lib/audit";
+import { deleteStorageFile } from "@/lib/supabase/storage";
 
 function slugify(title: string): string {
   return title
@@ -58,6 +59,13 @@ export const PUT = withAudit(
         publishedAt = null;
       }
 
+      if (body.coverImage && body.coverImage !== existing.coverImage) {
+        await deleteStorageFile(existing.coverImage);
+      }
+      if (body.ogImage && body.ogImage !== existing.ogImage) {
+        await deleteStorageFile(existing.ogImage);
+      }
+
       const post = await prisma.post.update({
         where: { id },
         data: {
@@ -71,6 +79,7 @@ export const PUT = withAudit(
           ...(tags !== undefined && { tags }),
           authorName: body.authorName ?? existing.authorName,
           status: body.status ?? existing.status,
+          isHidden: typeof body.isHidden === "boolean" ? body.isHidden : existing.isHidden,
           publishedAt,
           metaTitle:
             body.metaTitle !== undefined ? body.metaTitle || null : existing.metaTitle,
@@ -127,6 +136,12 @@ export const DELETE = withAudit(
       }
 
       await prisma.post.delete({ where: { id } });
+
+      await deleteStorageFile(existing.coverImage);
+      if (existing.ogImage) {
+        await deleteStorageFile(existing.ogImage);
+      }
+
       return NextResponse.json({ success: true });
     } catch (error) {
       console.error("Delete post error:", error);

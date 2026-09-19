@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { IconClock, IconMailOpened, IconCheck, IconTrash } from "@tabler/icons-react";
 import { ContactActions } from "@/components/admin/ContactActions";
 import { DataTable } from "@/components/admin/DataTable";
@@ -80,18 +80,22 @@ const FILTERS: DataTableFilter[] = [
 
 export function ContactsList({
   messages,
-  activeStatus,
-  activeCategory,
   statusMap,
   categoryMap,
   total,
+  page,
+  totalPages,
+  activeStatus,
+  activeCategory,
 }: {
   messages: ContactRow[];
-  activeStatus: string;
-  activeCategory: string;
   statusMap: Record<string, number>;
   categoryMap: Record<string, number>;
   total: number;
+  page: number;
+  totalPages: number;
+  activeStatus: string;
+  activeCategory: string;
 }) {
   const router = useRouter();
 
@@ -173,6 +177,13 @@ export function ContactsList({
         getRowId={(m) => m.id}
         bulkActions={bulkActions}
         emptyMessage="No messages match these filters."
+        page={page}
+        totalPages={totalPages}
+        onPageChange={(p) =>
+          router.push(
+            `/admin/contacts?page=${p}${activeStatus !== "ALL" ? `&status=${activeStatus}` : ""}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}`
+          )
+        }
         headerExtra={
           <>
             <div className="flex gap-1 rounded-lg border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-800 dark:bg-neutral-900">
@@ -180,7 +191,7 @@ export function ContactsList({
                 const count =
                   tab.key === "ALL" ? total : (statusMap[tab.key] ?? 0);
                 return (
-                  <a
+                  <Link
                     key={tab.key}
                     href={statusHref(tab.key)}
                     className={`flex-1 rounded-md px-4 py-2 text-center text-sm font-medium transition-colors ${
@@ -195,7 +206,7 @@ export function ContactsList({
                         {count}
                       </span>
                     )}
-                  </a>
+                  </Link>
                 );
               })}
             </div>
@@ -205,7 +216,7 @@ export function ContactsList({
                 const count =
                   tab.key === "ALL" ? total : (categoryMap[tab.key] ?? 0);
                 return (
-                  <a
+                  <Link
                     key={tab.key}
                     href={categoryHref(tab.key)}
                     className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
@@ -216,7 +227,7 @@ export function ContactsList({
                   >
                     {tab.label}
                     {count > 0 && <span className="opacity-60">{count}</span>}
-                  </a>
+                  </Link>
                 );
               })}
             </div>

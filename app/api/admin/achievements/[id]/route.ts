@@ -50,6 +50,7 @@ export const PUT = withAudit(
           category: body.category !== undefined ? body.category || null : existing.category,
           order: typeof body.order === "number" ? body.order : existing.order,
           isActive: typeof body.isActive === "boolean" ? body.isActive : existing.isActive,
+          isHidden: typeof body.isHidden === "boolean" ? body.isHidden : existing.isHidden,
         },
       });
 

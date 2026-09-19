@@ -22,6 +22,7 @@ export const PUT = withAudit(
           outlet: body.outlet ?? existing.outlet,
           title: body.title ?? existing.title,
           url: body.url ?? existing.url,
+          isHidden: typeof body.isHidden === "boolean" ? body.isHidden : existing.isHidden,
           publishedAt: body.publishedAt ? new Date(body.publishedAt) : existing.publishedAt,
         },
       });

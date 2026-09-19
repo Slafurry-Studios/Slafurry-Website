@@ -51,6 +51,7 @@ export default async function AdminSettingsPage() {
           url: l.url,
           section: l.section,
           order: l.order,
+          isHidden: l.isHidden,
         }))}
       />
     </div>

@@ -62,7 +62,7 @@ export async function getPublishedPosts(
   limit?: number
 ): Promise<PostCardData[]> {
   const rows = await prisma.post.findMany({
-    where: { category, status: PostStatus.PUBLISHED },
+    where: { category, status: PostStatus.PUBLISHED, isHidden: false },
     orderBy: { publishedAt: "desc" },
     select: {
       id: true,
@@ -87,8 +87,8 @@ export async function getPostBySlug(
   slug: string,
   category: PostCategory
 ): Promise<PostArticleData | null> {
-  const row = await prisma.post.findUnique({
-    where: { slug, category, status: PostStatus.PUBLISHED },
+  const row = await prisma.post.findFirst({
+    where: { slug, category, status: PostStatus.PUBLISHED, isHidden: false },
     select: {
       id: true,
       slug: true,
@@ -147,8 +147,8 @@ export async function getAdjacentPosts(
 
   // Prev: manual override → fallback to publishedAt order
   if (current.prevPostId) {
-    const row = await prisma.post.findUnique({
-      where: { id: current.prevPostId, status: PostStatus.PUBLISHED },
+    const row = await prisma.post.findFirst({
+      where: { id: current.prevPostId, status: PostStatus.PUBLISHED, isHidden: false },
       select: cardFields,
     });
     if (row) prev = toCardData(row);
@@ -158,6 +158,7 @@ export async function getAdjacentPosts(
       where: {
         category,
         status: PostStatus.PUBLISHED,
+        isHidden: false,
         publishedAt: { gt: current.publishedAt },
       },
       orderBy: { publishedAt: "asc" },
@@ -168,8 +169,8 @@ export async function getAdjacentPosts(
 
   // Next: manual override → fallback to publishedAt order
   if (current.nextPostId) {
-    const row = await prisma.post.findUnique({
-      where: { id: current.nextPostId, status: PostStatus.PUBLISHED },
+    const row = await prisma.post.findFirst({
+      where: { id: current.nextPostId, status: PostStatus.PUBLISHED, isHidden: false },
       select: cardFields,
     });
     if (row) next = toCardData(row);
@@ -179,6 +180,7 @@ export async function getAdjacentPosts(
       where: {
         category,
         status: PostStatus.PUBLISHED,
+        isHidden: false,
         publishedAt: { lt: current.publishedAt },
       },
       orderBy: { publishedAt: "desc" },
@@ -195,7 +197,7 @@ export async function getPostTags(
   category: PostCategory
 ): Promise<string[]> {
   const rows = await prisma.post.findMany({
-    where: { category, status: PostStatus.PUBLISHED },
+    where: { category, status: PostStatus.PUBLISHED, isHidden: false },
     select: { tags: true },
   });
   const allTags = rows.flatMap((r) => r.tags);

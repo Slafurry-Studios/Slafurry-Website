@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { withAudit, snapshot, extractIdFromUrl } from "@/lib/audit";
+import { deleteStorageFile } from "@/lib/supabase/storage";
 
 export const PUT = withAudit(
   async (
@@ -49,6 +50,13 @@ export const PUT = withAudit(
           await tx.playLink.deleteMany({ where: { gameId: id } });
         }
 
+        if (body.coverImage && body.coverImage !== existing.coverImage) {
+          await deleteStorageFile(existing.coverImage);
+        }
+        if (body.ogImage && body.ogImage !== existing.ogImage) {
+          await deleteStorageFile(existing.ogImage);
+        }
+
         return tx.game.update({
           where: { id },
           data: {
@@ -61,6 +69,7 @@ export const PUT = withAudit(
             status: body.status ?? existing.status,
             featured: typeof body.featured === "boolean" ? body.featured : existing.featured,
             order: typeof body.order === "number" ? body.order : existing.order,
+            isHidden: typeof body.isHidden === "boolean" ? body.isHidden : existing.isHidden,
             metaTitle: body.metaTitle !== undefined ? body.metaTitle || null : existing.metaTitle,
             metaDescription: body.metaDescription !== undefined ? body.metaDescription || null : existing.metaDescription,
             ogImage: body.ogImage !== undefined ? body.ogImage || null : existing.ogImage,
@@ -101,6 +110,11 @@ export const DELETE = withAudit(
       }
 
       await prisma.game.delete({ where: { id } });
+
+      await deleteStorageFile(existing.coverImage);
+      if (existing.ogImage) {
+        await deleteStorageFile(existing.ogImage);
+      }
 
       return NextResponse.json({ success: true });
     } catch (error) {

@@ -23,6 +23,7 @@ export default async function AdminMontagePage() {
         videoUrl: v.videoUrl,
         order: v.order,
         isActive: v.isActive,
+        isHidden: v.isHidden,
         gameTitle: v.game?.title ?? null,
       }))}
     />

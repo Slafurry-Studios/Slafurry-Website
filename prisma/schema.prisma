@@ -21,6 +21,7 @@ model Game {
   order           Int             @default(0)
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+  isHidden        Boolean         @default(false)
   metaTitle       String?
   metaDescription String?
   ogImage         String?
@@ -45,7 +46,8 @@ model MontageVideo {
   gameId   String?
   order    Int     @default(0)
   isActive Boolean @default(true)
-  game     Game?   @relation(fields: [gameId], references: [id])
+  isHidden Boolean @default(false)
+  game     Game?   @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }
 
 model Post {
@@ -65,6 +67,7 @@ model Post {
   viewCount       Int          @default(0)
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
+  isHidden        Boolean      @default(false)
   metaTitle       String?
   metaDescription String?
   ogImage         String?
@@ -102,6 +105,7 @@ model PressRelease {
   title       String
   url         String
   publishedAt DateTime @default(now())
+  isHidden    Boolean  @default(false)
 }
 
 model PressKitAsset {
@@ -109,8 +113,9 @@ model PressKitAsset {
   label   String
   type    PressAssetType
   fileUrl String
+  isHidden Boolean        @default(false)
   gameId  String?
-  game    Game?          @relation(fields: [gameId], references: [id])
+  game    Game?          @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }
 
 model ContactMessage {
@@ -138,6 +143,7 @@ model Achievement {
   category      String?
   order         Int                @default(0)
   isActive      Boolean            @default(true)
+  isHidden      Boolean            @default(false)
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
 }
@@ -149,6 +155,7 @@ model SocialLink {
   url      String
   section  LinkSection
   order    Int         @default(0)
+  isHidden Boolean     @default(false)
 }
 
 model Redirect {

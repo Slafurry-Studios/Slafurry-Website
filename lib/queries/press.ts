@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 export async function getPressReleases() {
   try {
     return await prisma.pressRelease.findMany({
+      where: { isHidden: false },
       orderBy: { publishedAt: "desc" },
     });
   } catch {
@@ -13,6 +14,7 @@ export async function getPressReleases() {
 export async function getPressKitAssets() {
   try {
     return await prisma.pressKitAsset.findMany({
+      where: { isHidden: false },
       orderBy: { label: "asc", type: "asc" },
     });
   } catch {

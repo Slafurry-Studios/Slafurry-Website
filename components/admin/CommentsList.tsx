@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "@/i18n/navigation";
+import { useRouter, Link } from "@/i18n/navigation";
 import { IconMessage, IconClock, IconMail, IconCheck, IconX, IconTrash, IconDeviceGamepad } from "@tabler/icons-react";
 import { CommentActions } from "@/components/admin/CommentActions";
 import { DataTable } from "@/components/admin/DataTable";
@@ -44,24 +44,24 @@ type CommentRow = {
 function TargetLink({ comment }: { comment: CommentRow }) {
   if (comment.targetType === "GAME" && comment.gameId && comment.gameTitle) {
     return (
-      <a
+      <Link
         href={`/admin/games/${comment.gameId}/edit`}
         className="flex items-center gap-1 hover:text-neutral-600 dark:hover:text-neutral-300"
       >
         <IconDeviceGamepad size={12} />
         {comment.gameTitle}
-      </a>
+      </Link>
     );
   }
   if (comment.postId && comment.postTitle) {
     return (
-      <a
+      <Link
         href={`/admin/posts/${comment.postId}/edit`}
         className="flex items-center gap-1 hover:text-neutral-600 dark:hover:text-neutral-300"
       >
         <IconMessage size={12} />
         {comment.postTitle}
-      </a>
+      </Link>
     );
   }
   return <span className="text-neutral-400">Deleted</span>;
@@ -99,14 +99,18 @@ const FILTERS: DataTableFilter[] = [
 
 export function CommentsList({
   comments,
-  activeTab,
   countMap,
   total,
+  page,
+  totalPages,
+  activeStatus,
 }: {
   comments: CommentRow[];
-  activeTab: string;
   countMap: Record<string, number>;
   total: number;
+  page: number;
+  totalPages: number;
+  activeStatus: string;
 }) {
   const router = useRouter();
 
@@ -181,21 +185,24 @@ export function CommentsList({
         getRowId={(c) => c.id}
         bulkActions={bulkActions}
         emptyMessage={
-          activeTab === "PENDING"
+          activeStatus === "PENDING"
             ? "No pending comments. All caught up!"
-            : `No ${activeTab.toLowerCase()} comments.`
+            : `No ${activeStatus.toLowerCase()} comments.`
         }
+        page={page}
+        totalPages={totalPages}
+        onPageChange={(p) => router.push(`/admin/comments?status=${activeStatus}&page=${p}`)}
         headerExtra={
           <div className="flex gap-1 rounded-lg border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-800 dark:bg-neutral-900">
             {TABS.map((tab) => {
               const count =
                 tab.key === "ALL" ? total : (countMap[tab.key] ?? 0);
               return (
-                <a
+                <Link
                   key={tab.key}
                   href={`/admin/comments?status=${tab.key}`}
                   className={`flex-1 rounded-md px-4 py-2 text-center text-sm font-medium transition-colors ${
-                    activeTab === tab.key
+                    activeStatus === tab.key
                       ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-800 dark:text-white"
                       : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
                   }`}
@@ -206,7 +213,7 @@ export function CommentsList({
                       {count}
                     </span>
                   )}
-                </a>
+                </Link>
               );
             })}
           </div>

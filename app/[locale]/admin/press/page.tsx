@@ -1,14 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { PressList } from "@/components/admin/PressList";
 
-export default async function AdminPressPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ tab?: string }>;
-}) {
-  const { tab } = await searchParams;
-  const activeTab = tab === "assets" ? "assets" : "releases";
-
+export default async function AdminPressPage() {
   const [releases, assets, games] = await Promise.all([
     prisma.pressRelease.findMany({ orderBy: { publishedAt: "desc" } }),
     prisma.pressKitAsset.findMany({
@@ -23,13 +16,13 @@ export default async function AdminPressPage({
 
   return (
     <PressList
-      activeTab={activeTab}
       games={games}
       releases={releases.map((r) => ({
         id: r.id,
         title: r.title,
         outlet: r.outlet,
         url: r.url,
+        isHidden: r.isHidden,
         publishedAt: r.publishedAt.toISOString(),
       }))}
       assets={assets.map((a) => ({
@@ -37,8 +30,10 @@ export default async function AdminPressPage({
         label: a.label,
         type: a.type,
         fileUrl: a.fileUrl,
+        isHidden: a.isHidden,
         gameTitle: a.game?.title ?? null,
       }))}
     />
   );
 }
+

@@ -58,6 +58,9 @@ export type DataTableProps<T> = {
   getRowId?: (item: T) => string;
   /** Bulk actions shown when rows are selected. Omit to disable selection. */
   bulkActions?: BulkAction<T>[];
+  page?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
 };
 
 // ─── Component ──────────────────────────────────────────────────
@@ -76,6 +79,9 @@ export function DataTable<T extends Record<string, unknown>>({
   topContent,
   getRowId,
   bulkActions,
+  page,
+  totalPages,
+  onPageChange,
 }: DataTableProps<T>) {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<string | null>(defaultSort?.key ?? null);
@@ -404,6 +410,31 @@ export function DataTable<T extends Record<string, unknown>>({
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {page !== undefined && totalPages !== undefined && totalPages > 1 && (
+        <div className="flex items-center justify-between pt-4 border-t border-neutral-200 dark:border-neutral-800">
+          <span className="text-sm text-neutral-500 dark:text-neutral-400">
+            Page {page} of {totalPages}
+          </span>
+          <div className="flex gap-2">
+            <button
+              disabled={page <= 1}
+              onClick={() => onPageChange?.(page - 1)}
+              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+            >
+              Previous
+            </button>
+            <button
+              disabled={page >= totalPages}
+              onClick={() => onPageChange?.(page + 1)}
+              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+            >
+              Next
+            </button>
+          </div>
         </div>
       )}
     </div>

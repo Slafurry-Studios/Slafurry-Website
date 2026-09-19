@@ -16,6 +16,7 @@ export default async function AdminGamesPage() {
         status: g.status,
         featured: g.featured,
         order: g.order,
+        isHidden: g.isHidden,
         playLinkCount: g._count.playLinks,
       }))}
     />
