@@ -10,7 +10,7 @@ export function NewsPreview({ posts }: { posts: Post[] }) {
   if (posts.length === 0) return null;
 
   // 2x2 — ambil max 4 post, kartu seragam tanpa featured gede.
-  const cards = posts.slice(0, 4);
+  const cards = posts.slice(0, 2);
 
   return (
     <section className="flex min-h-screen flex-col justify-center px-6 py-16 md:px-10">
