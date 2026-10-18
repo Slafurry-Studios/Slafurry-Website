@@ -47,7 +47,16 @@ export function Navbar() {
               );
             })}
           </ul>
-          {/* burger tetap dipertahankan di mobile */}
+          {/* Burger — nav item desktop disembunyikan di layar kecil (md:flex). */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-900 text-neutral-900 transition-all hover:scale-105 md:hidden"
+          >
+            {menuOpen ? <IconX size={18} stroke={1.75} /> : <IconMenu size={18} stroke={1.75} />}
+          </button>
         </div>
 
         {/* Mobile dropdown — nempel di bawah navbar. */}
