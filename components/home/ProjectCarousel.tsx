@@ -105,8 +105,8 @@ function ProjectCard({
     >
       <PlaceholderImage label={project.title} className="aspect-[16/9] max-h-80 w-full" />
       <div className="p-4">
-        <h3 className="font-heading text-2xl tracking-wide">{project.title}</h3>
-        <p className="mt-1 font-body text-xl text-neutral-600 dark:text-neutral-400">
+        <h3 className="line-clamp-1 min-h-[2rem] font-heading text-2xl tracking-wide">{project.title}</h3>
+        <p className="mt-1 line-clamp-2 min-h-[3.5rem] font-body text-xl text-neutral-600 dark:text-neutral-400">
           {project.shortDesc}
         </p>
       </div>
