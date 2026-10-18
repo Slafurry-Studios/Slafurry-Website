@@ -14,7 +14,7 @@ export default async function GamesPage() {
         Check Out Our Games
       </h1>
 
-      <div className="mx-auto mt-10 max-w-4xl">
+      <div className="mx-auto mt-10 max-w-7xl">
         {featured && <GameCard game={featured} featured />}
       </div>
 

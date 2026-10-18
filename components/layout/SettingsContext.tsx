@@ -32,43 +32,35 @@ function saveToLocalStorage(key: string, value: string) {
   }
 }
 
+// Serious Mode + sound mute dihapus dari UI (settings button juga udah
+// dicabut). Context shape dipertahanin biar komponen lama tetap compile —
+// nilainya fixed "off", gak ada yang bisa ngubah.
 export function SettingsProvider({
-  initialSeriousMode,
-  initialSoundMuted,
   children,
 }: {
-  initialSeriousMode: SeriousMode;
-  initialSoundMuted: SoundMode;
   children: ReactNode;
 }) {
-  // Dark mode dimatikan — light mode only.
-  const [seriousMode, setSeriousMode] = useState<SeriousMode>(initialSeriousMode);
-  const [soundMuted, setSoundMuted] = useState<SoundMode>(initialSoundMuted);
-  const [serious, setSerious] = useState<boolean>(initialSeriousMode === "on");
+  const [seriousMode] = useState<SeriousMode>("off");
+  const [soundMuted] = useState<SoundMode>("off");
+  const [serious] = useState<boolean>(false);
 
-  // Sync CSS classes on mount/change — class ".dark" selalu dilepas
-  // (backup kalau user masih punya sisa state dark di localStorage).
+  // Force light mode, class "dark"/"serious" dilepas permanen (backup
+  // buat user yang masih nyimpen sisa state lama di localStorage).
   useEffect(() => {
     document.documentElement.classList.remove("dark");
-    document.documentElement.classList.toggle("serious", serious);
-  }, [serious]);
+    document.documentElement.classList.remove("serious");
+  }, []);
 
-  // Persist to localStorage on every change
   useEffect(() => {
     saveToLocalStorage("theme", "light");
-    saveToLocalStorage("serious_mode", seriousMode ? "on" : "off");
-    saveToLocalStorage("sound_muted", soundMuted ? "on" : "off");
-  }, [seriousMode, soundMuted]);
+  }, []);
 
   const updateSeriousMode = (mode: SeriousMode) => {
-    setSeriousMode(mode);
-    setSerious(mode === "on");
-    saveToLocalStorage("serious_mode", mode);
+    void mode; // fitur dimatikan — no-op
   };
 
   const updateSoundMuted = (mode: SoundMode) => {
-    setSoundMuted(mode);
-    saveToLocalStorage("sound_muted", mode);
+    void mode; // fitur dimatikan — no-op
   };
 
   return (
@@ -79,7 +71,7 @@ export function SettingsProvider({
         soundMuted,
         setSoundMuted: updateSoundMuted,
         serious,
-        setSerious,
+        setSerious: () => {}, // fitur dimatikan — no-op
       }}
     >
       {children}

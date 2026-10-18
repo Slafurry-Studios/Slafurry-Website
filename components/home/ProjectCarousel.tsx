@@ -28,7 +28,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
         "Projects"
       </h2>
 
-      <div className="mx-auto mt-10 flex max-w-5xl items-center justify-center gap-3 md:gap-6">
+      <div className="mx-auto mt-10 flex max-w-7xl items-center justify-center gap-3 md:gap-6">
         {count > 1 && (
           <button
             type="button"
@@ -106,7 +106,7 @@ function ProjectCard({
       <PlaceholderImage label={project.title} className="aspect-[16/9] w-full" />
       <div className="p-4">
         <h3 className="font-heading text-2xl tracking-wide">{project.title}</h3>
-        <p className="mt-1 font-body text-base text-neutral-600 dark:text-neutral-400">
+        <p className="mt-1 font-body text-lg text-neutral-600 dark:text-neutral-400">
           {project.shortDesc}
         </p>
       </div>

@@ -52,7 +52,7 @@ export default async function GameDetailPage({
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center rounded-md bg-neutral-100 dark:bg-neutral-800 px-4 py-2 text-base font-medium text-neutral-800 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                className="flex items-center rounded-md bg-neutral-100 dark:bg-neutral-800 px-4 py-2 text-lg font-medium text-neutral-800 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700"
               >
                 {link.label}
                 <svg
@@ -72,7 +72,7 @@ export default async function GameDetailPage({
       <div className="mt-8">
         <Link
           href="/games"
-          className="inline-flex items-center rounded-md bg-primary-600 px-4 py-2 text-base font-medium text-white hover:bg-primary-700"
+          className="inline-flex items-center rounded-md bg-primary-600 px-4 py-2 text-lg font-medium text-white hover:bg-primary-700"
         >
           ← Kembali ke daftar game
         </Link>

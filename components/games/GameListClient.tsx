@@ -21,7 +21,7 @@ export function GameListClient({
 
   return (
     <>
-      <div className="mx-auto mt-8 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mx-auto mt-8 grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {visibleGames.map((game) => (
           <GameCard key={game.id} game={game} />
         ))}

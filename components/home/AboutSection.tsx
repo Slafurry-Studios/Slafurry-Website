@@ -15,12 +15,12 @@ export function AboutSection({ settings }: { settings: SiteSettings | null }) {
 
   return (
     <section className="flex min-h-screen items-center px-6 py-16 md:px-10">
-      <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[220px_1fr] md:items-center">
+      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[220px_1fr] md:items-center">
         <SlafurryMark className="mx-auto h-40 w-40 text-neutral-900 dark:text-white md:mx-0" />
 
         <div>
           <h2 className="font-heading text-4xl tracking-wide">"About"</h2>
-          <div className="mt-4 space-y-4 font-body text-base leading-relaxed text-neutral-700 dark:text-neutral-300">
+          <div className="mt-4 space-y-4 font-body text-lg leading-relaxed text-neutral-700 dark:text-neutral-300">
             {/* Dua versi teks (normal vs serious) di-render dua-duanya,
                 CSS `.joke-only`/`.serious-only` yang nentuin mana yang
                 keliatan — biar gak ada flash/mismatch pas toggle. */}

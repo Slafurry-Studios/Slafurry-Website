@@ -1,12 +1,22 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { Suspense, useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { IconMail, IconLock, IconAlertCircle } from "@tabler/icons-react";
 
+// Root layout udah gak pake cookies() → halaman ini ke-prerender statis,
+// wajib bungkus useSearchParams pakai Suspense.
 export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
     const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createClient();

@@ -39,7 +39,7 @@ export function PostListClient({
   });
 
   const tagButtonClass = (tag: string, isActive: boolean) =>
-    `inline-flex items-center rounded-full border px-3 py-1.5 font-body text-base font-medium transition-colors ${
+    `inline-flex items-center rounded-full border px-3 py-1.5 font-body text-lg font-medium transition-colors ${
       isActive
         ? "border-neutral-900 text-neutral-900 bg-neutral-100 dark:border-white dark:text-white dark:bg-neutral-800"
         : "border-neutral-300 text-neutral-700 hover:bg-neutral-200 hover:text-neutral-900 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
@@ -55,20 +55,20 @@ export function PostListClient({
       <h1 className="text-center font-heading text-5xl tracking-wide">
         {heading}
       </h1>
-      <p className="mx-auto mt-4 max-w-xl text-center font-body text-base text-neutral-600 dark:text-neutral-400">
+      <p className="mx-auto mt-4 max-w-xl text-center font-body text-lg text-neutral-600 dark:text-neutral-400">
         {intro}
       </p>
       {subIntro && (
-        <p className="mx-auto mt-3 max-w-xl text-center font-body text-base text-neutral-500 dark:text-neutral-500">
+        <p className="mx-auto mt-3 max-w-xl text-center font-body text-lg text-neutral-500 dark:text-neutral-500">
           {subIntro}
         </p>
       )}
 
-      <div className="mx-auto mb-10 max-w-2xl">
+      <div className="mx-auto mb-10 max-w-4xl">
         <div className="flex flex-wrap gap-2 justify-center">
           <button
             onClick={() => setTagFilter(undefined)}
-            className={`inline-flex items-center rounded-full border px-3 py-1.5 font-body text-base font-medium transition-colors ${allTagsClass}`}
+            className={`inline-flex items-center rounded-full border px-3 py-1.5 font-body text-lg font-medium transition-colors ${allTagsClass}`}
           >
             All tags
           </button>
@@ -89,17 +89,17 @@ export function PostListClient({
             placeholder={searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 rounded border px-3 py-2 font-body text-base dark:border-neutral-600 dark:bg-neutral-800 dark:text-white focus-outline"
+            className="flex-1 rounded border px-3 py-2 font-body text-lg dark:border-neutral-600 dark:bg-neutral-800 dark:text-white focus-outline"
           />
         </div>
       </div>
 
-      <div className="mx-auto mt-10 flex max-w-2xl flex-col gap-8">
+      <div className="mx-auto mt-10 flex max-w-4xl flex-col gap-8">
         {filtered.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
         {filtered.length === 0 && (
-          <p className="text-center text-base text-neutral-500 dark:text-neutral-400">
+          <p className="text-center text-lg text-neutral-500 dark:text-neutral-400">
             No posts found.
           </p>
         )}

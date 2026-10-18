@@ -14,7 +14,7 @@ export function Footer() {
   
   return (
     <footer className="mt-auto bg-neutral-950 px-6 py-8 text-white">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 sm:flex-row sm:justify-between">
+      <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 sm:flex-row sm:justify-between">
         <div className="flex items-center gap-3">
           {FOOTER_LINKS.map((link) => (
             <a

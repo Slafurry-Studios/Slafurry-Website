@@ -11,7 +11,7 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
     <section className="relative -mt-24 flex min-h-screen flex-col justify-center overflow-hidden bg-white px-6 pb-16 pt-24 text-neutral-900 md:px-10">
       <div className="relative mx-auto grid w-full max-w-7xl gap-10 md:grid-cols-2 md:items-center">
         <div>
-          <p className="font-body text-base font-semibold uppercase tracking-[0.2em] text-neutral-500">
+          <p className="font-body text-lg font-semibold uppercase tracking-[0.2em] text-neutral-500">
             "Indie Game Developers"
           </p>
           <h1 className="mt-3 font-heading text-7xl leading-[0.95] tracking-wide sm:text-8xl">
@@ -19,10 +19,10 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
             <br />
             Studios
           </h1>
-          <p className="mt-5 max-w-md font-body text-base italic text-neutral-500 joke-only">
+          <p className="mt-5 max-w-md font-body text-lg italic text-neutral-500 joke-only">
             {tagline}
           </p>
-          <p className="mt-5 max-w-md font-body text-base italic text-neutral-500 serious-only">
+          <p className="mt-5 max-w-md font-body text-lg italic text-neutral-500 serious-only">
             {seriousTagline}
           </p>
           <div className="mt-8">
@@ -39,7 +39,7 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
             kolom ini daripada nampilin section kosong/pecah. */}
         {upcomingGame && (
           <div>
-            <p className="font-body text-base font-semibold uppercase tracking-wide underline underline-offset-4">
+            <p className="font-body text-lg font-semibold uppercase tracking-wide underline underline-offset-4">
               "Upcoming Project"
             </p>
             {/* border.png dobel peran: mask bentuk (mask-image) + border
@@ -57,7 +57,7 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
                 className="pointer-events-none absolute inset-0 h-full w-full mix-blend-multiply"
               />
             </div>
-            <p className="mt-3 max-w-sm font-body text-base text-neutral-500">
+            <p className="mt-3 max-w-sm font-body text-lg text-neutral-500">
               {upcomingGame.shortDesc}
             </p>
           </div>

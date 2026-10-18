@@ -9,44 +9,40 @@ export function NewsPreview({ posts }: { posts: Post[] }) {
   // daripada nampilin grid kosong.
   if (posts.length === 0) return null;
 
-  const [featured, ...rest] = posts;
+  // 2x2 — ambil max 4 post, kartu seragam tanpa featured gede.
+  const cards = posts.slice(0, 4);
 
   return (
     <section className="flex min-h-screen flex-col justify-center px-6 py-16 md:px-10">
       <h2 className="text-center font-heading text-4xl tracking-wide">News</h2>
 
-      <div className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-2">
-        <NewsCard post={featured} large />
-        {rest.length > 0 && (
-          <div className="grid gap-6">
-            {rest.map((post) => (
-              <NewsCard key={post.id} post={post} />
-            ))}
-          </div>
-        )}
+      <div className="mx-auto mt-10 grid max-w-7xl gap-6 md:grid-cols-2">
+        {cards.map((post) => (
+          <NewsCard key={post.id} post={post} />
+        ))}
       </div>
     </section>
   );
 }
 
-function NewsCard({ post, large }: { post: Post; large?: boolean }) {
+function NewsCard({ post }: { post: Post }) {
 
   return (
     <Link
       href={`/news/${post.slug}`}
-      className="flex flex-col overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
+      className="flex flex-col overflow-hidden rounded-xl border border-neutral-300 transition-all hover:scale-[1.02] hover:shadow-md dark:border-neutral-700"
     >
       <PlaceholderImage
         label={post.title}
-        className={large ? "aspect-[16/10] w-full" : "aspect-[16/9] w-full"}
+        className="aspect-[16/10] w-full"
       />
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="font-body text-base font-semibold leading-snug">{post.title}</h3>
+        <h3 className="font-body text-lg font-semibold leading-snug">{post.title}</h3>
         <p className="mt-1 font-body text-xs text-neutral-500 dark:text-neutral-400">
           By {post.authorName}
           {post.publishedAt && ` | ${formatDate(post.publishedAt)}`}
         </p>
-        <p className="mt-2 line-clamp-3 font-body text-base text-neutral-600 dark:text-neutral-400">
+        <p className="mt-2 line-clamp-3 font-body text-lg text-neutral-600 dark:text-neutral-400">
           {post.excerpt}
         </p>
       </div>

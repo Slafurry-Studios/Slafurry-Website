@@ -28,10 +28,10 @@ export default async function NotFound() {
       </p>
       <h1 className="mt-1 font-heading text-3xl tracking-wide">"Check Out Our Games"</h1>
 
-      <p className="joke-only mt-3 max-w-sm font-body text-base text-neutral-500 dark:text-neutral-400">
+      <p className="joke-only mt-3 max-w-sm font-body text-lg text-neutral-500 dark:text-neutral-400">
         "Looks like you're lost. Maybe this page got caught in a joke that went too far."
       </p>
-      <p className="serious-only mt-3 max-w-sm font-body text-base text-neutral-500 dark:text-neutral-400">
+      <p className="serious-only mt-3 max-w-sm font-body text-lg text-neutral-500 dark:text-neutral-400">
         "The page you're looking for doesn't exist or may have been moved."
       </p>
 

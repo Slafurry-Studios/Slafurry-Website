@@ -27,7 +27,7 @@ export function PillButton({
   type = "button",
 }: PillButtonProps) {
   const base =
-    "inline-flex items-center justify-center gap-3 rounded-full border px-8 py-4 font-body text-base font-medium transition-colors min-h-14";
+    "inline-flex items-center justify-center gap-3 rounded-full border px-8 py-4 font-body text-lg font-medium transition-all hover:scale-105 min-h-14";
   const style =
     variant === "solid"
       ? "border-neutral-900 bg-neutral-900 text-white hover:bg-neutral-700 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"

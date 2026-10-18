@@ -37,7 +37,7 @@ export function CommunityContact({
           <h2 className="font-heading text-5xl tracking-wide">Join Our Community</h2>
           <div className="mt-8 flex flex-col items-start gap-4">
             {communityLinks.length === 0 ? (
-              <p className="font-body text-base text-neutral-400">
+              <p className="font-body text-lg text-neutral-400">
                 {/* Belum ada SocialLink section COMMUNITY di database */}
                 Coming soon.
               </p>
