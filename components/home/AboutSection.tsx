@@ -15,8 +15,10 @@ export function AboutSection({ settings }: { settings: SiteSettings | null }) {
 
   return (
     <section className="flex min-h-screen items-center px-6 py-16 md:px-10">
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[220px_1fr] md:items-center">
-        <SlafurryMark className="mx-auto h-40 w-40 text-neutral-900 dark:text-white md:mx-0" />
+      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1fr_2fr] md:items-center">
+        <div className="w-1/3 md:w-full mx-auto md:mx-0">
+          <SlafurryMark className="h-auto w-full text-neutral-900 md:aspect-square" />
+        </div>
 
         <div>
           <h2 className="font-heading text-4xl tracking-wide">"About"</h2>
