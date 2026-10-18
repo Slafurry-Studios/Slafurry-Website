@@ -8,30 +8,44 @@ import {
   getCarouselGames,
   getCommunityLinks,
   getLatestNewsPosts,
-  getActiveMontageVideos,
   getSiteSettings,
 } from "@/lib/queries/home";
 
 export default async function Home() {
   // Semua query jalan paralel (bukan await berurutan) — page load-nya
   // secepat query yang paling lambat, bukan total semuanya dijumlah.
-  const [featuredGame, carouselGames, communityLinks, newsPosts, montageVideos, settings] =
+  const [featuredGame, carouselGames, communityLinks, newsPosts, settings] =
     await Promise.all([
       getFeaturedGame(),
       getCarouselGames(),
       getCommunityLinks(),
       getLatestNewsPosts(),
-      getActiveMontageVideos(),
       getSiteSettings(),
     ]);
 
   return (
     <>
-      <Hero upcomingGame={featuredGame} montageVideos={montageVideos} settings={settings} />
+      <Hero upcomingGame={featuredGame} settings={settings} />
+      <LineBreak />
       <AboutSection settings={settings} />
+      <LineBreak />
       <ProjectCarousel projects={carouselGames} />
+      <LineBreak />
       <CommunityContact communityLinks={communityLinks} />
+      <LineBreak />
       <NewsPreview posts={newsPosts} />
     </>
+  );
+}
+
+// Pemisah section — garis handdrawn dari line_break.png
+function LineBreak() {
+  return (
+    <img
+      src="/line_break.png"
+      alt=""
+      aria-hidden="true"
+      className="mx-auto block w-full max-w-5xl px-6"
+    />
   );
 }

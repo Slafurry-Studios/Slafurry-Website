@@ -1,20 +1,19 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { IconSettings, IconSun, IconMoon } from "@tabler/icons-react";
+import { IconSettings, IconSun } from "@tabler/icons-react";
 import { useSettings } from "./SettingsContext";
 
-// UI dropdown Settings — Light/Dark, Serious Mode, Sound Mute.
+// UI dropdown Settings — Serious Mode, Sound Mute.
+// Dark mode dimatikan (light mode only).
 // State dikelola oleh SettingsContext yang shared di seluruh app,
-// sehingga theme/serious/sound state konsisten seluruh komponen.
+// sehingga serious/sound state konsisten seluruh komponen.
 // Persistence ke localStorage + cookie handled oleh SettingsProvider.
 export function SettingsDropdown() {
     const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const {
-    dark,
-    setDark,
     serious,
     setSerious,
     soundMuted,
@@ -30,10 +29,6 @@ export function SettingsDropdown() {
     document.addEventListener("mousedown", onClickOutside);
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, []);
-
-  function toggleDark() {
-    setDark(!dark);
-  }
 
   function toggleSerious() {
     setSerious(!serious);
@@ -58,13 +53,14 @@ export function SettingsDropdown() {
       {open && (
         <div className="absolute right-0 z-50 mt-2 w-56 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg dark:border-neutral-700 dark:bg-neutral-900">
           <SettingsRow
-            icon={dark ? <IconMoon size={16} /> : <IconSun size={16} />}
-            label={dark ? "Dark Mode" : "Light Mode"}
-            active={dark}
-            onClick={toggleDark}
-          />
-          <SettingsRow
-            icon={<span className="text-base leading-none">🙂</span>}
+            icon={
+              <img
+                src="/slafurry-logo.png"
+                alt=""
+                aria-hidden="true"
+                className="h-4 w-4"
+              />
+            }
             label={`$"Serious Mode" | ${serious ? "ON" : "OFF"}`}
             active={serious}
             onClick={toggleSerious}

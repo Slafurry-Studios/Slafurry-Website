@@ -12,7 +12,7 @@ export function NewsPreview({ posts }: { posts: Post[] }) {
   const [featured, ...rest] = posts;
 
   return (
-    <section className="flex min-h-screen flex-col justify-center border-t border-neutral-200 px-6 py-16 dark:border-neutral-800 md:px-10">
+    <section className="flex min-h-screen flex-col justify-center px-6 py-16 md:px-10">
       <h2 className="text-center font-heading text-4xl tracking-wide">News</h2>
 
       <div className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-2">

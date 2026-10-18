@@ -11,7 +11,7 @@ export function CommunityContact({
 
 
   return (
-    <section className="flex min-h-screen items-center border-t border-neutral-200 px-6 py-16 dark:border-neutral-800 md:px-10">
+    <section className="flex min-h-screen items-center px-6 py-16 md:px-10">
       <div className="mx-auto grid max-w-4xl gap-12 sm:grid-cols-2">
         <div>
           <h2 className="font-heading text-3xl tracking-wide">Join Our Community</h2>

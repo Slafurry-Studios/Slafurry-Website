@@ -14,7 +14,7 @@ export function AboutSection({ settings }: { settings: SiteSettings | null }) {
   const aboutTextSerious = settings?.aboutTextSerious ?? aboutText;
 
   return (
-    <section className="flex min-h-screen items-center border-t border-neutral-200 px-6 py-16 dark:border-neutral-800 md:px-10">
+    <section className="flex min-h-screen items-center px-6 py-16 md:px-10">
       <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[220px_1fr] md:items-center">
         <SlafurryMark className="mx-auto h-40 w-40 text-neutral-900 dark:text-white md:mx-0" />
 

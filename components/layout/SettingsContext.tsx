@@ -2,19 +2,14 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
-type ThemeMode = "light" | "dark";
 type SeriousMode = "off" | "on";
 type SoundMode = "off" | "on";
 
 type SettingsContextValue = {
-  theme: ThemeMode;
-  setTheme: (mode: ThemeMode) => void;
   seriousMode: SeriousMode;
   setSeriousMode: (mode: SeriousMode) => void;
   soundMuted: SoundMode;
   setSoundMuted: (mode: SoundMode) => void;
-  dark: boolean;
-  setDark: (v: boolean) => void;
   serious: boolean;
   setSerious: (v: boolean) => void;
 };
@@ -38,40 +33,32 @@ function saveToLocalStorage(key: string, value: string) {
 }
 
 export function SettingsProvider({
-  initialTheme,
   initialSeriousMode,
   initialSoundMuted,
   children,
 }: {
-  initialTheme: ThemeMode;
   initialSeriousMode: SeriousMode;
   initialSoundMuted: SoundMode;
   children: ReactNode;
 }) {
-  const [theme, setTheme] = useState<ThemeMode>(initialTheme);
+  // Dark mode dimatikan — light mode only.
   const [seriousMode, setSeriousMode] = useState<SeriousMode>(initialSeriousMode);
   const [soundMuted, setSoundMuted] = useState<SoundMode>(initialSoundMuted);
-  const [dark, setDark] = useState<boolean>(initialTheme === "dark");
   const [serious, setSerious] = useState<boolean>(initialSeriousMode === "on");
 
-  // Sync CSS classes on mount/change
+  // Sync CSS classes on mount/change — class ".dark" selalu dilepas
+  // (backup kalau user masih punya sisa state dark di localStorage).
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
+    document.documentElement.classList.remove("dark");
     document.documentElement.classList.toggle("serious", serious);
-  }, [dark, serious]);
+  }, [serious]);
 
   // Persist to localStorage on every change
   useEffect(() => {
-    saveToLocalStorage("theme", theme);
+    saveToLocalStorage("theme", "light");
     saveToLocalStorage("serious_mode", seriousMode ? "on" : "off");
     saveToLocalStorage("sound_muted", soundMuted ? "on" : "off");
-  }, [theme, seriousMode, soundMuted]);
-
-  const updateTheme = (mode: ThemeMode) => {
-    setTheme(mode);
-    setDark(mode === "dark");
-    saveToLocalStorage("theme", mode);
-  };
+  }, [seriousMode, soundMuted]);
 
   const updateSeriousMode = (mode: SeriousMode) => {
     setSeriousMode(mode);
@@ -87,14 +74,10 @@ export function SettingsProvider({
   return (
     <SettingsContext.Provider
       value={{
-        theme,
-        setTheme: updateTheme,
         seriousMode,
         setSeriousMode: updateSeriousMode,
         soundMuted,
         setSoundMuted: updateSoundMuted,
-        dark,
-        setDark,
         serious,
         setSerious,
       }}

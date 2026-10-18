@@ -19,7 +19,7 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-8">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-neutral-900 bg-white/90 px-4 py-2 backdrop-blur dark:border-neutral-200 dark:bg-neutral-900/90 md:px-6">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-full bg-[url(/navbar_handrawn.png)] bg-[length:100%_100%] bg-no-repeat px-4 py-5 backdrop-blur md:px-6">
         <Link href="/" className="flex items-center gap-2 text-neutral-900 dark:text-white">
           <SlafurryMark className="h-7 w-7" />
           <span className="hidden font-body text-sm font-bold tracking-wide sm:inline">
