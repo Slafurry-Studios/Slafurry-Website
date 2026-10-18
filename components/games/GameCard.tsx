@@ -51,7 +51,7 @@ export function GameCard({
         </div>
         <p
           className={`mt-2 font-body text-neutral-600 dark:text-neutral-400 ${
-            featured ? "text-sm" : "line-clamp-2 text-sm"
+            featured ? "text-base" : "line-clamp-2 text-base"
           }`}
         >
           {game.shortDesc}

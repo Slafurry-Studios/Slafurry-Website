@@ -1,9 +1,11 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsentBanner } from "@/components/layout/CookieConsentBanner";
-import { AchievementToastContainer } from "@/components/achievements/AchievementToast";
-import { AchievementCTA } from "@/components/achievements/AchievementCTA";
-import { AchievementInit } from "@/components/achievements/AchievementInit";
+// Achievements feature disabled sementara — balikin komponen di bawah
+// kalau mau nyalain lagi.
+// import { AchievementToastContainer } from "@/components/achievements/AchievementToast";
+// import { AchievementCTA } from "@/components/achievements/AchievementCTA";
+// import { AchievementInit } from "@/components/achievements/AchievementInit";
 
 export default function MainLayout({
   children,
@@ -19,9 +21,10 @@ export default function MainLayout({
           dapet clearance yang bener dari padding ini. */}
       <main className="flex-1 pt-24">{children}</main>
       <Footer />
-      <AchievementToastContainer />
-      <AchievementCTA />
-      <AchievementInit />
+      {/* Achievement feature disabled sementara — jangan render dulu. */}
+      {/* <AchievementToastContainer /> */}
+      {/* <AchievementCTA /> */}
+      {/* <AchievementInit /> */}
       <CookieConsentBanner />
     </>
   );

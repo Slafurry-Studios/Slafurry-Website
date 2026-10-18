@@ -20,7 +20,7 @@ export function AboutSection({ settings }: { settings: SiteSettings | null }) {
 
         <div>
           <h2 className="font-heading text-4xl tracking-wide">"About"</h2>
-          <div className="mt-4 space-y-4 font-body text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
+          <div className="mt-4 space-y-4 font-body text-base leading-relaxed text-neutral-700 dark:text-neutral-300">
             {/* Dua versi teks (normal vs serious) di-render dua-duanya,
                 CSS `.joke-only`/`.serious-only` yang nentuin mana yang
                 keliatan — biar gak ada flash/mismatch pas toggle. */}

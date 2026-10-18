@@ -74,44 +74,19 @@ export default function AdminLayout({
 }: AdminLayoutProps) {
   const pathname = usePathname();
 
-  /*
-   * pathname contoh:
-   *
-   * /en/admin
-   * /en/admin/posts
-   * /en/admin/comments
-   *
-   * Ambil locale dari segment pertama.
-   */
-  const segments = pathname.split("/").filter(Boolean);
-  const locale = segments[0] || "en";
-
-  /*
-   * Buang locale:
-   *
-   * /en/admin/posts
-   *       ↓
-   * /admin/posts
-   */
-  const adminPath =
-    "/" + segments.slice(1).join("/");
-
   const isActive = (href: string) => {
     // Dashboard hanya aktif tepat di /admin
     if (href === "/admin") {
-      return adminPath === "/admin";
+      return pathname === "/admin";
     }
 
     // Menu lainnya aktif di route + child route
-    return (
-      adminPath === href ||
-      adminPath.startsWith(`${href}/`)
-    );
+    return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto flex min-h-screen max-w-7xl">
+      <div className="flex min-h-screen w-full">
         {/* Sidebar */}
         <nav className="sticky left-0 top-0 z-50 h-screen w-64 shrink-0 border-r border-neutral-800/50 bg-neutral-950">
           <div className="h-full p-6">
@@ -120,7 +95,7 @@ export default function AdminLayout({
                 const active = isActive(item.href);
                 const Icon = item.icon;
 
-                const href = `/${locale}${item.href}`;
+                const href = item.href;
 
                 return (
                   <li key={item.label}>

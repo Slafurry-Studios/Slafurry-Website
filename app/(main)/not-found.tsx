@@ -2,26 +2,25 @@ import Link from "next/link";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { PillButton } from "@/components/ui/PillButton";
 
-// Achievement flag-hunting hook (lihat spec: model Achievement, trigger
-// FLAG_CODE) — halaman ini dipilih jadi salah satu tempat sembunyi flag.
+// Achievement flag-hunting hook DISABLED sementara — jangan render hint
+// flag ke user (kode bocor lewat page source). Balikin span-nya di bawah
+// kalau feature nyalain lagi.
 // Code seed: slafury-flag-2024
 // Hash: sha256("slafury-flag-2024") = 258f2a81a07cdd569249d1606f9da76de201f74b0b6f707bbb37f730bcd439f1
 // Diverifikasi server-side lewat /api/achievements/redeem.
-// pengguna yang berhasil meredeem achievement ini akan mendapatkan
-// achievement "Flag Hunter" dan toast notifikasi.
-const FLAG_HINT_COMMENT = {
-  __html:
-    "<p><strong>Flag code:</strong> <code>slafury-flag-2024</code></p>" +
-    "<p><strong>How to redeem:</strong> Masukkan kode di panel Achievement (AchievementCTA → tab Redeem) " +
-    "atau melalui <code>/api/achievements/redeem</code> POST dengan body <code>{ code: \"slafury-flag-2024\" }</code>." +
-    "<p>Jika berhasil, akan mendapatkan achievement <em>Flag Hunter</em> dan notifikasi toast.</p>",
-};
+// const FLAG_HINT_COMMENT = {
+//   __html:
+//     "<p><strong>Flag code:</strong> <code>slafury-flag-2024</code></p>" +
+//     "<p><strong>How to redeem:</strong> Masukkan kode di panel Achievement (AchievementCTA → tab Redeem) " +
+//     "atau melalui <code>/api/achievements/redeem</code> POST dengan body <code>{ code: \"slafury-flag-2024\" }</code>." +
+//     "<p>Jika berhasil, akan mendapatkan achievement <em>Flag Hunter</em> dan notifikasi toast.</p>",
+// };
 
 export default async function NotFound() {
   
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-16 text-center">
-      <span aria-hidden="true" dangerouslySetInnerHTML={FLAG_HINT_COMMENT} />
+      {/* <span aria-hidden="true" dangerouslySetInnerHTML={FLAG_HINT_COMMENT} /> */}
       <SlafurryMark className="h-16 w-16 text-neutral-300 dark:text-neutral-700" />
 
       <p className="mt-6 font-heading text-7xl tracking-wide text-neutral-300 dark:text-neutral-700">
@@ -29,10 +28,10 @@ export default async function NotFound() {
       </p>
       <h1 className="mt-1 font-heading text-3xl tracking-wide">"Check Out Our Games"</h1>
 
-      <p className="joke-only mt-3 max-w-sm font-body text-sm text-neutral-500 dark:text-neutral-400">
+      <p className="joke-only mt-3 max-w-sm font-body text-base text-neutral-500 dark:text-neutral-400">
         "Looks like you're lost. Maybe this page got caught in a joke that went too far."
       </p>
-      <p className="serious-only mt-3 max-w-sm font-body text-sm text-neutral-500 dark:text-neutral-400">
+      <p className="serious-only mt-3 max-w-sm font-body text-base text-neutral-500 dark:text-neutral-400">
         "The page you're looking for doesn't exist or may have been moved."
       </p>
 

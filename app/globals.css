@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Base type scale — 18px root, biar copy gak kekecilan. Semua ukuran rem
+   (text-*, spacing, Tailwind breakpoints) ikut skala ~12% dari default 16px. */
+html {
+  font-size: 18px;
+}
+
 /* Dark mode dikontrol lewat class ".dark" di <html> (bukan prefers-color-scheme),
    karena themenya user-toggleable & disimpan di cookie/localStorage — lihat
    app/[locale]/layout.tsx & lib/settings/. */

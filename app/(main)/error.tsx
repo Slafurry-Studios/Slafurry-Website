@@ -53,7 +53,7 @@ export default function ErrorPage({
       </p>
       <h1 className="mt-1 font-heading text-3xl tracking-wide">{t.heading}</h1>
 
-      <p className="mt-3 max-w-sm font-body text-sm text-neutral-500 dark:text-neutral-400">
+      <p className="mt-3 max-w-sm font-body text-base text-neutral-500 dark:text-neutral-400">
         {t.body}
       </p>
 

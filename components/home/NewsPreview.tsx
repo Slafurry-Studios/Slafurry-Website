@@ -46,7 +46,7 @@ function NewsCard({ post, large }: { post: Post; large?: boolean }) {
           By {post.authorName}
           {post.publishedAt && ` | ${formatDate(post.publishedAt)}`}
         </p>
-        <p className="mt-2 line-clamp-3 font-body text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="mt-2 line-clamp-3 font-body text-base text-neutral-600 dark:text-neutral-400">
           {post.excerpt}
         </p>
       </div>

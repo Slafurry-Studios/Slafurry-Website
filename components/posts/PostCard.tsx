@@ -33,7 +33,7 @@ export function PostCard({
         <h3
           className={
             compact
-              ? "font-body text-sm font-semibold leading-snug"
+              ? "font-body text-base font-semibold leading-snug"
               : "font-body text-lg font-semibold leading-snug"
           }
         >
@@ -52,7 +52,7 @@ export function PostCard({
           className={
             compact
               ? "mt-1.5 line-clamp-2 font-body text-xs text-neutral-600 dark:text-neutral-400"
-              : "mt-2 line-clamp-2 font-body text-sm text-neutral-600 dark:text-neutral-400"
+              : "mt-2 line-clamp-2 font-body text-base text-neutral-600 dark:text-neutral-400"
           }
         >
           {post.excerpt}

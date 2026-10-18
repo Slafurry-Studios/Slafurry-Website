@@ -23,14 +23,14 @@ export function CommentForm({
       </p>
 
       {state?.ok === true && (
-        <div className="mt-4 flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+        <div className="mt-4 flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-base text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
           <IconCheck size={16} />
           {state.message}
         </div>
       )}
 
       {state?.ok === false && (
-        <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-300">
+        <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-base text-red-700 dark:bg-red-900/30 dark:text-red-300">
           <IconAlertTriangle size={16} />
           {state.error}
         </div>
@@ -63,7 +63,7 @@ export function CommentForm({
                 name="authorName"
                 required
                 maxLength={100}
-                className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
+                className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-base outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
                 placeholder="Your name"
               />
             </div>
@@ -79,7 +79,7 @@ export function CommentForm({
                 name="authorEmail"
                 type="email"
                 required
-                className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
+                className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-base outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
                 placeholder="you@example.com"
               />
               <p className="mt-1 text-[10px] text-neutral-400 dark:text-neutral-500">
@@ -101,7 +101,7 @@ export function CommentForm({
               required
               maxLength={2000}
               rows={4}
-              className="w-full resize-y rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
+              className="w-full resize-y rounded-lg border border-neutral-300 bg-white px-3 py-2 text-base outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
               placeholder="Write your thoughts..."
             />
           </div>
@@ -109,7 +109,7 @@ export function CommentForm({
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+            className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-5 py-2 text-base font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
           >
             {isPending ? (
               <IconLoader2 size={14} className="animate-spin" />

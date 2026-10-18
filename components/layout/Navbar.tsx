@@ -22,7 +22,7 @@ export function Navbar() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-full bg-[url(/navbar_handrawn.png)] bg-[length:100%_100%] bg-no-repeat px-4 py-5 backdrop-blur md:px-6">
         <Link href="/" className="flex items-center gap-2 text-neutral-900 dark:text-white">
           <SlafurryMark className="h-7 w-7" />
-          <span className="hidden font-body text-sm font-bold tracking-wide sm:inline">
+          <span className="hidden font-body text-base font-bold tracking-wide sm:inline">
             SLAFURRY STUDIOS
           </span>
         </Link>
@@ -34,7 +34,7 @@ export function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`font-body text-sm text-neutral-800 transition-colors hover:text-neutral-950 dark:text-neutral-200 dark:hover:text-white ${
+                  className={`font-body text-base text-neutral-800 transition-colors hover:text-neutral-950 dark:text-neutral-200 dark:hover:text-white ${
                     active ? "font-semibold underline underline-offset-4" : ""
                   }`}
                 >
