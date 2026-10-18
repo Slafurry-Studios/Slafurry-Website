@@ -101,7 +101,7 @@ function ProjectCard({
   return (
     <Link
       href={`/games/${project.slug}`}
-      className="w-[680px] max-w-full shrink-0 overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
+      className="md:w-[680px] w-full max-w-full shrink-0 overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
     >
       <PlaceholderImage label={project.title} className="aspect-[16/9] w-full" />
       <div className="p-4">
