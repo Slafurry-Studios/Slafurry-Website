@@ -24,11 +24,11 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
 
   return (
     <section className="flex min-h-screen flex-col justify-center px-6 py-16 md:px-10">
-      <h2 className="text-center font-heading text-4xl tracking-wide">
+        <h2 className="text-center font-heading text-5xl tracking-wide">
         "Projects"
       </h2>
 
-      <div className="mx-auto mt-10 flex max-w-7xl items-center justify-center gap-3 md:gap-6">
+      <div className="mx-auto mt-12 flex max-w-7xl items-center justify-center gap-4 md:gap-8">
         {count > 1 && (
           <button
             type="button"
@@ -92,7 +92,7 @@ function ProjectCard({
 }) {
   if (peek) {
     return (
-      <div className="hidden w-16 shrink-0 overflow-hidden rounded-xl border border-neutral-300 opacity-50 dark:border-neutral-700 sm:block md:w-24">
+      <div className="hidden w-20 shrink-0 overflow-hidden rounded-xl border border-neutral-300 opacity-50 dark:border-neutral-700 sm:block md:w-28">
         <PlaceholderImage label={project.title} className="aspect-[4/5] w-full" />
       </div>
     );
@@ -101,7 +101,7 @@ function ProjectCard({
   return (
     <Link
       href={`/games/${project.slug}`}
-      className="w-full max-w-sm shrink-0 overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
+      className="w-full max-w-2xl shrink-0 overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
     >
       <PlaceholderImage label={project.title} className="aspect-[16/9] w-full" />
       <div className="p-4">
