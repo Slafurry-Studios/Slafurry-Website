@@ -43,7 +43,7 @@ export function CookieConsentBanner() {
         role="document"
         className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-8 max-w-sm w-full mx-4 transform transition-transform scale-100"
       >
-        <p className="text-neutral-700 dark:text-neutral-300 text-lg mb-6 line-height-relaxed">
+        <p className="text-neutral-700 dark:text-neutral-300 text-xl mb-6 line-height-relaxed">
           We use functional cookies to remember your theme and preferences, and optional analytics cookies to understand how the site is used.
         </p>
 

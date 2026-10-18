@@ -37,12 +37,12 @@ function NewsCard({ post }: { post: Post }) {
         className="aspect-[16/10] w-full"
       />
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="font-body text-lg font-semibold leading-snug">{post.title}</h3>
+        <h3 className="font-body text-xl font-semibold leading-snug">{post.title}</h3>
         <p className="mt-1 font-body text-xs text-neutral-500 dark:text-neutral-400">
           By {post.authorName}
           {post.publishedAt && ` | ${formatDate(post.publishedAt)}`}
         </p>
-        <p className="mt-2 line-clamp-3 font-body text-lg text-neutral-600 dark:text-neutral-400">
+        <p className="mt-2 line-clamp-3 font-body text-xl text-neutral-600 dark:text-neutral-400">
           {post.excerpt}
         </p>
       </div>

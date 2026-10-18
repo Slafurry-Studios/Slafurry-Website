@@ -92,7 +92,7 @@ function SettingsRow({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left font-body text-lg font-medium text-neutral-800 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800"
+      className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left font-body text-xl font-medium text-neutral-800 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800"
     >
       <span className={active ? "text-neutral-900 dark:text-white" : "text-neutral-400"}>
         {icon}

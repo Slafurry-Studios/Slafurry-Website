@@ -59,7 +59,7 @@ export function ArticleReader({
       )}
 
       <div
-        className="mt-8 space-y-5 font-body text-lg leading-relaxed text-neutral-700 dark:text-neutral-300 prose prose-neutral dark:prose-invert max-w-none"
+        className="mt-8 space-y-5 font-body text-xl leading-relaxed text-neutral-700 dark:text-neutral-300 prose prose-neutral dark:prose-invert max-w-none"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
@@ -114,7 +114,7 @@ function NavCard({
         {label}
         {isNext && <IconArrowRight size={14} />}
       </span>
-      <span className="line-clamp-1 font-body text-lg font-semibold">
+      <span className="line-clamp-1 font-body text-xl font-semibold">
         {post.title}
       </span>
     </Link>

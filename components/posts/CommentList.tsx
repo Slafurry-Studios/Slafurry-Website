@@ -6,7 +6,7 @@ export function CommentList({ comments }: { comments: PublicComment[] }) {
 
   return (
     <div className="mt-12">
-      <h3 className="flex items-center gap-2 font-heading text-lg font-semibold tracking-tight">
+      <h3 className="flex items-center gap-2 font-heading text-xl font-semibold tracking-tight">
         <IconMessage size={18} />
         Comments ({comments.length})
       </h3>
@@ -18,7 +18,7 @@ export function CommentList({ comments }: { comments: PublicComment[] }) {
             className="rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-900/50"
           >
             <div className="flex items-center gap-2">
-              <span className="text-lg font-medium">{c.authorName}</span>
+              <span className="text-xl font-medium">{c.authorName}</span>
               <span className="text-xs text-neutral-400 dark:text-neutral-500">
                 {new Date(c.createdAt).toLocaleDateString("en-US", {
                   month: "short",
@@ -27,7 +27,7 @@ export function CommentList({ comments }: { comments: PublicComment[] }) {
                 })}
               </span>
             </div>
-            <p className="mt-2 whitespace-pre-wrap text-lg text-neutral-700 dark:text-neutral-300">
+            <p className="mt-2 whitespace-pre-wrap text-xl text-neutral-700 dark:text-neutral-300">
               {c.content}
             </p>
           </div>
