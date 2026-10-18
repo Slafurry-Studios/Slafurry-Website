@@ -103,7 +103,7 @@ function ProjectCard({
       href={`/games/${project.slug}`}
       className="md:w-[680px] w-full max-w-full shrink-0 overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
     >
-      <PlaceholderImage label={project.title} className="aspect-[16/9] w-full" />
+      <PlaceholderImage label={project.title} className="aspect-[16/9] max-h-80 w-full" />
       <div className="p-4">
         <h3 className="font-heading text-2xl tracking-wide">{project.title}</h3>
         <p className="mt-1 font-body text-xl text-neutral-600 dark:text-neutral-400">
