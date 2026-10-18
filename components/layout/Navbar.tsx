@@ -21,7 +21,7 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-8">
-      <nav className="relative mx-auto flex max-w-7xl items-center justify-between rounded-full bg-[url(/navbar_handrawn.png)] bg-[length:100%_100%] bg-no-repeat px-4 py-5 backdrop-blur md:px-6">
+      <nav className="relative mx-auto flex max-w-7xl items-center justify-between rounded-full bg-[url(/navbar_handrawn.png)] bg-[length:100%_100%] bg-no-repeat px-6 md:px-10 py-5 backdrop-blur">
         <Link href="/" className="flex items-center gap-2 text-neutral-900 dark:text-white">
           <SlafurryMark className="h-7 w-7" />
           <span className="hidden font-body text-xl font-bold tracking-wide sm:inline">
@@ -29,36 +29,25 @@ export function Navbar() {
           </span>
         </Link>
 
-        <ul className="hidden items-center gap-6 md:flex">
-          {NAV_ITEMS.map((item) => {
-            const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`font-body text-xl text-neutral-800 transition-colors hover:text-neutral-950 dark:text-neutral-200 dark:hover:text-white ${
-                    active ? "font-semibold underline underline-offset-4" : ""
-                  }`}
-                >
-                  {item.key.charAt(0).toUpperCase() + item.key.slice(1)}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div className="flex items-center gap-2">
-          {/* Settings button (Serious Mode + Mute) dihapus — fitur dimatikan. */}
-          {/* Burger — nav item desktop disembunyikan di layar kecil (md:flex). */}
-          <button
-            type="button"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-900 text-neutral-900 transition-all hover:scale-105 md:hidden"
-          >
-            {menuOpen ? <IconX size={18} stroke={1.75} /> : <IconMenu size={18} stroke={1.75} />}
-          </button>
+        <div className="ml-auto flex items-center gap-8">
+          <ul className="hidden items-center gap-8 md:flex">
+            {NAV_ITEMS.map((item) => {
+              const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`font-body text-xl text-neutral-800 transition-colors hover:text-neutral-950 dark:text-neutral-200 dark:hover:text-white ${
+                      active ? "font-semibold underline underline-offset-4" : ""
+                    }`}
+                  >
+                    {item.key.charAt(0).toUpperCase() + item.key.slice(1)}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          {/* burger tetap dipertahankan di mobile */}
         </div>
 
         {/* Mobile dropdown — nempel di bawah navbar. */}
