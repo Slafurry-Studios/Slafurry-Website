@@ -32,12 +32,6 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    if (!altText || !altText.trim()) {
-      return NextResponse.json(
-        { error: "Alt text is required." },
-        { status: 400 }
-      );
-    }
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { error: "File too large. Maximum size is 10 MB." },
@@ -75,7 +69,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       url: publicUrl,
-      altText: altText.trim(),
+      altText: altText?.trim() ?? "",
       bucket,
       filename,
     });
