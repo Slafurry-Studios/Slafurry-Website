@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next();
+  const response = NextResponse.next();
 
   // 1. Refresh session Supabase — WAJIB dipanggil di tiap request biar
   //    token gak expired diam-diam pas admin lagi kerja lama.
@@ -31,11 +31,22 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 2. Redirect lookup — check for stale slugs before they hit 404.
+  // 2. Admin API guard — /api/admin/* ditulis pakai service-role key, jadi
+  //    wajib ada session valid. Balikin 401 JSON (bukan redirect) biar
+  //    client fetch() bisa handle, gak dapet HTML halaman login.
+  const pathname = request.nextUrl.pathname;
+  const isAdminApi = pathname.startsWith("/api/admin");
+
+  if (isAdminApi) {
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    return response;
+  }
+
+  // 3. Redirect lookup — check for stale slugs before they hit 404.
   //    Wrapped in try-catch: if the DB is unreachable, skip the lookup
   //    instead of crashing every request on the site.
-  const pathname = request.nextUrl.pathname;
-
   try {
     const redirect = await prisma.redirect.findUnique({
       where: { from: pathname },
@@ -52,11 +63,11 @@ export async function proxy(request: NextRequest) {
     // The catch-all [...rest]/page.tsx will handle 404 if needed.
   }
 
-  // 3. Admin route matching.
+  // 4. Admin route matching.
   const isAdminRoute = pathname.startsWith("/admin");
   const isLoginRoute = pathname.startsWith("/admin/login");
 
-  // 4. Protect /admin/* — need valid session, except login page.
+  // 5. Protect /admin/* — need valid session, except login page.
   if (isAdminRoute && !isLoginRoute && !user) {
     const returnTo = request.nextUrl.pathname;
     const loginUrl = new URL(
@@ -66,7 +77,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 5. If already logged in and hitting /admin/login, redirect to /admin
+  // 6. If already logged in and hitting /admin/login, redirect to /admin
   //    (or the returnTo destination).
   if (isLoginRoute && user) {
     const returnTo = request.nextUrl.searchParams.get("returnTo");
@@ -80,9 +91,10 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Matcher ini exclude static assets, API routes yang gak butuh redirect checks,
-  // dan file dengan ekstensi.
+  // Matcher exclude static assets, API routes yang gak butuh redirect checks,
+  // dan file dengan ekstensi. /api/admin/* TETAP di-match (lihat negative
+  // lookahead `api/(?!admin)`) biar session guard di atas jalan.
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|sfx|.*\\..*).*)",
+    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|sfx|api/(?!admin)|.*\\..*).*)",
   ],
 };
