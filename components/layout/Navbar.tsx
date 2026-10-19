@@ -21,7 +21,7 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-8">
-      <nav className="relative mx-auto flex max-w-7xl items-center justify-between rounded-full bg-[url(/navbar_handrawn.png)] bg-[length:100%_100%] bg-no-repeat px-6 md:px-10 py-5 backdrop-blur">
+      <nav className="relative mx-auto flex max-w-7xl items-center justify-between bg-[url(/navbar_handrawn.png)] bg-[length:100%_100%] bg-no-repeat px-6 md:px-10 py-7">
         <Link href="/" className="flex items-center gap-2 text-neutral-900 dark:text-white">
           <SlafurryMark className="h-7 w-7" />
           <span className="hidden font-body text-xl font-bold tracking-wide sm:inline">
@@ -30,7 +30,7 @@ export function Navbar() {
         </Link>
 
         <div className="ml-auto flex items-center gap-8">
-          <ul className="hidden items-center gap-8 md:flex">
+          <ul className="hidden items-center gap-8 md:flex mr-20">
             {NAV_ITEMS.map((item) => {
               const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               return (

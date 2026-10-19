@@ -5,27 +5,21 @@ import { StudioAgeCounter } from "./StudioAgeCounter";
 
 export function AboutSection({ settings }: { settings: SiteSettings | null }) {
     
-  // Fallback kalau SiteSettings somehow belum ke-seed — jarang kejadian
-  // (seed.ts selalu bikin row id=1), tapi jaga-jaga daripada section-nya
-  // kosong blas.
   const aboutText =
     settings?.aboutText ??
     "Slafurry Studios is an independent game development studio.";
   const aboutTextSerious = settings?.aboutTextSerious ?? aboutText;
 
   return (
-    <section className="flex min-h-screen items-center px-6 py-16 md:px-10">
+    <section className="flex items-center px-6 py-16 md:px-10">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1fr_2fr] md:items-center">
         <div className="w-1/3 md:w-full mx-auto md:mx-0">
           <SlafurryMark className="h-auto w-full text-neutral-900 md:aspect-square" />
         </div>
 
-        <div>
-          <h2 className="font-heading text-4xl tracking-wide">"About"</h2>
-          <div className="mt-4 space-y-4 font-body text-xl leading-relaxed text-neutral-700 dark:text-neutral-300">
-            {/* Dua versi teks (normal vs serious) di-render dua-duanya,
-                CSS `.joke-only`/`.serious-only` yang nentuin mana yang
-                keliatan — biar gak ada flash/mismatch pas toggle. */}
+        <div className="ml-10">
+          <h2 className="font-heading text-6xl tracking-wide">About</h2>
+          <div className="mt-10 space-y-8 font-body text-xl leading-relaxed text-neutral-700 dark:text-neutral-300">
             <p className="joke-only whitespace-pre-line">{aboutText}</p>
             <p className="serious-only whitespace-pre-line">{aboutTextSerious}</p>
 

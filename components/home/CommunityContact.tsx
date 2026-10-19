@@ -31,14 +31,13 @@ export function CommunityContact({
 
 
   return (
-    <section className="flex min-h-screen items-center px-6 py-24 md:px-10">
-      <div className="mx-auto grid w-full max-w-7xl gap-16 sm:grid-cols-2">
+    <section className="flex items-center px-6 py-16 md:px-10">
+      <div className="mx-auto grid w-full max-w-7xl items-start gap-16 sm:grid-cols-2">
         <div>
-          <h2 className="font-heading text-5xl tracking-wide">Join Our Community</h2>
-          <div className="mt-8 flex flex-col items-start gap-4">
+          <h2 className="font-heading text-7xl tracking-wide">Join Our Community</h2>
+          <div className="mt-14 flex flex-col items-start gap-8">
             {communityLinks.length === 0 ? (
               <p className="font-body text-xl text-neutral-400">
-                {/* Belum ada SocialLink section COMMUNITY di database */}
                 Coming soon.
               </p>
             ) : (
@@ -46,7 +45,7 @@ export function CommunityContact({
                 <PillButton
                   key={link.id}
                   href={link.url}
-                  icon={<BrandIcon slug={link.platform} className="h-4 w-4" />}
+                  icon={<BrandIcon slug={link.platform} className="h-6 w-6" />}
                   className={BTN_IMAGE_CLASSES[link.platform] ?? ""}
                 >
                   {link.label}
@@ -57,18 +56,18 @@ export function CommunityContact({
         </div>
 
         <div>
-          <h2 className="font-heading text-5xl tracking-wide">Contact Us</h2>
-          <div className="mt-8 flex flex-col items-start gap-4">
+          <h2 className="font-heading text-7xl tracking-wide">Contact Us</h2>
+          <div className="mt-14 flex flex-col items-start gap-8">
             <PillButton
               href="/contact"
-              icon={<IconMail size={16} />}
+              icon={<IconMail size={32} />}
               className={BTN_IMAGE_CLASSES.email}
             >
               Say Hello
             </PillButton>
             <PillButton
               href="/contact"
-              icon={<IconCurrencyDollar size={16} />}
+              icon={<IconCurrencyDollar size={32} />}
               className={BTN_IMAGE_CLASSES.business}
             >
               Business Inquiries

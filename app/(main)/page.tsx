@@ -45,7 +45,7 @@ function LineBreak() {
       src="/line_break.png"
       alt=""
       aria-hidden="true"
-      className="mx-auto block w-full max-w-7xl px-6"
+      className="mx-auto block w-full max-w-[90rem]"
     />
   );
 }
