@@ -11,6 +11,11 @@ import {
   getSiteSettings,
 } from "@/lib/queries/home";
 
+// ISR: halaman ini nge-render data DB, tapi route-nya static (di-prerender
+// waktu build). Tanpa revalidate, edit dari admin baru kelihatan setelah
+// redeploy. 60s = maksimal stale semenit.
+export const revalidate = 60;
+
 export default async function Home() {
   // Semua query jalan paralel (bukan await berurutan) — page load-nya
   // secepat query yang paling lambat, bukan total semuanya dijumlah.

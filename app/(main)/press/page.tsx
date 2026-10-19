@@ -11,6 +11,9 @@ const ASSET_TYPE_LABEL: Record<string, string> = {
   CHARACTER: "Character",
 };
 
+// ISR: press release/asset baru muncul tanpa rebuild (maks. 60 detik).
+export const revalidate = 60;
+
 export default async function PressPage() {
   
   const [releases, assets] = await Promise.all([

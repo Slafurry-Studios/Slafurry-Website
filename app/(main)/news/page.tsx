@@ -2,6 +2,9 @@ import { PostCategory } from "@prisma/client";
 import { getPublishedPosts, getPostTags } from "@/lib/queries/posts";
 import { NewsListClient } from "@/components/posts/NewsListClient";
 
+// ISR: artikel baru muncul tanpa rebuild (maks. 60 detik).
+export const revalidate = 60;
+
 export default async function NewsPage() {
   
   const [posts, tags] = await Promise.all([

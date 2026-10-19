@@ -2,6 +2,10 @@ import { GameCard } from "@/components/games/GameCard";
 import { GameListClient } from "@/components/games/GameListClient";
 import { getActiveGames } from "@/lib/queries/games";
 
+// ISR: data DB, halaman static — tanpa ini, game baru/ubah status baru
+// kelihatan setelah rebuild (lihat catatan di app/(main)/page.tsx).
+export const revalidate = 60;
+
 export default async function GamesPage() {
   const games = await getActiveGames();
 

@@ -19,11 +19,13 @@ export type GameData = {
 
 // ─── Query helpers ─────────────────────────────────────────────
 
-/** Fetch all active games (RELEASED + UPCOMING) for the public list. */
+/** Fetch all visible games (RELEASED + UPCOMING + IN_DEVELOPMENT) for the public list. */
 export async function getActiveGames(): Promise<GameData[]> {
   const rows = await prisma.game.findMany({
-    where: { 
-      status: { in: [GameStatus.RELEASED, GameStatus.UPCOMING] },
+    where: {
+      status: {
+        in: [GameStatus.RELEASED, GameStatus.UPCOMING, GameStatus.IN_DEVELOPMENT],
+      },
       isHidden: false
     },
     orderBy: { order: "asc" },
