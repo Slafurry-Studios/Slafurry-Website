@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import type { Game } from "@prisma/client";
 import Link from "next/link";
+import Image from "next/image";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 
 export function ProjectCarousel({ projects }: { projects: Game[] }) {
@@ -151,13 +152,22 @@ function ProjectCard({
     >
       <div
         className={
-          "transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] " +
+          "relative transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] " +
           (isCurrent ? "h-80" : "h-[8.75rem]")
         }
       >
-        <PlaceholderImage label={project.title} className="h-full w-full" />
+        {project.coverImage ? (
+          <Image
+            src={project.coverImage}
+            alt={project.coverImageAlt}
+            fill
+            sizes="(max-width: 768px) 80vw, 680px"
+            className="object-cover"
+          />
+        ) : (
+          <PlaceholderImage label={project.title} className="h-full w-full" />
+        )}
       </div>
-
       <div
         className={
           "p-4 transition-opacity duration-300 " +

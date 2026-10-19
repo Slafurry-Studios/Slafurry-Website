@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { getGameBySlug } from "@/lib/queries/games";
 import { getApprovedGameComments } from "@/lib/queries/comments";
 import { getSiteSettings } from "@/lib/queries/home";
@@ -22,7 +23,17 @@ export default async function GameDetailPage({
 
   return (
     <div className="prose lg:prose-xl max-w-2xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-heading tracking-wide mb-6">
+      {game.coverImage && (
+        <Image
+          src={game.coverImage}
+          alt={game.coverImageAlt}
+          width={1200}
+          height={675}
+          className="aspect-[16/9] w-full rounded-xl object-cover"
+        />
+      )}
+
+      <h1 className="text-3xl font-heading tracking-wide mb-6 mt-8">
         {game.title}
 
         <span
