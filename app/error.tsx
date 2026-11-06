@@ -2,12 +2,11 @@
 
 import { useEffect } from "react";
 
-// Safety net paling luar — nangkep error yang kejadian DI DALAM
-// app/[locale]/layout.tsx sendiri (termasuk kalau NextIntlClientProvider
-// gagal render). Karena ini lapisan terakhir sebelum Next.js nampilin
-// error page generic bawaan mereka, sengaja dibikin sesederhana dan
-// se-independen mungkin: no next-intl, no custom component, no Tailwind
-// theme variable yang mungkin belum sempat ke-load.
+// Safety net paling luar — nangkep error yang terjadi di dalam root layout
+// sendiri. Karena ini lapisan terakhir sebelum Next.js menampilkan error
+// page generik bawaan, sengaja dibikin sesederhana dan se-independen
+// mungkin: no custom component, no Tailwind variabel tema yang mungkin
+// belum sempat dimuat.
 export default function RootError({
   error,
   reset,

@@ -3,9 +3,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    // Dibutuhkan karena root layout kita pakai top-level dynamic segment
-    // (app/[locale]/layout.tsx) — persis kasus yang didokumentasikan
-    // Next.js butuh global-not-found.tsx, bukan cuma app/not-found.tsx biasa.
     globalNotFound: true,
   },
   images: {

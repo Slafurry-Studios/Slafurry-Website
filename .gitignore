@@ -37,6 +37,12 @@ yarn-error.log*
 .env*
 !.env.example
 
+# local storage adapter (dev only) — tidak di-commit
+.local-storage/
+
+# docker
+docker-entrypoint-initdb.d/
+
 # vercel
 .vercel
 

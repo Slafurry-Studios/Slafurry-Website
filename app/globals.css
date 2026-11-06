@@ -64,7 +64,7 @@ main > *:nth-child(4) {
 
 /* Dark mode dikontrol lewat class ".dark" di <html> (bukan prefers-color-scheme),
    karena themenya user-toggleable & disimpan di cookie/localStorage — lihat
-   app/[locale]/layout.tsx & lib/settings/. */
+   app/layout.tsx & lib/settings/. */
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {

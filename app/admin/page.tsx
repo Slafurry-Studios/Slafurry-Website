@@ -11,16 +11,7 @@ import Link from "next/link";
 // Admin halaman memerlukan sesi — jangan prerender statis waktu build.
 export const dynamic = "force-dynamic";
 
-type PageProps = {
-  params: Promise<{
-    locale: string;
-  }>;
-};
-
-export default async function AdminDashboardPage({
-  params,
-}: PageProps) {
-  const { locale } = await params;
+export default async function AdminDashboardPage() {
 
   const [
     pendingCommentCount,
@@ -168,7 +159,7 @@ export default async function AdminDashboardPage({
 
           <li>
             <Link
-              href={`/${locale}/admin/analytics`}
+              href="/admin/analytics"
               className="text-primary-600 underline hover:text-primary-400 dark:text-primary-400 dark:hover:text-primary-200"
             >
               Analytics dashboard

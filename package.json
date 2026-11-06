@@ -10,8 +10,12 @@
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
+    "db:up": "docker compose up -d --wait postgres",
+    "db:down": "docker compose down",
+    "db:reset": "prisma migrate reset --force && npm run db:seed",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
+    "test:db": "DATABASE_URL=\"postgresql://postgres:password@localhost:5432/slafurry_test\" DIRECT_URL=\"postgresql://postgres:password@localhost:5432/slafurry_test\" vitest run",
     "test": "vitest run && playwright test"
   },
   "dependencies": {

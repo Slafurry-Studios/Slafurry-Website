@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 
-// Tanpa file ini, path yang locale-nya valid tapi halamannya gak ada
-// (misal /en/asal-ngetik) gak akan otomatis manggil
-// app/[locale]/not-found.tsx — Next.js butuh route yang eksplisit
-// manggil notFound() buat kasus ini (rekomendasi resmi next-intl).
+// Path yang halamannya tidak ada akan ditangani oleh
+// app/global-not-found.tsx (globalNotFound diaktifkan di next.config.ts).
+// File ini memastikan notFound() dipanggil untuk route tangkapan semua.
 export default function CatchAll() {
   notFound();
 }

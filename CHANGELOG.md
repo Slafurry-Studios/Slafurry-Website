@@ -8,9 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Local PostgreSQL (Docker) with auth and storage adapters; provider (`local` | `supabase`) chosen via env vars (`AUTH_PROVIDER`, `STORAGE_PROVIDER`); portable migrations via `prisma migrate` (no auth/storage schema, RLS, triggers, or Supabase functions).
+- Auth adapter (`getSession`, `requireAdmin`, `signIn`, `signOut`) and storage adapter (`upload`, `getUrl`, `delete`) with local and Supabase implementations.
+
 ### Changed
 ### Deprecated
 ### Removed
+- `messages/en.json` and remaining next-intl/i18n code; site is single language (English), URLs unchanged.
 ### Fixed
 ### Security
 

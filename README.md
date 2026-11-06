@@ -145,7 +145,7 @@ prisma/seed.ts
 
 ## INTERNATIONALIZATION
 
-English only (`<html lang="en">`). `next-intl` and locale routing were removed; `messages/en.json` is dead. Do not reintroduce locale routing without asking.
+Single language, no i18n — English only (`<html lang="en">`). `next-intl` and locale routing were removed; `messages/en.json` is dead. Do not reintroduce locale routing without asking.
 
 ---
 
