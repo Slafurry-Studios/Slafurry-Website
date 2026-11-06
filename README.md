@@ -157,7 +157,9 @@ Run the unit and smoke test suite:
 npm test
 ```
 
-This runs `vitest run` (unit tests in `tests/unit/`) followed by `playwright test` (the homepage smoke test in `tests/e2e/`). Playwright Chromium is installed via `npx playwright install chromium`.
+This runs `vitest run` (unit tests in `tests/unit/`) followed by `playwright test` (e2e tests in `tests/e2e/`): the homepage smoke test (`homepage.spec.ts`) and the admin panel QA spec (`admin-qa.spec.ts`, groups A–L covering Authentication, Dashboard, Games, Posts, Comments, Press, Contacts, Achievements, Montage, Settings, Media, Audit logs, plus Responsive QA and Console/network checks). Playwright Chromium is installed via `npx playwright install chromium`.
+
+Admin QA tests that write data (Games, Posts, Press, Achievements, Montage, Settings) require a test admin account. Set `ADMIN_TEST_EMAIL` and `ADMIN_TEST_PASSWORD` in `.env` (never commit real credentials). Without creds these tests skip gracefully. Run headed Chromium with `npx playwright test --headed tests/e2e/admin-qa.spec.ts` (`--headed` is a Playwright CLI flag; `slowMo` is a browser launch option, not a CLI flag).
 
 ---
 
@@ -185,6 +187,23 @@ npm run db:seed
 Make sure the environment variables point to the intended production database before running these commands.
 
 ---
+
+## VERSIONING & RELEASE
+
+The project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (`MAJOR.MINOR.PATCH`, git tags `vMAJOR.MINOR.PATCH`). Current version: `1.14.1`.
+
+- `feat` (backward-compatible feature) → MINOR bump
+- `fix`/`perf` (backward-compatible fix) → PATCH bump
+- Breaking change → MAJOR bump
+- `docs`, `test`, `chore`, `ci`, `build`, `style`, `refactor` → no release
+
+Conventional Commits are used (`<type>(<scope>): <summary>`). Changes are logged in `CHANGELOG.md` under `## [Unreleased]` (feat → Added, fix → Fixed, removals → Removed); breaking entries are prefixed with `**BREAKING:**` plus a short migration note.
+
+Version headings, tags, and releases are cut only by the deployer via `gh release`. Never create a version heading or tag manually.
+
+## LICENSE
+
+Proprietary codebase — see `LICENSE.md`. All rights reserved; no license grant is implied by access to this repository. For permission or licensing inquiries, contact Slafurry Studios through its official channels.
 
 ## PROJECT STRUCTURE
 

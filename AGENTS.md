@@ -28,7 +28,7 @@ npm run db:studio    # prisma studio
 
 - Tests: `npm test` (Vitest unit + Playwright e2e). Full verification is `npm run lint && npm run build && npm test`.
 - **Build is flaky, not broken.** `next build` prerenders `/admin/*`, which hits the live database; a transient `PrismaClientKnownRequestError` / "build worker exited with code 1" happens. Re-run before investigating.
-- **Lint baseline is dirty**: ~110 problems (~79 errors) pre-existing repo-wide. Don't try to fix them all; just don't add new ones.
+- **Lint baseline is dirty**: ~110 problems (~77 errors) pre-existing repo-wide. Don't try to fix them all; just don't add new ones.
 - `postinstall` runs `prisma generate`.
 - **Only `.env` exists** — `SETUP.md` tells you to `cp .env.example .env`, but `.env.example` was never committed. Derive variable names from code (list below).
 

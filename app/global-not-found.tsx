@@ -5,15 +5,20 @@
 // route apapun.
 import type { Metadata } from "next";
 
+import { fontDisplay, fontUI, fontBody } from "@/lib/fonts";
+
 export const metadata: Metadata = {
   title: "404 - Page Not Found",
   description: "The page you are looking for does not exist.",
 };
 
 export default function GlobalNotFound() {
+  const htmlClasses = [fontDisplay.variable, fontUI.variable, fontBody.variable].join(" ");
+
   return (
-    <html lang="en">
+    <html lang="en" className={htmlClasses}>
       <body
+        className="font-body"
         style={{
           minHeight: "100vh",
           display: "flex",
@@ -22,14 +27,16 @@ export default function GlobalNotFound() {
           justifyContent: "center",
           textAlign: "center",
           padding: "4rem 1.5rem",
-          fontFamily: "system-ui, sans-serif",
           margin: 0,
         }}
       >
-        <p style={{ fontSize: "4rem", fontWeight: 700, margin: 0, color: "#ccc" }}>
+        <p
+          className="font-display"
+          style={{ fontSize: "4rem", fontWeight: 700, margin: 0, color: "#ccc" }}
+        >
           404
         </p>
-        <h1 style={{ fontSize: "1.5rem", marginTop: "0.5rem" }}>
+        <h1 className="font-display" style={{ fontSize: "1.5rem", marginTop: "0.5rem" }}>
           This page went unfinished too
         </h1>
         <p style={{ marginTop: "0.5rem", color: "#666", maxWidth: 360 }}>
