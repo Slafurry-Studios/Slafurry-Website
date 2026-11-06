@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [v1.14.1] - 2026-11-06
+
+### Added
 - Vitest unit tests (`checkHoneypot` form spam guard, `extractIdFromUrl` audit helper) and a Playwright homepage smoke test (HTTP 200, renders content).
 - GitHub Actions CI workflow: Node 22, `npm ci`, `prisma generate`, `tsc --noEmit`, lint (gated to baseline of 78 errors), `next build`, `npm test`.
 
@@ -20,4 +29,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-[unreleased]: https://github.com/Slafurry-Studios/Slafurry-Website/compare/v1.14.0-alpha...HEAD
+[unreleased]: https://github.com/Slafurry-Studios/Slafurry-Website/compare/v1.14.1...HEAD
+[v1.14.1]: https://github.com/Slafurry-Studios/Slafurry-Website/compare/v1.14.0-alpha...v1.14.1
