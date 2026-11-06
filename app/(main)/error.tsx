@@ -15,7 +15,7 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   const pathname = usePathname();
-
+https://github.com/muhammadzaini213/Slafurry-Website-Staging/pull/1/conflict?name=app%252F%2528main%2529%252Ferror.tsx&ancestor_oid=3858aa7d9719b766575e8470994499667be0b4b9&base_oid=543e3642905fb9954f3f871bd75fade8d51cec1e&head_oid=ef3a764f4df1cd1ff3cebf47cada078c21053f83
   useEffect(() => {
     // TODO (step 4+): kirim ke error tracking service kalau ada
     // (Sentry/dst). Untuk sekarang log ke console aja.
