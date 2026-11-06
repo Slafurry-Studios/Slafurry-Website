@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { LinkSection, PostCategory, PostStatus } from "@prisma/client";
 
-// Semua fungsi di sini dipanggil dari app/[locale]/page.tsx (Server
+// Semua fungsi di sini dipanggil dari halaman Server (Server
 // Component), bukan dari dalam komponen section langsung — biar section
 // component tetep reusable & gampang ditest (nerima data lewat props).
 //

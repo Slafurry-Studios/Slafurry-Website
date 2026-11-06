@@ -1,17 +1,8 @@
 // Konvensi Next.js 16 (experimental, diaktifkan via next.config.ts
-// `experimental.globalNotFound`). Dipakai khusus karena root layout kita
-// pakai top-level dynamic segment (app/[locale]/layout.tsx) — Next.js
-// gak bisa nyusun 404 global dari kombinasi layout.js + not-found.js
-// biasa buat kasus ini, jadi butuh file terpisah yang BYPASS semua layout.
-//
-// Konsekuensinya: file ini HARUS include <html>/<body> sendiri, gak bisa
-// pakai NextIntlClientProvider (belum tentu ada locale yang ke-resolve),
-// dan sebaiknya gak gantung ke next/font (biar tetep ringan & gak ikut
-// gagal kalau font fetch bermasalah). Untuk kasus dalam-locale yang gak
-// ketemu (misal /en/asal-ngetik), itu di-handle oleh
-// app/[locale]/[...rest]/page.tsx yang manggil notFound() ke
-// app/[locale]/not-found.tsx (localized, on-brand). File ini murni buat
-// URL yang gak match apapun sama sekali.
+// `experimental.globalNotFound`). File ini BYPASS semua layout dan wajib
+// include <html>/<body> sendiri, biar ringan dan tidak ikut gagal jika
+// pemuatan font bermasalah. Digunakan untuk URL yang tidak cocok dengan
+// route apapun.
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

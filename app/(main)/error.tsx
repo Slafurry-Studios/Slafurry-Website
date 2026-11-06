@@ -5,28 +5,8 @@ import { usePathname } from "next/navigation";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { PillButton } from "@/components/ui/PillButton";
 
-// PENTING: error.tsx TIDAK BOLEH bergantung pada NextIntlClientProvider.
-// Next.js error boundaries tidak dijamin ke-cover provider dari layout.tsx
-// di segment yang sama, kalau errornya kejadian SEBELUM provider itu
-// sempat ke-render (misal error di dalam layout.tsx itu sendiri). Makanya
-// di sini locale dideteksi manual dari URL, bukan lewat useTranslations.
-const DICTIONARY = {
-  en: {
-    title: "500",
-    heading: "Something broke behind the scenes",
-    body: "Our server is having a moment. Try again in a bit.",
-    tryAgain: "Try again",
-    backHome: "Back to Home",
-  },
-  id: {
-    title: "500",
-    heading: "Ada yang rusak di belakang layar",
-    body: "Server kami lagi bermasalah. Coba lagi sebentar lagi.",
-    tryAgain: "Coba lagi",
-    backHome: "Kembali ke Beranda",
-  },
-} as const;
-
+// Error boundary untuk segmen (main). Tidak bergantung pada i18n — situs
+// bahasa tunggal (English). Teks dalam bahasa yang saat ini tampil di situs.
 export default function ErrorPage({
   error,
   reset,
@@ -35,8 +15,6 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   const pathname = usePathname();
-  const locale = pathname?.startsWith("/id") ? "id" : "en";
-  const t = DICTIONARY[locale];
 
   useEffect(() => {
     // TODO (step 4+): kirim ke error tracking service kalau ada
@@ -49,19 +27,21 @@ export default function ErrorPage({
       <SlafurryMark className="h-16 w-16 text-neutral-300 dark:text-neutral-700" />
 
       <p className="mt-6 font-heading text-7xl tracking-wide text-neutral-300 dark:text-neutral-700">
-        {t.title}
+        500
       </p>
-      <h1 className="mt-1 font-heading text-3xl tracking-wide">{t.heading}</h1>
+      <h1 className="mt-1 font-heading text-3xl tracking-wide">
+        Something broke behind the scenes
+      </h1>
 
       <p className="mt-3 max-w-sm font-body text-xl text-neutral-500 dark:text-neutral-400">
-        {t.body}
+        Our server is having a moment. Try again in a bit.
       </p>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <PillButton onClick={reset} variant="solid">
-          {t.tryAgain}
+          Try again
         </PillButton>
-        <PillButton href="/">{t.backHome}</PillButton>
+        <PillButton href="/">Back to Home</PillButton>
       </div>
     </div>
   );

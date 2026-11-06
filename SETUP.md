@@ -1,6 +1,6 @@
 # Slafurry Studios — Website
 
-Stack: Next.js 16 (App Router) · Prisma 6 · Supabase (Postgres + Auth + Storage) · Vercel · next-intl · Framer Motion
+Stack: Next.js 16 (App Router) · Prisma 6 · Supabase (Postgres + Auth + Storage) · Vercel · Framer Motion
 
 ## Status: Step 1 (Setup) — done
 
@@ -9,8 +9,7 @@ Yang udah disiapin di step ini:
 - ✅ Next.js + TypeScript + Tailwind v4 project
 - ✅ `prisma/schema.prisma` — full schema dari technical spec (Game, Post, Comment, Press, Achievement, Contact, Analytics, Audit Log, dll)
 - ✅ `prisma/seed.ts` — seed data awal (SiteSettings, 2 starter achievement, social links placeholder)
-- ✅ i18n (`next-intl`) — routing `en`/`id`, `en` sebagai default
-- ✅ `proxy.ts` (Next.js 16 — dulu namanya `middleware.ts`) — gabungan locale routing + Supabase session refresh + proteksi `/admin/*`
+- ✅ `proxy.ts` (Next.js 16 — dulu namanya `middleware.ts`) — gabungan Supabase session refresh + proteksi `/admin/*`
 - ✅ Font Bebas Neue (heading) + Poppins (body) via `next/font/google`
 - ✅ Tailwind v4 dark mode (class-based, bukan `prefers-color-scheme`) + hook `.serious` buat Serious Mode
 - ✅ `lib/prisma.ts`, `lib/supabase/client.ts`, `lib/supabase/server.ts`
@@ -46,7 +45,7 @@ Yang udah disiapin di step ini:
    ```bash
    npm run dev
    ```
-   Buka `http://localhost:3000` — bakal auto-redirect ke `/en`.
+   Buka `http://localhost:3000`.
 
 > **Catatan**: project ini disiapkan di sandbox yang network-nya dibatasi (gak bisa akses `binaries.prisma.sh` atau `fonts.googleapis.com`), jadi `prisma generate` dan font Google belum sempat divalidasi end-to-end di sana. Keduanya seharusnya jalan normal di mesin lo yang punya akses internet biasa — kalau ternyata ada error waktu langkah 3, kabarin detail error-nya.
 
