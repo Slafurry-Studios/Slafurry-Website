@@ -11,42 +11,50 @@ export type PublicComment = {
 export async function getApprovedPostComments(
   postId: string
 ): Promise<PublicComment[]> {
-  const rows = await prisma.comment.findMany({
-    where: { postId, targetType: "POST", status: "APPROVED" },
-    orderBy: { createdAt: "asc" },
-    select: {
-      id: true,
-      authorName: true,
-      content: true,
-      createdAt: true,
-    },
-  });
-  return rows.map((r) => ({
-    id: r.id,
-    authorName: r.authorName,
-    content: r.content,
-    createdAt: r.createdAt.toISOString(),
-  }));
+  try {
+    const rows = await prisma.comment.findMany({
+      where: { postId, targetType: "POST", status: "APPROVED" },
+      orderBy: { createdAt: "asc" },
+      select: {
+        id: true,
+        authorName: true,
+        content: true,
+        createdAt: true,
+      },
+    });
+    return rows.map((r) => ({
+      id: r.id,
+      authorName: r.authorName,
+      content: r.content,
+      createdAt: r.createdAt.toISOString(),
+    }));
+  } catch {
+    return [];
+  }
 }
 
 /** Fetch approved comments for a game. */
 export async function getApprovedGameComments(
   gameId: string
 ): Promise<PublicComment[]> {
-  const rows = await prisma.comment.findMany({
-    where: { gameId, targetType: "GAME", status: "APPROVED" },
-    orderBy: { createdAt: "asc" },
-    select: {
-      id: true,
-      authorName: true,
-      content: true,
-      createdAt: true,
-    },
-  });
-  return rows.map((r) => ({
-    id: r.id,
-    authorName: r.authorName,
-    content: r.content,
-    createdAt: r.createdAt.toISOString(),
-  }));
+  try {
+    const rows = await prisma.comment.findMany({
+      where: { gameId, targetType: "GAME", status: "APPROVED" },
+      orderBy: { createdAt: "asc" },
+      select: {
+        id: true,
+        authorName: true,
+        content: true,
+        createdAt: true,
+      },
+    });
+    return rows.map((r) => ({
+      id: r.id,
+      authorName: r.authorName,
+      content: r.content,
+      createdAt: r.createdAt.toISOString(),
+    }));
+  } catch {
+    return [];
+  }
 }
