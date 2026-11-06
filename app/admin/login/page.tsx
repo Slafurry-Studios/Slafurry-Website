@@ -3,7 +3,7 @@
 import { Suspense, useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { signIn } from "@/lib/auth/actions";
 import { IconMail, IconLock, IconAlertCircle } from "@tabler/icons-react";
 
 // Root layout udah gak pake cookies() → halaman ini ke-prerender statis,
@@ -19,8 +19,6 @@ export default function AdminLoginPage() {
 function LoginForm() {
     const router = useRouter();
   const searchParams = useSearchParams();
-  const supabase = createClient();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -31,13 +29,10 @@ function LoginForm() {
     setError("");
     setLoading(true);
 
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const result = await signIn(email, password);
 
-    if (authError) {
-      setError("Invalid email or password.");
+    if (!result.ok) {
+      setError(result.error ?? "Invalid email or password.");
       setLoading(false);
       return;
     }

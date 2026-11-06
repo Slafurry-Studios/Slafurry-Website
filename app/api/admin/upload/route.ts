@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createServiceRoleClient } from "@/lib/supabase/server";
+import { getStorageProvider } from "@/lib/storage/adapter";
 
 const ALLOWED_BUCKETS = [
   "game-covers",
@@ -35,43 +35,25 @@ export async function POST(request: Request) {
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { error: "File too large. Maximum size is 10 MB." },
-        { status: 400 }
-      );
-    }
-
-    // Generate a unique path: bucket/timestamp-random-ext
-    const ext = file.name.split(".").pop() || "bin";
-    const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const path = `${filename}`;
-
-    const supabase = createServiceRoleClient();
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    const { error } = await supabase.storage
-      .from(bucket)
-      .upload(path, buffer, {
-        contentType: file.type,
-        upsert: false,
-      });
-
-    if (error) {
-      console.error("Supabase upload error:", error);
-      return NextResponse.json(
-        { error: `Upload failed: ${error.message}` },
         { status: 500 }
       );
     }
 
-    // Build the public URL
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const publicUrl = `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
+    const ext = file.name.split(".").pop() || "bin";
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const path = filename;
+
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    const storage = getStorageProvider();
+    const { url } = await storage.upload({ file: { buffer, name: file.name, type: file.type }, bucket, path });
 
     return NextResponse.json({
-      url: publicUrl,
+      url,
       altText: altText?.trim() ?? "",
       bucket,
-      filename,
+      filename: path,
     });
   } catch (error) {
     console.error("Upload route error:", error);

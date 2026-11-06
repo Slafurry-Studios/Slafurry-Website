@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { withAudit, snapshot, extractIdFromUrl } from "@/lib/audit";
-import { deleteStorageFile } from "@/lib/supabase/storage";
+import { deleteStorageFile } from "@/lib/storage";
 
 function slugify(title: string): string {
   return title

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthProvider, defaultCookies } from "@/lib/auth/adapter";
 import type { Prisma } from "@prisma/client";
 
 // ─── Types ──────────────────────────────────────────────────────
@@ -41,12 +41,12 @@ export type WithAuditOptions = {
 
 // ─── Helpers ────────────────────────────────────────────────────
 
-/** Get the current Supabase user ID from the session cookie. */
+/** Get the current admin user ID from the session via the auth adapter. */
 async function getSupabaseUserId(): Promise<string | null> {
   try {
-    const supabase = await createClient();
-    const { data } = await supabase.auth.getUser();
-    return data.user?.id ?? null;
+    const provider = getAuthProvider();
+    const session = await provider.getSession(await defaultCookies());
+    return session.user?.id ?? null;
   } catch {
     return null;
   }
