@@ -51,7 +51,7 @@ npm run db:studio    # prisma studio
 ## Gotchas
 
 - **`app/globals.css` sets `html { font-size: 18px }`** → every rem-based size *and Tailwind breakpoint* scales ~12% (`sm` is 720px, not 640px). Intentional; don't "correct" it to 16px.
-- **i18n is removed** — English only (`<html lang="en">`). `messages/en.json` is dead, `next-intl` isn't a dependency. Comments referencing `app/[locale]/` (including in `next.config.ts`) and `useTranslations` are stale. Don't reintroduce locale routing without asking.
+- **i18n is removed** — single language, no i18n; English only (`<html lang="en">`). `messages/en.json` is dead, `next-intl` isn't a dependency. Comments referencing `app/[locale]/` (including in `next.config.ts`) and `useTranslations` are stale. Don't reintroduce locale routing without asking.
 - **Achievements are disabled by comment** in `app/(main)/layout.tsx` (imports and JSX) and `app/(main)/not-found.tsx` (flag hint) — `lib/achievements/*` still exists. Re-enable by uncommenting, not rewriting.
 - **Serious Mode / sound mute removed**: `components/layout/SettingsContext.tsx` is inert, `.serious` / `joke-only` / `serious-only` CSS hooks in `globals.css` are dead.
 - Handdrawn button art: served copies in `public/*_btn.png`, source PNGs at repo root (untracked). Applied as background images (`bg-[url(/x_btn.png)] bg-[length:100%_100%]`) and Tailwind can't resolve class names built from template strings — keep such class strings literal.
