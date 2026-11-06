@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { GamesList } from "@/components/admin/GamesList";
 
+// Admin halaman memerlukan sesi — jangan prerender statis waktu build.
+export const dynamic = "force-dynamic";
+
 export default async function AdminGamesPage() {
   const games = await prisma.game.findMany({
     orderBy: { order: "asc" },

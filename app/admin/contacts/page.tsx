@@ -2,6 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { Prisma, ContactStatus, ContactCategory } from "@prisma/client";
 import { ContactsList } from "@/components/admin/ContactsList";
 
+// Admin halaman memerlukan sesi — jangan prerender statis waktu build.
+export const dynamic = "force-dynamic";
+
 export default async function AdminContactsPage(props: {
   searchParams: Promise<{ page?: string; status?: string; category?: string; search?: string }>;
 }) {
