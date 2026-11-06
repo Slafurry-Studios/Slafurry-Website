@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { prisma } from "@/lib/prisma";
-import type { AuthProvider, CookieStore, SessionResult, AdminContext, AuthUser } from "../adapter";
+import type { AuthProvider, CookieStore, SessionResult, AdminContext } from "../adapter";
 
 export class SupabaseAuthProvider implements AuthProvider {
   async getSession(cookies?: CookieStore): Promise<SessionResult> {

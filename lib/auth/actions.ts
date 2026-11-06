@@ -7,7 +7,9 @@ function buildCookieStore(store: Awaited<ReturnType<typeof cookies>>) {
   return {
     getAll: () => store.getAll(),
     setAll: (cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) => {
-      const setAll = (store as unknown as { setAll?: (c: any[]) => void }).setAll;
+      const setAll = (store as unknown as {
+        setAll?: (c: { name: string; value: string; options?: Record<string, unknown> }[]) => void;
+      }).setAll;
       if (typeof setAll === "function") {
         setAll(cookiesToSet);
       } else {

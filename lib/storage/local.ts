@@ -1,5 +1,4 @@
-import { createHash } from "crypto";
-import { existsSync, mkdirSync, writeFileSync, unlinkSync, readdirSync, statSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync, unlinkSync } from "fs";
 import { join, basename } from "path";
 import type { StorageProvider, StorageFile, UploadResult } from "./adapter";
 

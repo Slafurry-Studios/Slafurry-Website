@@ -55,15 +55,6 @@ function getCookie(store: CookieStore, name: string): string | undefined {
   return store.getAll().find((c) => c.name === name)?.value;
 }
 
-function setCookie(
-  store: CookieStore,
-  name: string,
-  value: string,
-  options: Record<string, unknown> = {}
-): void {
-  store.setAll([{ name, value, options: { path: "/", httpOnly: true, sameSite: "lax", secure: false, ...options } }]);
-}
-
 function clearCookie(store: CookieStore, name: string): void {
   store.setAll([{ name, value: "", options: { path: "/", httpOnly: true, sameSite: "lax", secure: false, maxAge: 0 } }]);
 }
@@ -125,13 +116,8 @@ export class LocalAuthProvider implements AuthProvider {
       });
     }
 
-    const user: AuthUser = {
-      id: adminUser.supabaseUserId,
-      email: adminUser.supabaseUserId.includes("@") ? adminUser.supabaseUserId : LOCAL_ADMIN_EMAIL,
-      name: adminUser.name,
-    };
-    return { ok: true };
-  }
+  return { ok: true };
+}
 
   async signOut(cookies?: CookieStore): Promise<void> {
     const store = cookies ?? (await defaultCookies());

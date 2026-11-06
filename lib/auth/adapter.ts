@@ -1,4 +1,3 @@
-import { prisma } from "@/lib/prisma";
 import { LocalAuthProvider } from "./providers/local";
 import { SupabaseAuthProvider } from "./providers/supabase";
 
