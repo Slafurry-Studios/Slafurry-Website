@@ -40,7 +40,7 @@ Added `export const dynamic = "force-dynamic"` to the static admin routes (`app/
 
 ## Decisions needed (from architect / product)
 
-- **i18n:** `next-intl` (en/id) was removed; PR #131 removed the language switch and #134 unified language pages. `messages/en.json` is dead. Marked "needs decision" — do not reintroduce locale routing without asking (per AGENTS.md).
+- **Bahasa:** situs bahasa tunggal (English); `messages/en.json` sudah dihapus. Jangan mengembalikan routing bahasa tanpa bertanya (per AGENTS.md).
 - **`Leanguge-Revision` branch (+116 commits, PR #135 closed due to conflicts):** not analyzed locally (no remote ref fetched in this session). Determine which commits/files are missing from `feat/website/update` vs duplicates, and whether to cherry-pick or resolve conflicts. Recommended: architect/QA run `git diff --stat` and `git log --cherry-pick --right-only` against `feat/website/update`; do not merge anything.
 - **Technical Specifications.md:** not present in repo (only `README.md`), so no diff was possible.
 

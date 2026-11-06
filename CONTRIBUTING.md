@@ -253,7 +253,6 @@ For UI changes:
 * Check interactive states.
 * Check for obvious overflow or broken spacing.
 * Verify touch targets where relevant.
-* Check both supported locales when the change affects text or layout.
 
 Screenshots or recordings are encouraged for significant visual changes.
 
