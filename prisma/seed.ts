@@ -352,6 +352,35 @@ async function main() {
     }
   }
 
+  // --- Admin user (lokal, idempotent) ---
+  await prisma.adminUser.upsert({
+    where: { supabaseUserId: "local-admin-1" },
+    update: {},
+    create: {
+      supabaseUserId: "local-admin-1",
+      name: "Local Admin",
+    },
+  });
+
+  // --- Contoh komentar (idempotent, tanpa data pribadi nyata) ---
+  const targetPost = await prisma.post.findFirst({ where: { status: "PUBLISHED" } });
+  if (targetPost) {
+    await prisma.comment.upsert({
+      where: { id: "seed-comment-1" },
+      update: {},
+      create: {
+        id: "seed-comment-1",
+        postId: targetPost.id,
+        authorName: "Pengunjung Contoh",
+        authorEmail: "contoh@example.com",
+        content: "Ini komentar contoh untuk menguji fitur komentar terhadap DB lokal.",
+        status: "APPROVED",
+        ipHash: "seed",
+        targetType: "POST",
+      },
+    });
+  }
+
   console.log("Seed selesai ✅");
 }
 
