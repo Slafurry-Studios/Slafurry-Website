@@ -245,7 +245,7 @@ export function AchievementForm({ initial }: { initial?: AchievementData }) {
 
       {/* Basic info */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">Achievement Info</h2>
+        <h2 className="font-display text-xl tracking-tight">Achievement Info</h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className={hintClass}>
@@ -309,7 +309,7 @@ export function AchievementForm({ initial }: { initial?: AchievementData }) {
 
       {/* Trigger config */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">Trigger</h2>
+        <h2 className="font-display text-xl tracking-tight">Trigger</h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className={hintClass}>
@@ -342,7 +342,7 @@ export function AchievementForm({ initial }: { initial?: AchievementData }) {
 
       {/* Flags */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">Options</h2>
+        <h2 className="font-display text-xl tracking-tight">Options</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <div className={hintClass}>
             <label className={labelClass}>Category</label>
@@ -388,7 +388,7 @@ export function AchievementForm({ initial }: { initial?: AchievementData }) {
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-6 py-2.5 font-ui text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
           {saving ? (
             <>
@@ -403,7 +403,7 @@ export function AchievementForm({ initial }: { initial?: AchievementData }) {
         </button>
         <Link
           href="/admin/achievements"
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 px-6 py-2.5 font-body text-sm font-medium transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 px-6 py-2.5 font-ui text-sm font-medium transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
         >
           Cancel
         </Link>

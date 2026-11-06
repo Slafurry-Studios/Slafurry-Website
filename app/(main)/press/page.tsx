@@ -28,11 +28,11 @@ export default async function PressPage() {
     <div className="px-6 py-16 md:px-10">
       <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-2">
         <div>
-          <h1 className="font-heading text-4xl tracking-wide">Press Releases</h1>
+          <h1 className="font-display text-4xl tracking-wide">Press Releases</h1>
           <div className="mt-6 space-y-8">
             {Object.entries(releasesByOutlet).map(([outlet, releases]) => (
               <div key={outlet}>
-                <h2 className="font-body text-lg font-bold">{outlet}</h2>
+                <h2 className="font-display text-lg font-bold">{outlet}</h2>
                 <ul className="mt-2 space-y-2">
                   {releases.map((release) => (
                     <li key={release.id}>
@@ -40,7 +40,7 @@ export default async function PressPage() {
                         href={release.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="group flex items-start gap-1.5 font-body text-lg text-neutral-700 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
+                        className="group flex items-start gap-1.5 font-ui text-lg text-neutral-700 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
                       >
                         <IconExternalLink
                           size={14}
@@ -62,17 +62,17 @@ export default async function PressPage() {
         </div>
 
         <div>
-          <h1 className="font-heading text-4xl tracking-wide">"Press Kit"</h1>
+          <h1 className="font-display text-4xl tracking-wide">"Press Kit"</h1>
           <div className="mt-6 space-y-8">
             {Object.entries(assetsByLabel).map(([label, assets]) => (
               <div key={label}>
-                <h2 className="font-body text-lg font-bold">{label}</h2>
+                <h2 className="font-display text-lg font-bold">{label}</h2>
                 <ul className="mt-2 space-y-1.5">
                   {assets.map((asset) => (
                     <li key={label + asset.type}>
                       <a
                         href={asset.fileUrl}
-                        className="inline-flex items-center gap-1.5 font-body text-lg text-neutral-700 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
+                        className="inline-flex items-center gap-1.5 font-ui text-lg text-neutral-700 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
                       >
                         <IconDownload size={14} className="text-neutral-400" />
                         <span className="font-medium">{ASSET_TYPE_LABEL[asset.type]}:</span>

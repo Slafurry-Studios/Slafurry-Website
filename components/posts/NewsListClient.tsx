@@ -39,7 +39,7 @@ export function NewsListClient({
   });
 
   const tagButtonClass = (tag: string, isActive: boolean) =>
-    `inline-flex items-center rounded-full border px-3 py-1.5 font-body text-xl font-medium transition-colors ${
+    `inline-flex items-center rounded-full border px-3 py-1.5 font-ui text-xl font-medium transition-colors ${
       isActive
         ? "border-neutral-900 text-neutral-900 bg-neutral-100 dark:border-white dark:text-white dark:bg-neutral-800"
         : "border-neutral-300 text-neutral-700 hover:bg-neutral-200 hover:text-neutral-900 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
@@ -52,7 +52,7 @@ export function NewsListClient({
 
   return (
     <div className="px-6 py-16 md:px-10">
-      <h1 className="text-center font-heading text-5xl tracking-wide">{heading}</h1>
+      <h1 className="text-center font-display text-5xl tracking-wide">{heading}</h1>
       <p className="mx-auto mt-4 max-w-xl text-center font-body text-xl text-neutral-600 dark:text-neutral-400">
         {intro}
       </p>
@@ -66,7 +66,7 @@ export function NewsListClient({
         <div className="flex flex-wrap gap-2 justify-center">
           <button
             onClick={() => setTagFilter(undefined)}
-            className={`inline-flex items-center rounded-full border px-3 py-1.5 font-body text-xl font-medium transition-colors ${allTagsClass}`}
+            className={`inline-flex items-center rounded-full border px-3 py-1.5 font-ui text-xl font-medium transition-colors ${allTagsClass}`}
           >
             All tags
           </button>

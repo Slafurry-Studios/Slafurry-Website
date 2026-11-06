@@ -130,13 +130,13 @@ function AchievementToast({
 
       {/* Text */}
       <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-body font-semibold uppercase tracking-wider text-yellow-400 dark:text-yellow-500 mb-0.5">
+        <p className="text-[11px] font-ui font-semibold uppercase tracking-wider text-yellow-400 dark:text-yellow-500 mb-0.5">
           "NEW!"
         </p>
-        <p className="font-heading text-lg leading-tight truncate">
+        <p className="font-display text-lg leading-tight truncate">
           {entry.title}
         </p>
-        <p className="text-xs text-neutral-400 dark:text-neutral-500 font-body mt-0.5">
+        <p className="text-xs text-neutral-400 dark:text-neutral-500 font-ui mt-0.5">
           "Unlocked"
         </p>
       </div>
@@ -202,7 +202,7 @@ export function AchievementToastContainer() {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-[11px] text-neutral-500 dark:text-neutral-400 font-body text-right mt-1.5 pr-1"
+                className="text-[11px] text-neutral-500 dark:text-neutral-400 font-ui text-right mt-1.5 pr-1"
               >
                 +{queued} more
               </motion.p>

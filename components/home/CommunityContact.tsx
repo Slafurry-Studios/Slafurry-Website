@@ -34,7 +34,7 @@ export function CommunityContact({
     <section className="flex items-center px-6 py-16 md:px-10">
       <div className="mx-auto grid w-full max-w-7xl items-start gap-16 sm:grid-cols-2">
         <div>
-          <h2 className="font-heading text-7xl tracking-wide">Join Our Community</h2>
+          <h2 className="font-display text-7xl tracking-wide">Join Our Community</h2>
           <div className="mt-14 flex flex-col items-start gap-8">
             {communityLinks.length === 0 ? (
               <p className="font-body text-xl text-neutral-400">
@@ -56,7 +56,7 @@ export function CommunityContact({
         </div>
 
         <div>
-          <h2 className="font-heading text-7xl tracking-wide">Contact Us</h2>
+          <h2 className="font-display text-7xl tracking-wide">Contact Us</h2>
           <div className="mt-14 flex flex-col items-start gap-8">
             <PillButton
               href="/contact"

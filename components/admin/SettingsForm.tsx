@@ -176,7 +176,7 @@ export function SettingsForm({
       {/* ═══ SITE SETTINGS ═══ */}
       <form onSubmit={handleSaveSettings} className="space-y-8">
         <section className="space-y-4">
-          <h2 className="font-heading text-xl tracking-tight">Site Settings</h2>
+          <h2 className="font-display text-xl tracking-tight">Site Settings</h2>
           <p className="text-xs text-neutral-500">
             Fields are shown in pairs: Normal mode (left) and Serious mode (right).
           </p>
@@ -280,7 +280,7 @@ export function SettingsForm({
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+            className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-6 py-2.5 font-ui text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
           >
             {saving ? (
               <>
@@ -298,7 +298,7 @@ export function SettingsForm({
 
       {/* ═══ SOCIAL LINKS ═══ */}
       <section className="space-y-6">
-        <h2 className="font-heading text-xl tracking-tight">Social Links</h2>
+        <h2 className="font-display text-xl tracking-tight">Social Links</h2>
 
         {SECTIONS.map((sec) => {
           const sectionLinks = links.filter((l) => l.section === sec.key);

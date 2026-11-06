@@ -57,7 +57,7 @@ export function AdminSidebar() {
                 style={{ color: active ? "white" : "" }}
               >
                 <div dangerouslySetInnerHTML={{ __html: iconSvg }} />
-                <span className="font-medium">{item.label}</span>
+                <span className="font-ui font-medium">{item.label}</span>
               </li>
             );
           })}

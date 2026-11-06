@@ -14,7 +14,7 @@ export function NewsPreview({ posts }: { posts: Post[] }) {
 
   return (
     <section className="flex min-h-screen flex-col justify-center px-6 py-16 md:px-10">
-      <h2 className="text-center font-heading text-4xl tracking-wide">News</h2>
+      <h2 className="text-center font-display text-4xl tracking-wide">News</h2>
 
       <div className="mx-auto mt-10 grid max-w-7xl gap-6 md:grid-cols-2">
         {cards.map((post) => (
@@ -37,8 +37,8 @@ function NewsCard({ post }: { post: Post }) {
         className="aspect-[16/10] w-full"
       />
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="font-body text-xl font-semibold leading-snug">{post.title}</h3>
-        <p className="mt-1 font-body text-xs text-neutral-500 dark:text-neutral-400">
+        <h3 className="font-display text-xl font-semibold leading-snug">{post.title}</h3>
+        <p className="mt-1 font-ui text-xs text-neutral-500 dark:text-neutral-400">
           By {post.authorName}
           {post.publishedAt && ` | ${formatDate(post.publishedAt)}`}
         </p>

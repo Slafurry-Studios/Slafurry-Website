@@ -81,11 +81,11 @@ main > *:nth-child(4) {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Brand fonts — variable di-set oleh next/font di lib/fonts.ts
-     (--font-heading-family / --font-body-family), dipetakan ke utility
-     Tailwind: font-heading / font-body. Nama di-theme beda dari nama
-     CSS variable biar gak circular reference. */
-  --font-heading: var(--font-heading-family);
+  /* Fonts — variable di-set oleh next/font di lib/fonts.ts
+     (--font-display-family / --font-ui-family / --font-body-family),
+     dipetakan ke utility Tailwind: font-display / font-ui / font-body. */
+  --font-display: var(--font-display-family);
+  --font-ui: var(--font-ui-family);
   --font-body: var(--font-body-family);
 }
 

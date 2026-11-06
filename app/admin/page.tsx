@@ -46,7 +46,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="mx-6 flex flex-col pt-16 md:mx-8">
-      <h1 className="font-heading text-3xl tracking-tight">
+      <h1 className="font-display text-3xl tracking-tight">
         Dashboard
       </h1>
 
@@ -61,7 +61,7 @@ export default async function AdminDashboardPage() {
             </span>
           </div>
 
-          <p className="font-heading text-4xl">
+          <p className="font-display text-4xl">
             {pendingCommentCount}
           </p>
 
@@ -127,7 +127,7 @@ export default async function AdminDashboardPage() {
             </span>
           </div>
 
-          <p className="font-heading text-4xl">
+          <p className="font-display text-4xl">
             {totalAchievements}
           </p>
 

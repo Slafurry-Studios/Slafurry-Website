@@ -34,7 +34,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
 
   return (
     <section className="flex flex-col justify-center px-6 py-16 md:px-10">
-      <h2 className="text-center font-heading text-7xl tracking-wide">
+      <h2 className="text-center font-display text-7xl tracking-wide">
         Projects
       </h2>
 
@@ -174,7 +174,7 @@ function ProjectCard({
           (isCurrent ? "opacity-100" : "opacity-0")
         }
       >
-        <h3 className="line-clamp-1 min-h-[2rem] font-heading text-2xl tracking-wide">
+        <h3 className="line-clamp-1 min-h-[2rem] font-display text-2xl tracking-wide">
           {project.title}
         </h3>
         <p className="mt-1 line-clamp-2 min-h-[3.5rem] font-body text-xl text-neutral-600 dark:text-neutral-400">

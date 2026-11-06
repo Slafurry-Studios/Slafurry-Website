@@ -10,7 +10,7 @@ export function ContactForm() {
 
   return (
     <div className="mt-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 dark:border-neutral-800 dark:bg-neutral-900/50">
-      <h3 className="font-heading text-xl font-semibold tracking-tight">
+      <h3 className="font-display text-xl font-semibold tracking-tight">
         Leave a message
       </h3>
       <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">

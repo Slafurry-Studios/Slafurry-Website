@@ -217,7 +217,7 @@ export function PostForm({ initial }: { initial?: PostData }) {
 
       {/* Main info */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">Post Info</h2>
+        <h2 className="font-display text-xl tracking-tight">Post Info</h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className={hintClass}>
@@ -275,7 +275,7 @@ export function PostForm({ initial }: { initial?: PostData }) {
 
       {/* Content editor */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">Content</h2>
+        <h2 className="font-display text-xl tracking-tight">Content</h2>
         <TiptapEditor content={post.content} onChange={handleContentChange} />
         {post.autosavedAt && (
           <p className="text-xs text-neutral-400">
@@ -286,7 +286,7 @@ export function PostForm({ initial }: { initial?: PostData }) {
 
       {/* Settings */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">Settings</h2>
+        <h2 className="font-display text-xl tracking-tight">Settings</h2>
 
         <div className="grid gap-4 sm:grid-cols-3">
           <div className={hintClass}>
@@ -375,7 +375,7 @@ export function PostForm({ initial }: { initial?: PostData }) {
 
       {/* Prev/Next override */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">Navigation Override</h2>
+        <h2 className="font-display text-xl tracking-tight">Navigation Override</h2>
         <p className="text-xs text-neutral-500">
           Optionally override the automatic previous/next post order. Leave empty
           to use publishedAt order.
@@ -416,7 +416,7 @@ export function PostForm({ initial }: { initial?: PostData }) {
 
       {/* SEO */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">SEO</h2>
+        <h2 className="font-display text-xl tracking-tight">SEO</h2>
 
         <div className={hintClass}>
           <label className={labelClass}>Meta Title</label>
@@ -453,7 +453,7 @@ export function PostForm({ initial }: { initial?: PostData }) {
       {/* Preview link */}
       {isEdit && previewUrl && (
         <section className="space-y-2">
-          <h2 className="font-heading text-xl tracking-tight">Preview</h2>
+          <h2 className="font-display text-xl tracking-tight">Preview</h2>
           <div className="flex items-center gap-2">
             <Link
               href={previewUrl}
@@ -481,7 +481,7 @@ export function PostForm({ initial }: { initial?: PostData }) {
           type="submit"
           disabled={saving}
           onClick={(e) => handleSubmit(e, post.status === "DRAFT" ? "DRAFT" : "PUBLISHED")}
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-6 py-2.5 font-ui text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
           {saving ? (
             <>
@@ -499,14 +499,14 @@ export function PostForm({ initial }: { initial?: PostData }) {
             type="button"
             disabled={saving}
             onClick={(e) => handleSubmit(e, "PUBLISHED")}
-            className="inline-flex items-center gap-2 rounded-full border border-emerald-600 bg-emerald-600 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-600 bg-emerald-600 px-6 py-2.5 font-ui text-sm font-medium text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Publish
           </button>
         )}
         <Link
           href="/admin/posts"
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 px-6 py-2.5 font-body text-sm font-medium transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 px-6 py-2.5 font-ui text-sm font-medium transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
         >
           Cancel
         </Link>

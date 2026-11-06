@@ -33,11 +33,11 @@ export default async function GameDetailPage({
         />
       )}
 
-      <h1 className="text-3xl font-heading tracking-wide mb-6 mt-8">
+      <h1 className="text-3xl font-display tracking-wide mb-6 mt-8">
         {game.title}
 
         <span
-          className={`inline-block rounded-full px-2.5 py-0.5 font-body text-xs font-medium ${
+          className={`inline-block rounded-full px-2.5 py-0.5 font-ui text-xs font-medium ${
             game.status === "RELEASED"
               ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
               : game.status === "UPCOMING"
@@ -55,7 +55,7 @@ export default async function GameDetailPage({
 
       {game.playLinks.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-heading mb-4">Play on</h2>
+          <h2 className="text-xl font-display mb-4">Play on</h2>
           <div className="grid grid-cols-2 gap-2">
             {game.playLinks.map((link) => (
               <a

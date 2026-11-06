@@ -142,7 +142,7 @@ export function AuditLogList({
       <div className="flex items-center gap-3">
         <IconHistory size={32} className="text-muted-foreground" />
         <div>
-          <h1 className="font-heading text-3xl tracking-tight">
+          <h1 className="font-display text-3xl tracking-tight">
             Audit Log
           </h1>
           <p className="text-sm text-muted-foreground">

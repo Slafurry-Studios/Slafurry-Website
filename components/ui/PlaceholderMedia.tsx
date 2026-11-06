@@ -41,7 +41,7 @@ export function PlaceholderImage({
     <div
       className={`flex items-center justify-center bg-gradient-to-br ${gradientFor(label)} ${className}`}
     >
-      <span className="px-3 text-center font-body text-xs font-medium text-white/70">
+      <span className="px-3 text-center font-ui text-xs font-medium text-white/70">
         {label}
       </span>
     </div>

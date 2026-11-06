@@ -26,10 +26,10 @@ export default function ErrorPage({
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-16 text-center">
       <SlafurryMark className="h-16 w-16 text-neutral-300 dark:text-neutral-700" />
 
-      <p className="mt-6 font-heading text-7xl tracking-wide text-neutral-300 dark:text-neutral-700">
+      <p className="mt-6 font-display text-7xl tracking-wide text-neutral-300 dark:text-neutral-700">
         500
       </p>
-      <h1 className="mt-1 font-heading text-3xl tracking-wide">
+      <h1 className="mt-1 font-display text-3xl tracking-wide">
         Something broke behind the scenes
       </h1>
 
