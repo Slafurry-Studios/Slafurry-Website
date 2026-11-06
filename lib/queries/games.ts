@@ -21,27 +21,35 @@ export type GameData = {
 
 /** Fetch all visible games (RELEASED + UPCOMING + IN_DEVELOPMENT) for the public list. */
 export async function getActiveGames(): Promise<GameData[]> {
-  const rows = await prisma.game.findMany({
-    where: {
-      status: {
-        in: [GameStatus.RELEASED, GameStatus.UPCOMING, GameStatus.IN_DEVELOPMENT],
+  try {
+    const rows = await prisma.game.findMany({
+      where: {
+        status: {
+          in: [GameStatus.RELEASED, GameStatus.UPCOMING, GameStatus.IN_DEVELOPMENT],
+        },
+        isHidden: false
       },
-      isHidden: false
-    },
-    orderBy: { order: "asc" },
-    include: { playLinks: { select: { label: true, url: true } } },
-  });
-  return rows.map(toGameData);
+      orderBy: { order: "asc" },
+      include: { playLinks: { select: { label: true, url: true } } },
+    });
+    return rows.map(toGameData);
+  } catch {
+    return [];
+  }
 }
 
 /** Fetch a single game by slug. */
 export async function getGameBySlug(slug: string): Promise<GameData | null> {
-  const row = await prisma.game.findFirst({
-    where: { slug, isHidden: false },
-    include: { playLinks: { select: { label: true, url: true } } },
-  });
-  if (!row) return null;
-  return toGameData(row);
+  try {
+    const row = await prisma.game.findFirst({
+      where: { slug, isHidden: false },
+      include: { playLinks: { select: { label: true, url: true } } },
+    });
+    if (!row) return null;
+    return toGameData(row);
+  } catch {
+    return null;
+  }
 }
 
 function toGameData(

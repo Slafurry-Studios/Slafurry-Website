@@ -61,25 +61,29 @@ export async function getPublishedPosts(
   category: PostCategory,
   limit?: number
 ): Promise<PostCardData[]> {
-  const rows = await prisma.post.findMany({
-    where: { category, status: PostStatus.PUBLISHED, isHidden: false },
-    orderBy: { publishedAt: "desc" },
-    select: {
-      id: true,
-      slug: true,
-      title: true,
-      excerpt: true,
-      coverImage: true,
-      coverImageAlt: true,
-      category: true,
-      tags: true,
-      authorName: true,
-      publishedAt: true,
-      _count: { select: { comments: true } },
-    },
-    ...(limit ? { take: limit } : {}),
-  });
-  return rows.map(toCardData);
+  try {
+    const rows = await prisma.post.findMany({
+      where: { category, status: PostStatus.PUBLISHED, isHidden: false },
+      orderBy: { publishedAt: "desc" },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        excerpt: true,
+        coverImage: true,
+        coverImageAlt: true,
+        category: true,
+        tags: true,
+        authorName: true,
+        publishedAt: true,
+        _count: { select: { comments: true } },
+      },
+      ...(limit ? { take: limit } : {}),
+    });
+    return rows.map(toCardData);
+  } catch {
+    return [];
+  }
 }
 
 /** Fetch a single published post by slug (article view). */
@@ -87,9 +91,56 @@ export async function getPostBySlug(
   slug: string,
   category: PostCategory
 ): Promise<PostArticleData | null> {
-  const row = await prisma.post.findFirst({
-    where: { slug, category, status: PostStatus.PUBLISHED, isHidden: false },
-    select: {
+  try {
+    const row = await prisma.post.findFirst({
+      where: { slug, category, status: PostStatus.PUBLISHED, isHidden: false },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        excerpt: true,
+        coverImage: true,
+        coverImageAlt: true,
+        category: true,
+        tags: true,
+        authorName: true,
+        publishedAt: true,
+        _count: { select: { comments: true } },
+        content: true,
+        metaTitle: true,
+        metaDescription: true,
+        ogImage: true,
+      },
+    });
+    if (!row) return null;
+    return {
+      ...toCardData(row),
+      content: row.content,
+      metaTitle: row.metaTitle,
+      metaDescription: row.metaDescription,
+      ogImage: row.ogImage,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/** Fetch adjacent (prev/next) published posts for navigation. */
+export async function getAdjacentPosts(
+  currentSlug: string,
+  category: PostCategory
+): Promise<{ prev: PostCardData | null; next: PostCardData | null }> {
+  try {
+    const current = await prisma.post.findUnique({
+      where: { slug: currentSlug },
+      select: { publishedAt: true, prevPostId: true, nextPostId: true },
+    });
+    if (!current) return { prev: null, next: null };
+
+    let prev: PostCardData | null = null;
+    let next: PostCardData | null = null;
+
+    const cardFields = {
       id: true,
       slug: true,
       title: true,
@@ -101,105 +152,70 @@ export async function getPostBySlug(
       authorName: true,
       publishedAt: true,
       _count: { select: { comments: true } },
-      content: true,
-      metaTitle: true,
-      metaDescription: true,
-      ogImage: true,
-    },
-  });
-  if (!row) return null;
-  return {
-    ...toCardData(row),
-    content: row.content,
-    metaTitle: row.metaTitle,
-    metaDescription: row.metaDescription,
-    ogImage: row.ogImage,
-  };
-}
+    } as const;
 
-/** Fetch adjacent (prev/next) published posts for navigation. */
-export async function getAdjacentPosts(
-  currentSlug: string,
-  category: PostCategory
-): Promise<{ prev: PostCardData | null; next: PostCardData | null }> {
-  const current = await prisma.post.findUnique({
-    where: { slug: currentSlug },
-    select: { publishedAt: true, prevPostId: true, nextPostId: true },
-  });
-  if (!current) return { prev: null, next: null };
+    // Prev: manual override → fallback to publishedAt order
+    if (current.prevPostId) {
+      const row = await prisma.post.findFirst({
+        where: { id: current.prevPostId, status: PostStatus.PUBLISHED, isHidden: false },
+        select: cardFields,
+      });
+      if (row) prev = toCardData(row);
+    }
+    if (!prev && current.publishedAt) {
+      const row = await prisma.post.findFirst({
+        where: {
+          category,
+          status: PostStatus.PUBLISHED,
+          isHidden: false,
+          publishedAt: { gt: current.publishedAt },
+        },
+        orderBy: { publishedAt: "asc" },
+        select: cardFields,
+      });
+      if (row) prev = toCardData(row);
+    }
 
-  let prev: PostCardData | null = null;
-  let next: PostCardData | null = null;
+    // Next: manual override → fallback to publishedAt order
+    if (current.nextPostId) {
+      const row = await prisma.post.findFirst({
+        where: { id: current.nextPostId, status: PostStatus.PUBLISHED, isHidden: false },
+        select: cardFields,
+      });
+      if (row) next = toCardData(row);
+    }
+    if (!next && current.publishedAt) {
+      const row = await prisma.post.findFirst({
+        where: {
+          category,
+          status: PostStatus.PUBLISHED,
+          isHidden: false,
+          publishedAt: { lt: current.publishedAt },
+        },
+        orderBy: { publishedAt: "desc" },
+        select: cardFields,
+      });
+      if (row) next = toCardData(row);
+    }
 
-  const cardFields = {
-    id: true,
-    slug: true,
-    title: true,
-    excerpt: true,
-    coverImage: true,
-    coverImageAlt: true,
-    category: true,
-    tags: true,
-    authorName: true,
-    publishedAt: true,
-    _count: { select: { comments: true } },
-  } as const;
-
-  // Prev: manual override → fallback to publishedAt order
-  if (current.prevPostId) {
-    const row = await prisma.post.findFirst({
-      where: { id: current.prevPostId, status: PostStatus.PUBLISHED, isHidden: false },
-      select: cardFields,
-    });
-    if (row) prev = toCardData(row);
+    return { prev, next };
+  } catch {
+    return { prev: null, next: null };
   }
-  if (!prev && current.publishedAt) {
-    const row = await prisma.post.findFirst({
-      where: {
-        category,
-        status: PostStatus.PUBLISHED,
-        isHidden: false,
-        publishedAt: { gt: current.publishedAt },
-      },
-      orderBy: { publishedAt: "asc" },
-      select: cardFields,
-    });
-    if (row) prev = toCardData(row);
-  }
-
-  // Next: manual override → fallback to publishedAt order
-  if (current.nextPostId) {
-    const row = await prisma.post.findFirst({
-      where: { id: current.nextPostId, status: PostStatus.PUBLISHED, isHidden: false },
-      select: cardFields,
-    });
-    if (row) next = toCardData(row);
-  }
-  if (!next && current.publishedAt) {
-    const row = await prisma.post.findFirst({
-      where: {
-        category,
-        status: PostStatus.PUBLISHED,
-        isHidden: false,
-        publishedAt: { lt: current.publishedAt },
-      },
-      orderBy: { publishedAt: "desc" },
-      select: cardFields,
-    });
-    if (row) next = toCardData(row);
-  }
-
-  return { prev, next };
 }
 
 /** Get all unique tags for published posts in a category. */
 export async function getPostTags(
   category: PostCategory
 ): Promise<string[]> {
-  const rows = await prisma.post.findMany({
-    where: { category, status: PostStatus.PUBLISHED, isHidden: false },
-    select: { tags: true },
-  });
-  const allTags = rows.flatMap((r) => r.tags);
-  return [...new Set(allTags)].sort();
+  try {
+    const rows = await prisma.post.findMany({
+      where: { category, status: PostStatus.PUBLISHED, isHidden: false },
+      select: { tags: true },
+    });
+    const allTags = rows.flatMap((r) => r.tags);
+    return [...new Set(allTags)].sort();
+  } catch {
+    return [];
+  }
 }

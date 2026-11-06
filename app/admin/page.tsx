@@ -8,6 +8,9 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 
+// Admin halaman memerlukan sesi — jangan prerender statis waktu build.
+export const dynamic = "force-dynamic";
+
 type PageProps = {
   params: Promise<{
     locale: string;

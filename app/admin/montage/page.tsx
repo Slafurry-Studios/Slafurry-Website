@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { MontageList } from "@/components/admin/MontageList";
 
+// Admin halaman memerlukan sesi — jangan prerender statis waktu build.
+export const dynamic = "force-dynamic";
+
 export default async function AdminMontagePage() {
   const [videos, games] = await Promise.all([
     prisma.montageVideo.findMany({

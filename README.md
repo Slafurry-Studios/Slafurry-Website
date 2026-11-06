@@ -31,7 +31,7 @@ Built with Next.js 16 on the App Router, Supabase for PostgreSQL, authentication
 * Game portfolio
 * itch.io game catalog
 * Studio blog / devlog
-* English / Indonesian localization
+* English only
 * Supabase-backed data
 * Authentication
 * Protected admin area
@@ -110,8 +110,6 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-The application will automatically redirect to `/en`.
-
 ---
 
 ## DATABASE
@@ -147,14 +145,19 @@ prisma/seed.ts
 
 ## INTERNATIONALIZATION
 
-The website currently supports:
+English only (`<html lang="en">`). `next-intl` and locale routing were removed; `messages/en.json` is dead. Do not reintroduce locale routing without asking.
 
-* 🇬🇧 English (`en`)
-* 🇮🇩 Indonesian (`id`)
+---
 
-English is currently the default locale.
+## TESTING
 
-Internationalization is handled with `next-intl`.
+Run the unit and smoke test suite:
+
+```bash
+npm test
+```
+
+This runs `vitest run` (unit tests in `tests/unit/`) followed by `playwright test` (the homepage smoke test in `tests/e2e/`). Playwright Chromium is installed via `npx playwright install chromium`.
 
 ---
 

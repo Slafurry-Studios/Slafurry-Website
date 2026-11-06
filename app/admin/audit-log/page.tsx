@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { AuditLogList } from "@/components/admin/AuditLogList";
 
+// Admin halaman memerlukan sesi — jangan prerender statis waktu build.
+export const dynamic = "force-dynamic";
+
 export default async function AdminAuditLogPage({
   searchParams,
 }: {

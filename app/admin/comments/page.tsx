@@ -2,6 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { Prisma, CommentStatus } from "@prisma/client";
 import { CommentsList } from "@/components/admin/CommentsList";
 
+// Admin halaman memerlukan sesi — jangan prerender statis waktu build.
+export const dynamic = "force-dynamic";
+
 export default async function AdminCommentsPage(props: {
   searchParams: Promise<{ page?: string; status?: string; search?: string }>;
 }) {

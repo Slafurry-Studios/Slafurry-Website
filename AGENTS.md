@@ -26,7 +26,7 @@ npm run db:seed      # tsx prisma/seed.ts
 npm run db:studio    # prisma studio
 ```
 
-- No tests exist. Full verification is `npm run lint && npm run build`.
+- Tests: `npm test` (Vitest unit + Playwright e2e). Full verification is `npm run lint && npm run build && npm test`.
 - **Build is flaky, not broken.** `next build` prerenders `/admin/*`, which hits the live database; a transient `PrismaClientKnownRequestError` / "build worker exited with code 1" happens. Re-run before investigating.
 - **Lint baseline is dirty**: ~110 problems (~79 errors) pre-existing repo-wide. Don't try to fix them all; just don't add new ones.
 - `postinstall` runs `prisma generate`.
