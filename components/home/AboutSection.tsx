@@ -18,7 +18,7 @@ export function AboutSection({ settings }: { settings: SiteSettings | null }) {
         </div>
 
         <div className="ml-10">
-          <h2 className="font-heading text-6xl tracking-wide">About</h2>
+          <h2 className="font-display text-6xl tracking-wide">About</h2>
           <div className="mt-10 space-y-8 font-body text-xl leading-relaxed text-neutral-700 dark:text-neutral-300">
             <p className="joke-only whitespace-pre-line">{aboutText}</p>
             <p className="serious-only whitespace-pre-line">{aboutTextSerious}</p>

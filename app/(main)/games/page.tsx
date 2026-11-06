@@ -14,7 +14,7 @@ export default async function GamesPage() {
 
   return (
     <div className="px-6 py-16 md:px-10">
-      <h1 className="text-center font-heading text-5xl tracking-wide">
+      <h1 className="text-center font-display text-5xl tracking-wide">
         Check Out Our Games
       </h1>
 

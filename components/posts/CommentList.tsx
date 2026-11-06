@@ -6,7 +6,7 @@ export function CommentList({ comments }: { comments: PublicComment[] }) {
 
   return (
     <div className="mt-12">
-      <h3 className="flex items-center gap-2 font-heading text-xl font-semibold tracking-tight">
+      <h3 className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight">
         <IconMessage size={18} />
         Comments ({comments.length})
       </h3>

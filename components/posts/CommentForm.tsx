@@ -15,7 +15,7 @@ export function CommentForm({
 
   return (
     <div className="mt-12 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 dark:border-neutral-800 dark:bg-neutral-900/50">
-      <h3 className="font-heading text-xl font-semibold tracking-tight">
+      <h3 className="font-display text-xl font-semibold tracking-tight">
         Leave a comment
       </h3>
       <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
@@ -109,7 +109,7 @@ export function CommentForm({
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-5 py-2 text-xl font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+            className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-5 py-2 text-xl font-ui font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
           >
             {isPending ? (
               <IconLoader2 size={14} className="animate-spin" />

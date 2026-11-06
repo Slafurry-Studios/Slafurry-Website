@@ -143,7 +143,7 @@ export function GameForm({ initial }: { initial?: GameData }) {
 
       {/* Main info */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">Game Info</h2>
+        <h2 className="font-display text-xl tracking-tight">Game Info</h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className={hintClass}>
@@ -211,7 +211,7 @@ export function GameForm({ initial }: { initial?: GameData }) {
 
       {/* Settings */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">Settings</h2>
+        <h2 className="font-display text-xl tracking-tight">Settings</h2>
 
         <div className="grid gap-4 sm:grid-cols-3">
           <div className={hintClass}>
@@ -252,7 +252,7 @@ export function GameForm({ initial }: { initial?: GameData }) {
       {/* Play Links */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="font-heading text-xl tracking-tight">Play Links</h2>
+          <h2 className="font-display text-xl tracking-tight">Play Links</h2>
           <button
             type="button"
             onClick={addPlayLink}
@@ -296,7 +296,7 @@ export function GameForm({ initial }: { initial?: GameData }) {
 
       {/* SEO */}
       <section className="space-y-4">
-        <h2 className="font-heading text-xl tracking-tight">SEO</h2>
+        <h2 className="font-display text-xl tracking-tight">SEO</h2>
 
         <div className={hintClass}>
           <label className={labelClass}>Meta Title</label>
@@ -335,7 +335,7 @@ export function GameForm({ initial }: { initial?: GameData }) {
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-6 py-2.5 font-ui text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
           {saving ? (
             <>
@@ -350,7 +350,7 @@ export function GameForm({ initial }: { initial?: GameData }) {
         </button>
         <Link
           href="/admin/games"
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 px-6 py-2.5 font-body text-sm font-medium transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 px-6 py-2.5 font-ui text-sm font-medium transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
         >
           Cancel
         </Link>

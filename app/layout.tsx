@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { caveat, deliciousHandrawn } from "@/lib/fonts";
+import { fontDisplay, fontUI, fontBody } from "@/lib/fonts";
 import { SettingsProvider } from "@/components/layout/SettingsContext";
 import "./globals.css";
 
@@ -18,7 +18,11 @@ export default async function RootLayout({
 
   // Serious Mode + sound mute dihapus — cookie lama udah gak dibaca,
   // class "serious" gak pernah dipasang lagi.
-  const htmlClassNames = [caveat.variable, deliciousHandrawn.variable].join(" ");
+  const htmlClassNames = [
+    fontDisplay.variable,
+    fontUI.variable,
+    fontBody.variable,
+  ].join(" ");
 
   return (
     <html lang="en" className={htmlClassNames}>

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Local PostgreSQL (Docker) with auth and storage adapters; provider (`local` | `supabase`) chosen via env vars (`AUTH_PROVIDER`, `STORAGE_PROVIDER`); portable migrations via `prisma migrate` (no auth/storage schema, RLS, triggers, or Supabase functions).
 - Auth adapter (`getSession`, `requireAdmin`, `signIn`, `signOut`) and storage adapter (`upload`, `getUrl`, `delete`) with local and Supabase implementations.
+- Website typography refresh: Pixelify Sans for display headings, Geist Pixel for UI (nav, buttons, badges, metadata), Geist Sans for body/reading text; replaces Caveat and Delicious Handrawn.
 
 ### Changed
 ### Deprecated

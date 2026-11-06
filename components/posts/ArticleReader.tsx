@@ -31,11 +31,11 @@ export function ArticleReader({
         <IconChevronLeft size={20} />
       </Link>
 
-      <h1 className="mt-6 font-heading text-4xl tracking-wide sm:text-5xl">
+      <h1 className="mt-6 font-display text-4xl tracking-wide sm:text-5xl">
         {post.title}
       </h1>
 
-      <p className="mt-2 font-body text-xs text-neutral-500 dark:text-neutral-400">
+      <p className="mt-2 font-ui text-xs text-neutral-500 dark:text-neutral-400">
         "by" {post.authorName} |{" "}
         {post.publishedAt ? formatDate(post.publishedAt) : ""} |{" "}
         {post.tags[0] ?? "update"} | {post.commentCount} "Comments"
@@ -53,7 +53,7 @@ export function ArticleReader({
         )}
       </div>
       {post.coverImageAlt && (
-        <p className="mt-3 font-body text-xs italic text-neutral-500 dark:text-neutral-400">
+        <p className="mt-3 font-ui text-xs italic text-neutral-500 dark:text-neutral-400">
           {post.coverImageAlt}
         </p>
       )}
@@ -109,12 +109,12 @@ function NavCard({
         isNext ? "items-end text-right" : "items-start text-left"
       }`}
     >
-      <span className="flex items-center gap-1.5 font-body text-xs text-neutral-500 dark:text-neutral-400">
+      <span className="flex items-center gap-1.5 font-ui text-xs text-neutral-500 dark:text-neutral-400">
         {!isNext && <IconArrowLeft size={14} />}
         {label}
         {isNext && <IconArrowRight size={14} />}
       </span>
-      <span className="line-clamp-1 font-body text-xl font-semibold">
+      <span className="line-clamp-1 font-display text-xl font-semibold">
         {post.title}
       </span>
     </Link>

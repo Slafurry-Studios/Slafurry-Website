@@ -15,7 +15,7 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   const pathname = usePathname();
-
+https://github.com/muhammadzaini213/Slafurry-Website-Staging/pull/1/conflict?name=app%252F%2528main%2529%252Ferror.tsx&ancestor_oid=3858aa7d9719b766575e8470994499667be0b4b9&base_oid=543e3642905fb9954f3f871bd75fade8d51cec1e&head_oid=ef3a764f4df1cd1ff3cebf47cada078c21053f83
   useEffect(() => {
     // TODO (step 4+): kirim ke error tracking service kalau ada
     // (Sentry/dst). Untuk sekarang log ke console aja.
@@ -26,10 +26,10 @@ export default function ErrorPage({
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-16 text-center">
       <SlafurryMark className="h-16 w-16 text-neutral-300 dark:text-neutral-700" />
 
-      <p className="mt-6 font-heading text-7xl tracking-wide text-neutral-300 dark:text-neutral-700">
+      <p className="mt-6 font-display text-7xl tracking-wide text-neutral-300 dark:text-neutral-700">
         500
       </p>
-      <h1 className="mt-1 font-heading text-3xl tracking-wide">
+      <h1 className="mt-1 font-display text-3xl tracking-wide">
         Something broke behind the scenes
       </h1>
 

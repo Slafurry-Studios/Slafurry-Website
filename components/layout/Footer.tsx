@@ -32,7 +32,7 @@ export function Footer() {
 
         <Link href="/" className="flex items-center gap-8">
           <SlafurryMark className="h-16 w-16" />
-          <span className="font-heading text-4xl tracking-wide">
+          <span className="font-display text-4xl tracking-wide">
             SLAFURRY STUDIOS
           </span>
         </Link>

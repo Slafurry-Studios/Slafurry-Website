@@ -11,7 +11,7 @@ const STATUS_STYLE: Record<GameData["status"], string> = {
 function StatusBadge({ status }: { status: GameData["status"] }) {
     return (
     <span
-      className={`inline-block rounded-full px-2.5 py-0.5 font-body text-xs font-medium ${STATUS_STYLE[status]}`}
+      className={`inline-block rounded-full px-2.5 py-0.5 font-ui text-xs font-medium ${STATUS_STYLE[status]}`}
     >
       {status.replace('_', ' ')}
     </span>
@@ -43,7 +43,7 @@ export function GameCard({
         />
       )}
       <div className={featured ? "p-6" : "p-4"}>
-        <h3 className={featured ? "font-heading text-3xl tracking-wide" : "font-heading text-2xl tracking-wide"}>
+        <h3 className={featured ? "font-display text-3xl tracking-wide" : "font-display text-2xl tracking-wide"}>
           {game.title}
         </h3>
         <div className="mt-1.5">

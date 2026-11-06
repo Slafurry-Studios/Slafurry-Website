@@ -46,7 +46,7 @@ function LoginForm() {
     <section className="flex min-h-[calc(100vh-6rem)] items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-8">
         <div className="text-center">
-          <h1 className="font-heading text-4xl tracking-tight">"Check Out Our Games"</h1>
+          <h1 className="font-display text-4xl tracking-tight">"Check Out Our Games"</h1>
           <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
             "Sign in to manage the studio dashboard."
           </p>
@@ -107,7 +107,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-6 py-2.5 font-ui text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>

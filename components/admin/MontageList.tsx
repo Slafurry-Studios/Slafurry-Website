@@ -72,7 +72,7 @@ export function MontageList({
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-10">
       <div className="flex items-center justify-between">
-        <h1 className="font-heading text-3xl tracking-tight">Montage Videos</h1>
+        <h1 className="font-display text-3xl tracking-tight">Montage Videos</h1>
         <span className="text-sm text-neutral-500 dark:text-neutral-400">
           {totalCount} video{totalCount !== 1 ? "s" : ""}
         </span>

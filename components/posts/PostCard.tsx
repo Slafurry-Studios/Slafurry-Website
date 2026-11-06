@@ -33,17 +33,17 @@ export function PostCard({
         <h3
           className={
             compact
-              ? "font-body text-xl font-semibold leading-snug"
-              : "font-body text-xl font-semibold leading-snug"
+              ? "font-display text-xl font-semibold leading-snug"
+              : "font-display text-xl font-semibold leading-snug"
           }
         >
           {post.title}
         </h3>
-        <p className="mt-1 font-body text-xs text-neutral-500 dark:text-neutral-400">
+        <p className="mt-1 font-ui text-xs text-neutral-500 dark:text-neutral-400">
           "by" {post.authorName} |{" "}
           {post.publishedAt ? formatDate(post.publishedAt) : ""} |{" "}
           {post.tags.map((tag) => (
-            <span key={tag} className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-xxs font-body mr-1">
+            <span key={tag} className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-xxs font-ui mr-1">
               {tag}
             </span>
           ))} | {post.commentCount} "Comments"

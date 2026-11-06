@@ -2,11 +2,14 @@
 
 import { useEffect } from "react";
 
+import { fontDisplay, fontBody } from "@/lib/fonts";
+
 // Safety net paling luar — nangkep error yang terjadi di dalam root layout
 // sendiri. Karena ini lapisan terakhir sebelum Next.js menampilkan error
 // page generik bawaan, sengaja dibikin sesederhana dan se-independen
-// mungkin: no custom component, no Tailwind variabel tema yang mungkin
-// belum sempat dimuat.
+// mungkin: no custom component. Font variabel diset langsung di elemen ini
+// lewat next/font class agar tetap berjalan bahkan jika root layout gagal
+// sebelum variabel tema terpasang di <html>.
 export default function RootError({
   error,
   reset,
@@ -18,8 +21,11 @@ export default function RootError({
     console.error(error);
   }, [error]);
 
+  const bodyClasses = [fontBody.variable, "font-body"].join(" ");
+
   return (
     <div
+      className={bodyClasses}
       style={{
         minHeight: "70vh",
         display: "flex",
@@ -28,11 +34,13 @@ export default function RootError({
         justifyContent: "center",
         textAlign: "center",
         padding: "4rem 1.5rem",
-        fontFamily: "system-ui, sans-serif",
+        margin: 0,
       }}
     >
-      <p style={{ fontSize: "3rem", fontWeight: 700, margin: 0 }}>500</p>
-      <h1 style={{ fontSize: "1.25rem", marginTop: "0.5rem" }}>
+      <p className="font-display" style={{ fontSize: "3rem", fontWeight: 700, margin: 0 }}>
+        500
+      </p>
+      <h1 className="font-display" style={{ fontSize: "1.25rem", marginTop: "0.5rem" }}>
         Something went wrong
       </h1>
       <p style={{ marginTop: "0.5rem", color: "#666", maxWidth: 360 }}>
