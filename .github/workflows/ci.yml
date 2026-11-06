@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: ["feat/website/update", "fix/stabilize", "main"]
+  pull_request:
+    branches: ["feat/website/update", "main"]
+
+env:
+  DATABASE_URL: "postgresql://postgres:password@localhost:54322/postgres"
+  DIRECT_URL: "postgresql://postgres:password@localhost:54322/postgres"
+  NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+  NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co"
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "pub-local-placeholder"
+  SUPABASE_SECRET_KEY: "secret-local-placeholder"
+  RESEND_API_KEY: "re_local_placeholder"
+  NEXT_PUBLIC_RESEND_API_KEY: "re_local_placeholder"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Typecheck (tsc --noEmit)
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Tests (Vitest + Playwright)
+        run: npm test
