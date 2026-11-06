@@ -11,8 +11,8 @@ export const GET = async (
     return new NextResponse(null, { status: 404 });
   }
 
-  const pathArr = await params;
-  const [bucket, ...rest] = pathArr ?? [];
+  const { path: pathSegments } = await params;
+  const [bucket, ...rest] = pathSegments ?? [];
   if (!bucket) {
     return new NextResponse(null, { status: 404 });
   }
