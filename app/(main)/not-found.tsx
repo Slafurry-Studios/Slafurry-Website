@@ -24,9 +24,9 @@ export default async function NotFound() {
       <SlafurryMark className="h-16 w-16 text-neutral-300 dark:text-neutral-700" />
 
       <p className="mt-6 font-display text-7xl tracking-wide text-neutral-300 dark:text-neutral-700">
-        "Achievements"
+        404
       </p>
-      <h1 className="mt-1 font-display text-3xl tracking-wide">"Check Out Our Games"</h1>
+      <h1 className="mt-1 font-display text-3xl tracking-wide">Page not found</h1>
 
       <p className="joke-only mt-3 max-w-sm font-display text-xl text-neutral-500 dark:text-neutral-400">
         "Looks like you're lost. Maybe this page got caught in a joke that went too far."
