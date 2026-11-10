@@ -48,41 +48,32 @@ export function CommunityContact({
           </h2>
         </div>
 
-        <div className="mt-14 grid w-full grid-cols-1 gap-8 sm:grid-cols-2">
-          {Array.from({ length: maxRows }).map((_, i) => {
-            const comm = communityLinks[i];
-            const cont = contactItems[i];
-            return (
-              <div key={i} className="contents">
-                <div className="flex flex-col items-start">
-                  {comm ? (
-                    <PillButton
-                      href={comm.url}
-                      icon={<BrandIcon slug={comm.platform} className="h-6 w-6" />}
-                      className={BTN_IMAGE_CLASSES[comm.platform] ?? ""}
-                    >
-                      {comm.label}
-                    </PillButton>
-                  ) : (
-                    <div />
-                  )}
-                </div>
-                <div className="flex flex-col items-start">
-                  {cont ? (
-                    <PillButton
-                      href={cont.href}
-                      icon={cont.icon}
-                      className={cont.className}
-                    >
-                      {cont.label}
-                    </PillButton>
-                  ) : (
-                    <div />
-                  )}
-                </div>
-              </div>
-            );
-          })}
+        <div className="mt-14 grid w-full gap-16 sm:grid-cols-2">
+          <div className="flex flex-col items-start gap-8">
+            {communityLinks.map((link) => (
+              <PillButton
+                key={link.id}
+                href={link.url}
+                icon={<BrandIcon slug={link.platform} className="h-6 w-6" />}
+                className={BTN_IMAGE_CLASSES[link.platform] ?? ""}
+              >
+                {link.label}
+              </PillButton>
+            ))}
+          </div>
+
+          <div className="flex flex-col items-start gap-8">
+            {contactItems.map((item, i) => (
+              <PillButton
+                key={i}
+                href={item.href}
+                icon={item.icon}
+                className={item.className}
+              >
+                {item.label}
+              </PillButton>
+            ))}
+          </div>
         </div>
       </div>
     </section>
