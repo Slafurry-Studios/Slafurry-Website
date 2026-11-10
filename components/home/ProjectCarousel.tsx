@@ -145,8 +145,8 @@ function ProjectCard({
         "absolute top-1/2 block -translate-x-1/2 -translate-y-1/2 overflow-hidden pixel-border bg-white dark:bg-neutral-900 " +
         "transition-[left,width,height,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] " +
         (isCurrent
-          ? "h-[28rem] w-[min(680px,80%)] hover:shadow-md"
-          : "h-[8.75rem] w-24 " +
+          ? "h-[28rem] w-[min(680px,80%)] hover:scale-[1.02] hover:shadow-md"
+          : "h-[8.75rem] w-24 hover:scale-[1.02] " +
             (isPeek ? "cursor-pointer" : "pointer-events-none"))
       }
     >

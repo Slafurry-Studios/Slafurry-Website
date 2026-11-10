@@ -37,7 +37,7 @@ export function Navbar() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`font-display text-xl text-neutral-800 transition-colors hover:text-neutral-950 dark:text-neutral-200 dark:hover:text-white ${
+                    className={`font-display text-xl text-neutral-800 transition-all hover:scale-[1.02] hover:text-neutral-950 dark:text-neutral-200 dark:hover:text-white ${
                       active ? "font-semibold underline underline-offset-4" : ""
                     }`}
                   >
@@ -70,7 +70,7 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`block rounded-xl px-3 py-2 font-display text-xl text-neutral-800 transition-colors hover:bg-neutral-100 ${
+                    className={`block rounded-xl px-3 py-2 font-display text-xl text-neutral-800 transition-all hover:scale-[1.02] hover:bg-neutral-100 ${
                       active ? "font-semibold underline underline-offset-4" : ""
                     }`}
                   >
