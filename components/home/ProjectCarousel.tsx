@@ -1,35 +1,64 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import type { Game } from "@prisma/client";
 import Link from "next/link";
 import Image from "next/image";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 
+const AUTO_PLAY_INTERVAL = 5000;
+
 export function ProjectCarousel({ projects }: { projects: Game[] }) {
   const [index, setIndex] = useState(0);
+  const [isTouching, setIsTouching] = useState(false);
   const touchStartX = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const count = projects.length;
-
-  function go(delta: number) {
-    setIndex((i) => (i + delta + count) % count);
-  }
 
   if (count === 0) return null;
 
-  // offset circular, di-clamp -2..2 supaya card jauh tidak melintasi layar saat loop
-  function getOffset(i: number) {
-    let offset = (((i - index) % count) + count) % count;
-    if (offset > count / 2) offset -= count;
-    return Math.max(-2, Math.min(2, offset));
+  const go = useCallback(
+    (delta: number) => {
+      setIndex((i) => (i + delta + count) % count);
+    },
+    [count]
+  );
+
+  const startTimer = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => go(1), AUTO_PLAY_INTERVAL);
+  }, [go]);
+
+  const stopTimer = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = null;
+  }, []);
+
+  useEffect(() => {
+    if (count > 1 && !isTouching) {
+      startTimer();
+    }
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [index, count, startTimer, isTouching]);
+
+  function onTouchStart(e: React.TouchEvent) {
+    setIsTouching(true);
+    stopTimer();
+    touchStartX.current = e.touches[0].clientX;
   }
 
   function onTouchEnd(e: React.TouchEvent) {
-    if (touchStartX.current === null) return;
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    setIsTouching(false);
+    const dx = e.changedTouches[0].clientX - (touchStartX.current ?? 0);
     touchStartX.current = null;
-    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    if (Math.abs(dx) > 50) {
+      go(dx < 0 ? 1 : -1);
+    } else {
+      startTimer();
+    }
   }
 
   return (
@@ -38,7 +67,11 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
         Projects
       </h2>
 
-      <div className="mx-auto mt-12 flex w-full max-w-7xl items-center justify-center gap-4">
+      <div
+        className="mx-auto mt-12 flex w-full max-w-7xl items-center justify-center gap-4"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
         {count > 1 && (
           <button
             type="button"
@@ -50,17 +83,13 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
           </button>
         )}
 
-        <div
-          className="relative h-[30rem] w-full max-w-[1000px] overflow-hidden"
-          onTouchStart={(e) => (touchStartX.current = e.touches[0].clientX)}
-          onTouchEnd={onTouchEnd}
-        >
+        <div className="relative h-[28rem] w-full max-w-[900px] overflow-hidden">
           {projects.map((project, i) => (
             <ProjectCard
               key={project.id ?? project.slug}
               project={project}
-              offset={getOffset(i)}
-              onSelect={() => go(getOffset(i))}
+              isActive={i === index}
+              onSelect={() => go(i - index)}
             />
           ))}
         </div>
@@ -99,63 +128,36 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
   );
 }
 
-// Lebar card utama = min(680px, 80% container). Setengahnya dipakai untuk
-// menghitung posisi card samping.
-const HALF_MAIN = "min(340px, 40%)";
-const PEEK_W = "6rem"; // harus sama dengan w-24 di bawah
-const GAP = "1rem";
-
-function leftFor(offset: number) {
-  if (offset === 0) return "50%";
-  const sign = offset < 0 ? "-" : "+";
-  // offset ±1: tepat di samping card utama; ±2: lebih jauh lagi (tersembunyi)
-  const extra = Math.abs(offset) === 2 ? ` ${sign} 7rem` : "";
-  return `calc(50% ${sign} ${HALF_MAIN} ${sign} ${GAP} ${sign} ${PEEK_W} / 2${extra})`;
-}
-
 function ProjectCard({
   project,
-  offset,
+  isActive,
   onSelect,
 }: {
   project: Game;
-  offset: number;
+  isActive: boolean;
   onSelect: () => void;
 }) {
-  const isCurrent = offset === 0;
-  const isPeek = Math.abs(offset) === 1;
-
   return (
     <Link
       href={`/games/${project.slug}`}
-      aria-hidden={!isCurrent}
-      tabIndex={isCurrent ? 0 : -1}
+      aria-hidden={!isActive}
+      tabIndex={isActive ? 0 : -1}
       onClick={(e) => {
-        if (!isCurrent) {
+        if (!isActive) {
           e.preventDefault();
-          if (isPeek) onSelect();
+          onSelect();
         }
       }}
       style={{
-        left: leftFor(offset),
-        opacity: isCurrent ? 1 : isPeek ? 0.5 : 0,
-        zIndex: isCurrent ? 10 : 0,
+        opacity: isActive ? 1 : 0,
+        pointerEvents: isActive ? "auto" : "none",
       }}
       className={
-        "absolute top-1/2 block -translate-x-1/2 -translate-y-1/2 overflow-hidden pixel-border bg-white dark:bg-neutral-900 " +
-        "transition-[left,width,height,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] " +
-        (isCurrent
-          ? "h-[28rem] w-[min(680px,80%)] hover:scale-[1.02] hover:shadow-md"
-          : "h-[8.75rem] w-24 hover:scale-[1.02] " +
-            (isPeek ? "cursor-pointer" : "pointer-events-none"))
+        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden pixel-border bg-white dark:bg-neutral-900 " +
+        "transition-opacity duration-300 h-[28rem] w-[min(680px,80%)] hover:scale-[1.02] hover:shadow-md"
       }
     >
-      <div
-        className={
-          "relative -mx-6 -mt-6 overflow-hidden transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] " +
-          (isCurrent ? "h-80" : "h-[8.75rem]")
-        }
-      >
+      <div className="relative -mx-6 -mt-6 overflow-hidden h-80">
         {project.coverImage ? (
           <Image
             src={project.coverImage}
@@ -168,12 +170,7 @@ function ProjectCard({
           <PlaceholderImage label={project.title} className="h-full w-full" />
         )}
       </div>
-      <div
-        className={
-          "p-4 transition-opacity duration-300 " +
-          (isCurrent ? "opacity-100" : "opacity-0")
-        }
-      >
+      <div className="p-4 transition-opacity duration-300 opacity-100">
         <h3 className="line-clamp-1 min-h-[2rem] font-display text-2xl tracking-wide">
           {project.title}
         </h3>
