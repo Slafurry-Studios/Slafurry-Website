@@ -93,7 +93,7 @@ export default async function PressPage() {
         "For press inquiries, contact us at"{" "}
         <a
           href={`mailto:${PRESS_CONTACT_EMAIL}`}
-          className="font-semibold text-neutral-900 underline underline-offset-2 dark:text-white"
+          className="break-all font-semibold text-neutral-900 underline underline-offset-2 dark:text-white"
         >
           {PRESS_CONTACT_EMAIL}
         </a>

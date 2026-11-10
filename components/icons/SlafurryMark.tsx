@@ -6,7 +6,7 @@ export function SlafurryMark({ className }: { className?: string }) {
       src="/slafurry-logo.png"
       alt=""
       aria-hidden="true"
-      className={`${className ?? ""} [image-rendering:pixelated]`}
+      className={className ?? ""}
     />
   );
 }

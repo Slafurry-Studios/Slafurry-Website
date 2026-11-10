@@ -30,18 +30,20 @@ export function GameCard({
       href={`/games/${game.slug}`}
       className="flex flex-col overflow-hidden pixel-border transition-shadow hover:shadow-md"
     >
-      {game.coverImage ? (
-        <img
-          src={game.coverImage}
-          alt={game.coverImageAlt}
-          className={featured ? "aspect-[21/9] w-full object-cover" : "aspect-[16/9] w-full object-cover"}
-        />
-      ) : (
-        <PlaceholderImage
-          label={game.title}
-          className={featured ? "aspect-[21/9] w-full" : "aspect-[16/9] w-full"}
-        />
-      )}
+      <div className="-mx-6 -mt-6 overflow-hidden">
+        {game.coverImage ? (
+          <img
+            src={game.coverImage}
+            alt={game.coverImageAlt}
+            className={featured ? "aspect-[21/9] w-full object-cover" : "aspect-[16/9] w-full object-cover"}
+          />
+        ) : (
+          <PlaceholderImage
+            label={game.title}
+            className={featured ? "aspect-[21/9] w-full" : "aspect-[16/9] w-full"}
+          />
+        )}
+      </div>
       <div className={featured ? "p-6" : "p-4"}>
         <h3 className={featured ? "font-display text-3xl tracking-wide" : "font-display text-2xl tracking-wide"}>
           {game.title}

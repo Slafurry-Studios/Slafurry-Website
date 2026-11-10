@@ -8,13 +8,13 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
   const seriousTagline = settings?.taglineSerious ?? tagline;
 
   return (
-    <section className="relative -mt-24 flex min-h-screen flex-col justify-center overflow-hidden bg-white px-6 pb-16 pt-24 text-neutral-900 md:px-10">
+    <section className="relative -mt-24 flex min-h-screen flex-col justify-center overflow-hidden bg-white px-4 pb-16 pt-24 text-neutral-900 sm:px-6 md:px-10">
       <div className="relative mx-auto grid w-full max-w-7xl gap-10 md:grid-cols-2 md:items-center">
         <div className="flex flex-col gap-y-10">
-          <p className="font-display text-4xl font-semibold italic uppercase tracking-[0.2em] text-neutral-500">
+          <p className="font-display text-2xl font-semibold italic uppercase tracking-[0.2em] text-neutral-500 sm:text-4xl">
             Indie Game Developers
           </p>
-          <h1 className="mt-3 font-display text-9xl leading-[0.95] tracking-wide sm:text-8xl">
+          <h1 className="mt-3 font-display text-4xl leading-[0.95] tracking-wide sm:text-6xl lg:text-7xl">
             SLAFURRY
             <br />
             STUDIOS
@@ -37,7 +37,7 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
 
         {upcomingGame && (
           <div>
-            <p className="font-display text-4xl text-center font-semibold uppercase tracking-wide underline underline-offset-4">
+            <p className="font-display text-2xl text-center font-semibold uppercase tracking-wide underline underline-offset-4 sm:text-4xl">
               Upcoming Project
             </p>
             <div className="relative mt-10 aspect-[16/9] w-full pixel-frame overflow-hidden bg-white">

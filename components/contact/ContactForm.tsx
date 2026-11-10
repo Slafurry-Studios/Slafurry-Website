@@ -108,6 +108,7 @@ export function ContactForm() {
           </div>
 
           <PillButton
+            size="sm"
             type="submit"
             disabled={isPending}
             icon={<IconSend size={16} />}

@@ -122,10 +122,33 @@ body {
 }
 
 .pixel-dark-frame {
-  border: 48px solid transparent;
-  border-image: url("/Dark Border.png") 56 fill / 48px / 0px stretch;
+  background-color: #171717;
+  border: 24px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 24 fill / 24px / 0px stretch;
   border-radius: 0 !important;
   image-rendering: pixelated;
+  clip-path: polygon(
+    14px 0px,
+    calc(100% - 14px) 0px,
+    calc(100% - 14px) 7px,
+    calc(100% - 7px) 7px,
+    calc(100% - 7px) 14px,
+    100% 14px,
+    100% calc(100% - 14px),
+    calc(100% - 7px) calc(100% - 14px),
+    calc(100% - 7px) calc(100% - 7px),
+    calc(100% - 14px) calc(100% - 7px),
+    calc(100% - 14px) 100%,
+    14px 100%,
+    14px calc(100% - 7px),
+    7px calc(100% - 7px),
+    7px calc(100% - 14px),
+    0px calc(100% - 14px),
+    0px 14px,
+    7px 14px,
+    7px 7px,
+    14px 7px
+  );
 }
 
 .pixel-frame-filled {
@@ -141,6 +164,28 @@ body {
   border-image: url("/Border Corner Pixel.png") 24 fill / 24px / 0px stretch;
   border-radius: 0 !important;
   image-rendering: pixelated;
+  clip-path: polygon(
+    14px 0px,
+    calc(100% - 14px) 0px,
+    calc(100% - 14px) 7px,
+    calc(100% - 7px) 7px,
+    calc(100% - 7px) 14px,
+    100% 14px,
+    100% calc(100% - 14px),
+    calc(100% - 7px) calc(100% - 14px),
+    calc(100% - 7px) calc(100% - 7px),
+    calc(100% - 14px) calc(100% - 7px),
+    calc(100% - 14px) 100%,
+    14px 100%,
+    14px calc(100% - 7px),
+    7px calc(100% - 7px),
+    7px calc(100% - 14px),
+    0px calc(100% - 14px),
+    0px 14px,
+    7px 14px,
+    7px 7px,
+    14px 7px
+  );
 }
 
 .pixel-border-sm {
@@ -148,6 +193,21 @@ body {
   border-image: url("/Border Corner Pixel.png") 24 fill / 8px / 0px stretch;
   border-radius: 0 !important;
   image-rendering: pixelated;
+}
+
+.pixel-border-white {
+  position: relative;
+}
+.pixel-border-white::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 8px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 24 fill / 8px / 0px stretch;
+  filter: brightness(0) invert(1);
+  pointer-events: none;
+  image-rendering: pixelated;
+  z-index: 10;
 }
 
 .pixel-btn {
@@ -167,5 +227,20 @@ body {
   transform: scale(1.05);
   filter: brightness(1.1);
   background-color: transparent !important;
+}
+
+@media (max-width: 640px) {
+  .pixel-dark-frame {
+    border-width: 24px;
+  }
+  .pixel-frame-filled {
+    border-width: 16px;
+  }
+  .pixel-border {
+    border-width: 16px;
+  }
+  .pixel-btn {
+    border-width: 16px;
+  }
 }
 

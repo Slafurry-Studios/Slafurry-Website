@@ -34,7 +34,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
 
   return (
     <section className="flex flex-col justify-center px-6 py-16 md:px-10">
-      <h2 className="text-center font-display text-7xl tracking-wide">
+      <h2 className="text-center font-display text-4xl tracking-wide sm:text-5xl lg:text-6xl">
         Projects
       </h2>
 
@@ -152,7 +152,7 @@ function ProjectCard({
     >
       <div
         className={
-          "relative transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] " +
+          "relative -mx-6 -mt-6 overflow-hidden transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] " +
           (isCurrent ? "h-80" : "h-[8.75rem]")
         }
       >

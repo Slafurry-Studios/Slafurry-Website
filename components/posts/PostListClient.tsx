@@ -89,7 +89,7 @@ export function PostListClient({
             placeholder={searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 pixel-border-sm px-3 py-2 font-display text-xl dark:bg-neutral-800 dark:text-white focus-outline"
+            className="flex-1 min-w-0 pixel-border-sm px-3 py-2 font-display text-xl dark:bg-neutral-800 dark:text-white focus-outline"
           />
         </div>
       </div>
@@ -106,7 +106,7 @@ export function PostListClient({
       </div>
 
       <div className="mt-10 flex justify-center">
-        <PillButton icon={<IconChevronDown size={16} />} iconPosition="right">
+        <PillButton size="sm" icon={<IconChevronDown size={16} />} iconPosition="right">
           More
         </PillButton>
       </div>

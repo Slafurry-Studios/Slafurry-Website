@@ -11,12 +11,11 @@ const FOOTER_LINKS = [
 ] as const;
 
 export function Footer() {
-  
   return (
-    <div className="mx-auto max-w-7xl px-4 md:px-8 mt-auto mb-6">
-      <footer className="pixel-dark-frame px-6 py-6 text-white">
-        <div className="mx-auto flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-          <div className="flex items-center gap-3">
+    <div className="mx-auto max-w-7xl px-3 md:px-8 mt-auto mb-6">
+      <footer className="pixel-dark-frame px-6 py-6 text-white flex flex-col justify-between min-h-[12rem]">
+        <div className="mx-auto flex w-full flex-col items-center gap-6 sm:flex-row sm:justify-between">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             {FOOTER_LINKS.map((link) => (
               <a
                 key={link.platform}
@@ -24,26 +23,26 @@ export function Footer() {
                 aria-label={link.label}
                 target="_blank"
                 rel="noreferrer"
-                className="flex h-16 w-16 items-center justify-center border border-white/40 text-white transition-all hover:scale-105 hover:border-white"
+                className="pixel-border-white flex h-12 w-12 items-center justify-center text-white transition-all hover:scale-105 sm:h-14 sm:w-14"
               >
-                <BrandIcon slug={link.platform} className="h-10 w-10" />
+                <BrandIcon slug={link.platform} className="relative z-20 h-6 w-6 sm:h-7 sm:w-7" />
               </a>
             ))}
           </div>
 
           <Link
             href="/"
-            className="pixel-frame-filled flex items-center gap-4 px-4 py-1 text-neutral-900"
+            className="pixel-border-white flex h-12 items-center gap-2 px-4 text-white sm:h-14 sm:gap-3 sm:px-5"
           >
-            <SlafurryMark className="h-10 w-10" />
-            <span className="font-display text-2xl tracking-wide">
+            <SlafurryMark className="relative z-20 h-6 w-6 sm:h-7 sm:w-7" />
+            <span className="relative z-20 font-display text-base tracking-wide sm:text-xl">
               SLAFURRY STUDIOS
             </span>
           </Link>
         </div>
 
-        <p className="mt-6 text-center font-display text-sm text-white/50">
-          © {new Date().getFullYear()} Slafurry Studios. "All Rights Reserved."
+        <p className="pt-6 text-center font-display text-xs text-neutral-400">
+          © {new Date().getFullYear()} Slafurry Studios. All Rights Reserved.
         </p>
       </footer>
     </div>

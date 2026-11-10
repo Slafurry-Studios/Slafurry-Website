@@ -17,18 +17,20 @@ export function PostCard({
       href={`${basePath}/${post.slug}`}
       className="block overflow-hidden pixel-border transition-shadow hover:shadow-md"
     >
-      {post.coverImage ? (
-        <img
-          src={post.coverImage}
-          alt={post.coverImageAlt}
-          className={compact ? "aspect-[16/9] w-full object-cover" : "aspect-[21/9] w-full object-cover"}
-        />
-      ) : (
-        <PlaceholderImage
-          label={post.title}
-          className={compact ? "aspect-[16/9] w-full" : "aspect-[21/9] w-full"}
-        />
-      )}
+      <div className="-mx-6 -mt-6 overflow-hidden">
+        {post.coverImage ? (
+          <img
+            src={post.coverImage}
+            alt={post.coverImageAlt}
+            className={compact ? "aspect-[16/9] w-full object-cover" : "aspect-[21/9] w-full object-cover"}
+          />
+        ) : (
+          <PlaceholderImage
+            label={post.title}
+            className={compact ? "aspect-[16/9] w-full" : "aspect-[21/9] w-full"}
+          />
+        )}
+      </div>
       <div className={compact ? "p-3" : "p-5"}>
         <h3
           className={
