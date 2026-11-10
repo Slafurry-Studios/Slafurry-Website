@@ -109,7 +109,7 @@ export default function AdminLayout({
                     >
                       <Icon size={16} />
 
-                      <span className="font-ui font-medium">
+                      <span className="font-display font-medium">
                         {item.label}
                       </span>
                     </Link>

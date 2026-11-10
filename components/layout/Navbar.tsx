@@ -21,8 +21,8 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-8">
-      <nav className="relative mx-auto flex max-w-7xl items-center justify-between bg-[url(/navbar_handrawn.png)] bg-[length:100%_100%] bg-no-repeat px-6 md:px-10 py-7">
-        <Link href="/" className="flex items-center gap-2 text-neutral-900 dark:text-white">
+      <nav className="relative mx-auto flex max-w-4xl items-center justify-between pixel-frame-filled px-3 md:px-4 py-0.5">
+        <Link href="/" className="flex items-center gap-2 px-2 text-neutral-900 dark:text-white">
           <SlafurryMark className="h-7 w-7" />
           <span className="hidden font-display text-xl font-bold tracking-wide sm:inline">
             SLAFURRY STUDIOS
@@ -37,7 +37,7 @@ export function Navbar() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`font-ui text-xl text-neutral-800 transition-colors hover:text-neutral-950 dark:text-neutral-200 dark:hover:text-white ${
+                    className={`font-display text-xl text-neutral-800 transition-colors hover:text-neutral-950 dark:text-neutral-200 dark:hover:text-white ${
                       active ? "font-semibold underline underline-offset-4" : ""
                     }`}
                   >
@@ -53,7 +53,7 @@ export function Navbar() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-900 text-neutral-900 transition-all hover:scale-105 md:hidden"
+            className="flex h-9 w-9 items-center justify-center pixel-border-sm text-neutral-900 transition-all hover:scale-105 md:hidden"
           >
             {menuOpen ? <IconX size={18} stroke={1.75} /> : <IconMenu size={18} stroke={1.75} />}
           </button>
@@ -70,7 +70,7 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`block rounded-xl px-3 py-2 font-ui text-xl text-neutral-800 transition-colors hover:bg-neutral-100 ${
+                    className={`block rounded-xl px-3 py-2 font-display text-xl text-neutral-800 transition-colors hover:bg-neutral-100 ${
                       active ? "font-semibold underline underline-offset-4" : ""
                     }`}
                   >

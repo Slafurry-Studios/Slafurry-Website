@@ -75,7 +75,7 @@ export function TiptapEditor({
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm max-w-none min-h-[300px] px-4 py-3 font-body text-neutral-900 dark:text-neutral-100 focus:outline-none prose-headings:font-display prose-p:leading-relaxed prose-a:text-blue-600 prose-img:rounded-lg dark:prose-invert",
+          "prose prose-sm max-w-none min-h-[300px] px-4 py-3 font-display text-neutral-900 dark:text-neutral-100 focus:outline-none prose-headings:font-display prose-p:leading-relaxed prose-a:text-blue-600 prose-img:rounded-lg dark:prose-invert",
       },
     },
     onUpdate: ({ editor: e }) => {

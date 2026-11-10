@@ -33,7 +33,7 @@ export default function ErrorPage({
         Something broke behind the scenes
       </h1>
 
-      <p className="mt-3 max-w-sm font-body text-xl text-neutral-500 dark:text-neutral-400">
+      <p className="mt-3 max-w-sm font-display text-xl text-neutral-500 dark:text-neutral-400">
         Our server is having a moment. Try again in a bit.
       </p>
 

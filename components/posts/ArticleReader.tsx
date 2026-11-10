@@ -26,7 +26,7 @@ export function ArticleReader({
       <Link
         href={basePath}
         aria-label="Back"
-        className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-900 text-neutral-900 transition-colors hover:bg-neutral-900 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900"
+        className="flex h-11 w-11 items-center justify-center pixel-border-sm text-neutral-900 transition-colors dark:text-white"
       >
         <IconChevronLeft size={20} />
       </Link>
@@ -35,7 +35,7 @@ export function ArticleReader({
         {post.title}
       </h1>
 
-      <p className="mt-2 font-ui text-xs text-neutral-500 dark:text-neutral-400">
+      <p className="mt-2 font-display text-xs text-neutral-500 dark:text-neutral-400">
         "by" {post.authorName} |{" "}
         {post.publishedAt ? formatDate(post.publishedAt) : ""} |{" "}
         {post.tags[0] ?? "update"} | {post.commentCount} "Comments"
@@ -53,13 +53,13 @@ export function ArticleReader({
         )}
       </div>
       {post.coverImageAlt && (
-        <p className="mt-3 font-ui text-xs italic text-neutral-500 dark:text-neutral-400">
+        <p className="mt-3 font-display text-xs italic text-neutral-500 dark:text-neutral-400">
           {post.coverImageAlt}
         </p>
       )}
 
       <div
-        className="mt-8 space-y-5 font-body text-xl leading-relaxed text-neutral-700 dark:text-neutral-300 prose prose-neutral dark:prose-invert max-w-none"
+        className="mt-8 space-y-5 font-display text-xl leading-relaxed text-neutral-700 dark:text-neutral-300 prose prose-neutral dark:prose-invert max-w-none"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
@@ -105,11 +105,11 @@ function NavCard({
   return (
     <Link
       href={`${basePath}/${post.slug}`}
-      className={`flex flex-col rounded-full border border-neutral-900 px-6 py-3 transition-colors hover:bg-neutral-100 dark:border-white dark:hover:bg-neutral-900 ${
+      className={`flex flex-col pixel-border px-6 py-3 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-900 ${
         isNext ? "items-end text-right" : "items-start text-left"
       }`}
     >
-      <span className="flex items-center gap-1.5 font-ui text-xs text-neutral-500 dark:text-neutral-400">
+      <span className="flex items-center gap-1.5 font-display text-xs text-neutral-500 dark:text-neutral-400">
         {!isNext && <IconArrowLeft size={14} />}
         {label}
         {isNext && <IconArrowRight size={14} />}

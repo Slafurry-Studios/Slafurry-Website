@@ -53,7 +53,7 @@ export function CookieConsentBanner() {
               document.cookie = "cookie_consent=accept; path=/";
               redirect("/");
             }}
-            className="px-6 py-3 rounded-full border bg-neutral-900 text-white font-ui font-medium hover:bg-neutral-700 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+            className="pixel-border px-6 py-3 bg-neutral-900 text-white font-display font-medium hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
           >
             Accept
           </button>
@@ -62,7 +62,7 @@ export function CookieConsentBanner() {
               document.cookie = "cookie_consent=reject; path=/";
               redirect("/");
             }}
-            className="px-6 py-3 rounded-full border border-neutral-900 text-neutral-900 font-ui font-medium hover:bg-neutral-900 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900"
+            className="pixel-border px-6 py-3 text-neutral-900 font-display font-medium hover:bg-neutral-900 hover:text-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900"
           >
             Reject
           </button>

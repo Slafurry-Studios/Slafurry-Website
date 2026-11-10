@@ -37,7 +37,7 @@ export default async function GameDetailPage({
         {game.title}
 
         <span
-          className={`inline-block rounded-full px-2.5 py-0.5 font-ui text-xs font-medium ${
+          className={`inline-block rounded-full px-2.5 py-0.5 font-display text-xs font-medium ${
             game.status === "RELEASED"
               ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
               : game.status === "UPCOMING"

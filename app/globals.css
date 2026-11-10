@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Global pixel rendering for all images and canvases */
+img, canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
 /* Base type scale — 18px root, biar copy gak kekecilan. Semua ukuran rem
    (text-*, spacing, Tailwind breakpoints) ikut skala ~12% dari default 16px. */
 html {
@@ -81,12 +87,9 @@ main > *:nth-child(4) {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Fonts — variable di-set oleh next/font di lib/fonts.ts
-     (--font-display-family / --font-ui-family / --font-body-family),
-     dipetakan ke utility Tailwind: font-display / font-ui / font-body. */
+   /* Fonts — variable di-set oleh next/font di lib/fonts.ts
+      (--font-display-family), dipetakan ke utility Tailwind: font-display. */
   --font-display: var(--font-display-family);
-  --font-ui: var(--font-ui-family);
-  --font-body: var(--font-body-family);
 }
 
 body {
@@ -108,5 +111,61 @@ body {
 }
 .serious .serious-only {
   display: initial;
+}
+
+/* Pixel art 9-slicing frames and buttons */
+.pixel-frame {
+  border: 32px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 56 fill / 32px / 0px stretch;
+  border-radius: 0 !important;
+  image-rendering: pixelated;
+}
+
+.pixel-dark-frame {
+  border: 48px solid transparent;
+  border-image: url("/Dark Border.png") 56 fill / 48px / 0px stretch;
+  border-radius: 0 !important;
+  image-rendering: pixelated;
+}
+
+.pixel-frame-filled {
+  border: 24px solid transparent;
+  border-image: url("/Border Corner Filled.png") 56 fill / 24px / 0px stretch;
+  border-radius: 0 !important;
+  image-rendering: pixelated;
+}
+
+/* Black-border replacement utilities (standard Tailwind border -> pixel corner) */
+.pixel-border {
+  border: 24px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 24 fill / 24px / 0px stretch;
+  border-radius: 0 !important;
+  image-rendering: pixelated;
+}
+
+.pixel-border-sm {
+  border: 8px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 24 fill / 8px / 0px stretch;
+  border-radius: 0 !important;
+  image-rendering: pixelated;
+}
+
+.pixel-btn {
+  border: 24px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 24 fill / 24px / 0px stretch;
+  border-radius: 0 !important;
+  padding: 0.1rem 0.75rem !important;
+  min-height: unset !important;
+  background-color: transparent !important;
+  image-rendering: pixelated;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.pixel-btn:hover,
+.pixel-btn:active,
+.pixel-btn:focus {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+  background-color: transparent !important;
 }
 

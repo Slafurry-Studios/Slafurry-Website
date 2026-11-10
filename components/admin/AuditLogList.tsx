@@ -60,7 +60,7 @@ function DiffViewer({ changes }: { changes: unknown }) {
     <div className="space-y-0.5 text-xs max-h-48 overflow-auto">
       {keys.map((key) => (
         <div key={key} className="flex gap-2">
-          <span className="font-ui text-muted-foreground min-w-[100px] shrink-0">
+          <span className="font-display text-muted-foreground min-w-[100px] shrink-0">
             {key}
           </span>
           {before?.[key] !== undefined && (
@@ -190,14 +190,14 @@ export function AuditLogList({
                     >
                       {row.action}
                     </span>
-                    <span className="font-ui text-sm font-medium">
+                    <span className="font-display text-sm font-medium">
                       {row.entityType}
                     </span>
                     <span className="text-xs text-muted-foreground">
                       by {row.adminUserName}
                     </span>
                   </div>
-                  <p className="font-ui text-xs text-muted-foreground truncate">
+                  <p className="font-display text-xs text-muted-foreground truncate">
                     {row.entityId}
                   </p>
                 </div>

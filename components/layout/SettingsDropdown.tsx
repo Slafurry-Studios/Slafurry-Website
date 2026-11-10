@@ -45,7 +45,7 @@ export function SettingsDropdown() {
         onClick={() => setOpen((v) => !v)}
         aria-label="Language"
         aria-expanded={open}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-900 text-neutral-900 transition-colors hover:bg-neutral-900 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900"
+        className="flex h-9 w-9 items-center justify-center pixel-border-sm text-neutral-900 transition-colors dark:text-white"
       >
         <IconSettings size={18} stroke={1.75} />
       </button>
@@ -92,7 +92,7 @@ function SettingsRow({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left font-ui text-xl font-medium text-neutral-800 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800"
+      className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left font-display text-xl font-medium text-neutral-800 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800"
     >
       <span className={active ? "text-neutral-900 dark:text-white" : "text-neutral-400"}>
         {icon}

@@ -24,11 +24,11 @@ export function PillButton({
   type = "button",
 }: PillButtonProps) {
   const base =
-    "inline-flex items-center justify-center gap-6 rounded-full border px-12 py-6 font-ui text-3xl font-medium transition-all hover:scale-105 min-h-14";
+    "inline-flex items-center justify-center gap-6 pixel-border px-12 py-6 font-display text-3xl font-medium transition-all hover:scale-105 min-h-14";
   const style =
     variant === "solid"
-      ? "border-neutral-900 bg-neutral-900 text-white hover:bg-neutral-700 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
-      : "border-neutral-900 text-neutral-900 hover:bg-neutral-900 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900";
+      ? "bg-neutral-900 text-white hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+      : "text-neutral-900 dark:text-white";
 
   const content =
     iconPosition === "right" ? (

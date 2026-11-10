@@ -44,7 +44,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
             type="button"
             onClick={() => go(-1)}
             aria-label="Previous project"
-            className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:flex"
+            className="hidden h-10 w-10 shrink-0 items-center justify-center pixel-border-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:flex"
           >
             <IconChevronLeft size={20} />
           </button>
@@ -70,7 +70,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
             type="button"
             onClick={() => go(1)}
             aria-label="Next project"
-            className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:flex"
+            className="hidden h-10 w-10 shrink-0 items-center justify-center pixel-border-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:flex"
           >
             <IconChevronRight size={20} />
           </button>
@@ -82,14 +82,14 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
           <button
             onClick={() => go(-1)}
             aria-label="Previous project"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
+            className="flex h-10 w-10 items-center justify-center pixel-border-sm text-neutral-600 dark:text-neutral-300"
           >
             <IconChevronLeft size={20} />
           </button>
           <button
             onClick={() => go(1)}
             aria-label="Next project"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
+            className="flex h-10 w-10 items-center justify-center pixel-border-sm text-neutral-600 dark:text-neutral-300"
           >
             <IconChevronRight size={20} />
           </button>
@@ -142,7 +142,7 @@ function ProjectCard({
         zIndex: isCurrent ? 10 : 0,
       }}
       className={
-        "absolute top-1/2 block -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl border border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900 " +
+        "absolute top-1/2 block -translate-x-1/2 -translate-y-1/2 overflow-hidden pixel-border bg-white dark:bg-neutral-900 " +
         "transition-[left,width,height,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] " +
         (isCurrent
           ? "h-[28rem] w-[min(680px,80%)] hover:shadow-md"
@@ -177,7 +177,7 @@ function ProjectCard({
         <h3 className="line-clamp-1 min-h-[2rem] font-display text-2xl tracking-wide">
           {project.title}
         </h3>
-        <p className="mt-1 line-clamp-2 min-h-[3.5rem] font-body text-xl text-neutral-600 dark:text-neutral-400">
+        <p className="mt-1 line-clamp-2 min-h-[3.5rem] font-display text-xl text-neutral-600 dark:text-neutral-400">
           {project.shortDesc}
         </p>
       </div>

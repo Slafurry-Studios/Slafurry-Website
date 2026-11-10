@@ -19,16 +19,16 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
             <br />
             STUDIOS
           </h1>
-          <p className="mt-5 max-w-md font-body text-xl text-neutral-500 joke-only">
+          <p className="mt-5 max-w-md font-display text-xl text-neutral-500 joke-only">
             {tagline}
           </p>
-          <p className="mt-5 max-w-md font-body text-xl text-neutral-500 serious-only">
+          <p className="mt-5 max-w-md font-display text-xl text-neutral-500 serious-only">
             {seriousTagline}
           </p>
           <div className="mt-8">
             <PillButton
               href="/games"
-              className="border-0! rounded-none! bg-[url(/cta_btn.png)] bg-[length:100%_100%] bg-no-repeat transition-all! hover:scale-105 hover:bg-transparent! hover:text-neutral-900!"
+              className="pixel-btn"
             >
               PLAY OUR GAMES
             </PillButton>
@@ -40,19 +40,13 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
             <p className="font-display text-4xl text-center font-semibold uppercase tracking-wide underline underline-offset-4">
               Upcoming Project
             </p>
-            <div className="relative mt-10 aspect-[16/9] w-full bg-white [-webkit-mask-image:url(/border.png)] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:100%_100%] [mask-image:url(/border.png)] [mask-repeat:no-repeat] [mask-size:100%_100%]">
+            <div className="relative mt-10 aspect-[16/9] w-full pixel-frame overflow-hidden bg-white">
               <PlaceholderImage
                 label={upcomingGame.title}
                 className="h-full w-full"
               />
-              <img
-                src="/border.png"
-                alt=""
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 h-full w-full mix-blend-multiply"
-              />
             </div>
-            <p className="mt-6 text-center font-body text-xl text-neutral-500">
+            <p className="mt-6 text-center font-display text-xl text-neutral-500">
               {upcomingGame.shortDesc}
             </p>
           </div>

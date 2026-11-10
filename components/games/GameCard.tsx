@@ -11,7 +11,7 @@ const STATUS_STYLE: Record<GameData["status"], string> = {
 function StatusBadge({ status }: { status: GameData["status"] }) {
     return (
     <span
-      className={`inline-block rounded-full px-2.5 py-0.5 font-ui text-xs font-medium ${STATUS_STYLE[status]}`}
+      className={`inline-block rounded-full px-2.5 py-0.5 font-display text-xs font-medium ${STATUS_STYLE[status]}`}
     >
       {status.replace('_', ' ')}
     </span>
@@ -28,7 +28,7 @@ export function GameCard({
   return (
     <Link
       href={`/games/${game.slug}`}
-      className="flex flex-col overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
+      className="flex flex-col overflow-hidden pixel-border transition-shadow hover:shadow-md"
     >
       {game.coverImage ? (
         <img
@@ -50,7 +50,7 @@ export function GameCard({
           <StatusBadge status={game.status} />
         </div>
         <p
-          className={`mt-2 font-body text-neutral-600 dark:text-neutral-400 ${
+          className={`mt-2 font-display text-neutral-600 dark:text-neutral-400 ${
             featured ? "text-xl" : "line-clamp-2 text-xl"
           }`}
         >

@@ -19,7 +19,7 @@ export default function MainLayout({
           Hero.tsx nge-cancel ini pakai -mt-24 biar background-nya full-bleed dari
           y=0, sementara halaman lain (belum ada background khusus di atas) otomatis
           dapet clearance yang bener dari padding ini. */}
-      <main className="flex-1 pt-24">{children}</main>
+      <main className="flex-1 pt-24 mx-auto w-full max-w-7xl px-4 md:px-8">{children}</main>
       <Footer />
       {/* Achievement feature disabled sementara — jangan render dulu. */}
       {/* <AchievementToastContainer /> */}

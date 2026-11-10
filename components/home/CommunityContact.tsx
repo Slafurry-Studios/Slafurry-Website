@@ -6,21 +6,12 @@ import { BrandIcon } from "@/components/icons/BrandIcon";
 // Background PNG per tombol (handdrawn outline, hitam di atas transparan).
 // Tulisan literal — Tailwind gak bisa scan string template dinamis.
 // Hover: scale up aja, gak ada fill gelap.
-const HOVER_SCALE = " transition-all! hover:scale-105 hover:bg-transparent! hover:text-neutral-900!";
 const BTN_IMAGE_CLASSES: Record<string, string> = {
-  itch: "border-0! rounded-none! bg-[url(/itch_btn.png)] bg-[length:100%_100%] bg-no-repeat" + HOVER_SCALE,
-  discord:
-    "border-0! rounded-none! bg-[url(/discord_btn.png)] bg-[length:100%_100%] bg-no-repeat" +
-    HOVER_SCALE,
-  steam:
-    "border-0! rounded-none! bg-[url(/steam_btn.png)] bg-[length:100%_100%] bg-no-repeat" +
-    HOVER_SCALE,
-  email:
-    "border-0! rounded-none! bg-[url(/email_btn.png)] bg-[length:100%_100%] bg-no-repeat" +
-    HOVER_SCALE,
-  business:
-    "border-0! rounded-none! bg-[url(/business_btn.png)] bg-[length:100%_100%] bg-no-repeat" +
-    HOVER_SCALE,
+  itch: "pixel-btn",
+  discord: "pixel-btn",
+  steam: "pixel-btn",
+  email: "pixel-btn",
+  business: "pixel-btn",
 };
 
 export function CommunityContact({
@@ -37,7 +28,7 @@ export function CommunityContact({
           <h2 className="font-display text-7xl tracking-wide">Join Our Community</h2>
           <div className="mt-14 flex flex-col items-start gap-8">
             {communityLinks.length === 0 ? (
-              <p className="font-body text-xl text-neutral-400">
+              <p className="font-display text-xl text-neutral-400">
                 Coming soon.
               </p>
             ) : (

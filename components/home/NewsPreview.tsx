@@ -30,7 +30,7 @@ function NewsCard({ post }: { post: Post }) {
   return (
     <Link
       href={`/news/${post.slug}`}
-      className="flex flex-col overflow-hidden rounded-xl border border-neutral-300 transition-all hover:scale-[1.02] hover:shadow-md dark:border-neutral-700"
+      className="flex flex-col overflow-hidden pixel-border transition-all hover:scale-[1.02] hover:shadow-md"
     >
       <PlaceholderImage
         label={post.title}
@@ -38,11 +38,11 @@ function NewsCard({ post }: { post: Post }) {
       />
       <div className="flex flex-1 flex-col p-4">
         <h3 className="font-display text-xl font-semibold leading-snug">{post.title}</h3>
-        <p className="mt-1 font-ui text-xs text-neutral-500 dark:text-neutral-400">
+        <p className="mt-1 font-display text-xs text-neutral-500 dark:text-neutral-400">
           By {post.authorName}
           {post.publishedAt && ` | ${formatDate(post.publishedAt)}`}
         </p>
-        <p className="mt-2 line-clamp-3 font-body text-xl text-neutral-600 dark:text-neutral-400">
+        <p className="mt-2 line-clamp-3 font-display text-xl text-neutral-600 dark:text-neutral-400">
           {post.excerpt}
         </p>
       </div>
