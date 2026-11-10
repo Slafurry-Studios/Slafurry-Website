@@ -15,7 +15,7 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
           <p className="font-display text-2xl font-semibold italic uppercase tracking-[0.2em] text-neutral-500 sm:text-4xl">
             Indie Game Developers
           </p>
-          <SlafurryMark className="h-12 w-12 sm:h-16 sm:w-16" />
+          <SlafurryMark className="h-24 w-24 sm:h-28 sm:w-28" />
           <h1 className="mt-3 font-display text-4xl leading-[0.95] tracking-wide sm:text-6xl lg:text-7xl">
             SLAFURRY
             <br />
