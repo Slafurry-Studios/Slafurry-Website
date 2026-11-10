@@ -39,17 +39,11 @@ export function CommunityContact({
   return (
     <section className="flex items-center px-6 py-16 md:px-10">
       <div className="mx-auto w-full max-w-7xl">
-        <div className="grid w-full gap-16 sm:grid-cols-2">
-          <h2 className="font-display text-4xl tracking-wide sm:text-5xl lg:text-6xl">
-            Join Our Community
-          </h2>
-          <h2 className="font-display text-4xl tracking-wide sm:text-5xl lg:text-6xl">
-            Contact Us
-          </h2>
-        </div>
-
         <div className="mt-14 grid w-full gap-16 sm:grid-cols-2">
           <div className="flex flex-col items-start gap-8">
+            <h2 className="font-display text-4xl tracking-wide sm:text-5xl lg:text-6xl">
+              Join Our Community
+            </h2>
             {communityLinks.map((link) => (
               <PillButton
                 key={link.id}
@@ -63,6 +57,9 @@ export function CommunityContact({
           </div>
 
           <div className="flex flex-col items-start gap-8">
+            <h2 className="font-display text-4xl tracking-wide sm:text-5xl lg:text-6xl">
+              Contact Us
+            </h2>
             {contactItems.map((item, i) => (
               <PillButton
                 key={i}
