@@ -130,7 +130,7 @@ body {
 
 .pixel-frame-filled {
   border: 24px solid transparent;
-  border-image: url("/Border Corner Filled.png") 56 fill / 24px / 0px stretch;
+  border-image: url("/Border Corner Filled.png") 24 fill / 24px / 0px stretch;
   border-radius: 0 !important;
   image-rendering: pixelated;
 }

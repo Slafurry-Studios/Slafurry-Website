@@ -31,7 +31,10 @@ export function Footer() {
             ))}
           </div>
 
-          <Link href="/" className="flex items-center gap-4">
+          <Link
+            href="/"
+            className="pixel-frame-filled flex items-center gap-4 px-4 py-1 text-neutral-900"
+          >
             <SlafurryMark className="h-10 w-10" />
             <span className="font-display text-2xl tracking-wide">
               SLAFURRY STUDIOS

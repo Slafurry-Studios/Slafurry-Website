@@ -24,13 +24,13 @@ export function Navbar() {
       <nav className="relative mx-auto flex max-w-4xl items-center justify-between pixel-frame-filled px-3 md:px-4 py-0.5">
         <Link href="/" className="flex items-center gap-2 px-2 text-neutral-900 dark:text-white">
           <SlafurryMark className="h-7 w-7" />
-          <span className="hidden font-display text-xl font-bold tracking-wide sm:inline">
+          <span className="hidden whitespace-nowrap font-display text-xl font-bold tracking-wide sm:inline">
             SLAFURRY STUDIOS
           </span>
         </Link>
 
         <div className="ml-auto flex items-center gap-8">
-          <ul className="hidden items-center gap-8 md:flex mr-20">
+          <ul className="hidden items-center gap-8 lg:flex">
             {NAV_ITEMS.map((item) => {
               const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               return (
@@ -53,7 +53,7 @@ export function Navbar() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className="flex h-9 w-9 items-center justify-center pixel-border-sm text-neutral-900 transition-all hover:scale-105 md:hidden"
+            className="flex h-9 w-9 items-center justify-center pixel-border-sm text-neutral-900 transition-all hover:scale-105 lg:hidden"
           >
             {menuOpen ? <IconX size={18} stroke={1.75} /> : <IconMenu size={18} stroke={1.75} />}
           </button>
@@ -61,7 +61,7 @@ export function Navbar() {
 
         {/* Mobile dropdown — nempel di bawah navbar. */}
         {menuOpen && (
-          <ul className="absolute right-0 top-full z-50 mt-2 w-48 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg md:hidden">
+          <ul className="absolute right-0 top-full z-50 mt-2 w-48 pixel-border-sm bg-white p-2 shadow-lg lg:hidden">
             {NAV_ITEMS.map((item) => {
               const active =
                 item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
