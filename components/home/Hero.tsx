@@ -8,9 +8,9 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
   const seriousTagline = settings?.taglineSerious ?? tagline;
 
   return (
-    <section className="relative -mt-24 flex min-h-screen flex-col justify-center overflow-hidden bg-white px-4 pb-16 pt-24 text-neutral-900 sm:px-6 md:px-10">
+    <section className="relative -mt-24 flex flex-col justify-start overflow-hidden bg-white px-4 pb-10 pt-20 text-neutral-900 sm:px-6 md:px-10">
       <div className="relative mx-auto grid w-full max-w-7xl gap-10 md:grid-cols-2 md:items-center">
-        <div className="flex flex-col gap-y-10">
+        <div className="flex flex-col gap-y-8">
           <p className="font-display text-2xl font-semibold italic uppercase tracking-[0.2em] text-neutral-500 sm:text-4xl">
             Indie Game Developers
           </p>

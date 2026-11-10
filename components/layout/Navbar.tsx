@@ -24,7 +24,7 @@ export function Navbar() {
       <nav className="relative mx-auto flex max-w-4xl items-center justify-between pixel-frame-filled px-3 md:px-4 py-0.5">
         <Link href="/" className="flex items-center gap-2 px-2 text-neutral-900 dark:text-white">
           <SlafurryMark className="h-7 w-7" />
-          <span className="hidden whitespace-nowrap font-display text-xl font-bold tracking-wide sm:inline">
+          <span className="whitespace-nowrap font-display text-base font-bold tracking-wide sm:text-xl">
             SLAFURRY STUDIOS
           </span>
         </Link>
