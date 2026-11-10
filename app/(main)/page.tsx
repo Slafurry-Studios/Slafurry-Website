@@ -50,7 +50,7 @@ function LineBreak() {
       src="/Linebreak.png"
       alt=""
       aria-hidden="true"
-      className="mx-auto block h-3 w-full max-w-7xl px-4 md:px-8 [image-rendering:pixelated]"
+      className="mx-auto block h-3 w-full max-w-[90rem] px-4 md:px-8 [image-rendering:pixelated]"
     />
   );
 }
