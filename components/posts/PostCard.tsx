@@ -15,7 +15,7 @@ export function PostCard({
   return (
     <Link
       href={`${basePath}/${post.slug}`}
-      className="block overflow-hidden pixel-border transition-shadow hover:shadow-md"
+      className="block overflow-hidden pixel-border transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
     >
       <div className="-mx-6 -mt-6 overflow-hidden">
         {post.coverImage ? (
