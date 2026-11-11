@@ -10,14 +10,14 @@ export function AboutSection({ settings }: { settings: SiteSettings | null }) {
     "Slafurry Studios is an independent game development studio.";
 
   return (
-    <section className="flex items-center px-6 py-16 md:px-10">
+    <section className="flex items-center px-6 py-12 md:py-16 md:px-10">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1fr_2fr] md:items-center">
         <div className="hidden w-1/3 md:block md:w-full mx-auto md:mx-0">
           <SlafurryMark className="h-auto w-full text-neutral-900 md:aspect-square" />
         </div>
 
-        <div className="ml-10">
-          <h2 className="font-display text-6xl tracking-wide">About</h2>
+        <div className="ml-0 md:ml-10">
+          <h2 className="font-display text-5xl sm:text-6xl tracking-wide">About</h2>
           <div className="mt-10 space-y-8 font-display text-lg leading-relaxed text-neutral-700 dark:text-neutral-300">
             <p className="joke-only whitespace-pre-line">{aboutText}</p>
 

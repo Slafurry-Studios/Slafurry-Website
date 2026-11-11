@@ -37,9 +37,9 @@ export function CommunityContact({
   const maxRows = Math.max(communityLinks.length, contactItems.length);
 
   return (
-    <section className="flex items-center px-6 py-16 md:px-10">
+    <section className="flex items-center px-6 py-12 md:py-16 md:px-10">
       <div className="mx-auto w-full max-w-7xl">
-        <div className="mt-14 grid w-full gap-16 sm:grid-cols-2">
+        <div className="mt-10 grid w-full gap-10 sm:gap-16 sm:grid-cols-2">
           <div className="flex flex-col items-start gap-8">
             <h2 className="font-display text-4xl tracking-wide sm:text-5xl lg:text-6xl">
               Join Our Community

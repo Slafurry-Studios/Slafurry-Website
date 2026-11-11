@@ -62,7 +62,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
   }
 
   return (
-    <section className="flex flex-col justify-center px-6 py-16 md:px-10">
+    <section className="flex flex-col justify-center px-6 py-12 md:py-16 md:px-10">
       <h2 className="text-center font-display text-4xl tracking-wide sm:text-5xl lg:text-6xl">
         Projects
       </h2>
@@ -83,7 +83,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
           </button>
         )}
 
-        <div className="relative h-[28rem] w-full max-w-[900px] overflow-hidden">
+        <div className="relative h-[20rem] sm:h-[28rem] w-full max-w-[900px] overflow-hidden">
           {projects.map((project, i) => (
             <ProjectCard
               key={project.id ?? project.slug}

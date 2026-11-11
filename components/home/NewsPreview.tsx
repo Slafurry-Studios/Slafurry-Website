@@ -17,7 +17,7 @@ export function NewsPreview({ posts }: { posts: Post[] }) {
   const cardWidth = CARD_WIDTH_BY_COUNT[count] ?? "w-full";
 
   return (
-    <section className="flex min-h-screen flex-col justify-center px-6 py-16 md:px-10">
+    <section className="flex min-h-screen flex-col justify-center px-6 py-12 md:py-16 md:px-10">
       <h2 className="text-center font-display text-4xl tracking-wide">News</h2>
 
       <div className="mx-auto mt-10 flex flex-row gap-6 max-w-7xl">
