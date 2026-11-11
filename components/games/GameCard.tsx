@@ -34,29 +34,29 @@ export function GameCard({
       href={`/games/${game.slug}`}
       className="flex flex-col overflow-visible pixel-border press-btn game-hover"
     >
-      <div className="-m-2 overflow-hidden relative group">
-        {/* Image — always rendered, mandatory fallback */}
+      <div className={featured ? "p-6" : "p-4"}>
+        <h3 className={featured ? "font-display text-3xl tracking-wide" : "font-display text-2xl tracking-wide"}>
+          {game.title}
+        </h3>
+        <div className={`${featured ? "mt-2" : "mt-4"} -m-2 overflow-hidden relative group`}>
+          {/* Image — always rendered, mandatory fallback */}
           <img
             src={game.coverImage}
             alt={game.coverImageAlt}
             className={`w-full object-cover transition-opacity duration-300 ${hasYoutube ? "group-hover:opacity-30" : ""} aspect-[16/9]`}
           />
 
-        {/* YouTube preview — optional, auto-plays on hover; image stays as fallback */}
-        {hasYoutube && (
-          <iframe
-            className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in"
-            src={`${youtubeEmbedUrl}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0${typeof window !== 'undefined' ? `&origin=${window.location.origin}` : ''}`}
-            title={`${game.title} preview`}
-            allow="autoplay; encrypted-media; picture-in-picture"
-            allowFullScreen
-          />
-        )}
-      </div>
-      <div className={featured ? "p-6" : "p-4"}>
-        <h3 className={featured ? "font-display text-3xl tracking-wide" : "font-display text-2xl tracking-wide"}>
-          {game.title}
-        </h3>
+          {/* YouTube preview — optional, auto-plays on hover; image stays as fallback */}
+          {hasYoutube && (
+            <iframe
+              className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in"
+              src={`${youtubeEmbedUrl}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0${typeof window !== 'undefined' ? `&origin=${window.location.origin}` : ''}`}
+              title={`${game.title} preview`}
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowFullScreen
+            />
+          )}
+        </div>
         <div className="mt-1.5">
           <StatusBadge status={game.status} />
         </div>
