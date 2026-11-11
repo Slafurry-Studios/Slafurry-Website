@@ -1,10 +1,13 @@
 "use client";
 
+"use client";
+
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
+import TextAlign from "@tiptap/extension-text-align";
 import {
   IconBold,
   IconItalic,
@@ -16,6 +19,10 @@ import {
   IconPhoto,
   IconMinus,
   IconHeading,
+  IconAlignLeft,
+  IconAlignCenter,
+  IconAlignRight,
+  IconAlignJustified,
 } from "@tabler/icons-react";
 import { useToast } from "@/components/ui/Toast";
 
@@ -71,6 +78,9 @@ export function TiptapEditor({
       }),
       Image.configure({
         HTMLAttributes: { class: "rounded-lg max-w-full" },
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
       }),
     ],
     content,
@@ -201,6 +211,37 @@ export function TiptapEditor({
           title="Inline Code"
         >
           <IconCode size={iconSize} />
+        </ToolbarButton>
+
+        <div className="mx-1 h-5 w-px bg-neutral-300 dark:bg-neutral-600" />
+
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          active={editor.isActive("textAlign", { textAlign: "left" })}
+          title="Align Left"
+        >
+          <IconAlignLeft size={iconSize} />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          active={editor.isActive("textAlign", { textAlign: "center" })}
+          title="Align Center"
+        >
+          <IconAlignCenter size={iconSize} />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          active={editor.isActive("textAlign", { textAlign: "right" })}
+          title="Align Right"
+        >
+          <IconAlignRight size={iconSize} />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+          active={editor.isActive("textAlign", { textAlign: "justify" })}
+          title="Justify"
+        >
+          <IconAlignJustified size={iconSize} />
         </ToolbarButton>
 
         <div className="mx-1 h-5 w-px bg-neutral-300 dark:bg-neutral-600" />
