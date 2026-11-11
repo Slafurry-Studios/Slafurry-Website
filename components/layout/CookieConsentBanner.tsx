@@ -29,7 +29,7 @@ export function CookieConsentBanner() {
     checkConsent();
   }, []);
 
-  if (!showBanner || hasHydrated) {
+  if (!showBanner) {
     return null;
   }
 
