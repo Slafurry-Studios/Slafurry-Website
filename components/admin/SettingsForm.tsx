@@ -140,7 +140,7 @@ export function SettingsForm({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          platform: "discord",
+          platform: "",
           label: "",
           url: "",
           section,
@@ -351,80 +351,87 @@ export function SettingsForm({
                   </p>
                 )}
 
-                <div className="space-y-2">
-                  {sectionLinks.map((link) => {
-                    const IconComp = ICON_MAP[link.platform] || IconLink;
-                    return (
-                      <div
-                        key={link.id}
-                        className={`flex items-center gap-3 rounded-xl border p-3 ${
-                          link.isHidden 
-                            ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
-                            : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
-                        }`}
-                      >
-                        <IconComp size={18} className="shrink-0 text-neutral-400" />
+                      <div className="space-y-2">
+                        {sectionLinks.map((link) => {
+                          const IconComp = ICON_MAP[link.platform] || IconLink;
+                          return (
+                            <div
+                              key={link.id}
+                              className={`flex items-center gap-3 rounded-xl border p-3 ${
+                                link.isHidden 
+                                  ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
+                                  : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+                              }`}
+                            >
+                              <div className="flex items-center gap-3 flex-1">
+                                <IconComp size={18} className="shrink-0 text-neutral-400" />
 
-                        <select
-                          value={link.platform}
-                          onChange={(e) => updateLink(link.id, "platform", e.target.value)}
-                          className="w-32 rounded-lg border border-neutral-300 bg-white px-2 py-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-900"
-                        >
-                          {PLATFORM_PRESETS.map((p) => (
-                            <option key={p.slug} value={p.slug}>
-                              {p.label}
-                            </option>
-                          ))}
-                          <option value="custom">Custom...</option>
-                        </select>
+                                <div className="flex-1 space-y-1">
+                                  <label className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Platform</label>
+                                  <select
+                                    value={link.platform}
+                                    onChange={(e) => updateLink(link.id, "platform", e.target.value)}
+                                    className="w-full rounded-lg border border-neutral-300 bg-white px-2 py-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-900"
+                                  >
+                                    {PLATFORM_PRESETS.map((p) => (
+                                      <option key={p.slug} value={p.slug}>
+                                        {p.label}
+                                      </option>
+                                    ))}
+                                    <option value="custom">Custom...</option>
+                                  </select>
 
-                        <input
-                          type="text"
-                          placeholder="Label"
-                          value={link.label}
-                          onChange={(e) => updateLink(link.id, "label", e.target.value)}
-                          className={`${inputClass} !py-1.5 text-xs`}
-                        />
+                                  <label className="text-xs text-neutral-500 dark:text-neutral-400 font-medium mt-1">Label</label>
+                                  <input
+                                    type="text"
+                                    placeholder="Label"
+                                    value={link.label}
+                                    onChange={(e) => updateLink(link.id, "label", e.target.value)}
+                                    className="w-full rounded-lg border border-neutral-300 bg-white px-2 py-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-900"
+                                  />
 
-                        <input
-                          type="url"
-                          placeholder="https://..."
-                          value={link.url}
-                          onChange={(e) => updateLink(link.id, "url", e.target.value)}
-                          className={`${inputClass} flex-1 !py-1.5 text-xs`}
-                        />
+                                  <label className="text-xs text-neutral-500 dark:text-neutral-400 font-medium mt-1">URL</label>
+                                  <input
+                                    type="url"
+                                    placeholder="https://..."
+                                    value={link.url}
+                                    onChange={(e) => updateLink(link.id, "url", e.target.value)}
+                                    className="w-full rounded-lg border border-neutral-300 bg-white px-2 py-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-900"
+                                  />
+                                </div>
 
-                        <input
-                          type="number"
-                          value={link.order}
-                          onChange={(e) =>
-                            updateLink(link.id, "order", parseInt(e.target.value) || 0)
-                          }
-                          className={`${inputClass} !py-1.5 text-xs w-16`}
-                          title="Order"
-                        />
+                                <input
+                                  type="number"
+                                  value={link.order}
+                                  onChange={(e) =>
+                                    updateLink(link.id, "order", parseInt(e.target.value) || 0)
+                                  }
+                                  className="w-16 rounded-lg border border-neutral-300 bg-white px-2 py-1.5 text-xs text-center dark:border-neutral-700 dark:bg-neutral-900"
+                                  title="Order"
+                                />
 
-                        <button
-                          type="button"
-                          onClick={() => updateLink(link.id, "isHidden", !link.isHidden)}
-                          className="shrink-0 rounded-lg p-2.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400"
-                        >
-                          <IconTrash size={16} />
-                        </button>
+                                <button
+                                  type="button"
+                                  onClick={() => updateLink(link.id, "isHidden", !link.isHidden)}
+                                  className="shrink-0 rounded-lg p-2.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400"
+                                >
+                                  <IconTrash size={16} />
+                                </button>
 
-                        {link.isHidden && (
-                          <button
-                            type="button"
-                            onClick={() => deleteLink(link.id)}
-                            className="shrink-0 rounded-lg p-2.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400"
-                          >
-                            <IconTrash size={14} />
-                          </button>
-                        )}
+                                {link.isHidden && (
+                                  <button
+                                    type="button"
+                                    onClick={() => deleteLink(link.id)}
+                                    className="shrink-0 rounded-lg p-2.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400"
+                                  >
+                                    <IconTrash size={14} />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
-                </div>
               </div>
             );
           })}
