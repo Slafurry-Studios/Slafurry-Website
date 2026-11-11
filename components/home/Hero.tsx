@@ -39,10 +39,18 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
               Upcoming Project
             </p>
             <div className="relative mt-10 aspect-[16/9] w-full max-w-md pixel-frame overflow-hidden bg-white">
-              <PlaceholderImage
-                label={upcomingGame.title}
-                className="h-full w-full"
-              />
+              {upcomingGame.coverImage ? (
+                <img
+                  src={upcomingGame.coverImage}
+                  alt={upcomingGame.coverImageAlt}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <PlaceholderImage
+                  label={upcomingGame.title}
+                  className="h-full w-full"
+                />
+              )}
             </div>
             <p className="mt-6 text-center font-display text-xl text-neutral-500">
               {upcomingGame.shortDesc}
