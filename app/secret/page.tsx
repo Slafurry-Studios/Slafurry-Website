@@ -89,8 +89,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/itch io.png"
                                 alt="Itch.io"
                                 className="w-full h-auto"
-                                width={52}
-                                height={52}
+                                width={600}
+                                height={100}
                             />
                         </a>
                         <a 
@@ -103,8 +103,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/github.png"
                                 alt="Github"
                                 className="w-full h-auto"
-                                width={52}
-                                height={52}
+                                width={600}
+                                height={100}
                             />
                         </a>
                     </div>
@@ -132,8 +132,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/youtube.png"
                                 alt="Youtube"
                                 className="w-full h-auto"
-                                width={52}
-                                height={52}
+                                width={600}
+                                height={100}
                             />
                         </a>
                         <a 
@@ -146,8 +146,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/linkedin.png"
                                 alt="LinkedIn"
                                 className="w-full h-auto"
-                                width={52}
-                                height={52}
+                                width={600}
+                                height={100}
                             />
                         </a>
                         <a 
@@ -160,8 +160,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/instagram.png"
                                 alt="Instagram"
                                 className="w-full h-auto"
-                                width={52}
-                                height={52}
+                                width={600}
+                                height={100}
                             />
                         </a>
                         <a 
@@ -174,8 +174,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/tiktok.png"
                                 alt="Tiktok"
                                 className="w-full h-auto"
-                                width={52}
-                                height={52}
+                                width={600}
+                                height={100}
                             />
                         </a>
                     </div>
