@@ -3,7 +3,7 @@ import { getPublishedPosts, getPostTags } from "@/lib/queries/posts";
 import { PostListClient } from "@/components/posts/PostListClient";
 
 // ISR: devlog baru muncul tanpa rebuild (maks. 60 detik).
-export const revalidate = 60;
+export const revalidate = 10;
 
 export default async function DevlogPage() {
   
