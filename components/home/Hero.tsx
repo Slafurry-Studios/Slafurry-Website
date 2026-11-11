@@ -39,25 +39,32 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
             <p className="font-display text-2xl text-center font-semibold uppercase tracking-wide underline underline-offset-4 sm:text-4xl">
               Upcoming Project
             </p>
-            <div className="relative mt-10 aspect-[16/9] w-full max-w-md pixel-frame overflow-hidden bg-white">
+            <div className="relative mt-10 w-full max-w-md pixel-frame overflow-hidden bg-white">
               <Link href={`/games/${upcomingGame.slug}`}>
-                {upcomingGame.coverImage ? (
-                  <img
-                    src={upcomingGame.coverImage}
-                    alt={upcomingGame.coverImageAlt}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <PlaceholderImage
-                    label={upcomingGame.title}
-                    className="h-full w-full"
-                  />
-                )}
+                <div className="relative aspect-[16/9] w-full overflow-hidden">
+                  {upcomingGame.coverImage ? (
+                    <img
+                      src={upcomingGame.coverImage}
+                      alt={upcomingGame.coverImageAlt}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <PlaceholderImage
+                      label={upcomingGame.title}
+                      className="h-full w-full"
+                    />
+                  )}
+                </div>
+                <div className="p-4">
+                  <h3 className="font-display text-2xl tracking-wide">
+                    {upcomingGame.title}
+                  </h3>
+                  <p className="mt-1.5 line-clamp-2 text-neutral-600">
+                    {upcomingGame.shortDesc}
+                  </p>
+                </div>
               </Link>
             </div>
-            <h2 className="mt-4 font-display text-3xl tracking-wide sm:text-4xl">
-              {upcomingGame.title}
-            </h2>
           </div>
         )}
       </div>
