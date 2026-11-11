@@ -22,7 +22,7 @@ export async function GET() {
     return NextResponse.json(settings);
   } catch (error) {
     console.error("Get settings error:", error);
-    return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to load settings." }, { status: 500 });
   }
 }
 
@@ -56,8 +56,15 @@ export async function PUT(request: Request) {
     });
 
     return NextResponse.json(settings);
-  } catch (error) {
-    console.error("Update settings error:", error);
-    return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
+  } catch (error: any) {
+    console.error("Update settings error:", {
+      message: error.message,
+      code: error.code,
+      meta: error.meta,
+    });
+    return NextResponse.json(
+      { error: error.message || "Something went wrong." },
+      { status: 500 }
+    );
   }
 }
