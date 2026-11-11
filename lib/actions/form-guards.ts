@@ -42,20 +42,20 @@ export async function checkHoneypot(
 export async function checkRateLimit(
   key: string,
   max = 3,
-  windowMs = 60 * 60 * 1000
+  windowMs = 60 * 60 * 1000,
+  ip?: string
 ): Promise<RateLimitResult> {
   "use server";
-  const hdrs = await headers();
-  const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  const ipShort = createHash("sha256").update(ip).digest("hex").slice(0, 8);
+  const headersList = ip ? null : await headers();
+  const resolvedIp = ip ?? headersList?.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ipShort = createHash("sha256").update(resolvedIp).digest("hex").slice(0, 8);
   const cookieName = `form-rate-${key}-${ipShort}`;
 
-  const cookies = hdrs.get("cookie") || "";
-  const cookieMatch = cookies.match(new RegExp(`${cookieName}=([^;]+)`));
+  const headersCookie = headersList?.get("cookie") || "";
+  const cookieMatch = headersCookie.match(new RegExp(`${cookieName}=([^;]+)`));
   const existingCount = cookieMatch ? parseInt(cookieMatch[1], 10) : 0;
 
   const now = Date.now();
-  // Reset if past the window
   const resetAt = now - windowMs;
   const shouldReset = existingCount > 0 && existingCount <= resetAt;
 
@@ -64,7 +64,6 @@ export async function checkRateLimit(
   let reason = "";
 
   if (shouldReset) {
-    // Window expired, start fresh
     allowed = max > 0;
     remaining = allowed ? max - 1 : 0;
   } else {
@@ -77,13 +76,6 @@ export async function checkRateLimit(
   }
 
   const resetTime = Math.floor((now + windowMs) / 1000);
-
-  // Set the cookie if allowed
-  if (allowed) {
-    const expires = new Date(Date.now() + windowMs).toUTCString();
-    const newCookie = `form-rate-${key}-${ipShort}=${existingCount + 1}; Expires=${expires}; Path=/; SameSite=Strict; Secure`;
-    hdrs.set("set-cookie", newCookie);
-  }
 
   return { allowed, remaining, reset: resetTime, reason };
 }

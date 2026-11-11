@@ -6,6 +6,11 @@ import { createHash } from "crypto";
 
 export async function POST(request: Request) {
   try {
+    // Headers must be read before any other awaits (Next.js restriction).
+    const headersList = await headers();
+    const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+    const ipHash = createHash("sha256").update(ip).digest("hex").slice(0, 16);
+
     const formData = await request.formData();
 
     // Honeypot check
@@ -37,7 +42,7 @@ export async function POST(request: Request) {
     }
 
     // Rate limit
-    const rateLimit = await checkRateLimit("comment");
+    const rateLimit = await checkRateLimit("comment", 3, 60 * 60 * 1000, ip);
     if (!rateLimit.allowed) {
       return NextResponse.json({ error: rateLimit.reason }, { status: 429 });
     }
@@ -55,11 +60,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Game not found." }, { status: 404 });
       }
     }
-
-    // Hash IP for abuse tracing
-    const hdrs = await headers();
-    const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-    const ipHash = createHash("sha256").update(ip).digest("hex").slice(0, 16);
 
     const comment = await prisma.comment.create({
       data: {

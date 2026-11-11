@@ -38,7 +38,7 @@ export async function submitContactMessage(
   }
 
   // ─── Rate limit ───
-  const rateLimit = await checkRateLimit("contact");
+  const rateLimit = await checkRateLimit("contact", 3, 60 * 60 * 1000, ip);
   if (!rateLimit.allowed) {
     return { ok: false, error: rateLimit.reason };
   }
