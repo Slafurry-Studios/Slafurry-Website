@@ -29,7 +29,7 @@ export async function getActiveGames(): Promise<GameData[]> {
         },
         isHidden: false
       },
-      orderBy: { order: "asc" },
+      orderBy: { order: "desc" },
       include: { playLinks: { select: { label: true, url: true } } },
     });
     return rows.map(toGameData);
