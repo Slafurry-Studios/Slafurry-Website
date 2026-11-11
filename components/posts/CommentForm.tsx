@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState } from "react";
+import { submitComment } from "@/lib/actions/comment";
 import { IconSend, IconLoader2, IconCheck, IconAlertTriangle } from "@tabler/icons-react";
 import { PillButton } from "@/components/ui/PillButton";
-import { Skeleton } from "@/components/ui/Skeleton";
+import { Skeleton, useLoadingState } from "@/components/ui/Skeleton";
 
 export function CommentForm({
   postId,
@@ -12,38 +13,8 @@ export function CommentForm({
   postId?: string;
   gameId?: string;
 }) {
-  const [state, setState] = useState<{ ok?: boolean; message?: string; error?: string } | null>(null);
-  const [isPending, setIsPending] = useState(false);
-
-  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-
-    setIsPending(true);
-    setState(null);
-
-    try {
-      const res = await fetch("/api/comments", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        setState({ ok: false, error: result.error || "Failed to submit comment." });
-        setIsPending(false);
-        return;
-      }
-
-      setState({ ok: true, message: result.message || "Comment submitted! It will appear after moderation." });
-      setIsPending(false);
-      e.currentTarget.reset();
-    } catch {
-      setState({ ok: false, error: "Network error. Please try again." });
-      setIsPending(false);
-    }
-  }
+  const [state, formAction, isPending] = useActionState(submitComment, null);
+  const showPending = useLoadingState(isPending, 600);
 
   return (
     <div className="mt-10 pixel-border bg-neutral-50 p-6 dark:bg-neutral-900/50">
@@ -68,7 +39,7 @@ export function CommentForm({
         </div>
       )}
 
-      {isPending ? (
+      {showPending ? (
         <div className="mt-6 space-y-4">
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-10 w-32" />
@@ -79,7 +50,7 @@ export function CommentForm({
           </PillButton>
         </div>
       ) : (
-        <form action="#" className="mt-4 space-y-4" onSubmit={handleSubmit}>
+        <form action={formAction} className="mt-4 space-y-4">
           <input
             type="text"
             name="company"
