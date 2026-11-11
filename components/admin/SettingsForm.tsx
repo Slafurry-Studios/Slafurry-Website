@@ -19,6 +19,7 @@ import {
   IconEye,
   IconEyeOff,
 } from "@tabler/icons-react";
+import { useToast } from "@/components/ui/Toast";
 
 // ─── Tabler icon map for social links ──────────────────────────
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
@@ -78,6 +79,7 @@ export function SettingsForm({
   initialLinks: SocialLink[];
 }) {
   const router = useRouter();
+  const { toast } = useToast();
   const [settings, setSettings] = useState<SettingsData>(initialSettings);
   const [links, setLinks] = useState<SocialLink[]>(initialLinks);
   const [error, setError] = useState("");
@@ -104,35 +106,70 @@ export function SettingsForm({
         const data = await res.json();
         setError(data.error || "Failed to save settings.");
         setSaving(false);
+        toast({
+          title: "Error saving settings",
+          description: data.error || "Failed to save settings.",
+          type: "error",
+        });
         return;
       }
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
       setSaving(false);
+      toast({
+        title: "Settings saved",
+        description: "Your changes have been saved successfully.",
+        type: "success",
+      });
       router.refresh();
     } catch {
       setError("Network error.");
       setSaving(false);
+      toast({
+        title: "Error",
+        description: "Network error while saving settings.",
+        type: "error",
+      });
     }
   }
 
   // ─── Social Links ────────────────────────────────────────────
   async function addLink(section: SocialLink["section"]) {
-    const res = await fetch("/api/admin/social-links", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        platform: "discord",
-        label: "",
-        url: "",
-        section,
-        isHidden: false,
-        order: links.filter((l) => l.section === section).length,
-      }),
-    });
-    if (res.ok) {
+    try {
+      const res = await fetch("/api/admin/social-links", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          platform: "discord",
+          label: "",
+          url: "",
+          section,
+          isHidden: false,
+          order: links.filter((l) => l.section === section).length,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        toast({
+          title: "Error",
+          description: data.error || "Failed to add link.",
+          type: "error",
+        });
+        return;
+      }
       const link = await res.json();
       setLinks((prev) => [...prev, link]);
+      toast({
+        title: "Link added",
+        description: "New social link added. Fill in the details and save.",
+        type: "success",
+      });
+    } catch {
+      toast({
+        title: "Error",
+        description: "Network error. Please try again.",
+        type: "error",
+      });
     }
   }
 
@@ -140,11 +177,19 @@ export function SettingsForm({
     setLinks((prev) =>
       prev.map((l) => (l.id === id ? { ...l, [field]: value } : l))
     );
-    await fetch(`/api/admin/social-links/${id}`, {
+    const res = await fetch(`/api/admin/social-links/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ [field]: value }),
     });
+    if (!res.ok) {
+      const data = await res.json();
+      toast({
+        title: "Error",
+        description: data.error || "Failed to update link.",
+        type: "error",
+      });
+    }
   }
 
   async function deleteLink(id: string) {
@@ -152,6 +197,18 @@ export function SettingsForm({
     const res = await fetch(`/api/admin/social-links/${id}`, { method: "DELETE" });
     if (res.ok) {
       setLinks((prev) => prev.filter((l) => l.id !== id));
+      toast({
+        title: "Link deleted",
+        description: "The social link has been removed.",
+        type: "success",
+      });
+    } else {
+      const data = await res.json();
+      toast({
+        title: "Error",
+        description: data.error || "Failed to delete link.",
+        type: "error",
+      });
     }
   }
 
