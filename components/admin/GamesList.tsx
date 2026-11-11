@@ -84,10 +84,9 @@ export function GamesList({ games }: { games: GameRow[] }) {
 
   async function handleDragEnd(e: DragEvent<HTMLDivElement>, id: string) {
     setDraggedId(null);
-    setDragOverId(null);
 
-    const targetEl = e.currentTarget;
-    const targetId = targetEl.getAttribute("data-id");
+    const targetId = dragOverId;
+    setDragOverId(null);
     if (targetId && targetId !== id) {
       await reorderGames(id, targetId);
     }
