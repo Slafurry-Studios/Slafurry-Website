@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { followStoredRedirect } from "@/lib/queries/redirects";
 import Image from "next/image";
 import { getGameBySlug } from "@/lib/queries/games";
 import { getApprovedGameComments } from "@/lib/queries/comments";
@@ -16,6 +17,7 @@ export default async function GameDetailPage({
   const game = await getGameBySlug(slug);
 
   if (!game) {
+    await followStoredRedirect(`/games/${slug}`);
     notFound();
   }
 
@@ -105,6 +107,7 @@ export const generateMetadata = async ({
   const game = await getGameBySlug(slug);
 
   if (!game) {
+    await followStoredRedirect(`/games/${slug}`);
     notFound();
   }
 

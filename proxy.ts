@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getAuthProvider, type CookieStore } from "@/lib/auth/adapter";
-import { prisma } from "@/lib/prisma";
+import type { CookieStore } from "@/lib/auth/adapter";
+// Must stay Prisma-free: Netlify can't bundle Prisma's native engine into middleware.
+import { getProxySession } from "@/lib/auth/proxy-session";
 
 function buildCookieStore(request: NextRequest, response: NextResponse): CookieStore {
   return {
@@ -16,10 +17,9 @@ function buildCookieStore(request: NextRequest, response: NextResponse): CookieS
 export async function proxy(request: NextRequest) {
   const response = NextResponse.next();
 
-  // 1. Refresh session + get user via auth adapter (not Supabase directly).
-  const provider = getAuthProvider();
+  // 1. Refresh session + get user (Prisma-free variant of the auth adapter).
   const cookies = buildCookieStore(request, response);
-  const { user } = await provider.getSession(cookies);
+  const { user } = await getProxySession(cookies);
 
   // 2. Admin API guard — /api/admin/* needs valid session. Return 401 JSON.
   const pathname = request.nextUrl.pathname;
@@ -32,19 +32,8 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
-  // 3. Redirect lookup — check stale slugs before 404.
-  try {
-    const redirect = await prisma.redirect.findUnique({
-      where: { from: pathname },
-    });
-
-    if (redirect) {
-      const dest = redirect.to.startsWith("/") ? redirect.to : `/${redirect.to}`;
-      return NextResponse.redirect(new URL(dest, request.url), { status: 308 });
-    }
-  } catch {
-    // DB unreachable — skip redirect lookup.
-  }
+  // 3. Stored redirects (prisma.redirect) are resolved at not-found time in
+  //    pages via lib/queries/redirects.ts — middleware cannot use Prisma.
 
   // 4. Admin route matching.
   const isAdminRoute = pathname.startsWith("/admin");
