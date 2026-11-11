@@ -23,6 +23,11 @@ export function PostCard({
             src={post.coverImage}
             alt={post.coverImageAlt}
             className={compact ? "aspect-[16/9] w-full object-cover" : "aspect-[21/9] w-full object-cover"}
+            onError={(e) => {
+              console.error("Image failed to load:", post.coverImage, e);
+              (e.target as HTMLImageElement).onerror = null;
+              (e.target as HTMLImageElement).src = "";
+            }}
           />
         ) : (
           <PlaceholderImage
