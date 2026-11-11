@@ -1,24 +1,20 @@
 import Link from "next/link";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { BrandIcon } from "@/components/icons/BrandIcon";
+import { getFooterLinks } from "@/lib/queries/home";
+import type { SocialLink } from "@prisma/client";
 
-const FOOTER_LINKS = [
-  { platform: "mail", label: "Email", url: "mailto:hello@slafurrystudios.com" },
-  { platform: "youtube", label: "YouTube", url: "https://youtube.com" },
-  { platform: "instagram", label: "Instagram", url: "https://instagram.com" },
-  { platform: "linkedin", label: "LinkedIn", url: "https://linkedin.com" },
-  { platform: "tiktok", label: "TikTok", url: "https://tiktok.com" },
-] as const;
+export async function Footer() {
+  const links: SocialLink[] = await getFooterLinks();
 
-export function Footer() {
   return (
     <div className="mx-auto max-w-[90rem] px-3 md:px-8 mt-auto mb-4">
       <footer className="pixel-dark-frame px-6 py-6 text-white flex flex-col justify-between min-h-[12rem]">
         <div className="mx-auto flex w-full flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            {FOOTER_LINKS.map((link) => (
+            {links.map((link) => (
               <a
-                key={link.platform}
+                key={link.id}
                 href={link.url}
                 aria-label={link.label}
                 target="_blank"

@@ -45,6 +45,17 @@ export async function getCommunityLinks() {
   }
 }
 
+export async function getFooterLinks() {
+  try {
+    return await prisma.socialLink.findMany({
+      where: { section: LinkSection.FOOTER, isHidden: false },
+      orderBy: { order: "asc" },
+    });
+  } catch {
+    return [];
+  }
+}
+
 export async function getLatestNewsPosts(limit = 3) {
   try {
     const featured = await prisma.post.findMany({
