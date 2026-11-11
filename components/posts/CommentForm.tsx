@@ -68,7 +68,17 @@ export function CommentForm({
         </div>
       )}
 
-      {isPending || state?.ok !== true ? (
+      {isPending ? (
+        <div className="mt-6 space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-32" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-10 w-20" />
+          <PillButton size="sm" disabled className="w-full sm:w-auto">
+            Sending…
+          </PillButton>
+        </div>
+      ) : (
         <form action="#" className="mt-4 space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
@@ -109,7 +119,7 @@ export function CommentForm({
               </label>
               <input
                 id="email"
-                name="email"
+                name="authorEmail"
                 required
                 type="email"
                 className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none transition-colors focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
@@ -156,16 +166,6 @@ export function CommentForm({
             )}
           </PillButton>
         </form>
-      ) : (
-        <div className="mt-6 space-y-4">
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-32" />
-          <Skeleton className="h-24 w-full" />
-          <Skeleton className="h-10 w-20" />
-          <PillButton size="sm" disabled className="w-full sm:w-auto">
-            Sending…
-          </PillButton>
-        </div>
       )}
     </div>
   );
