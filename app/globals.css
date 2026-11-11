@@ -326,3 +326,33 @@ main > *:nth-child(4) {
   }
 }
 
+/* Article content headings — ensure headings are clearly larger than body text */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family: var(--font-display-family);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.prose h1 {
+  font-size: 2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose h2 {
+  font-size: 1.75rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.625rem;
+}
+
+.prose h3 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+

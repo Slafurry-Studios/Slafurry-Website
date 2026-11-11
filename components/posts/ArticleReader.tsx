@@ -20,8 +20,7 @@ export function ArticleReader({
   basePath: string;
   comments: PublicComment[];
 }) {
-    
-  return (
+      return (
     <article className="mx-auto max-w-3xl px-6 py-12 md:px-10">
       <Link
         href={basePath}
