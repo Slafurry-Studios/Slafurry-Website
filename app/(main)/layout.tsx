@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { CookieConsentBanner } from "@/components/layout/CookieConsentBanner";
 // Achievements feature disabled sementara — balikin komponen di bawah
 // kalau mau nyalain lagi.
 // import { AchievementToastContainer } from "@/components/achievements/AchievementToast";
@@ -25,7 +24,6 @@ export default function MainLayout({
       {/* <AchievementToastContainer /> */}
       {/* <AchievementCTA /> */}
       {/* <AchievementInit /> */}
-      <CookieConsentBanner />
     </>
   );
 }
