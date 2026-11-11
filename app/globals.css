@@ -115,6 +115,15 @@ body {
   image-rendering: pixelated;
 }
 
+.pixel-frame img,
+.pixel-dark-frame img,
+.pixel-border img,
+.pixel-border-sm img,
+.pixel-btn img,
+.pixel-frame-filled img {
+  image-rendering: auto;
+}
+
 .pixel-dark-frame {
   background-color: #171717;
   border: 24px solid transparent;
