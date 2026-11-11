@@ -40,20 +40,14 @@ export function GameCard({
           <img
             src={game.coverImage}
             alt={game.coverImageAlt}
-            className={
-              "w-full object-cover transition-opacity duration-300 " +
-              (hasYoutube ? "group-hover:opacity-30" : "") +
-              (featured ? "aspect-[21/9]" : "aspect-[16/9]")
-            }
+            className="w-full object-cover transition-opacity duration-300 " +
+            (hasYoutube ? "group-hover:opacity-30" : "") +
+            "aspect-[16/9]"
           />
         ) : (
           <PlaceholderImage
             label={game.title}
-            className={
-              "w-full transition-opacity duration-300 " +
-              (hasYoutube ? "group-hover:opacity-30" : "") +
-              (featured ? "aspect-[21/9]" : "aspect-[16/9]")
-            }
+            className="w-full transition-opacity duration-300 aspect-[16/9]"
           />
         )}
 
