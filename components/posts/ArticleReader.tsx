@@ -59,7 +59,7 @@ export function ArticleReader({
       )}
 
       <div
-        className="mt-8 space-y-5 font-display text-xl leading-relaxed text-neutral-700 dark:text-neutral-300 prose prose-neutral dark:prose-invert max-w-none"
+        className="mt-8 space-y-5 font-display prose prose-neutral dark:prose-invert max-w-none"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
