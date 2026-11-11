@@ -26,6 +26,11 @@ export async function submitContactMessage(
   _prevState: ContactResult | null,
   formData: FormData
 ): Promise<ContactResult> {
+  // Headers must be read before any other awaits (Next.js restriction).
+  const headersList = await headers();
+  const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ipHash = createHash("sha256").update(ip).digest("hex").slice(0, 16);
+
   // ─── Honeypot check ───
   const honeypotResult = await checkHoneypot(formData, "company");
   if (honeypotResult.isBot) {
@@ -49,11 +54,6 @@ export async function submitContactMessage(
     return { ok: false, error: "A valid email is required." };
   if (!message || message.length > 2000)
     return { ok: false, error: "Message is required (max 2000 chars." };
-
-  // Hash IP for abuse tracing (not identity)
-  const hdrs = await headers();
-  const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  const ipHash = createHash("sha256").update(ip).digest("hex").slice(0, 16);
 
   // Persist to database
   await prisma.contactMessage.create({

@@ -14,6 +14,11 @@ export async function submitComment(
   _prevState: CommentResult | null,
   formData: FormData
 ): Promise<CommentResult> {
+  // Headers must be read before any other awaits (Next.js restriction).
+  const headersList = await headers();
+  const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ipHash = createHash("sha256").update(ip).digest("hex").slice(0, 16);
+
   // ─── Honeypot check ───
   const honeypotResult = await checkHoneypot(formData, "company");
   if (honeypotResult.isBot) {
@@ -58,11 +63,6 @@ export async function submitComment(
       return { ok: false, error: "Game not found." };
     }
   }
-
-  // Hash IP for abuse tracing (not identity)
-  const hdrs = await headers();
-  const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  const ipHash = createHash("sha256").update(ip).digest("hex").slice(0, 16);
 
   await prisma.comment.create({
     data: {
