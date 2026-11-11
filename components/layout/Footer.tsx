@@ -43,6 +43,12 @@ export function Footer() {
 
         <p className="pt-6 text-center font-display text-xs text-neutral-400">
           © {new Date().getFullYear()} Slafurry Studios. All Rights Reserved.
+          <Link
+            href="/secret"
+            className="ml-1 text-xs hover:text-neutral-200 transition-colors"
+          >
+            🥚
+          </Link>
         </p>
       </footer>
     </div>
