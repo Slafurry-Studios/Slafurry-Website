@@ -33,10 +33,18 @@ function NewsCard({ post }: { post: Post }) {
       className="flex flex-col overflow-hidden pixel-border transition-all hover:scale-[1.02] hover:shadow-md"
     >
       <div className="-mx-6 -mt-6 overflow-hidden">
-        <PlaceholderImage
-          label={post.title}
-          className="aspect-[16/10] w-full"
-        />
+        {post.coverImage ? (
+          <img
+            src={post.coverImage}
+            alt={post.coverImageAlt || post.title}
+            className="aspect-[16/10] w-full object-cover"
+          />
+        ) : (
+          <PlaceholderImage
+            label={post.title}
+            className="aspect-[16/10] w-full"
+          />
+        )}
       </div>
       <div className="flex flex-1 flex-col p-4">
         <h3 className="font-display text-xl font-semibold leading-snug">{post.title}</h3>
