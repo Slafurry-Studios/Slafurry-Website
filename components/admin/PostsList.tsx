@@ -10,6 +10,7 @@ import {
   IconEyeOff,
   IconEye,
   IconTrash,
+  IconAlertCircle,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/admin/DataTable";
@@ -63,6 +64,7 @@ export function PostsList({
   const [activeTab, setActiveTab] = useState<"DEVLOG" | "NEWS">("DEVLOG");
   const [visibility, setVisibility] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
   const [statusFilter, setStatusFilter] = useState<"ALL" | "PUBLISHED" | "DRAFT">("ALL");
+  const [error, setError] = useState("");
 
   const visibleCount = posts.filter(p => p.category === activeTab && !p.isHidden).length;
   const hiddenCount = posts.filter(p => p.category === activeTab && p.isHidden).length;
@@ -78,12 +80,21 @@ export function PostsList({
   );
 
   async function toggleHide(id: string, isHidden: boolean) {
-    await fetch(`/api/admin/posts/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isHidden }),
-    });
-    router.refresh();
+    try {
+      const res = await fetch(`/api/admin/posts/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isHidden }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || "Failed to update post.");
+        return;
+      }
+      router.refresh();
+    } catch {
+      setError("Network error. Please try again.");
+    }
   }
 
   async function deletePost(id: string) {
@@ -104,6 +115,13 @@ export function PostsList({
           New Post
         </Link>
       </div>
+
+      {error && (
+        <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300">
+          <IconAlertCircle size={18} className="shrink-0" />
+          {error}
+        </div>
+      )}
 
       <DataTable
         data={filteredPosts}
