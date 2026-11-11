@@ -62,12 +62,19 @@ export function PostsList({
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"DEVLOG" | "NEWS">("DEVLOG");
   const [visibility, setVisibility] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
+  const [statusFilter, setStatusFilter] = useState<"ALL" | "PUBLISHED" | "DRAFT">("ALL");
 
   const visibleCount = posts.filter(p => p.category === activeTab && !p.isHidden).length;
   const hiddenCount = posts.filter(p => p.category === activeTab && p.isHidden).length;
 
   const filteredPosts = posts.filter(
-    (p) => p.category === activeTab && (visibility === "VISIBLE" ? !p.isHidden : p.isHidden)
+    (p) => {
+      if (p.category !== activeTab) return false;
+      if (visibility === "VISIBLE" ? p.isHidden : !p.isHidden) return false;
+      if (statusFilter === "PUBLISHED" && p.status !== "PUBLISHED") return false;
+      if (statusFilter === "DRAFT" && p.status !== "DRAFT") return false;
+      return true;
+    }
   );
 
   async function toggleHide(id: string, isHidden: boolean) {
