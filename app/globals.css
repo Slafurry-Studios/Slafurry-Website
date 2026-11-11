@@ -56,6 +56,21 @@ main > *:nth-child(4) {
   animation: carousel-enter 0.4s ease-out both;
 }
 
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .carousel-enter {
     animation: none;
