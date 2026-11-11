@@ -69,7 +69,7 @@ export function NewsListClient({
           <h2 className="text-center font-display text-3xl tracking-wide mb-8">
             Featured Stories
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             {featuredPosts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
