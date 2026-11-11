@@ -47,6 +47,21 @@ export async function getCommunityLinks() {
 
 export async function getLatestNewsPosts(limit = 3) {
   try {
+    const featured = await prisma.post.findMany({
+      where: {
+        category: PostCategory.NEWS,
+        status: PostStatus.PUBLISHED,
+        isHidden: false,
+        featured: true,
+      },
+      orderBy: { order: "asc" },
+      take: limit,
+    });
+
+    if (featured.length > 0) {
+      return featured;
+    }
+
     return await prisma.post.findMany({
       where: {
         category: PostCategory.NEWS,

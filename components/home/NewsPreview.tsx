@@ -3,34 +3,37 @@ import Link from "next/link";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 import { formatDate } from "@/lib/format";
 
+const CARD_WIDTH_BY_COUNT: Record<number, string> = {
+  1: "w-full",
+  2: "w-1/2",
+  3: "w-1/3",
+};
+
 export function NewsPreview({ posts }: { posts: Post[] }) {
-  
-  // Belum ada Post kategori NEWS yang PUBLISHED — sembunyiin section
-  // daripada nampilin grid kosong.
   if (posts.length === 0) return null;
 
-  // 2x2 — ambil max 4 post, kartu seragam tanpa featured gede.
-  const cards = posts.slice(0, 2);
+  const cards = posts.slice(0, 3);
+  const count = cards.length;
+  const cardWidth = CARD_WIDTH_BY_COUNT[count] ?? "w-full";
 
   return (
     <section className="flex min-h-screen flex-col justify-center px-6 py-16 md:px-10">
       <h2 className="text-center font-display text-4xl tracking-wide">News</h2>
 
-      <div className="mx-auto mt-10 grid max-w-7xl gap-6 md:grid-cols-2">
+      <div className="mx-auto mt-10 flex flex-row gap-6 max-w-7xl">
         {cards.map((post) => (
-          <NewsCard key={post.id} post={post} />
+          <NewsCard key={post.id} post={post} cardWidth={cardWidth} />
         ))}
       </div>
     </section>
   );
 }
 
-function NewsCard({ post }: { post: Post }) {
-
+function NewsCard({ post, cardWidth }: { post: Post; cardWidth: string }) {
   return (
     <Link
       href={`/news/${post.slug}`}
-      className="flex flex-col overflow-hidden pixel-border transition-all hover:scale-[1.02] hover:shadow-md"
+      className={`flex flex-col overflow-hidden pixel-border transition-all hover:scale-[1.02] hover:shadow-md ${cardWidth}`}
     >
       <div className="-mx-6 -mt-6 overflow-hidden">
         {post.coverImage ? (
