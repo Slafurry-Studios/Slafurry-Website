@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { error: "File too large. Maximum size is 10 MB." },
-        { status: 500 }
+        { status: 400 }
       );
     }
 
@@ -55,11 +55,14 @@ export async function POST(request: Request) {
       bucket,
       filename: path,
     });
-  } catch (error) {
-    console.error("Upload route error:", error);
+  } catch (error: any) {
+    console.error("Upload route error:", {
+      message: error.message,
+      status: error.status,
+    });
     return NextResponse.json(
-      { error: "Something went wrong." },
-      { status: 500 }
+      { error: error.message || "Upload failed." },
+      { status: error.status ?? 500 }
     );
   }
 }
