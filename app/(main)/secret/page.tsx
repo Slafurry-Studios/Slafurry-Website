@@ -40,6 +40,8 @@ export default function SecretEasterEgg() {
                     src="/images/phase 2/welcome to our top secret website.png"
                     alt="Welcome to our TOP SECRET Website!"
                     className="w-full h-auto"
+                    width={860}
+                    height={450}
                     priority
                 />
             </motion.div>
@@ -60,6 +62,8 @@ export default function SecretEasterEgg() {
                             src="/images/phase 2/you can mail us at.png"
                             alt="You can mail us at: hello@slafurrystudios.com"
                             className="w-full h-auto"
+                            width={700}
+                            height={200}
                         />
                     </a>
                 </motion.div>
@@ -70,6 +74,8 @@ export default function SecretEasterEgg() {
                             src="/images/phase 2/play our games here.png"
                             alt="Play our games here!"
                             className="w-full h-auto"
+                            width={760}
+                            height={200}
                         />
                     </div>
                     <div className="flex items-center gap-12 md:gap-24">
@@ -83,6 +89,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/itch io.png"
                                 alt="Itch.io"
                                 className="w-full h-auto"
+                                width={52}
+                                height={52}
                             />
                         </a>
                         <a 
@@ -95,6 +103,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/github.png"
                                 alt="Github"
                                 className="w-full h-auto"
+                                width={52}
+                                height={52}
                             />
                         </a>
                     </div>
@@ -106,6 +116,8 @@ export default function SecretEasterEgg() {
                             src="/images/phase 2/by the way this is our socmed.png"
                             alt="By the way, this is our social media. Come take a look!"
                             className="w-full h-auto"
+                            width={760}
+                            height={200}
                         />
                     </div>
 
@@ -120,6 +132,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/youtube.png"
                                 alt="Youtube"
                                 className="w-full h-auto"
+                                width={52}
+                                height={52}
                             />
                         </a>
                         <a 
@@ -132,6 +146,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/linkedin.png"
                                 alt="LinkedIn"
                                 className="w-full h-auto"
+                                width={52}
+                                height={52}
                             />
                         </a>
                         <a 
@@ -144,6 +160,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/instagram.png"
                                 alt="Instagram"
                                 className="w-full h-auto"
+                                width={52}
+                                height={52}
                             />
                         </a>
                         <a 
@@ -156,6 +174,8 @@ export default function SecretEasterEgg() {
                                 src="/images/phase 2/tiktok.png"
                                 alt="Tiktok"
                                 className="w-full h-auto"
+                                width={52}
+                                height={52}
                             />
                         </a>
                     </div>
@@ -167,6 +187,8 @@ export default function SecretEasterEgg() {
                             src="/images/phase 2/business inquiries.png"
                             alt="Business Inquiries (we add this like we gonna got funding soon)"
                             className="w-full h-auto"
+                            width={800}
+                            height={200}
                         />
                     </div>
                     <a 
@@ -177,6 +199,8 @@ export default function SecretEasterEgg() {
                             src="/images/phase 2/business email.png"
                             alt="business@slafurrystudios.com"
                             className="w-full h-auto"
+                            width={500}
+                            height={100}
                         />
                     </a>
                 </motion.div>
