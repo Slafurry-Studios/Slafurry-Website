@@ -18,14 +18,14 @@ export function ContactForm() {
       </p>
 
       {state?.ok === true && (
-        <div className="mt-4 flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-xl text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+        <div className="mt-4 toast-enter flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-xl text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
           <IconCheck size={16} />
           {state.message}
         </div>
       )}
 
       {state?.ok === false && (
-        <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-xl text-red-700 dark:bg-red-900/30 dark:text-red-300">
+        <div className="mt-4 toast-enter flex items-center gap-2 rounded-lg bg-red-50 p-3 text-xl text-red-700 dark:bg-red-900/30 dark:text-red-300">
           <IconAlertTriangle size={16} />
           {state.error}
         </div>
@@ -56,7 +56,7 @@ export function ContactForm() {
                 name="name"
                 required
                 maxLength={100}
-                className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none transition-colors focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
+                className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
                 placeholder="Your name"
               />
             </div>
@@ -72,7 +72,7 @@ export function ContactForm() {
                 name="email"
                 required
                 type="email"
-                className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none transition-colors focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
+                className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
                 placeholder="you@example.com"
               />
               <p className="mt-1 text-[10px] text-neutral-400 dark:text-neutral-500">
@@ -85,7 +85,7 @@ export function ContactForm() {
             name="message"
             rows={6}
             required
-            className="w-full resize-y pixel-border-sm bg-white px-3 py-2 text-xl outline-none transition-colors focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
+            className="w-full resize-y pixel-border-sm bg-white px-3 py-2 text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
             placeholder="Write your message..."
           />
 
@@ -100,7 +100,7 @@ export function ContactForm() {
               id="category"
               name="category"
               defaultValue="GENERAL"
-              className="w-full pixel-border-sm bg-transparent px-4 py-2.5 font-display text-xl outline-none focus:ring-1 focus:ring-neutral-900 dark:focus:ring-white"
+              className="w-full pixel-border-sm bg-transparent px-4 py-2.5 font-display text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:focus:ring-white"
             >
               <option value="GENERAL">General inquiry</option>
               <option value="BUSINESS">Business partnership</option>

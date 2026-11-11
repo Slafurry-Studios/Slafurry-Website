@@ -28,7 +28,7 @@ export function GameCard({
   return (
     <Link
       href={`/games/${game.slug}`}
-      className="flex flex-col overflow-hidden pixel-border transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
+      className="flex flex-col overflow-hidden pixel-border press-btn game-hover"
     >
       <div className="-mx-6 -mt-6 overflow-hidden">
         {game.coverImage ? (

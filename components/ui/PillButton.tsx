@@ -27,8 +27,8 @@ export function PillButton({
 }: PillButtonProps) {
   const base =
     size === "sm"
-      ? "inline-flex items-center justify-center gap-2 pixel-border px-4 py-2 font-display text-lg font-medium transition-all hover:scale-105 min-h-10 sm:gap-4 sm:px-6 sm:py-3 sm:text-xl"
-      : "inline-flex items-center justify-center gap-3 pixel-border px-6 py-4 font-display text-base font-medium transition-all hover:scale-105 min-h-14 sm:gap-6 sm:px-12 sm:py-6 sm:text-xl md:text-3xl";
+      ? "inline-flex items-center justify-center gap-2 pixel-border px-4 py-2 font-display text-lg font-medium press-btn game-hover min-h-10 sm:gap-4 sm:px-6 sm:py-3 sm:text-xl"
+      : "inline-flex items-center justify-center gap-3 pixel-border px-6 py-4 font-display text-base font-medium press-btn game-hover min-h-14 sm:gap-6 sm:px-12 sm:py-6 sm:text-xl md:text-3xl";
   const style =
     variant === "solid"
       ? "bg-neutral-900 text-white hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
