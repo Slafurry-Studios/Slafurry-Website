@@ -17,6 +17,7 @@ import {
   IconMinus,
   IconHeading,
 } from "@tabler/icons-react";
+import { useToast } from "@/components/ui/Toast";
 
 function ToolbarButton({
   onClick,
@@ -55,6 +56,7 @@ export function TiptapEditor({
   content: string;
   onChange: (html: string) => void;
 }) {
+  const { toast } = useToast();
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -76,6 +78,66 @@ export function TiptapEditor({
       attributes: {
         class:
           "prose prose-sm max-w-none min-h-[300px] px-4 py-3 font-display text-neutral-900 dark:text-neutral-100 focus:outline-none prose-headings:font-display prose-p:leading-relaxed prose-a:text-blue-600 prose-img:rounded-lg dark:prose-invert",
+      },
+      handlePaste: (view: any, event: ClipboardEvent) => {
+        const items =
+          (event.clipboardData ||
+            (event.originalEvent as ClipboardEvent).clipboardData)?.items;
+        if (!items) return false;
+
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          if (item.type.indexOf("image") === -1) continue;
+
+          const file = item.getAsFile();
+          if (!file) continue;
+
+          event.preventDefault();
+
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("bucket", "post-covers");
+
+          toast({
+            title: "Uploading image...",
+            description: "Please wait while we upload your image.",
+            type: "loading",
+            duration: 3000,
+          });
+
+          fetch("/api/admin/upload", {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (!res.ok) {
+                toast({
+                  title: "Error",
+                  description: data.error || "Upload failed.",
+                  type: "error",
+                });
+                return;
+              }
+              editor.chain().focus().setImage({ src: data.url }).run();
+              toast({
+                title: "Image inserted",
+                description: "Image has been added to your post.",
+                type: "success",
+              });
+            })
+            .catch(() => {
+              toast({
+                title: "Error",
+                description: "Network error while uploading image.",
+                type: "error",
+              });
+            });
+
+          return true;
+        }
+
+        return false;
       },
     },
     onUpdate: ({ editor: e }) => {
