@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 function getCookie(name: string): string | null {
   return document.cookie
@@ -12,6 +12,7 @@ function getCookie(name: string): string | null {
 }
 
 export function CookieConsentBanner() {
+  const router = useRouter();
   const [showBanner, setShowBanner] = useState(true);
   const [hasHydrated, setHasHydrated] = useState(false);
 
@@ -52,7 +53,7 @@ export function CookieConsentBanner() {
             <button
               onClick={() => {
                 document.cookie = "cookie_consent=accept; path=/";
-                redirect("/");
+                router.push("/");
               }}
               className="flex-1 px-6 py-3 bg-neutral-900 text-white font-display font-medium rounded-lg hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
             >
@@ -61,7 +62,7 @@ export function CookieConsentBanner() {
             <button
               onClick={() => {
                 document.cookie = "cookie_consent=reject; path=/";
-                redirect("/");
+                router.push("/");
               }}
               className="flex-1 px-6 py-3 text-neutral-900 font-display font-medium rounded-lg hover:bg-neutral-200 dark:text-white dark:hover:bg-white dark:hover:text-neutral-900"
             >
