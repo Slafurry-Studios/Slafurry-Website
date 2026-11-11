@@ -8,12 +8,21 @@ const STATUS_STYLE: Record<GameData["status"], string> = {
   IN_DEVELOPMENT: "bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300",
 };
 
+const YOUTUBE_REGEX = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+
+function getYoutubeEmbedUrl(playLinks: GameData["playLinks"]): string | null {
+  const youtubeLink = playLinks.find((l) => YOUTUBE_REGEX.test(l.url));
+  if (!youtubeLink) return null;
+  const id = youtubeLink.url.match(YOUTUBE_REGEX)?.[1];
+  return id ? `https://www.youtube.com/embed/${id}` : null;
+}
+
 function StatusBadge({ status }: { status: GameData["status"] }) {
-    return (
+  return (
     <span
       className={`inline-block rounded-full px-2.5 py-0.5 font-display text-xs font-medium ${STATUS_STYLE[status]}`}
     >
-      {status.replace('_', ' ')}
+      {status.replace("_", " ")}
     </span>
   );
 }
@@ -25,22 +34,46 @@ export function GameCard({
   game: GameData;
   featured?: boolean;
 }) {
+  const youtubeEmbedUrl = getYoutubeEmbedUrl(game.playLinks);
+  const hasYoutube = Boolean(youtubeEmbedUrl);
+
   return (
     <Link
       href={`/games/${game.slug}`}
       className="flex flex-col overflow-hidden pixel-border press-btn game-hover"
     >
-      <div className="-m-2 overflow-hidden">
+      <div className="-m-2 overflow-hidden relative group">
+        {/* Image — always rendered, mandatory fallback */}
         {game.coverImage ? (
           <img
             src={game.coverImage}
             alt={game.coverImageAlt}
-            className={featured ? "aspect-[21/9] w-full object-cover" : "aspect-[16/9] w-full object-cover"}
+            className={
+              "w-full object-cover transition-opacity duration-300 " +
+              (hasYoutube ? "group-hover:opacity-30" : "") +
+              (featured ? "aspect-[21/9]" : "aspect-[16/9]")
+            }
           />
         ) : (
           <PlaceholderImage
             label={game.title}
-            className={featured ? "aspect-[21/9] w-full" : "aspect-[16/9] w-full"}
+            className={
+              "w-full transition-opacity duration-300 " +
+              (hasYoutube ? "group-hover:opacity-30" : "") +
+              (featured ? "aspect-[21/9]" : "aspect-[16/9]")
+            }
+          />
+        )}
+
+        {/* YouTube preview — optional, auto-plays on hover; image stays as fallback */}
+        {hasYoutube && (
+          <iframe
+            className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in"
+            src={`${youtubeEmbedUrl}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0`}
+            title={`${game.title} preview`}
+            allow="autoplay; encrypted-media"
+            loading="lazy"
+            referrerPolicy="no-referrer"
           />
         )}
       </div>
