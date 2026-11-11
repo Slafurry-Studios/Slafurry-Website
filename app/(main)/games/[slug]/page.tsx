@@ -25,6 +25,16 @@ export default async function GameDetailPage({
 
   return (
     <div className="prose lg:prose-xl max-w-2xl mx-auto px-4 py-12">
+      {game.coverImage && (
+        <Image
+          src={game.coverImage}
+          alt={game.coverImageAlt}
+          width={1200}
+          height={675}
+          className="aspect-[16/9] w-full rounded-xl object-cover"
+        />
+      )}
+
       <h1 className="text-3xl font-display tracking-wide mb-6 mt-8">
         {game.title}
 
@@ -40,16 +50,6 @@ export default async function GameDetailPage({
           {game.status}
         </span>
       </h1>
-
-      {game.coverImage && (
-        <Image
-          src={game.coverImage}
-          alt={game.coverImageAlt}
-          width={1200}
-          height={675}
-          className="aspect-[16/9] w-full rounded-xl object-cover"
-        />
-      )}
 
       <div className="mt-8 space-y-5 font-display prose prose-neutral dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: game.longDesc || "" }} />
 
