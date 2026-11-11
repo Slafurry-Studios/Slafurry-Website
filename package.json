@@ -1,7 +1,8 @@
 {
-  "name": "slafurry-studios",
+  "name": "Slafurry-Studios",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -44,7 +45,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.3",
+    "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.12",
     "typescript": "^5",

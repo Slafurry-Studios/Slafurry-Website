@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /* Base type scale — 18px root, biar copy gak kekecilan. Semua ukuran rem
    (text-*, spacing, Tailwind breakpoints) ikut skala ~12% dari default 16px. */
@@ -67,14 +68,12 @@ main > *:nth-child(4) {
    app/layout.tsx & lib/settings/. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Register Branding Colors */
+  --color-primary: #2d2d2d;
+  --color-accent: #fed001;
 
-.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  /* Utility Animations (Optional) */
+  --animate-fade-in: fade-in 0.5s ease-out;
 }
 
 @theme inline {
@@ -86,25 +85,34 @@ main > *:nth-child(4) {
   --font-display: var(--font-display-family);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Serious Mode hook — komponen yang punya elemen "jokey" (misal achievement
-   CTA/toast) bisa di-hide lewat class ini tanpa perlu conditional render
-   di semua tempat. Toggle class ".serious" di <html> lewat SettingsProvider. */
-.serious .joke-only {
-  display: none !important;
+/* TipTap Editor Heading Styles */
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: white;
 }
 
-/* Kebalikannya — konten yang cuma muncul KETIKA Serious Mode aktif (misal
-   versi teks formal pengganti copy jokey). Disembunyikan secara default. */
-.serious-only {
-  display: none;
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: white;
 }
-.serious .serious-only {
-  display: initial;
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: white;
 }
 
 /* Pixel art 9-slicing frames and buttons */
