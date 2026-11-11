@@ -14,7 +14,7 @@ export default async function ContactPage() {
   
   return (
     <div className="mx-auto max-w-4xl px-6 py-16 md:px-10">
-      <h1 className="font-display text-5xl tracking-wide">"Check Out Our Games"</h1>
+      <h1 className="font-display text-5xl tracking-wide">Contact Us</h1>
       <p className="mt-3 font-display text-lg text-neutral-600 dark:text-neutral-400">
         {MOCK_INTRO}
       </p>

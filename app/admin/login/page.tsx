@@ -10,7 +10,18 @@ import { IconMail, IconLock, IconAlertCircle } from "@tabler/icons-react";
 // wajib bungkus useSearchParams pakai Suspense.
 export default function AdminLoginPage() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={
+      <div className="flex min-h-[calc(100vh-6rem)] items-center justify-center px-4">
+        <div className="w-full max-w-sm space-y-8 animate-pulse">
+          <div className="h-20 w-24 rounded-full bg-neutral-200 dark:bg-neutral-800 mx-auto" />
+          <div className="space-y-4">
+            <div className="h-4 w-3/4 rounded bg-neutral-200 dark:bg-neutral-800" />
+            <div className="h-4 w-full rounded bg-neutral-200 dark:bg-neutral-800" />
+            <div className="h-10 w-3/4 rounded-full bg-neutral-200 dark:bg-neutral-800" />
+          </div>
+        </div>
+      </div>
+    }>
       <LoginForm />
     </Suspense>
   );
@@ -46,7 +57,7 @@ function LoginForm() {
     <section className="flex min-h-[calc(100vh-6rem)] items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-8">
         <div className="text-center">
-          <h1 className="font-display text-4xl tracking-tight">"Check Out Our Games"</h1>
+          <h1 className="font-display text-4xl tracking-tight">Admin Login</h1>
           <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
             "Sign in to manage the studio dashboard."
           </p>
@@ -82,26 +93,35 @@ function LoginForm() {
             </div>
           </div>
 
-          <div>
-            <label htmlFor="password" className="mb-1.5 block text-sm font-medium">
-              "Password"
-            </label>
-            <div className="relative">
-              <IconLock
-                size={18}
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-              />
-              <input
-                id="password"
-                type="password"
-                required
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Your password"
-                className="w-full rounded-lg border border-neutral-300 bg-white py-2.5 pl-10 pr-4 text-sm outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
-              />
+          <div className="flex items-end gap-2">
+            <div>
+              <label htmlFor="password" className="mb-1.5 block text-sm font-medium">
+                "Password"
+              </label>
+              <div className="relative">
+                <IconLock
+                  size={18}
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+                />
+                <input
+                  id="password"
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Your password"
+                  className="w-full rounded-lg border border-neutral-300 bg-white py-2.5 pl-10 pr-4 text-sm outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
+                />
+              </div>
             </div>
+            <button
+              type="button"
+              onClick={() => {}}
+              className="mt-7 block text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
+            >
+              Forgot password?
+            </button>
           </div>
 
           <button
@@ -111,6 +131,17 @@ function LoginForm() {
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
+
+          <p className="text-center text-sm text-neutral-500 dark:text-neutral-400">
+            Don't have an account?{" "}
+            <button
+              type="button"
+              onClick={() => {}}
+              className="font-medium text-neutral-900 hover:text-neutral-950 dark:text-white dark:hover:text-neutral-100 underline underline-offset-2"
+            >
+              Create account
+            </button>
+          </p>
         </form>
       </div>
     </section>

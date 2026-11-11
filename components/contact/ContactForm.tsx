@@ -40,6 +40,7 @@ export function ContactForm() {
             autoComplete="off"
             className="absolute -left-[9999px] h-0 w-0 opacity-0"
             aria-hidden="true"
+            suppressHydrationWarning
           />
 
           <div className="grid gap-3 sm:grid-cols-2">

@@ -85,7 +85,7 @@ export default async function GameDetailPage({
           href="/games"
           className="inline-flex items-center rounded-md bg-primary-600 px-4 py-2 text-xl font-medium text-white hover:bg-primary-700"
         >
-          ← Kembali ke daftar game
+          ← Back to game list
         </Link>
       </div>
 
@@ -109,7 +109,7 @@ export const generateMetadata = async ({
   }
 
   const settings = await getSiteSettings();
-  const ogImage = game.ogImage || (settings?.defaultOgImage || "/og/default-banner.png");
+  const ogImage = game.ogImage || (settings?.defaultOgImage || "/slafurry-logo.png");
 
   return {
     title: game.title,

@@ -51,7 +51,7 @@ export const generateMetadata = async ({
       openGraph: {
         images: [
           {
-            url: "/og/default-banner.png",
+            url: "/slafurry-logo.png",
             width: 1200,
             height: 630,
             alt: "Slafurry Studios",
@@ -64,7 +64,7 @@ export const generateMetadata = async ({
     };
   }
 
-  const ogImage = post.ogImage || settings?.defaultOgImage || "/og/default-banner.png";
+  const ogImage = post.ogImage || settings?.defaultOgImage || "/slafurry-logo.png";
 
   return {
     title: post.title,
