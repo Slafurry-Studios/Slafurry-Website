@@ -1,5 +1,5 @@
 import { PostCategory } from "@prisma/client";
-import { getPublishedPosts, getPostTags } from "@/lib/queries/posts";
+import { getFeaturedPosts, getPublishedPosts, getPostTags } from "@/lib/queries/posts";
 import { NewsListClient } from "@/components/posts/NewsListClient";
 
 // ISR: artikel baru muncul tanpa rebuild (maks. 60 detik).
@@ -7,7 +7,8 @@ export const revalidate = 10;
 
 export default async function NewsPage() {
   
-  const [posts, tags] = await Promise.all([
+  const [featuredPosts, posts, tags] = await Promise.all([
+    getFeaturedPosts(PostCategory.NEWS, 3),
     getPublishedPosts(PostCategory.NEWS),
     getPostTags(PostCategory.NEWS),
   ]);
@@ -20,6 +21,7 @@ export default async function NewsPage() {
       intro="Official updates, unofficial rambling, and the occasional announcement we probably should have made sooner."
       subIntro="Read at your own risk."
       searchPlaceholder="Search news..."
+      featuredPosts={featuredPosts}
     />
   );
 }

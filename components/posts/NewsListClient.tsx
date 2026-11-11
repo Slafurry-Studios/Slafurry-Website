@@ -13,6 +13,7 @@ export function NewsListClient({
   intro,
   subIntro,
   searchPlaceholder,
+  featuredPosts,
 }: {
   posts: PostCardData[];
   tags: string[];
@@ -20,8 +21,8 @@ export function NewsListClient({
   intro: string;
   subIntro?: string;
   searchPlaceholder: string;
+  featuredPosts: PostCardData[];
 }) {
-
   const [tagFilter, setTagFilter] = useState<string | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -62,6 +63,20 @@ export function NewsListClient({
         </p>
       )}
 
+      {/* Featured posts */}
+      {featuredPosts.length > 0 && (
+        <section className="my-20">
+          <h2 className="text-center font-display text-3xl tracking-wide mb-8">
+            Featured Stories
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {featuredPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        </section>
+      )}
+
       <div className="mx-auto mb-10 max-w-4xl">
         <div className="flex flex-wrap gap-2 justify-center">
           <button
@@ -92,7 +107,7 @@ export function NewsListClient({
         </div>
       </div>
 
-      {/* Straight vertical list — tanpa grid kolom. */}
+      {/* Posts list */}
       <div className="mx-auto mt-10 flex max-w-4xl flex-col gap-8">
         {filtered.map((post) => (
           <PostCard key={post.id} post={post} />

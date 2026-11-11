@@ -14,6 +14,7 @@ export type PostCardData = {
   authorName: string;
   publishedAt: string | null;
   commentCount: number;
+  featured: boolean;
 };
 
 // ─── Public type for article reader ────────────────────────────
@@ -38,6 +39,7 @@ type CardRow = {
   authorName: string;
   publishedAt: Date | null;
   _count: { comments: number };
+  featured: boolean;
 };
 
 function toCardData(row: CardRow): PostCardData {
@@ -53,6 +55,7 @@ function toCardData(row: CardRow): PostCardData {
     authorName: row.authorName,
     publishedAt: row.publishedAt?.toISOString() ?? null,
     commentCount: row._count.comments,
+    featured: row.featured,
   };
 }
 
@@ -64,6 +67,42 @@ export async function getPublishedPosts(
   try {
     const rows = await prisma.post.findMany({
       where: { category, status: PostStatus.PUBLISHED, isHidden: false },
+      orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        excerpt: true,
+        coverImage: true,
+        coverImageAlt: true,
+        category: true,
+        tags: true,
+        authorName: true,
+        publishedAt: true,
+        featured: true,
+        _count: { select: { comments: true } },
+      },
+      ...(limit ? { take: limit } : {}),
+    });
+    return rows.map(toCardData);
+  } catch {
+    return [];
+  }
+}
+
+/** Fetch featured posts (for hero/hero sections). */
+export async function getFeaturedPosts(
+  category: PostCategory,
+  limit?: number
+): Promise<PostCardData[]> {
+  try {
+    const rows = await prisma.post.findMany({
+      where: {
+        category,
+        status: PostStatus.PUBLISHED,
+        isHidden: false,
+        featured: true,
+      },
       orderBy: { publishedAt: "desc" },
       select: {
         id: true,
@@ -76,6 +115,7 @@ export async function getPublishedPosts(
         tags: true,
         authorName: true,
         publishedAt: true,
+        featured: true,
         _count: { select: { comments: true } },
       },
       ...(limit ? { take: limit } : {}),
@@ -105,6 +145,7 @@ export async function getPostBySlug(
         tags: true,
         authorName: true,
         publishedAt: true,
+        featured: true,
         _count: { select: { comments: true } },
         content: true,
         metaTitle: true,
@@ -151,6 +192,7 @@ export async function getAdjacentPosts(
       tags: true,
       authorName: true,
       publishedAt: true,
+      featured: true,
       _count: { select: { comments: true } },
     } as const;
 
