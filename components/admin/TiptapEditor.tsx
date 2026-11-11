@@ -244,10 +244,9 @@ export function TiptapEditor({
       </div>
 
       {/* Editor */}
-      <EditorContent
-        editor={editor}
-        className="bg-white dark:bg-neutral-900"
-      />
+      <div className="bg-white dark:bg-neutral-900 prose prose-neutral dark:prose-invert">
+        <EditorContent editor={editor} className="h-full" />
+      </div>
     </div>
   );
 }

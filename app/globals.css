@@ -336,6 +336,7 @@ main > *:nth-child(4) {
   font-family: var(--font-display-family);
   font-weight: 700;
   line-height: 1.2;
+  color: var(--neutral-900);
 }
 
 .prose h1 {
@@ -354,5 +355,36 @@ main > *:nth-child(4) {
   font-size: 1.5rem;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
+}
+
+/* Dark mode headings */
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6 {
+  color: var(--neutral-100);
+}
+
+/* TipTap editor headings — ensure dark text on white editor background */
+.TiptapEditor h1,
+.TiptapEditor h2,
+.TiptapEditor h3,
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--neutral-900);
+}
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6 {
+  color: var(--neutral-100);
 }
 
