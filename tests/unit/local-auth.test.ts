@@ -18,21 +18,21 @@ describe("LocalAuthProvider (guard production)", () => {
     env.VERCEL = origVercel;
   });
 
-  it("melempar saat NODE_ENV=production", () => {
+  it("throws when NODE_ENV=production", () => {
     env.NODE_ENV = "production";
     expect(() => new LocalAuthProvider()).toThrow(
-      "Local auth provider tidak boleh aktif di production"
+      "Local auth provider cannot be active in production"
     );
   });
 
-  it("melempar saat VERCEL di-set", () => {
+  it("throws when VERCEL is set", () => {
     env.VERCEL = "1";
     expect(() => new LocalAuthProvider()).toThrow(
-      "Local auth provider tidak boleh aktif di production"
+      "Local auth provider cannot be active in production"
     );
   });
 
-  it("tidak melempar saat development", () => {
+  it("does not throw in development", () => {
     env.NODE_ENV = "development";
     expect(() => new LocalAuthProvider()).not.toThrow();
   });
