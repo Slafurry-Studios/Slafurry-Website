@@ -4,9 +4,11 @@ import { useActionState } from "react";
 import { submitContactMessage } from "@/lib/actions/contact";
 import { IconSend, IconLoader2, IconCheck, IconAlertTriangle } from "@tabler/icons-react";
 import { PillButton } from "@/components/ui/PillButton";
+import { Skeleton, SkeletonText, useLoadingState } from "@/components/ui/Skeleton";
 
 export function ContactForm() {
   const [state, formAction, isPending] = useActionState(submitContactMessage, null);
+  const showPending = useLoadingState(isPending, 600);
 
   return (
     <div className="mt-10 pixel-border bg-neutral-50 p-6 dark:bg-neutral-900/50">
@@ -18,20 +20,81 @@ export function ContactForm() {
       </p>
 
       {state?.ok === true && (
-        <div className="mt-4 toast-enter flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-xl text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+        <div className="mt-4 flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-xl text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
           <IconCheck size={16} />
           {state.message}
         </div>
       )}
 
       {state?.ok === false && (
-        <div className="mt-4 toast-enter flex items-center gap-2 rounded-lg bg-red-50 p-3 text-xl text-red-700 dark:bg-red-900/30 dark:text-red-300">
+        <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-xl text-red-700 dark:bg-red-900/30 dark:text-red-300">
           <IconAlertTriangle size={16} />
           {state.error}
         </div>
       )}
 
-      {state?.ok !== true && (
+      {isPending || state?.ok !== true ? (
+        <form action={formAction} className="mt-6 space-y-4 opacity-50 pointer-events-none">
+          <input
+            type="text"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            className="absolute -left-[9999px] h-0 w-0 opacity-0"
+            aria-hidden="true"
+            suppressHydrationWarning
+          />
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label
+                htmlFor="name"
+                className="mb-1 block text-xs font-medium text-neutral-700 dark:text-neutral-300"
+              >
+                Name
+              </label>
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-1 block text-xs font-medium text-neutral-700 dark:text-neutral-300"
+              >
+                Email
+              </label>
+              <Skeleton className="h-10 w-32" />
+            </div>
+          </div>
+
+          <Skeleton className="h-24 w-full" />
+
+          <div>
+            <label
+              htmlFor="category"
+              className="mb-1 block text-xs font-medium text-neutral-700 dark:text-neutral-300"
+            >
+              Category
+            </label>
+            <Skeleton className="h-10 w-20" />
+          </div>
+
+          <PillButton
+            size="sm"
+            type="submit"
+            disabled
+            className="w-full sm:w-auto"
+          >
+            {isPending ? (
+              <>
+                <IconLoader2 size={16} className="animate-spin" />
+                Sending…
+              </>
+            ) : (
+              "Sending…"
+            )}
+          </PillButton>
+        </form>
+      ) : (
         <form action={formAction} className="mt-6 space-y-4">
           <input
             type="text"
@@ -56,7 +119,7 @@ export function ContactForm() {
                 name="name"
                 required
                 maxLength={100}
-                className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
+                className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none transition-colors focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
                 placeholder="Your name"
               />
             </div>
@@ -72,7 +135,7 @@ export function ContactForm() {
                 name="email"
                 required
                 type="email"
-                className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
+                className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none transition-colors focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
                 placeholder="you@example.com"
               />
               <p className="mt-1 text-[10px] text-neutral-400 dark:text-neutral-500">
@@ -85,7 +148,7 @@ export function ContactForm() {
             name="message"
             rows={6}
             required
-            className="w-full resize-y pixel-border-sm bg-white px-3 py-2 text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
+            className="w-full resize-y pixel-border-sm bg-white px-3 py-2 text-xl outline-none transition-colors focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
             placeholder="Write your message..."
           />
 
@@ -100,7 +163,7 @@ export function ContactForm() {
               id="category"
               name="category"
               defaultValue="GENERAL"
-              className="w-full pixel-border-sm bg-transparent px-4 py-2.5 font-display text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:focus:ring-white"
+              className="w-full pixel-border-sm bg-transparent px-4 py-2.5 font-display text-xl outline-none focus:ring-1 focus:ring-neutral-900 dark:focus:ring-white"
             >
               <option value="GENERAL">General inquiry</option>
               <option value="BUSINESS">Business partnership</option>
@@ -115,7 +178,7 @@ export function ContactForm() {
             icon={<IconSend size={16} />}
             className="w-full sm:w-auto"
           >
-            {isPending ? "Sending..." : "Send message"}
+            {isPending ? "Sending…" : "Send message"}
           </PillButton>
         </form>
       )}
