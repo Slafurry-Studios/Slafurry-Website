@@ -2,7 +2,6 @@
 
 import type { Game } from "@prisma/client";
 import Link from "next/link";
-import Image from "next/image";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 
 const CARD_WIDTH_BY_COUNT: Record<number, string> = {
@@ -46,24 +45,23 @@ function ProjectCard({
       href={`/games/${project.slug}`}
       className={`overflow-hidden pixel-border bg-white dark:bg-neutral-900 transition-all duration-200 hover:scale-[1.02] hover:shadow-md ${cardWidth}`}
     >
-      <div className="relative -mx-6 -mt-6 overflow-hidden h-64 sm:h-80">
+      <div className="-mx-6 -mt-6 overflow-hidden">
         {project.coverImage ? (
-          <Image
+          <img
             src={project.coverImage}
             alt={project.coverImageAlt}
-            fill
-            sizes="(max-width: 768px) 80vw, 680px"
-            className="object-cover"
+            className="aspect-[16/9] w-full object-cover"
           />
         ) : (
-          <PlaceholderImage label={project.title} className="h-full w-full" />
+          <PlaceholderImage
+            label={project.title}
+            className="aspect-[16/9] w-full"
+          />
         )}
       </div>
       <div className="p-4 sm:p-6">
-        <h3 className="line-clamp-1 min-h-[2rem] font-display text-xl sm:text-2xl tracking-wide">
-          {project.title}
-        </h3>
-        <p className="mt-1 line-clamp-2 min-h-[3.5rem] font-display text-sm sm:text-xl text-neutral-600 dark:text-neutral-400">
+        <h3 className="font-display text-xl sm:text-2xl font-semibold leading-snug">{project.title}</h3>
+        <p className="mt-2 line-clamp-2 font-display text-sm sm:text-xl text-neutral-600 dark:text-neutral-400">
           {project.shortDesc}
         </p>
       </div>
