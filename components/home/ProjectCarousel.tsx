@@ -83,7 +83,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
           </button>
         )}
 
-        <div className="relative h-[20rem] sm:h-[28rem] w-full max-w-[900px] overflow-hidden">
+        <div className="relative h-[24rem] sm:h-[28rem] w-full max-w-[900px] overflow-hidden">
           {projects.map((project, i) => (
             <ProjectCard
               key={project.id ?? project.slug}
@@ -154,7 +154,7 @@ function ProjectCard({
       }}
       className={
         "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden pixel-border bg-white dark:bg-neutral-900 " +
-        "transition-opacity duration-300 h-[28rem] w-[min(680px,80%)] hover:scale-[1.02] hover:shadow-md"
+        "transition-opacity duration-300 h-[24rem] sm:h-[28rem] w-full sm:w-[min(680px,90%)] hover:scale-[1.02] hover:shadow-md"
       }
     >
       <div className="relative -mx-6 -mt-6 overflow-hidden h-80">
