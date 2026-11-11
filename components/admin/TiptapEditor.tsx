@@ -81,8 +81,7 @@ export function TiptapEditor({
       },
       handlePaste: (view: any, event: ClipboardEvent) => {
         const items =
-          (event.clipboardData ||
-            (event.originalEvent as ClipboardEvent).clipboardData)?.items;
+          (event as any).clipboardData?.items;
         if (!items) return false;
 
         for (let i = 0; i < items.length; i++) {
@@ -109,16 +108,18 @@ export function TiptapEditor({
             method: "POST",
             body: formData,
           })
-            .then((res) => res.json())
-            .then((data) => {
+            .then((res) => {
               if (!res.ok) {
                 toast({
                   title: "Error",
-                  description: data.error || "Upload failed.",
+                  description: "Upload failed.",
                   type: "error",
                 });
-                return;
+                throw new Error(res.statusText);
               }
+              return res.json();
+            })
+            .then((data) => {
               editor.chain().focus().setImage({ src: data.url }).run();
               toast({
                 title: "Image inserted",

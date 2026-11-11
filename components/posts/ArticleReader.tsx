@@ -53,7 +53,7 @@ export function ArticleReader({
         )}
       </div>
       {post.coverImageAlt && (
-        <p className="mt-3 font-display text-xs italic text-neutral-500 dark:text-neutral-400">
+        <p className="mt-3 font-display text-xs italic text-neutral-500 dark:text-neutral-400 text-center">
           {post.coverImageAlt}
         </p>
       )}
