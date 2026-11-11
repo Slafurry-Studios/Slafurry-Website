@@ -33,7 +33,7 @@ export function ContactForm() {
         </div>
       )}
 
-      {isPending || state?.ok !== true ? (
+      {isPending ? (
         <form action={formAction} className="mt-6 space-y-4 opacity-50 pointer-events-none">
           <input
             type="text"
@@ -84,14 +84,8 @@ export function ContactForm() {
             disabled
             className="w-full sm:w-auto"
           >
-            {isPending ? (
-              <>
-                <IconLoader2 size={16} className="animate-spin" />
-                Sending…
-              </>
-            ) : (
-              "Sending…"
-            )}
+            <IconLoader2 size={16} className="animate-spin" />
+            Sending…
           </PillButton>
         </form>
       ) : (
