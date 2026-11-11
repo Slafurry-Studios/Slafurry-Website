@@ -11,7 +11,11 @@
   # would otherwise trip secrets scanning for AUTH_PROVIDER/STORAGE_PROVIDER.
   SECRETS_SCAN_OMIT_PATHS = ".netlify/**"
   # NEXT_PUBLIC_* values are intentionally inlined into the client bundle.
-  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,NEXT_PUBLIC_APP_URL,AUTH_PROVIDER,STORAGE_PROVIDER"
+  # AUTH_PROVIDER/STORAGE_PROVIDER values (supabase) appear legitimately in
+  # Prisma client, migrations, and docs — exclude them from secrets scanning.
+  # AUTH_LOCAL_SECRET and NEXT_PUBLIC_RESEND_API_KEY values appear in build
+  # output chunks — exclude them as well.
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,NEXT_PUBLIC_APP_URL,AUTH_PROVIDER,STORAGE_PROVIDER,AUTH_LOCAL_SECRET,NEXT_PUBLIC_RESEND_API_KEY"
 
 [dev]
   command = "npm run dev"
