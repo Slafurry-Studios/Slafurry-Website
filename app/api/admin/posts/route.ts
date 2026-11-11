@@ -101,6 +101,7 @@ export const POST = withAudit(
           metaTitle: body.metaTitle || null,
           metaDescription: body.metaDescription || null,
           ogImage: body.ogImage || null,
+          featured: body.featured ?? false,
           previewToken: generatePreviewToken(),
           prevPostId: body.prevPostId || null,
           nextPostId: body.nextPostId || null,

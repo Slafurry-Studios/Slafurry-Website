@@ -75,6 +75,7 @@ export const PUT = withAudit(
           authorName: body.authorName ?? existing.authorName,
           status: body.status ?? existing.status,
           isHidden: typeof body.isHidden === "boolean" ? body.isHidden : existing.isHidden,
+          featured: typeof body.featured === "boolean" ? body.featured : existing.featured,
           publishedAt,
           metaTitle:
             body.metaTitle !== undefined ? body.metaTitle || null : existing.metaTitle,

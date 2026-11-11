@@ -42,6 +42,8 @@ export default async function EditPostPage({
           ogImage: post.ogImage ?? "",
           prevPostId: post.prevPostId,
           nextPostId: post.nextPostId,
+          featured: post.featured,
+          order: post.order,
           previewToken: post.previewToken,
           autosavedAt: post.autosavedAt?.toISOString() ?? null,
         }}

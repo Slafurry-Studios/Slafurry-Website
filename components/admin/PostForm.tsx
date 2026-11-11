@@ -37,8 +37,10 @@ type PostData = {
   ogImage: string;
   prevPostId: string | null;
   nextPostId: string | null;
-  previewToken?: string | null;
-  autosavedAt?: string | null;
+  featured: boolean;
+  previewToken: string | null;
+  autosavedAt: string | null;
+  order: number;
 };
 
 type PostOption = { id: string; title: string; slug: string };
@@ -59,6 +61,10 @@ const EMPTY_POST: PostData = {
   ogImage: "",
   prevPostId: null,
   nextPostId: null,
+  featured: false,
+  previewToken: null,
+  autosavedAt: null,
+  order: 0,
 };
 
 function slugify(title: string): string {
@@ -333,14 +339,25 @@ export function PostForm({ initial }: { initial?: PostData }) {
               <option value="PUBLISHED">Published</option>
             </select>
           </div>
-          <div className={hintClass}>
-            <label className={labelClass}>Author</label>
+        <div className={hintClass}>
+            <label className={labelClass}>Order</label>
             <input
-              type="text"
-              value={post.authorName}
-              onChange={(e) => update("authorName", e.target.value)}
+              type="number"
+              value={post.order}
+              onChange={(e) => update("order", parseInt(e.target.value) || 0)}
               className={inputClass}
             />
+          </div>
+          <div className="flex items-end pb-1">
+            <label className="flex items-center gap-2 text-sm font-medium">
+              <input
+                type="checkbox"
+                checked={post.featured}
+                onChange={(e) => update("featured", e.target.checked)}
+                className="h-4 w-4 rounded border-neutral-300"
+              />
+              Featured
+            </label>
           </div>
         </div>
 
