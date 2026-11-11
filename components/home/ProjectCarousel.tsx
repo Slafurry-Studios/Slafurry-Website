@@ -157,14 +157,14 @@ function ProjectCard({
         "transition-opacity duration-300 h-[28rem] w-[min(680px,80%)] hover:scale-[1.02] hover:shadow-md"
       }
     >
-      <div className="relative -mx-6 -mt-6 overflow-hidden aspect-[16/9] w-full">
+      <div className="relative -mx-6 -mt-6 overflow-hidden h-[200px] w-full">
         {project.coverImage ? (
           <Image
             src={project.coverImage}
             alt={project.coverImageAlt}
             fill
             sizes="(max-width: 768px) 80vw, 680px"
-            className="object-cover"
+            className="object-cover object-center"
           />
         ) : (
           <PlaceholderImage label={project.title} className="h-full w-full" />
@@ -174,7 +174,7 @@ function ProjectCard({
         <h3 className="line-clamp-1 min-h-[2rem] font-display text-2xl tracking-wide">
           {project.title}
         </h3>
-        <p className="mt-1 line-clamp-2 min-h-[3.5rem] font-display text-xl text-neutral-600 dark:text-neutral-400">
+        <p className="mt-1 line-clamp-4 font-display text-xl text-neutral-600 dark:text-neutral-400">
           {project.shortDesc}
         </p>
       </div>
