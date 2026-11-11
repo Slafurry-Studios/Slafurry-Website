@@ -182,10 +182,10 @@ export function GamesList({ games }: { games: GameRow[] }) {
                 {hasYoutube && (
                   <iframe
                     className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in"
-                    src={`${youtubeEmbedUrl}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0`}
+                    src={`${youtubeEmbedUrl}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0${typeof window !== 'undefined' ? `&origin=${window.location.origin}` : ''}`}
                     title={`${game.title} preview`}
-                    allow="autoplay; encrypted-media"
-                    referrerPolicy="no-referrer"
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowFullScreen
                   />
                 )}
               </div>
