@@ -5,8 +5,12 @@ export async function POST(request: Request) {
   try {
     const { draggedId, targetId } = await request.json();
 
-    const draggedGame = await prisma.game.findUnique({ where: { id: draggedId } });
-    const targetGame = await prisma.game.findUnique({ where: { id: targetId });
+    const draggedGame = await prisma.game.findUnique({
+      where: { id: draggedId },
+    });
+    const targetGame = await prisma.game.findUnique({
+      where: { id: targetId },
+    });
 
     if (!draggedGame || !targetGame) {
       return NextResponse.json({ error: "Games not found." }, { status: 404 });
@@ -24,7 +28,6 @@ export async function POST(request: Request) {
       // Moving down: shift games between dragged+1 and target up by 1
       await prisma.game.updateMany({
         where: {
-          category: draggedGame.category,
           order: { gte: draggedOrder + 1, lte: targetOrder },
         },
         data: { order: { decrement: 1 } },
@@ -33,7 +36,6 @@ export async function POST(request: Request) {
       // Moving up: shift games between target and dragged-1 down by 1
       await prisma.game.updateMany({
         where: {
-          category: draggedGame.category,
           order: { gte: targetOrder, lt: draggedOrder },
         },
         data: { order: { increment: 1 } },

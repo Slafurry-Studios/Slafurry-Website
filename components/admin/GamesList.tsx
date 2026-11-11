@@ -1,22 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, DragEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { IconPlus, IconPencil, IconStar, IconGripVertical, IconEyeOff, IconEye, IconTrash } from "@tabler/icons-react";
+import {
+  IconPlus,
+  IconPencil,
+  IconStar,
+  IconGripVertical,
+  IconEyeOff,
+  IconEye,
+  IconTrash,
+} from "@tabler/icons-react";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
 import { getYoutubeEmbedUrl } from "@/lib/youtube";
 import { useToast } from "@/components/ui/Toast";
 
 const STATUS_STYLE: Record<string, string> = {
-  RELEASED:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
-  UPCOMING:
-    "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
-  IN_DEVELOPMENT:
-    "bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300",
+  RELEASED: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
+  UPCOMING: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
+  IN_DEVELOPMENT: "bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300",
 };
 
 type GameRow = {
@@ -58,7 +63,7 @@ export function GamesList({ games }: { games: GameRow[] }) {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
   const [draggedId, setDraggedId] = useState<string | null>(null);
-  const [dragOverId, setDragOverId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>();
 
   const visibleCount = games.filter((g) => !g.isHidden).length;
   const hiddenCount = games.filter((g) => g.isHidden).length;
@@ -67,21 +72,22 @@ export function GamesList({ games }: { games: GameRow[] }) {
     activeTab === "VISIBLE" ? !g.isHidden : g.isHidden
   );
 
-  async function handleDragStart(e: DragEvent, id: string) {
+  async function handleDragStart(e: DragEvent<HTMLDivElement>, id: string) {
     setDraggedId(id);
     e.dataTransfer?.setData("text/plain", id);
   }
 
-  async function handleDragOver(e: DragEvent, id: string) {
+  async function handleDragOver(e: DragEvent<HTMLDivElement>, id: string) {
     e.preventDefault();
     setDragOverId(id);
   }
 
-  async function handleDragEnd(e: DragEvent, id: string) {
+  async function handleDragEnd(e: DragEvent<HTMLDivElement>, id: string) {
     setDraggedId(null);
     setDragOverId(null);
 
-    const targetId = e.currentTarget.getAttribute("data-id");
+    const targetEl = e.currentTarget;
+    const targetId = targetEl.getAttribute("data-id");
     if (targetId && targetId !== id) {
       await reorderGames(id, targetId);
     }
@@ -101,6 +107,8 @@ export function GamesList({ games }: { games: GameRow[] }) {
       console.error("Failed to reorder games");
     }
   }
+
+  async function toggleHide(id: string, isHidden: boolean) {
     try {
       await fetch(`/api/admin/games/${id}`, {
         method: "PUT",
@@ -109,7 +117,9 @@ export function GamesList({ games }: { games: GameRow[] }) {
       });
       toast({
         title: isHidden ? "Game hidden" : "Game restored",
-        description: isHidden ? "The game is no longer visible on the site." : "The game is visible again.",
+        description: isHidden
+          ? "The game is no longer visible on the site."
+          : "The game is visible again.",
         type: "success",
       });
       router.refresh();
@@ -123,7 +133,10 @@ export function GamesList({ games }: { games: GameRow[] }) {
   }
 
   async function deleteGame(id: string) {
-    if (!confirm("Are you sure you want to permanently delete this game? This cannot be undone.")) return;
+    if (
+      !confirm("Are you sure you want to permanently delete this game? This cannot be undone.")
+    )
+      return;
     try {
       await fetch(`/api/admin/games/${id}`, { method: "DELETE" });
       toast({
@@ -161,7 +174,11 @@ export function GamesList({ games }: { games: GameRow[] }) {
         filters={FILTERS}
         columns={COLUMNS}
         defaultSort={{ key: "order", direction: "asc" }}
-        emptyMessage={activeTab === "VISIBLE" ? "No games yet. Create your first one!" : "No hidden games."}
+        emptyMessage={
+          activeTab === "VISIBLE"
+            ? "No games yet. Create your first one!"
+            : "No hidden games."
+        }
         headerExtra={
           <div className="flex gap-1 rounded-lg border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-800 dark:bg-neutral-900">
             <button
@@ -173,7 +190,9 @@ export function GamesList({ games }: { games: GameRow[] }) {
               }`}
             >
               Visible
-              <span className="ml-1.5 text-xs text-neutral-400 dark:text-neutral-500">{visibleCount}</span>
+              <span className="ml-1.5 text-xs text-neutral-400 dark:text-neutral-500">
+                {visibleCount}
+              </span>
             </button>
             <button
               onClick={() => setActiveTab("HIDDEN")}
@@ -184,7 +203,11 @@ export function GamesList({ games }: { games: GameRow[] }) {
               }`}
             >
               Hidden
-              {hiddenCount > 0 && <span className="ml-1.5 text-xs text-neutral-400 dark:text-neutral-500">{hiddenCount}</span>}
+              {hiddenCount > 0 && (
+                <span className="ml-1.5 text-xs text-neutral-400 dark:text-neutral-500">
+                  {hiddenCount}
+                </span>
+              )}
             </button>
           </div>
         }
@@ -192,18 +215,18 @@ export function GamesList({ games }: { games: GameRow[] }) {
           const youtubeEmbedUrl = getYoutubeEmbedUrl(game.playLinks);
           const hasYoutube = Boolean(youtubeEmbedUrl);
           return (
-              <div
-                key={game.id}
-                data-id={game.id}
-                draggable={true}
-                onDragStart={(e) => handleDragStart(e, game.id)}
-                onDragOver={(e) => handleDragOver(e, game.id)}
-                onDragEnd={(e) => handleDragEnd(e, game.id)}
-                className={`flex items-center gap-4 rounded-xl border p-4 transition-shadow hover:shadow-sm ${
-                  game.isHidden 
-                    ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
-                    : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
-                }`}
+            <div
+              key={game.id}
+              data-id={game.id}
+              draggable={true}
+              onDragStart={(e) => handleDragStart(e, game.id)}
+              onDragOver={(e) => handleDragOver(e, game.id)}
+              onDragEnd={(e) => handleDragEnd(e, game.id)}
+              className={`flex items-center gap-4 rounded-xl border p-4 transition-shadow hover:shadow-sm ${
+                game.isHidden
+                  ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50"
+                  : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+              }`}
             >
               <div className="relative shrink-0 aspect-[16/9] w-24 h-14 rounded-lg overflow-hidden">
                 {game.coverImage ? (
@@ -222,10 +245,11 @@ export function GamesList({ games }: { games: GameRow[] }) {
                 {hasYoutube && (
                   <iframe
                     className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in"
-                    src={`${youtubeEmbedUrl}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0${typeof window !== 'undefined' ? `&origin=${window.location.origin}` : ''}`}
+                    src={`${youtubeEmbedUrl}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0${typeof window !== "undefined" ? `&origin=${window.location.origin}` : ""}`}
                     title={`${game.title} preview`}
                     allow="autoplay; encrypted-media; picture-in-picture"
                     allowFullScreen
+                    referrerPolicy="no-referrer"
                   />
                 )}
               </div>
@@ -256,11 +280,14 @@ export function GamesList({ games }: { games: GameRow[] }) {
                     {game.status.replace(/_/g, " ")}
                   </span>
                 </div>
-                <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
-                  /{game.slug}
-                  {game.playLinkCount > 0 &&
-                    ` · ${game.playLinkCount} link${game.playLinkCount > 1 ? "s" : ""}`}
-                </p>
+                <div className="mt-1 flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
+                  <span>/{game.slug}</span>
+                  {game.playLinkCount > 0 && (
+                    <span>
+                      {game.playLinkCount} link{game.playLinkCount > 1 ? "s" : ""}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <div className="flex items-center gap-1">

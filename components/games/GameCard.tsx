@@ -32,24 +32,15 @@ export function GameCard({
   return (
     <Link
       href={`/games/${game.slug}`}
-      className="flex flex-col overflow-hidden pixel-border press-btn game-hover"
+      className="flex flex-col overflow-visible pixel-border press-btn game-hover"
     >
       <div className="-m-2 overflow-hidden relative group">
         {/* Image — always rendered, mandatory fallback */}
-        {game.coverImage ? (
           <img
             src={game.coverImage}
             alt={game.coverImageAlt}
-            className="w-full object-cover transition-opacity duration-300 " +
-            (hasYoutube ? "group-hover:opacity-30" : "") +
-            "aspect-[16/9]"
+            className={`w-full object-cover transition-opacity duration-300 ${hasYoutube ? "group-hover:opacity-30" : ""} aspect-[16/9]`}
           />
-        ) : (
-          <PlaceholderImage
-            label={game.title}
-            className="w-full transition-opacity duration-300 aspect-[16/9]"
-          />
-        )}
 
         {/* YouTube preview — optional, auto-plays on hover; image stays as fallback */}
         {hasYoutube && (

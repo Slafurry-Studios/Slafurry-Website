@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Game, SiteSettings } from "@prisma/client";
 import { PillButton } from "@/components/ui/PillButton";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
@@ -39,29 +40,20 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
               Upcoming Project
             </p>
             <div className="relative mt-10 aspect-[16/9] w-full max-w-md pixel-frame overflow-hidden bg-white">
-              {upcomingGame.coverImage ? (
-                <img
-                  src={upcomingGame.coverImage}
-                  alt={upcomingGame.coverImageAlt}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <PlaceholderImage
-                  label={upcomingGame.title}
-                  className="h-full w-full"
-                />
-              )}
-            </div>
-            <p className="mt-6 text-center font-display text-xl text-neutral-500">
-              {upcomingGame.shortDesc}
-            </p>
-            <div className="mt-8 md:hidden">
-              <PillButton
-                href="/games"
-                className="pixel-btn"
-              >
-                PLAY OUR GAMES
-              </PillButton>
+              <Link href={`/games/${upcomingGame.slug}`}>
+                {upcomingGame.coverImage ? (
+                  <img
+                    src={upcomingGame.coverImage}
+                    alt={upcomingGame.coverImageAlt}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <PlaceholderImage
+                    label={upcomingGame.title}
+                    className="h-full w-full"
+                  />
+                )}
+              </Link>
             </div>
           </div>
         )}
