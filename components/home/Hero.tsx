@@ -55,6 +55,9 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
                 )}
               </Link>
             </div>
+            <h2 className="mt-4 font-display text-3xl tracking-wide sm:text-4xl">
+              {upcomingGame.title}
+            </h2>
           </div>
         )}
       </div>
