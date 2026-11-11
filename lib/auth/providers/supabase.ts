@@ -1,20 +1,11 @@
-import { createServerClient } from "@supabase/ssr";
+import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import type { AuthProvider, CookieStore, SessionResult, AdminContext } from "../adapter";
 
 export class SupabaseAuthProvider implements AuthProvider {
   async getSession(cookies?: CookieStore): Promise<SessionResult> {
     const store = cookies ?? (await defaultCookies());
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-      {
-        cookies: {
-          getAll: store.getAll,
-          setAll: store.setAll,
-        },
-      }
-    );
+    const supabase = createClient(store);
     const { data } = await supabase.auth.getUser();
     return {
       user: data.user
@@ -54,11 +45,7 @@ export class SupabaseAuthProvider implements AuthProvider {
     cookies?: CookieStore
   ): Promise<{ ok: boolean; error?: string }> {
     const store = cookies ?? (await defaultCookies());
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-      { cookies: { getAll: store.getAll, setAll: store.setAll } }
-    );
+    const supabase = createClient(store);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return { ok: false, error: "Invalid email or password." };
     return { ok: true };
@@ -66,11 +53,7 @@ export class SupabaseAuthProvider implements AuthProvider {
 
   async signOut(cookies?: CookieStore): Promise<void> {
     const store = cookies ?? (await defaultCookies());
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-      { cookies: { getAll: store.getAll, setAll: store.setAll } }
-    );
+    const supabase = createClient(store);
     await supabase.auth.signOut();
   }
 }

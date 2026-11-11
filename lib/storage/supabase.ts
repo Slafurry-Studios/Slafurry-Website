@@ -1,11 +1,5 @@
-import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import type { StorageProvider, StorageFile, UploadResult } from "./adapter";
-
-function createServiceRoleClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const key = process.env.SUPABASE_SECRET_KEY!;
-  return createSupabaseClient(url, key);
-}
+import { createServiceRoleClient } from "@/lib/supabase/server";
 
 function publicUrl(bucket: string, path: string): string {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
