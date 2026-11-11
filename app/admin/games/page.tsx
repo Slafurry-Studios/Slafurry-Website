@@ -7,7 +7,10 @@ export const dynamic = "force-dynamic";
 export default async function AdminGamesPage() {
   const games = await prisma.game.findMany({
     orderBy: { order: "asc" },
-    include: { _count: { select: { playLinks: true } } },
+    include: {
+      playLinks: { select: { id: true, label: true, url: true } },
+      _count: { select: { playLinks: true } },
+    },
   });
 
   return (
@@ -20,7 +23,10 @@ export default async function AdminGamesPage() {
         featured: g.featured,
         order: g.order,
         isHidden: g.isHidden,
+        coverImage: g.coverImage,
+        coverImageAlt: g.coverImageAlt,
         playLinkCount: g._count.playLinks,
+        playLinks: g.playLinks,
       }))}
     />
   );

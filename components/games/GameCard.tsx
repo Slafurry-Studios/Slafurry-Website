@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
+import { getYoutubeEmbedUrl } from "@/lib/youtube";
 import type { GameData } from "@/lib/queries/games";
 
 const STATUS_STYLE: Record<GameData["status"], string> = {
@@ -7,15 +8,6 @@ const STATUS_STYLE: Record<GameData["status"], string> = {
   UPCOMING: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
   IN_DEVELOPMENT: "bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300",
 };
-
-const YOUTUBE_REGEX = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-
-function getYoutubeEmbedUrl(playLinks: GameData["playLinks"]): string | null {
-  const youtubeLink = playLinks.find((l) => YOUTUBE_REGEX.test(l.url));
-  if (!youtubeLink) return null;
-  const id = youtubeLink.url.match(YOUTUBE_REGEX)?.[1];
-  return id ? `https://www.youtube.com/embed/${id}` : null;
-}
 
 function StatusBadge({ status }: { status: GameData["status"] }) {
   return (

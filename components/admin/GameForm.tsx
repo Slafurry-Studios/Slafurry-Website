@@ -11,6 +11,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { ImageUploader } from "@/components/admin/ImageUploader";
+import { getYoutubeEmbedUrl } from "@/lib/youtube";
 
 type PlayLinkRow = { id?: string; label: string; url: string };
 
@@ -292,6 +293,52 @@ export function GameForm({ initial }: { initial?: GameData }) {
             </button>
           </div>
         ))}
+      </section>
+
+      {/* Preview */}
+      <section className="space-y-4">
+        <h2 className="font-display text-xl tracking-tight">Preview</h2>
+        <div className="relative aspect-[16/9] w-full max-w-md rounded-xl border p-1 overflow-hidden bg-neutral-50 dark:bg-neutral-900/50 group">
+          {game.coverImage ? (
+            <img
+              src={game.coverImage}
+              alt={game.coverImageAlt || game.title}
+              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-30"
+            />
+          ) : (
+            <div className="w-full h-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-400 text-xs font-display">
+              No cover image
+            </div>
+          )}
+          {getYoutubeEmbedUrl(game.playLinks) && (
+            <iframe
+              className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in"
+              src={`${getYoutubeEmbedUrl(game.playLinks)}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0`}
+              title={`${game.title} preview`}
+              allow="autoplay; encrypted-media"
+              loading="lazy"
+              referrerPolicy="no-referrer"
+            />
+          )}
+          {getYoutubeEmbedUrl(game.playLinks) ? (
+            <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-200">
+              <div className="flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 backdrop-blur-sm">
+                <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <span className="text-xs font-medium text-white uppercase tracking-wider">YouTube preview</span>
+              </div>
+            </div>
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center opacity-50 group-hover:opacity-100 transition-opacity duration-200">
+              <div className="flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 backdrop-blur-sm">
+                <span className="text-[10px] font-medium text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">
+                  Add a YouTube play link to preview
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* SEO */}
