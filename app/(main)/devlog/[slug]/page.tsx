@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { followStoredRedirect } from "@/lib/queries/redirects";
 import { PostCategory } from "@prisma/client";
 import { ArticleReader } from "@/components/posts/ArticleReader";
 import { getPostBySlug, getAdjacentPosts } from "@/lib/queries/posts";
@@ -17,7 +18,10 @@ export default async function DevlogArticlePage({
     getAdjacentPosts(slug, PostCategory.DEVLOG),
   ]);
 
-  if (!post) notFound();
+  if (!post) {
+    await followStoredRedirect(`/devlog/${slug}`);
+    notFound();
+  }
 
   const comments = await getApprovedPostComments(post.id);
 
