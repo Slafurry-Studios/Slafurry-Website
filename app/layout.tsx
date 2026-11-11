@@ -9,7 +9,12 @@ export const metadata: Metadata = {
   title: "Slafurry Studios",
   description: "Indie game developers. The joke went too far. Now we are going professional.",
   icons: {
-    icon: "/slafurry-logo.png",
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 

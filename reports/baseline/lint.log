@@ -1,0 +1,181 @@
+
+> slafurry-studios@0.1.0 lint
+> eslint
+
+
+/data/Projects/Slafurry Studios/Slafurry-Website/app/(main)/contact/page.tsx
+  17:59  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  17:79  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  28:63  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  28:73  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  30:13  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  30:41  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  38:63  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  38:82  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  40:13  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  40:45  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  47:11  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  47:38  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/data/Projects/Slafurry Studios/Slafurry-Website/app/(main)/not-found.tsx
+   1:8   warning  'Link' is defined but never used                                 @typescript-eslint/no-unused-vars
+  27:9   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:22  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  29:64  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  29:84  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  32:9   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  32:24  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  32:89  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  35:9   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  35:22  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  35:43  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  35:75  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  40:11  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  40:24  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  42:35  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  42:50  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/data/Projects/Slafurry Studios/Slafurry-Website/app/(main)/page.tsx
+  49:5  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/data/Projects/Slafurry Studios/Slafurry-Website/app/(main)/press/page.tsx
+  65:63  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  65:73  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  80:27  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  80:36  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  93:9   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  93:44  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/data/Projects/Slafurry Studios/Slafurry-Website/app/admin/analytics/page.tsx
+   90:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  123:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  158:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/data/Projects/Slafurry Studios/Slafurry-Website/app/admin/login/page.tsx
+  54:64  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  54:84  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  56:13  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  56:53  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  70:15  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  70:26  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  92:15  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  92:24  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/data/Projects/Slafurry Studios/Slafurry-Website/app/api/analytics/route.ts
+  54:58  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  54:75  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  60:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  64:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/data/Projects/Slafurry Studios/Slafurry-Website/app/global-not-found.tsx
+  48:9  error  Do not use an `<a>` element to navigate to `/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  48:9  error  Do not use an `<a>` element to navigate to `/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+/data/Projects/Slafurry Studios/Slafurry-Website/app/layout.tsx
+  2:10  warning  'notFound' is defined but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/achievements/AchievementCTA.tsx
+   67:37  error    React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render                                                                                                                                                              react-hooks/rules-of-hooks
+   68:41  error    React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render                                                                                                                                                              react-hooks/rules-of-hooks
+   69:15  error    React Hook "useRef" is called conditionally. React Hooks must be called in the exact same order in every component render                                                                                                                                                                react-hooks/rules-of-hooks
+   72:3   error    React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render                                                                                                                                                             react-hooks/rules-of-hooks
+   79:3   error    React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render                                                                                                                                                             react-hooks/rules-of-hooks
+   90:3   error    React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render                                                                                                                                                             react-hooks/rules-of-hooks
+  213:64  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  213:77  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  256:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  282:31  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  282:36  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  348:17  warning  'isNew' is assigned a value but never used                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  382:9   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  382:21  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/achievements/AchievementToast.tsx
+  117:9   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  134:11  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  134:16  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  140:11  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  140:20  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  166:9   warning  'hideTimerRef' is assigned a value but never used                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  188:9   warning  'maxVisible' is assigned a value but never used                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/admin/AchievementForm.tsx
+  8:3  warning  'IconEye' is defined but never used     @typescript-eslint/no-unused-vars
+  9:3  warning  'IconEyeOff' is defined but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/admin/CommentsList.tsx
+    3:10  warning  'useState' is defined but never used            @typescript-eslint/no-unused-vars
+  120:10  warning  'isPending' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/admin/ContactsList.tsx
+    3:10  warning  'useState' is defined but never used            @typescript-eslint/no-unused-vars
+  105:10  warning  'isPending' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/admin/DataTable.tsx
+    3:29  warning  'useCallback' is defined but never used                                                                                                                                                     @typescript-eslint/no-unused-vars
+  100:9   warning  The 'getId' logical expression could make the dependencies of useMemo Hook (at line 159) change on every render. To fix this, wrap the initialization of 'getId' in its own useMemo() Hook  react-hooks/exhaustive-deps
+  100:9   warning  The 'getId' logical expression could make the dependencies of useMemo Hook (at line 198) change on every render. To fix this, wrap the initialization of 'getId' in its own useMemo() Hook  react-hooks/exhaustive-deps
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/admin/DeleteButton.tsx
+  3:10  warning  'useState' is defined but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/admin/GameForm.tsx
+  10:3  warning  'IconArrowLeft' is defined but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/admin/ImageUploader.tsx
+  6:3  warning  'IconUpload' is defined but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/admin/SettingsForm.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/contact/ContactForm.tsx
+  5:20  warning  'IconLoader2' is defined but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/games/GameCard.tsx
+  34:9  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/home/Hero.tsx
+  48:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/icons/SlafurryMark.tsx
+  5:5  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/layout/Footer.tsx
+  42:56  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  42:77  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/layout/SettingsDropdown.tsx
+  57:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/posts/ArticleReader.tsx
+  39:9   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  39:12  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  41:58  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  41:67  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  46:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/data/Projects/Slafurry Studios/Slafurry-Website/components/posts/PostCard.tsx
+  21:9   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  43:11  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  43:14  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  49:37  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  49:46  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+
+/data/Projects/Slafurry Studios/Slafurry-Website/lib/achievements/debug.ts
+  79:17  warning  'isNew' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/lib/achievements/storage.ts
+  29:5  error  'state' is never reassigned. Use 'const' instead  prefer-const
+
+/data/Projects/Slafurry Studios/Slafurry-Website/lib/actions/comment.ts
+  4:10  warning  'CommentStatus' is defined but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/lib/actions/form-guards.ts
+  6:10  warning  'ContactCategory' is defined but never used  @typescript-eslint/no-unused-vars
+
+/data/Projects/Slafurry Studios/Slafurry-Website/lib/supabase/server.ts
+  35:50  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+✖ 109 problems (78 errors, 31 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+
