@@ -31,9 +31,6 @@ export default async function NotFound() {
       <p className="joke-only mt-3 max-w-sm font-display text-xl text-neutral-500 dark:text-neutral-400">
         "Looks like you're lost. Maybe this page got caught in a joke that went too far."
       </p>
-      <p className="serious-only mt-3 max-w-sm font-display text-xl text-neutral-500 dark:text-neutral-400">
-        "The page you're looking for doesn't exist or may have been moved."
-      </p>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <PillButton href="/" variant="solid">

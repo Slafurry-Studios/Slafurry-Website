@@ -24,8 +24,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
 
-  // Serious Mode + sound mute dihapus — cookie lama udah gak dibaca,
-  // class "serious" gak pernah dipasang lagi.
+// Serious Mode removed — cookie lama udah gak dibaca,
+// class "serious" gak pernah dipasang lagi.
   const htmlClassNames = [
     fontDisplay.variable,
   ].join(" ");

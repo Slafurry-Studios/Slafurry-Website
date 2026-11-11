@@ -13,15 +13,11 @@ export default async function AdminSettingsPage() {
   ]);
 
   // Ensure singleton exists
-  const settings = settingsRaw ?? {
+    const settings = settingsRaw ?? {
     tagline: "",
-    taglineSerious: "",
     aboutText: "",
-    aboutTextSerious: "",
     contactHeading: "Get in touch",
-    contactHeadingSerious: "Contact us",
     contactIntro: "",
-    contactIntroSerious: "",
     foundedAt: new Date(),
     contactEmail: "",
     businessEmail: "",
@@ -35,13 +31,9 @@ export default async function AdminSettingsPage() {
       <SettingsForm
         initialSettings={{
           tagline: settings.tagline,
-          taglineSerious: settings.taglineSerious,
           aboutText: settings.aboutText,
-          aboutTextSerious: settings.aboutTextSerious,
           contactHeading: settings.contactHeading,
-          contactHeadingSerious: settings.contactHeadingSerious,
           contactIntro: settings.contactIntro,
-          contactIntroSerious: settings.contactIntroSerious,
           foundedAt: settings.foundedAt.toISOString().split("T")[0],
           contactEmail: settings.contactEmail,
           businessEmail: settings.businessEmail,

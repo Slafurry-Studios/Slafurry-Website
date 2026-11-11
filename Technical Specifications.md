@@ -210,7 +210,7 @@ model Achievement {
 
 enum AchievementTrigger {
   PAGE_VISIT       // { path: "/press" }
-  EVENT            // { eventName: "toggled_serious_mode" }
+  EVENT            // { eventName: "event_name" }
   VISIT_COUNT      // { count: 3 }
   SCROLL_DEPTH     // { path: "/", percent: 100 }
   TIME_ON_SITE     // { seconds: 300 }
@@ -248,14 +248,10 @@ model Redirect {
 model SiteSettings {
   id               Int      @id @default(1) // singleton
   tagline          String
-  taglineSerious   String
   aboutText        String   @db.Text
-  aboutTextSerious String   @db.Text
   contactHeading        String  @default("Get in touch")
-  contactHeadingSerious String  @default("Contact us")
   contactIntro          String  @db.Text
-  contactIntroSerious   String  @db.Text
-  foundedAt        DateTime // basis hitung "X months, X days..." (skip kalau serious mode)
+  foundedAt        DateTime
   contactEmail     String
   businessEmail    String
   defaultOgImage   String   // 1200x630px — fallback OG banner utk halaman/post tanpa ogImage sendiri

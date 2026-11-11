@@ -45,13 +45,9 @@ const PLATFORM_PRESETS = [
 
 type SettingsData = {
   tagline: string;
-  taglineSerious: string;
   aboutText: string;
-  aboutTextSerious: string;
   contactHeading: string;
-  contactHeadingSerious: string;
   contactIntro: string;
-  contactIntroSerious: string;
   foundedAt: string;
   contactEmail: string;
   businessEmail: string;
@@ -177,61 +173,54 @@ export function SettingsForm({
       <form onSubmit={handleSaveSettings} className="space-y-8">
         <section className="space-y-4">
           <h2 className="font-display text-xl tracking-tight">Site Settings</h2>
-          <p className="text-xs text-neutral-500">
-            Fields are shown in pairs: Normal mode (left) and Serious mode (right).
-          </p>
 
           {/* Tagline */}
-          <FieldPair
-            labelNormal="Tagline"
-            labelSerious="Tagline (Serious)"
-            valueNormal={settings.tagline}
-            valueSerious={settings.taglineSerious}
-            onChangeNormal={(v) => update("tagline", v)}
-            onChangeSerious={(v) => update("taglineSerious", v)}
-            inputClass={inputClass}
-            labelClass={labelClass}
-          />
+          <div className={hintClass}>
+            <label className={labelClass}>Tagline</label>
+            <input
+              type="text"
+              value={settings.tagline}
+              onChange={(e) => update("tagline", e.target.value)}
+              className={inputClass}
+              placeholder="The joke went too far. Now we are going professional."
+            />
+          </div>
 
           {/* About */}
-          <FieldPair
-            labelNormal="About Text"
-            labelSerious="About Text (Serious)"
-            valueNormal={settings.aboutText}
-            valueSerious={settings.aboutTextSerious}
-            onChangeNormal={(v) => update("aboutText", v)}
-            onChangeSerious={(v) => update("aboutTextSerious", v)}
-            inputClass={inputClass}
-            labelClass={labelClass}
-            textarea
-          />
+          <div className={hintClass}>
+            <label className={labelClass}>About Text</label>
+            <textarea
+              rows={3}
+              value={settings.aboutText}
+              onChange={(e) => update("aboutText", e.target.value)}
+              className={`${inputClass} min-h-[80px]`}
+              placeholder="Slafurry Studios is an indie game development collective..."
+            />
+          </div>
 
           {/* Contact Heading */}
-          <FieldPair
-            labelNormal="Contact Heading"
-            labelSerious="Contact Heading (Serious)"
-            valueNormal={settings.contactHeading}
-            valueSerious={settings.contactHeadingSerious}
-            onChangeNormal={(v) => update("contactHeading", v)}
-            onChangeSerious={(v) => update("contactHeadingSerious", v)}
-            inputClass={inputClass}
-            labelClass={labelClass}
-          />
+          <div className={hintClass}>
+            <label className={labelClass}>Contact Heading</label>
+            <input
+              type="text"
+              value={settings.contactHeading}
+              onChange={(e) => update("contactHeading", e.target.value)}
+              className={inputClass}
+              placeholder="Get in touch"
+            />
+          </div>
 
           {/* Contact Intro */}
-          <FieldPair
-            labelNormal="Contact Intro"
-            labelSerious="Contact Intro (Serious)"
-            valueNormal={settings.contactIntro}
-            valueSerious={settings.contactIntroSerious}
-            onChangeNormal={(v) => update("contactIntro", v)}
-            onChangeSerious={(v) => update("contactIntroSerious", v)}
-            inputClass={inputClass}
-            labelClass={labelClass}
-            textarea
-          />
-
-          {/* Other fields */}
+          <div className={hintClass}>
+            <label className={labelClass}>Contact Intro</label>
+            <textarea
+              rows={3}
+              value={settings.contactIntro}
+              onChange={(e) => update("contactIntro", e.target.value)}
+              className={`${inputClass} min-h-[80px]`}
+              placeholder="Got a question, a business proposal, or just want to say the joke worked? Pick a channel below."
+            />
+          </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className={hintClass}>
               <label className={labelClass}>Founded At</label>
@@ -408,70 +397,4 @@ export function SettingsForm({
   );
 }
 
-// ─── Side-by-side field pair component ─────────────────────────
-function FieldPair({
-  labelNormal,
-  labelSerious,
-  valueNormal,
-  valueSerious,
-  onChangeNormal,
-  onChangeSerious,
-  inputClass,
-  labelClass,
-  textarea = false,
-}: {
-  labelNormal: string;
-  labelSerious: string;
-  valueNormal: string;
-  valueSerious: string;
-  onChangeNormal: (v: string) => void;
-  onChangeSerious: (v: string) => void;
-  inputClass: string;
-  labelClass: string;
-  textarea?: boolean;
-}) {
-  const sharedProps = {
-    className: `${inputClass} ${textarea ? "min-h-[80px]" : ""}`,
-  };
-
-  return (
-    <div className="grid gap-4 sm:grid-cols-2">
-      <div className="mb-4 block">
-        <label className={labelClass}>{labelNormal}</label>
-        {textarea ? (
-          <textarea
-            rows={3}
-            value={valueNormal}
-            onChange={(e) => onChangeNormal(e.target.value)}
-            {...sharedProps}
-          />
-        ) : (
-          <input
-            type="text"
-            value={valueNormal}
-            onChange={(e) => onChangeNormal(e.target.value)}
-            {...sharedProps}
-          />
-        )}
-      </div>
-      <div className="mb-4 block">
-        <label className={labelClass}>{labelSerious}</label>
-        {textarea ? (
-          <textarea
-            rows={3}
-            value={valueSerious}
-            onChange={(e) => onChangeSerious(e.target.value)}
-            {...sharedProps}
-          />
-        ) : (
-          <input
-            type="text"
-            value={valueSerious}
-            onChange={(e) => onChangeSerious(e.target.value)}
-            {...sharedProps}
-          />
-        )}
-      </div>
-    </div>
-  );
-}
+// ─── Side-by-side field pair component REMOVED (Serious Mode removed) ─────

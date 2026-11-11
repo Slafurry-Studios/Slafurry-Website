@@ -2,16 +2,11 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
-type SeriousMode = "off" | "on";
 type SoundMode = "off" | "on";
 
 type SettingsContextValue = {
-  seriousMode: SeriousMode;
-  setSeriousMode: (mode: SeriousMode) => void;
   soundMuted: SoundMode;
   setSoundMuted: (mode: SoundMode) => void;
-  serious: boolean;
-  setSerious: (v: boolean) => void;
 };
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
@@ -32,17 +27,12 @@ function saveToLocalStorage(key: string, value: string) {
   }
 }
 
-// Serious Mode + sound mute removed from UI (settings button also removed).
-// Context shape kept so old components still compile — value fixed to "off",
-// nothing can change it.
 export function SettingsProvider({
   children,
 }: {
   children: ReactNode;
 }) {
-  const [seriousMode] = useState<SeriousMode>("off");
   const [soundMuted] = useState<SoundMode>("off");
-  const [serious] = useState<boolean>(false);
 
   // Force light mode, class "dark"/"serious" removed permanently (backup
   // for users who still have leftover state in localStorage).
@@ -55,23 +45,15 @@ export function SettingsProvider({
     saveToLocalStorage("theme", "light");
   }, []);
 
-  const updateSeriousMode = (mode: SeriousMode) => {
-    void mode; // feature disabled — no-op
-  };
-
   const updateSoundMuted = (mode: SoundMode) => {
-    void mode; // feature disabled — no-op
+    void mode; // no-op
   };
 
   return (
     <SettingsContext.Provider
       value={{
-        seriousMode,
-        setSeriousMode: updateSeriousMode,
         soundMuted,
         setSoundMuted: updateSoundMuted,
-        serious,
-        setSerious: () => {}, // feature disabled — no-op
       }}
     >
       {children}

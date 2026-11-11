@@ -8,7 +8,6 @@ export function AboutSection({ settings }: { settings: SiteSettings | null }) {
   const aboutText =
     settings?.aboutText ??
     "Slafurry Studios is an independent game development studio.";
-  const aboutTextSerious = settings?.aboutTextSerious ?? aboutText;
 
   return (
     <section className="flex items-center px-6 py-16 md:px-10">
@@ -19,17 +18,13 @@ export function AboutSection({ settings }: { settings: SiteSettings | null }) {
 
         <div className="ml-10">
           <h2 className="font-display text-6xl tracking-wide">About</h2>
-          <div className="mt-10 space-y-8 font-display text-xl leading-relaxed text-neutral-700 dark:text-neutral-300">
+          <div className="mt-10 space-y-8 font-display text-lg leading-relaxed text-neutral-700 dark:text-neutral-300">
             <p className="joke-only whitespace-pre-line">{aboutText}</p>
-            <p className="serious-only whitespace-pre-line">{aboutTextSerious}</p>
 
             {settings && (
               <>
                 <p className="joke-only text-neutral-500 dark:text-neutral-400">
                   Founded <StudioAgeCounter foundedAt={settings.foundedAt} /> ago.
-                </p>
-                <p className="serious-only text-neutral-500 dark:text-neutral-400">
-                  Founded {formatDate(settings.foundedAt)}.
                 </p>
               </>
             )}

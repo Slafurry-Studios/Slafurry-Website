@@ -168,13 +168,9 @@ model Redirect {
 model SiteSettings {
   id                    Int      @id @default(1)
   tagline               String
-  taglineSerious        String
   aboutText             String
-  aboutTextSerious      String
   contactHeading        String   @default("Get in touch")
-  contactHeadingSerious String   @default("Contact us")
   contactIntro          String
-  contactIntroSerious   String
   foundedAt             DateTime
   contactEmail          String
   businessEmail         String

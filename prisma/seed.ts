@@ -10,17 +10,11 @@ async function main() {
     create: {
       id: 1,
       tagline: "The joke went too far. Now we are going professional.",
-      taglineSerious: "Independent game development studio.",
       aboutText:
         "Slafurry Studios is an indie game development collective creating narrative-driven and experimental games. We blend humor with heart, crafting experiences that linger long after the credits roll.",
-      aboutTextSerious:
-        "Slafurry Studios is an independent game development studio founded in 2023. We specialize in narrative and experimental game design, focusing on player-driven stories and meaningful interactivity.",
       contactHeading: "Get in touch",
-      contactHeadingSerious: "Contact us",
       contactIntro:
         "Got a question, a business proposal, or just want to say the joke worked? Pick a channel below.",
-      contactIntroSerious:
-        "For inquiries, please use the appropriate channel below.",
       foundedAt: new Date("2023-06-15"),
       contactEmail: "hello@slafurrystudios.com",
       businessEmail: "business@slafurrystudios.com",

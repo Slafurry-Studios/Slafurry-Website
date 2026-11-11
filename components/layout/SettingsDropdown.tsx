@@ -4,18 +4,16 @@ import { useState, useRef, useEffect } from "react";
 import { IconSettings, IconSun } from "@tabler/icons-react";
 import { useSettings } from "./SettingsContext";
 
-// UI dropdown Settings — Serious Mode, Sound Mute.
+// UI dropdown Settings — Sound Mute.
 // Dark mode disabled (light mode only).
 // State managed by SettingsContext shared across the whole app,
-// so serious/sound state stays consistent across components.
+// so sound state stays consistent across components.
 // Persistence to localStorage + cookie handled by SettingsProvider.
 export function SettingsDropdown() {
     const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const {
-    serious,
-    setSerious,
     soundMuted,
     setSoundMuted,
   } = useSettings();
@@ -30,10 +28,6 @@ export function SettingsDropdown() {
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, []);
 
-  function toggleSerious() {
-    setSerious(!serious);
-  }
-
   function toggleSound() {
     setSoundMuted(soundMuted === "on" ? "off" : "on");
   }
@@ -43,7 +37,7 @@ export function SettingsDropdown() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label="Language"
+        aria-label="Settings"
         aria-expanded={open}
         className="flex h-9 w-9 items-center justify-center pixel-border-sm text-neutral-900 transition-colors dark:text-white"
       >
@@ -52,19 +46,6 @@ export function SettingsDropdown() {
 
       {open && (
         <div className="absolute right-0 z-50 mt-2 w-56 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg dark:border-neutral-700 dark:bg-neutral-900">
-          <SettingsRow
-            icon={
-              <img
-                src="/slafurry-logo.png"
-                alt=""
-                aria-hidden="true"
-                className="h-4 w-4"
-              />
-            }
-            label={`$"Serious Mode" | ${serious ? "ON" : "OFF"}`}
-            active={serious}
-            onClick={toggleSerious}
-          />
           <SettingsRow
             icon={soundMuted ? <IconSun size={16} /> : <IconSettings size={16} />}
             label={soundMuted ? "Unmute" : "Mute Sound"}

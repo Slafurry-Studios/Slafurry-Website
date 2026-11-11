@@ -42,7 +42,7 @@ npm test             # vitest run && playwright test
 - **Storage buckets** (must exist): `game-covers`, `post-covers`, `press-kit` (public), `montage-videos` (public, video-only). Upload endpoint `app/api/admin/upload/route.ts`; public URL matches `next.config.ts` `remotePatterns`. `STORAGE_PROVIDER=supabase` in production.
 - **Env vars referenced**: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY` / `NEXT_PUBLIC_RESEND_API_KEY`, `AUTH_PROVIDER`, `STORAGE_PROVIDER`, `AUTH_LOCAL_SECRET` (local dev only).
 - **Fonts**: Pixelify Sans (`font-display`), Geist Pixel (`font-ui`), Geist Sans (`font-body`) via `lib/fonts.ts`.
-- **Theme**: light-only. `app/layout.tsx` is static. Serious mode and sound mute were removed (`SettingsContext` is inert).
+- **Theme**: light-only. `app/layout.tsx` is static.
 - **Path alias**: only `@/*` → repo root.
 - **Not-found**: `experimental.globalNotFound: true` + `app/global-not-found.tsx`; catch-all `app/(main)/[...rest]/page.tsx` calls `notFound()`.
 - **Models** (`prisma/schema.prisma`): Game, PlayLink, MontageVideo, Post, Comment, PressRelease, PressKitAsset, ContactMessage, Achievement, SocialLink, Redirect, SiteSettings (singleton id=1), AdminUser, PageView, AuditLog.

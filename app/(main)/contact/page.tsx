@@ -2,9 +2,7 @@ import { IconMail, IconBriefcase } from "@tabler/icons-react";
 import { ContactForm } from "@/components/contact/ContactForm";
 
 // TODO (step 4): heading/intro dan email tarik dari SiteSettings
-// (contactHeading/contactHeadingSerious, contactIntro/contactIntroSerious,
-// contactEmail, businessEmail). Bukan translation key karena ini konten,
-// bukan UI string.
+// (contactHeading/contactIntro, contactEmail, businessEmail).
 const CONTACT_EMAIL = "hello@slafurrystudios.com";
 const BUSINESS_EMAIL = "business@slafurrystudios.com";
 const MOCK_INTRO =

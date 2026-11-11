@@ -11,7 +11,7 @@ Yang udah disiapin di step ini:
 - ✅ `prisma/seed.ts` — seed data awal (SiteSettings, 2 starter achievement, social links placeholder)
 - ✅ `proxy.ts` (Next.js 16 — dulu namanya `middleware.ts`) — gabungan Supabase session refresh + proteksi `/admin/*`
 - ✅ Font Bebas Neue (heading) + Poppins (body) via `next/font/google`
-- ✅ Tailwind v4 dark mode (class-based, bukan `prefers-color-scheme`) + hook `.serious` buat Serious Mode
+- ✅ Tailwind v4 dark mode (class-based, bukan `prefers-color-scheme`)
 - ✅ `lib/prisma.ts`, `lib/supabase/client.ts`, `lib/supabase/server.ts`
 - ✅ Placeholder Home page (buat konfirmasi setup nyambung)
 

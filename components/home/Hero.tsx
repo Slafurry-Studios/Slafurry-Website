@@ -6,7 +6,6 @@ import { SlafurryMark } from "@/components/icons/SlafurryMark";
 export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; settings: SiteSettings | null }) {
   
   const tagline = settings?.tagline ?? "The joke went too far. Now we are going professional";
-  const seriousTagline = settings?.taglineSerious ?? tagline;
 
   return (
     <section className="relative -mt-24 flex flex-col justify-start overflow-hidden bg-white px-4 pb-12 pt-32 text-neutral-900 sm:px-6 sm:pt-36 md:px-10">
@@ -23,9 +22,6 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
           </h1>
           <p className="mt-5 max-w-md font-display text-xl text-neutral-500 joke-only">
             {tagline}
-          </p>
-          <p className="mt-5 max-w-md font-display text-xl text-neutral-500 serious-only">
-            {seriousTagline}
           </p>
           <div className="mt-8 hidden md:block">
             <PillButton

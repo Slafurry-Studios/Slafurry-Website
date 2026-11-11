@@ -58,12 +58,6 @@ async function redeemCode(code: string): Promise<RedeemResult> {
 // ---------------------------------------------------------------------------
 
 export function AchievementCTA() {
-  const { serious } = useSettings();
-
-  // When Serious Mode is active, skip the entire achievement UI —
-  // no panel, no FAB, no storage listeners, no toasts.
-  if (serious) return null;
-
   const [panelOpen, setPanelOpen] = useState(false);
   const [unseenCount, setUnseenCount] = useState(() => getUnseenKeys().size);
   const ref = useRef<HTMLDivElement>(null);
