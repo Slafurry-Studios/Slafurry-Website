@@ -14,7 +14,7 @@ function isProduction(): boolean {
 function getSecret(): string {
   const secret = process.env.AUTH_LOCAL_SECRET;
   if (!secret || secret === "dev-local-secret-placeholder") {
-    throw new Error("AUTH_LOCAL_SECRET belum diisi (gunakan `openssl rand -base64 32`).");
+    throw new Error("AUTH_LOCAL_SECRET not set (use `openssl rand -base64 32`).");
   }
   return secret;
 }
@@ -63,7 +63,7 @@ export class LocalAuthProvider implements AuthProvider {
   constructor() {
     if (isProduction()) {
       throw new Error(
-        "Local auth provider tidak boleh aktif di production. Set AUTH_PROVIDER=supabase."
+        "Local auth provider cannot be active in production. Set AUTH_PROVIDER=supabase."
       );
     }
   }
@@ -101,10 +101,10 @@ export class LocalAuthProvider implements AuthProvider {
 
   async signIn(email: string, password: string): Promise<{ ok: boolean; error?: string }> {
     if (isProduction()) {
-      throw new Error("Local auth provider tidak boleh aktif di production.");
+      throw new Error("Local auth provider cannot be active in production.");
     }
     if (email !== LOCAL_ADMIN_EMAIL || password !== LOCAL_ADMIN_PASSWORD) {
-      return { ok: false, error: "Email atau sandi salah." };
+      return { ok: false, error: "Email or password is incorrect." };
     }
 
     let adminUser = await prisma.adminUser.findUnique({

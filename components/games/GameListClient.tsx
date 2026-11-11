@@ -13,7 +13,7 @@ export function GameListClient({
   games: GameData[];
   moreText: string;
 }) {
-  // Tampilkan maksimal 6 game secara default
+  // Show max 6 games by default
   const [visibleCount, setVisibleCount] = useState(6);
 
   const visibleGames = games.slice(0, visibleCount);

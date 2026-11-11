@@ -1,6 +1,7 @@
-// Dipakai buat mengisi tempat aset asli (video montage, cover image, dst)
-// yang belum ada. Sengaja dikasih label kecil biar jelas ini placeholder,
-// bukan bug. Ganti ke <video>/<Image> asli begitu asetnya siap.
+// Used to fill in for real assets (montage video, cover image, etc.)
+// that don't exist yet. Deliberately given a small label so it's clear
+// this is a placeholder, not a bug. Replace with <video>/<Image> once
+// assets are ready.
 
 const PLACEHOLDER_GRADIENTS = [
   "from-emerald-700 via-neutral-900 to-neutral-950",

@@ -3,9 +3,9 @@ import type { SocialLink } from "@prisma/client";
 import { PillButton } from "@/components/ui/PillButton";
 import { BrandIcon } from "@/components/icons/BrandIcon";
 
-// Background PNG per tombol (handdrawn outline, hitam di atas transparan).
-// Tulisan literal — Tailwind gak bisa scan string template dinamis.
-// Hover: scale up aja, gak ada fill gelap.
+// Background PNG per button (handdrawn outline, black on transparent).
+// Literal text — Tailwind can't scan dynamic template strings.
+// Hover: scale up only, no dark fill.
 const BTN_IMAGE_CLASSES: Record<string, string> = {
   itch: "pixel-btn",
   discord: "pixel-btn",

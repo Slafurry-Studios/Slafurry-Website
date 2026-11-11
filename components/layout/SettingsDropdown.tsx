@@ -5,10 +5,10 @@ import { IconSettings, IconSun } from "@tabler/icons-react";
 import { useSettings } from "./SettingsContext";
 
 // UI dropdown Settings — Serious Mode, Sound Mute.
-// Dark mode dimatikan (light mode only).
-// State dikelola oleh SettingsContext yang shared di seluruh app,
-// sehingga serious/sound state konsisten seluruh komponen.
-// Persistence ke localStorage + cookie handled oleh SettingsProvider.
+// Dark mode disabled (light mode only).
+// State managed by SettingsContext shared across the whole app,
+// so serious/sound state stays consistent across components.
+// Persistence to localStorage + cookie handled by SettingsProvider.
 export function SettingsDropdown() {
     const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);

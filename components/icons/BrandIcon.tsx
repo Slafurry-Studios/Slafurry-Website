@@ -11,9 +11,9 @@ import {
   type Icon,
 } from "@tabler/icons-react";
 
-// Lookup slug -> komponen Tabler. Tambahin di sini kalau nanti butuh
-// platform baru (misal Twitch, Bluesky, dst — tinggal cek dulu tersedia
-// di @tabler/icons-react, hampir semua brand populer ada).
+// Lookup slug -> Tabler component. Add here if you later need
+// a new platform (e.g. Twitch, Bluesky, etc. — just check availability
+// in @tabler/icons-react, most popular brands are there).
 const ICONS: Record<string, Icon> = {
   discord: IconBrandDiscord,
   steam: IconBrandSteam,

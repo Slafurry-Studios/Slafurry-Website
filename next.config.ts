@@ -6,8 +6,8 @@ const nextConfig: NextConfig = {
     globalNotFound: true,
   },
   images: {
-    // Sesuaikan hostname ini kalau project ref Supabase udah ada,
-    // buat "coverImage"/"ogImage" yang di-serve dari Supabase Storage.
+    // Adjust this hostname if your Supabase project ref exists,
+    // for "coverImage"/"ogImage" served from Supabase Storage.
     remotePatterns: [
       {
         protocol: "https",

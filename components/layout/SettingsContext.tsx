@@ -32,9 +32,9 @@ function saveToLocalStorage(key: string, value: string) {
   }
 }
 
-// Serious Mode + sound mute dihapus dari UI (settings button juga udah
-// dicabut). Context shape dipertahanin biar komponen lama tetap compile —
-// nilainya fixed "off", gak ada yang bisa ngubah.
+// Serious Mode + sound mute removed from UI (settings button also removed).
+// Context shape kept so old components still compile — value fixed to "off",
+// nothing can change it.
 export function SettingsProvider({
   children,
 }: {
@@ -44,8 +44,8 @@ export function SettingsProvider({
   const [soundMuted] = useState<SoundMode>("off");
   const [serious] = useState<boolean>(false);
 
-  // Force light mode, class "dark"/"serious" dilepas permanen (backup
-  // buat user yang masih nyimpen sisa state lama di localStorage).
+  // Force light mode, class "dark"/"serious" removed permanently (backup
+  // for users who still have leftover state in localStorage).
   useEffect(() => {
     document.documentElement.classList.remove("dark");
     document.documentElement.classList.remove("serious");
@@ -56,11 +56,11 @@ export function SettingsProvider({
   }, []);
 
   const updateSeriousMode = (mode: SeriousMode) => {
-    void mode; // fitur dimatikan — no-op
+    void mode; // feature disabled — no-op
   };
 
   const updateSoundMuted = (mode: SoundMode) => {
-    void mode; // fitur dimatikan — no-op
+    void mode; // feature disabled — no-op
   };
 
   return (
@@ -71,7 +71,7 @@ export function SettingsProvider({
         soundMuted,
         setSoundMuted: updateSoundMuted,
         serious,
-        setSerious: () => {}, // fitur dimatikan — no-op
+        setSerious: () => {}, // feature disabled — no-op
       }}
     >
       {children}

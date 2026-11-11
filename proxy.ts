@@ -16,12 +16,12 @@ function buildCookieStore(request: NextRequest, response: NextResponse): CookieS
 export async function proxy(request: NextRequest) {
   const response = NextResponse.next();
 
-  // 1. Refresh session + ambil user via adapter auth (bukan Supabase langsung).
+  // 1. Refresh session + get user via auth adapter (not Supabase directly).
   const provider = getAuthProvider();
   const cookies = buildCookieStore(request, response);
   const { user } = await provider.getSession(cookies);
 
-  // 2. Admin API guard — /api/admin/* butuh sesi valid. Balikin 401 JSON.
+  // 2. Admin API guard — /api/admin/* needs valid session. Return 401 JSON.
   const pathname = request.nextUrl.pathname;
   const isAdminApi = pathname.startsWith("/api/admin");
 
@@ -32,7 +32,7 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
-  // 3. Redirect lookup — check stale slugs sebelum 404.
+  // 3. Redirect lookup — check stale slugs before 404.
   try {
     const redirect = await prisma.redirect.findUnique({
       where: { from: pathname },
@@ -50,7 +50,7 @@ export async function proxy(request: NextRequest) {
   const isAdminRoute = pathname.startsWith("/admin");
   const isLoginRoute = pathname.startsWith("/admin/login");
 
-  // 5. Protect /admin/* — butuh sesi valid, kecuali halaman login.
+  // 5. Protect /admin/* — needs valid session, except login page.
   if (isAdminRoute && !isLoginRoute && !user) {
     const returnTo = request.nextUrl.pathname;
     const loginUrl = new URL(
@@ -60,7 +60,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 6. Sudah login dan buka /admin/login → redirect ke /admin.
+  // 6. Already logged in and opening /admin/login → redirect to /admin.
   if (isLoginRoute && user) {
     const returnTo = request.nextUrl.searchParams.get("returnTo");
     const dest = returnTo && returnTo.startsWith(`/admin`) ? returnTo : `/admin`;

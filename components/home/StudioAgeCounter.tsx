@@ -10,8 +10,8 @@ function diffParts(from: Date, to: Date) {
   const msPerHour = msPerMinute * 60;
   const msPerDay = msPerHour * 24;
 
-  // Bulan dihitung kalender (bukan 30 hari rata), biar "5 months, 23 days"
-  // konsisten sama cara orang ngomong umur sehari-hari.
+  // Months calculated by calendar (not 30-day average), so "5 months, 23 days"
+  // stays consistent with how people normally talk about age day-to-day.
   let months =
     (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
   const anchor = new Date(from);
@@ -36,8 +36,8 @@ function diffParts(from: Date, to: Date) {
 }
 
 export function StudioAgeCounter({ foundedAt }: { foundedAt: Date }) {
-  // null di render pertama (server) biar gak mismatch sama client —
-  // begitu mount, mulai ngitung & update tiap frame.
+  // null on first render (server) to avoid mismatch with client —
+  // once mounted, starts counting & updates every frame.
   const [parts, setParts] = useState<ReturnType<typeof diffParts> | null>(null);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export function StudioAgeCounter({ foundedAt }: { foundedAt: Date }) {
   }, [foundedAt]);
 
   if (!parts) {
-    // Placeholder singkat sebelum hydrate, biar gak ada layout shift.
+    // Short placeholder before hydration, to avoid layout shift.
     return <span>a while</span>;
   }
 

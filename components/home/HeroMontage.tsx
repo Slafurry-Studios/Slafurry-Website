@@ -33,9 +33,9 @@ export function HeroMontage({ videos }: { videos: MontageVideo[] }) {
     indexRef.current += 1;
 
     if (indexRef.current >= playlistRef.current.length) {
-      // Playlist habis — reshuffle. Kalau video pertama hasil shuffle baru
-      // kebetulan sama kayak video terakhir yang baru diputer, tuker posisi
-      // biar gak berasa "nge-loop" balik ke video yang sama dua kali beruntun.
+      // Playlist exhausted — reshuffle. If the first video from the new shuffle
+      // happens to be the same one that was just played, swap positions
+      // so it doesn't feel like "looping" back to the same video twice in a row.
       const reshuffled = shuffle(videos);
       const lastPlayed = playlistRef.current[playlistRef.current.length - 1];
 
@@ -53,8 +53,8 @@ export function HeroMontage({ videos }: { videos: MontageVideo[] }) {
     setCurrentSrc(playlistRef.current[indexRef.current].videoUrl);
   }
 
-  // Belum ada video aktif (list kosong / belum sempat di-shuffle) — fallback
-  // ke gradient placeholder biar Hero tetep keliatan intentional, bukan blank.
+  // No active video yet (list empty / not shuffled yet) — fallback
+  // to gradient placeholder so Hero looks intentional, not blank.
   if (!currentSrc) {
     return <PlaceholderVideoBg label="hero video montage placeholder" />;
   }

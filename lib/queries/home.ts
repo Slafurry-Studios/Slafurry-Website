@@ -1,14 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import { LinkSection, PostCategory, PostStatus } from "@prisma/client";
 
-// Semua fungsi di sini dipanggil dari halaman Server (Server
-// Component), bukan dari dalam komponen section langsung — biar section
-// component tetep reusable & gampang ditest (nerima data lewat props).
+// All functions here are called from Server Pages (Server
+// Component), not from section components directly — keeps sections
+// reusable & easy to test (receives data via props).
 //
-// Catat stabilisasi: setiap query dibungkus try/catch agar halaman tetap bisa
-// di-prerender waktu build meski database tidak tersedia (mis. CI tanpa DB).
-// Saat database nyala, perilaku identik; saat mati, dikembalikan data kosong
-// alih-alih menjatuhkan seluruh build.
+// Stability note: each query is wrapped in try/catch so the page can still
+// be prerendered at build time even if the database is unavailable (e.g.
+// CI without DB).
+// When the database is up, behavior is identical; when it's down, empty data
+// is returned instead of crashing the entire build.
 
 export async function getFeaturedGame() {
   try {
