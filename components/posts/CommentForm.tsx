@@ -3,12 +3,47 @@
 import { useState } from "react";
 import { IconSend, IconLoader2, IconCheck, IconAlertTriangle } from "@tabler/icons-react";
 import { PillButton } from "@/components/ui/PillButton";
-import { Skeleton, SkeletonText, useLoadingState } from "@/components/ui/Skeleton";
+import { Skeleton } from "@/components/ui/Skeleton";
 
-export function ContactForm() {
-  const [state, setState] = useState<{ ok?: boolean; message?: string; error?: string }>(null);
+export function CommentForm({
+  postId,
+  gameId,
+}: {
+  postId?: string;
+  gameId?: string;
+}) {
+  const [state, setState] = useState<{ ok?: boolean; message?: string; error?: string } | null>(null);
   const [isPending, setIsPending] = useState(false);
-  const showPending = isPending;
+
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    setIsPending(true);
+    setState(null);
+
+    try {
+      const res = await fetch("/api/comments", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        setState({ ok: false, error: result.error || "Failed to submit comment." });
+        setIsPending(false);
+        return;
+      }
+
+      setState({ ok: true, message: result.message || "Comment submitted! It will appear after moderation." });
+      setIsPending(false);
+      e.currentTarget.reset();
+    } catch {
+      setState({ ok: false, error: "Network error. Please try again." });
+      setIsPending(false);
+    }
+  }
 
   return (
     <div className="mt-10 pixel-border bg-neutral-50 p-6 dark:bg-neutral-900/50">
@@ -45,21 +80,13 @@ export function ContactForm() {
             suppressHydrationWarning
           />
 
-          <input
-            type="hidden"
-            name="postId"
-            value=""
-          />
-          <input
-            type="hidden"
-            name="gameId"
-            value=""
-          />
+          <input type="hidden" name="postId" value={postId ?? ""} />
+          <input type="hidden" name="gameId" value={gameId ?? ""} />
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label
-                htmlFor="name"
+                htmlFor="authorName"
                 className="mb-1 block text-xs font-medium text-neutral-700 dark:text-neutral-300"
               >
                 Name
@@ -142,34 +169,4 @@ export function ContactForm() {
       )}
     </div>
   );
-}
-
-async function handleSubmit(e: SubmitEvent) {
-  e.preventDefault();
-  const formData = new FormData(e.currentTarget);
-  
-  setIsPending(true);
-  setState(null);
-  
-  try {
-    const res = await fetch("/api/comments", {
-      method: "POST",
-      body: formData,
-    });
-    
-    const result = await res.json();
-    
-    if (!res.ok) {
-      setState({ ok: false, error: result.error || "Failed to submit comment." });
-      setIsPending(false);
-      return;
-    }
-    
-    setState({ ok: true, message: result.message || "Comment submitted! It will appear after moderation." });
-    setIsPending(false);
-    e.currentTarget.reset();
-  } catch {
-    setState({ ok: false, error: "Network error. Please try again." });
-    setIsPending(false);
-  }
 }
