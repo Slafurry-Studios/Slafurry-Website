@@ -68,7 +68,7 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
       </h2>
 
       <div
-        className="mx-auto mt-12 flex w-full max-w-7xl items-center justify-center gap-4"
+        className="mx-auto mt-12 flex w-full max-w-[90rem] items-center justify-center gap-4"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >

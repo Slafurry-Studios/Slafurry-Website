@@ -12,7 +12,7 @@ const FOOTER_LINKS = [
 
 export function Footer() {
   return (
-    <div className="mx-auto max-w-7xl px-3 md:px-8 mt-auto mb-6">
+    <div className="mx-auto max-w-[90rem] px-3 md:px-8 mt-auto mb-4">
       <footer className="pixel-dark-frame px-6 py-6 text-white flex flex-col justify-between min-h-[12rem]">
         <div className="mx-auto flex w-full flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
