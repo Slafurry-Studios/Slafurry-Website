@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# agent orchestration state (never committed)
+.neon-opencode/
+
 # dependencies
 /node_modules
 /.pnp
@@ -24,9 +27,15 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
-.env
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# local storage adapter (dev only) — tidak di-commit
+.local-storage/
+
+# docker
+docker-entrypoint-initdb.d/
 
 # vercel
 .vercel

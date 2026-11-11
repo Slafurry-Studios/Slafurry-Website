@@ -1,0 +1,65 @@
+import Link from "next/link";
+import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
+import { formatDate } from "@/lib/format";
+import type { PostCardData } from "@/lib/queries/posts";
+
+export function PostCard({
+  post,
+  compact = false,
+}: {
+  post: PostCardData;
+  compact?: boolean;
+}) {
+      const basePath = post.category === "DEVLOG" ? "/devlog" : "/news";
+
+  return (
+    <Link
+      href={`${basePath}/${post.slug}`}
+      className="block overflow-hidden pixel-border transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
+    >
+      <div className="-mx-6 -mt-6 overflow-hidden">
+        {post.coverImage ? (
+          <img
+            src={post.coverImage}
+            alt={post.coverImageAlt}
+            className={compact ? "aspect-[16/9] w-full object-cover" : "aspect-[21/9] w-full object-cover"}
+          />
+        ) : (
+          <PlaceholderImage
+            label={post.title}
+            className={compact ? "aspect-[16/9] w-full" : "aspect-[21/9] w-full"}
+          />
+        )}
+      </div>
+      <div className={compact ? "p-3" : "p-5"}>
+        <h3
+          className={
+            compact
+              ? "font-display text-xl font-semibold leading-snug"
+              : "font-display text-xl font-semibold leading-snug"
+          }
+        >
+          {post.title}
+        </h3>
+        <p className="mt-1 font-display text-xs text-neutral-500 dark:text-neutral-400">
+          "by" {post.authorName} |{" "}
+          {post.publishedAt ? formatDate(post.publishedAt) : ""} |{" "}
+          {post.tags.map((tag) => (
+            <span key={tag} className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-xxs font-display mr-1">
+              {tag}
+            </span>
+          ))} | {post.commentCount} "Comments"
+        </p>
+        <p
+          className={
+            compact
+              ? "mt-1.5 line-clamp-2 font-display text-xs text-neutral-600 dark:text-neutral-400"
+              : "mt-2 line-clamp-2 font-display text-xl text-neutral-600 dark:text-neutral-400"
+          }
+        >
+          {post.excerpt}
+        </p>
+      </div>
+    </Link>
+  );
+}

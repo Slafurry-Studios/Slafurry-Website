@@ -20,10 +20,18 @@ The website for Slafurry Studios — home to our games, devlogs, and whatever el
 ---
 
 ## FEATURES
-- Studio landing page with rolling updates as the site grows
-- Game portfolio showcasing our itch.io catalog
-- Studio blog / devlog space
-- Supabase-backed data layer for dynamic content
+
+* Studio landing page
+* Game portfolio
+* itch.io game catalog
+* Studio blog / devlog
+* English only
+* Supabase-backed data
+* Authentication
+* Protected admin area
+* Achievement system
+* Analytics
+* Audit logging
 
 ---
 
@@ -54,14 +62,58 @@ npx prisma generate
 npm run dev
 ```
 
+Open `http://localhost:3000`.
+
 ---
 
-## TECH STACK
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=ffffff)
-![React](https://img.shields.io/badge/React-000000?style=flat-square&logo=react&logoColor=ffffff)
-![Supabase](https://img.shields.io/badge/Supabase-000000?style=flat-square&logo=supabase&logoColor=ffffff)
-![Prisma](https://img.shields.io/badge/Prisma-000000?style=flat-square&logo=prisma&logoColor=ffffff)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=ffffff)
+## DATABASE
+
+The project uses Prisma with Supabase PostgreSQL.
+
+The current schema includes systems such as:
+
+* Game
+* Post
+* Comment
+* Press
+* Achievement
+* Contact
+* Analytics
+* Audit Log
+* Site Settings
+* Social Links
+
+The Prisma schema is located at:
+
+```text
+prisma/schema.prisma
+```
+
+Initial seed data is located at:
+
+```text
+prisma/seed.ts
+```
+
+---
+
+## INTERNATIONALIZATION
+
+Single language, no i18n — English only (`<html lang="en">`). `next-intl` and locale routing were removed; `messages/en.json` is dead. Do not reintroduce locale routing without asking.
+
+---
+
+## TESTING
+
+Run the unit and smoke test suite:
+
+```bash
+npm test
+```
+
+This runs `vitest run` (unit tests in `tests/unit/`) followed by `playwright test` (e2e tests in `tests/e2e/`): the homepage smoke test (`homepage.spec.ts`) and the admin panel QA spec (`admin-qa.spec.ts`, groups A–L covering Authentication, Dashboard, Games, Posts, Comments, Press, Contacts, Achievements, Montage, Settings, Media, Audit logs, plus Responsive QA and Console/network checks). Playwright Chromium is installed via `npx playwright install chromium`.
+
+Admin QA tests that write data (Games, Posts, Press, Achievements, Montage, Settings) require a test admin account. Set `ADMIN_TEST_EMAIL` and `ADMIN_TEST_PASSWORD` in `.env` (never commit real credentials). Without creds these tests skip gracefully. Run headed Chromium with `npx playwright test --headed tests/e2e/admin-qa.spec.ts` (`--headed` is a Playwright CLI flag; `slowMo` is a browser launch option, not a CLI flag).
 
 ---
 
@@ -73,8 +125,28 @@ npm run dev
 
 ---
 
+## VERSIONING & RELEASE
+
+The project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (`MAJOR.MINOR.PATCH`, git tags `vMAJOR.MINOR.PATCH`). Current version: `1.14.1`.
+
+- `feat` (backward-compatible feature) → MINOR bump
+- `fix`/`perf` (backward-compatible fix) → PATCH bump
+- Breaking change → MAJOR bump
+- `docs`, `test`, `chore`, `ci`, `build`, `style`, `refactor` → no release
+
+Conventional Commits are used (`<type>(<scope>): <summary>`). Changes are logged in `CHANGELOG.md` under `## [Unreleased]` (feat → Added, fix → Fixed, removals → Removed); breaking entries are prefixed with `**BREAKING:**` plus a short migration note.
+
+Version headings, tags, and releases are cut only by the deployer via `gh release`. Never create a version heading or tag manually.
+
 ## LICENSE
-**© 2026 Slafurry Studio. All Rights Reserved.**
+
+Proprietary codebase — see `LICENSE.md`. All rights reserved; no license grant is implied by access to this repository. For permission or licensing inquiries, contact Slafurry Studios through its official channels.
+
+## PROJECT STRUCTURE
+
+The project structure is being developed progressively alongside the roadmap.
+
+For detailed schema information and planned architecture, see:
 
 This is a **commercial, proprietary project**. All source code, assets, artwork, audio, design documents, and other materials contained in this repository are the exclusive property of Slafurry Studio.
 

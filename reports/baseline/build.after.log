@@ -1,0 +1,84 @@
+
+> slafurry-studios@0.1.0 build
+> next build
+
+▲ Next.js 16.3.3 (Turbopack)
+- Environments: .env
+✓ Running next.config.ts took 37ms
+- Experiments (use with caution):
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 563ms
+  Running TypeScript ...
+  Finished TypeScript in 3.1s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/29) ...
+  Generating static pages using 15 workers (7/29) 
+  Generating static pages using 15 workers (14/29) 
+  Generating static pages using 15 workers (21/29) 
+✓ Generating static pages using 15 workers (29/29) in 352ms
+  Finalizing page optimization ...
+
+Route (app)                         Revalidate  Expire
+┌ ○ /                                       1m      1y
+├ ○ /_not-found
+├ ƒ /[...rest]
+├ ƒ /admin
+├ ƒ /admin/achievements
+├ ƒ /admin/achievements/[id]/edit
+├ ○ /admin/achievements/new
+├ ƒ /admin/analytics
+├ ƒ /admin/audit-log
+├ ƒ /admin/comments
+├ ƒ /admin/contacts
+├ ƒ /admin/games
+├ ƒ /admin/games/[id]/edit
+├ ○ /admin/games/new
+├ ○ /admin/login
+├ ƒ /admin/montage
+├ ƒ /admin/posts
+├ ƒ /admin/posts/[id]/edit
+├ ○ /admin/posts/new
+├ ƒ /admin/press
+├ ƒ /admin/settings
+├ ƒ /api/achievements/redeem
+├ ƒ /api/admin/achievements
+├ ƒ /api/admin/achievements/[id]
+├ ƒ /api/admin/audit-log
+├ ƒ /api/admin/comments/[id]
+├ ƒ /api/admin/contacts/[id]
+├ ƒ /api/admin/games
+├ ƒ /api/admin/games/[id]
+├ ƒ /api/admin/montage
+├ ƒ /api/admin/montage/[id]
+├ ƒ /api/admin/posts
+├ ƒ /api/admin/posts/[id]
+├ ƒ /api/admin/posts/[id]/autosave
+├ ƒ /api/admin/press/assets
+├ ƒ /api/admin/press/assets/[id]
+├ ƒ /api/admin/press/releases
+├ ƒ /api/admin/press/releases/[id]
+├ ƒ /api/admin/settings
+├ ƒ /api/admin/social-links
+├ ƒ /api/admin/social-links/[id]
+├ ƒ /api/admin/upload
+├ ƒ /api/analytics
+├ ƒ /api/analytics/track
+├ ○ /contact
+├ ○ /devlog                                 1m      1y
+├ ƒ /devlog/[slug]
+├ ƒ /devlog/rss.xml
+├ ○ /games                                  1m      1y
+├ ƒ /games/[slug]
+├ ○ /news                                   1m      1y
+├ ƒ /news/[slug]
+├ ƒ /news/rss.xml
+└ ○ /press                                  1m      1y
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

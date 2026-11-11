@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: ["feat/website/update", "fix/stabilize", "main"]
+  pull_request:
+    branches: ["feat/website/update", "main"]
+
+env:
+  DATABASE_URL: "postgresql://postgres:password@localhost:54322/postgres"
+  DIRECT_URL: "postgresql://postgres:password@localhost:54322/postgres"
+  NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+  NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co"
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "pub-local-placeholder"
+  SUPABASE_SECRET_KEY: "secret-local-placeholder"
+  RESEND_API_KEY: "re_local_placeholder"
+  NEXT_PUBLIC_RESEND_API_KEY: "re_local_placeholder"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Typecheck (tsc --noEmit)
+        run: npx tsc --noEmit
+
+      - name: Lint (fail only on new errors beyond baseline 78)
+        run: |
+          npx eslint --format=json . > /tmp/eslint-report.json 2>/dev/null || true
+          node -e "
+            const fs = require('fs');
+            let report = [];
+            try { report = JSON.parse(fs.readFileSync('/tmp/eslint-report.json','utf8')); } catch {}
+            const errors = report.reduce((sum, r) => sum + (r.errorCount || 0), 0);
+            const baseline = 78;
+            console.log('Lint errors:', errors, '(baseline max:', baseline + ')');
+            if (errors > baseline) {
+              console.error('New lint errors introduced beyond baseline:', errors - baseline);
+              process.exit(1);
+            }
+          "
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Tests (Vitest + Playwright)
+        run: npm test

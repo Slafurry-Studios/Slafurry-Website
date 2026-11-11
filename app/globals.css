@@ -1,21 +1,79 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
-@theme {
-  /* Register Custom Fonts */
-  --font-bebas: var(--font-bebas);
-  --font-poppins: var(--font-poppins);
-
-  /* Register Branding Colors */
-  --color-primary: #2d2d2d;
-  --color-accent: #fed001;
-
-  /* Utility Animations (Optional) */
-  --animate-fade-in: fade-in 0.5s ease-out;
+/* Base type scale — 18px root, biar copy gak kekecilan. Semua ukuran rem
+   (text-*, spacing, Tailwind breakpoints) ikut skala ~12% dari default 16px. */
+html {
+  font-size: 18px;
 }
 
-html {
-  scroll-behavior: smooth;
+/* First-load entrance — konten halaman fade + slide-up, staggered per
+   section biar gak nongol sekaligus. Final state = transform none,
+   jadi gak ngaruh ke sticky/fixed setelah animasi kelar. */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+main > * {
+  animation: page-enter 0.6s ease-out both;
+}
+main > *:nth-child(2) {
+  animation-delay: 0.08s;
+}
+main > *:nth-child(3) {
+  animation-delay: 0.16s;
+}
+main > *:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main > * {
+    animation: none;
+  }
+}
+
+/* Carousel slide — dipakai ProjectCarousel waktu pindah project.
+   Komponen remount wrapper (key=index) tiap ganti, jadi animasi main lagi. */
+@keyframes carousel-enter {
+  from {
+    opacity: 0;
+    transform: translateX(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.carousel-enter {
+  animation: carousel-enter 0.4s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-enter {
+    animation: none;
+  }
+}
+
+/* Dark mode dikontrol lewat class ".dark" di <html> (bukan prefers-color-scheme),
+   karena themenya user-toggleable & disimpan di cookie/localStorage — lihat
+   app/layout.tsx & lib/settings/. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+   /* Fonts — variable di-set oleh next/font di lib/fonts.ts
+      (--font-display-family), dipetakan ke utility Tailwind: font-display. */
+  --font-display: var(--font-display-family);
 }
 
 @keyframes fade-in {
@@ -48,20 +106,208 @@ html {
   color: white;
 }
 
-.prose-content h1 { font-size: 2rem; font-weight: 800; color: white; margin-top: 2.5rem; margin-bottom: 1rem; }
-.prose-content h2 { font-size: 1.5rem; font-weight: 700; color: white; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; }
-.prose-content h3 { font-size: 1.25rem; font-weight: 600; color: white; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-.prose-content p { color: rgba(255,255,255,0.8); font-size: 1.125rem; line-height: 1.8; margin-bottom: 1.25rem; }
-.prose-content strong { color: white; font-weight: 700; }
-.prose-content em { color: rgba(255,255,255,0.6); font-style: italic; }
-.prose-content ul { list-style: disc; padding-left: 1.5rem; color: rgba(255,255,255,0.8); margin-bottom: 1rem; }
-.prose-content ol { list-style: decimal; padding-left: 1.5rem; color: rgba(255,255,255,0.8); margin-bottom: 1rem; }
-.prose-content li { margin-bottom: 0.5rem; line-height: 1.7; }
-.prose-content blockquote { border-left: 4px solid #fed001; padding-left: 1.5rem; margin: 1.5rem 0; color: rgba(255,255,255,0.6); font-style: italic; background: rgba(255,255,255,0.03); padding: 1rem 1.5rem; border-radius: 0 0.75rem 0.75rem 0; }
-.prose-content code { color: #fed001; background: rgba(255,255,255,0.1); padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875rem; font-family: monospace; }
-.prose-content pre { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 1.5rem; overflow-x: auto; margin: 1.5rem 0; }
-.prose-content pre code { background: none; padding: 0; color: rgba(255,255,255,0.8); }
-.prose-content img { border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.1); width: 100%; object-fit: cover; margin: 2rem 0; }
-.prose-content hr { border-color: rgba(255,255,255,0.1); margin: 2.5rem 0; }
-.prose-content a { color: #fed001; text-decoration: underline; text-underline-offset: 2px; }
-.prose-content a:hover { color: white; }
+/* Pixel art 9-slicing frames and buttons */
+.pixel-frame {
+  border: 32px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 56 fill / 32px / 0px stretch;
+  border-radius: 0 !important;
+  image-rendering: pixelated;
+}
+
+.pixel-frame img,
+.pixel-dark-frame img,
+.pixel-border img,
+.pixel-border-sm img,
+.pixel-btn img,
+.pixel-frame-filled img {
+  image-rendering: auto;
+}
+
+.pixel-dark-frame {
+  background-color: #171717;
+  border: 24px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 24 fill / 24px / 0px stretch;
+  border-radius: 0 !important;
+  image-rendering: pixelated;
+  clip-path: polygon(
+    14px 0px,
+    calc(100% - 14px) 0px,
+    calc(100% - 14px) 7px,
+    calc(100% - 7px) 7px,
+    calc(100% - 7px) 14px,
+    100% 14px,
+    100% calc(100% - 14px),
+    calc(100% - 7px) calc(100% - 14px),
+    calc(100% - 7px) calc(100% - 7px),
+    calc(100% - 14px) calc(100% - 7px),
+    calc(100% - 14px) 100%,
+    14px 100%,
+    14px calc(100% - 7px),
+    7px calc(100% - 7px),
+    7px calc(100% - 14px),
+    0px calc(100% - 14px),
+    0px 14px,
+    7px 14px,
+    7px 7px,
+    14px 7px
+  );
+}
+
+.pixel-frame-filled {
+  border: 24px solid transparent;
+  border-image: url("/Border Corner Filled.png") 24 fill / 24px / 0px stretch;
+  border-radius: 0 !important;
+  image-rendering: pixelated;
+}
+
+/* Black-border replacement utilities (standard Tailwind border -> pixel corner) */
+.pixel-border {
+  border: 24px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 24 fill / 24px / 0px stretch;
+  border-radius: 0 !important;
+  image-rendering: pixelated;
+  clip-path: polygon(
+    14px 0px,
+    calc(100% - 14px) 0px,
+    calc(100% - 14px) 7px,
+    calc(100% - 7px) 7px,
+    calc(100% - 7px) 14px,
+    100% 14px,
+    100% calc(100% - 14px),
+    calc(100% - 7px) calc(100% - 14px),
+    calc(100% - 7px) calc(100% - 7px),
+    calc(100% - 14px) calc(100% - 7px),
+    calc(100% - 14px) 100%,
+    14px 100%,
+    14px calc(100% - 7px),
+    7px calc(100% - 7px),
+    7px calc(100% - 14px),
+    0px calc(100% - 14px),
+    0px 14px,
+    7px 14px,
+    7px 7px,
+    14px 7px
+  );
+}
+
+.pixel-border-sm {
+  border: 8px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 24 fill / 8px / 0px stretch;
+  border-radius: 0 !important;
+  image-rendering: pixelated;
+}
+
+.pixel-border-white {
+  position: relative;
+}
+.pixel-border-white::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 8px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 24 fill / 8px / 0px stretch;
+  filter: brightness(0) invert(1);
+  pointer-events: none;
+  image-rendering: pixelated;
+  z-index: 10;
+}
+
+.pixel-btn {
+  border: 24px solid transparent;
+  border-image: url("/Border Corner Pixel.png") 24 fill / 24px / 0px stretch;
+  border-radius: 0 !important;
+  padding: 0.1rem 0.75rem !important;
+  min-height: unset !important;
+  background-color: transparent !important;
+  image-rendering: pixelated;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.pixel-btn:hover,
+.pixel-btn:active,
+.pixel-btn:focus {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+  background-color: transparent !important;
+}
+
+@media (max-width: 640px) {
+  .pixel-dark-frame {
+    border-width: 24px;
+  }
+  .pixel-frame-filled {
+    border-width: 16px;
+  }
+  .pixel-border {
+    border-width: 16px;
+  }
+  .pixel-btn {
+    border-width: 16px;
+  }
+}
+
+/* ===== Animation tokens (gamedev energy) ===== */
+:root {
+  --duration-fast: 100ms;
+  --duration-base: 150ms;
+  --duration-slow: 250ms;
+  --ease-game: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Press-down feel for buttons — compositor-only transform, snappy 100ms */
+.press-btn {
+  transition: transform var(--duration-fast) var(--ease-game), filter var(--duration-fast) var(--ease-game);
+}
+.press-btn:active {
+  transform: scale(0.94);
+  filter: brightness(0.9);
+}
+
+/* Game-like hover lift — card rises off the page */
+.game-hover {
+  transition: transform var(--duration-base) var(--ease-game), box-shadow var(--duration-base) var(--ease-game);
+}
+.game-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.15);
+}
+.game-hover:active {
+  transform: translateY(-2px);
+}
+
+/* Form input focus — subtle scale + ring glow, no layout shift */
+.input-focus {
+  transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+}
+.input-focus:focus {
+  transform: scale(1.02);
+}
+
+/* Toast slide-in — rises from below, fades in */
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.toast-enter {
+  animation: toast-enter var(--duration-base) var(--ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .press-btn:active,
+  .game-hover:hover,
+  .game-hover:active,
+  .input-focus:focus,
+  .toast-enter {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+

@@ -3,21 +3,6 @@
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 
-import welcomeToOurTopSecretWebsite from "@/public/images/phase 2/welcome to our top secret website.png";
-import youCanMailUsAt from "@/public/images/phase 2/you can mail us at.png";
-import businessEmail from "@/public/images/phase 2/business email.png";
-import playOurGamesHere from "@/public/images/phase 2/play our games here.png";
-import itchIo from "@/public/images/phase 2/itch io.png";
-import github from "@/public/images/phase 2/github.png";
-import byTheWayThisIsOurSocmed from "@/public/images/phase 2/by the way this is our socmed.png";
-import youtube from "@/public/images/phase 2/youtube.png";
-import linkedin from "@/public/images/phase 2/linkedin.png";
-import instagram from "@/public/images/phase 2/instagram.png";
-import tiktok from "@/public/images/phase 2/tiktok.png";
-import businessInquiries from "@/public/images/phase 2/business inquiries.png";
-import zenWasHere from "@/public/images/phase 2/zen was here.png";
-import sorryFont from "@/public/images/phase 2/sorry font.png";
-
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -41,7 +26,7 @@ const itemVariants: Variants = {
     },
 };
 
-export default function Home() {
+export default function SecretEasterEgg() {
     return (
         <main className="w-screen h-screen flex flex-col items-center justify-start md:justify-center gap-4 md:gap-6 p-6 md:p-4 relative overflow-hidden bg-white selection:bg-none">
 
@@ -52,9 +37,11 @@ export default function Home() {
                 className="w-[380px] sm:w-[680px] md:w-[860px] shrink-0 pt-2 md:pt-10"
             >
                 <Image
-                    src={welcomeToOurTopSecretWebsite}
+                    src="/images/phase 2/welcome to our top secret website.png"
                     alt="Welcome to our TOP SECRET Website!"
                     className="w-full h-auto"
+                    width={860}
+                    height={450}
                     priority
                 />
             </motion.div>
@@ -72,9 +59,11 @@ export default function Home() {
                         className="w-[360px] sm:w-[580px] md:w-[700px] hover:scale-105 transition-transform block origin-left"
                     >
                         <Image
-                            src={youCanMailUsAt}
+                            src="/images/phase 2/you can mail us at.png"
                             alt="You can mail us at: hello@slafurrystudios.com"
                             className="w-full h-auto"
+                            width={700}
+                            height={200}
                         />
                     </a>
                 </motion.div>
@@ -82,9 +71,11 @@ export default function Home() {
                 <motion.div variants={itemVariants} className="flex flex-col items-start gap-3 md:gap-4">
                     <div className="w-[380px] sm:w-[620px] md:w-[760px]">
                         <Image
-                            src={playOurGamesHere}
+                            src="/images/phase 2/play our games here.png"
                             alt="Play our games here!"
                             className="w-full h-auto"
+                            width={760}
+                            height={200}
                         />
                     </div>
                     <div className="flex items-center gap-12 md:gap-24">
@@ -95,9 +86,11 @@ export default function Home() {
                             className="w-32 sm:w-44 md:w-52 hover:scale-105 transition-transform block"
                         >
                             <Image
-                                src={itchIo}
+                                src="/images/phase 2/itch io.png"
                                 alt="Itch.io"
                                 className="w-full h-auto"
+                                width={600}
+                                height={100}
                             />
                         </a>
                         <a 
@@ -107,9 +100,11 @@ export default function Home() {
                             className="w-32 sm:w-44 md:w-52 hover:scale-105 transition-transform block"
                         >
                             <Image
-                                src={github}
+                                src="/images/phase 2/github.png"
                                 alt="Github"
                                 className="w-full h-auto"
+                                width={600}
+                                height={100}
                             />
                         </a>
                     </div>
@@ -118,9 +113,11 @@ export default function Home() {
                 <motion.div variants={itemVariants} className="flex flex-col items-start gap-3 md:gap-4">
                     <div className="w-[380px] sm:w-[620px] md:w-[760px]">
                         <Image
-                            src={byTheWayThisIsOurSocmed}
+                            src="/images/phase 2/by the way this is our socmed.png"
                             alt="By the way, this is our social media. Come take a look!"
                             className="w-full h-auto"
+                            width={760}
+                            height={200}
                         />
                     </div>
 
@@ -132,9 +129,11 @@ export default function Home() {
                             className="w-32 sm:w-44 md:w-52 hover:scale-105 transition-transform block"
                         >
                             <Image
-                                src={youtube}
+                                src="/images/phase 2/youtube.png"
                                 alt="Youtube"
                                 className="w-full h-auto"
+                                width={600}
+                                height={100}
                             />
                         </a>
                         <a 
@@ -144,9 +143,11 @@ export default function Home() {
                             className="w-32 sm:w-44 md:w-52 hover:scale-105 transition-transform block"
                         >
                             <Image
-                                src={linkedin}
+                                src="/images/phase 2/linkedin.png"
                                 alt="LinkedIn"
                                 className="w-full h-auto"
+                                width={600}
+                                height={100}
                             />
                         </a>
                         <a 
@@ -156,9 +157,11 @@ export default function Home() {
                             className="w-32 sm:w-44 md:w-52 hover:scale-105 transition-transform block"
                         >
                             <Image
-                                src={instagram}
+                                src="/images/phase 2/instagram.png"
                                 alt="Instagram"
                                 className="w-full h-auto"
+                                width={600}
+                                height={100}
                             />
                         </a>
                         <a 
@@ -168,9 +171,11 @@ export default function Home() {
                             className="w-32 sm:w-44 md:w-52 hover:scale-105 transition-transform block"
                         >
                             <Image
-                                src={tiktok}
+                                src="/images/phase 2/tiktok.png"
                                 alt="Tiktok"
                                 className="w-full h-auto"
+                                width={600}
+                                height={100}
                             />
                         </a>
                     </div>
@@ -179,9 +184,11 @@ export default function Home() {
                 <motion.div variants={itemVariants} className="flex flex-col items-start gap-3 md:gap-4">
                     <div className="w-[380px] sm:w-[680px] md:w-[800px]">
                         <Image
-                            src={businessInquiries}
+                            src="/images/phase 2/business inquiries.png"
                             alt="Business Inquiries (we add this like we gonna got funding soon)"
                             className="w-full h-auto"
+                            width={800}
+                            height={200}
                         />
                     </div>
                     <a 
@@ -189,9 +196,11 @@ export default function Home() {
                         className="w-80 sm:w-[440px] md:w-[500px] hover:scale-105 transition-transform block origin-left"
                     >
                         <Image
-                            src={businessEmail}
+                            src="/images/phase 2/business email.png"
                             alt="business@slafurrystudios.com"
                             className="w-full h-auto"
+                            width={500}
+                            height={100}
                         />
                     </a>
                 </motion.div>
@@ -205,7 +214,7 @@ export default function Home() {
                 className="absolute bottom-4 left-4 md:bottom-6 md:left-8 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 p-10 pointer-events-none"
             >
                 <Image
-                    src={zenWasHere}
+                    src="/images/phase 2/zen was here.png"
                     alt="Zen Slafuraga WAS HERE"
                     fill
                     style={{ objectFit: "contain" }}
@@ -219,7 +228,7 @@ export default function Home() {
                 className="absolute bottom-0 right-2 md:right-8 w-52 h-52 sm:w-64 sm:h-64 md:w-80 md:h-80 pointer-events-none"
             >
                 <Image
-                    src={sorryFont}
+                    src="/images/phase 2/sorry font.png"
                     alt="Sorry, we still not found a technology called font"
                     fill
                     style={{ objectFit: "contain", objectPosition: "bottom" }}

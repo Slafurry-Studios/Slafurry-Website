@@ -1,89 +1,40 @@
-import { Bebas_Neue, Poppins } from 'next/font/google';
-import './globals.css';
-import { Metadata } from 'next';
-import { Analytics } from '@vercel/analytics/next';
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-const bebas = Bebas_Neue({
-    weight: '400',
-    subsets: ['latin'],
-    variable: '--font-bebas'
-});
+import { fontDisplay } from "@/lib/fonts";
+import { SettingsProvider } from "@/components/layout/SettingsContext";
+import "./globals.css";
 
-const poppins = Poppins({
-    weight: ['400', '700'],
-    subsets: ['latin'],
-    variable: '--font-poppins'
-});
+export const metadata: Metadata = {
+  title: "Slafurry Studios",
+  description: "Indie game developers. The joke went too far. Now we are going professional.",
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+};
 
-const FALLBACK = {
-    title: "Slafurry Studios",
-    description: "The joke went too far. Now we are going professional.",
-    siteUrl: "https://slafurrystudios.com",
-    ogImage: "/images/Slafurry Logo.png",
-    twitterImage: "/images/Slafurry Logo.png",
-    googleVerifyId: "",
-}
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
 
-export async function generateMetadata(): Promise<Metadata> {
-    //   const meta = await prisma.siteMetadata.findUnique({ where: { id: 1 } })
+  // Serious Mode + sound mute dihapus — cookie lama udah gak dibaca,
+  // class "serious" gak pernah dipasang lagi.
+  const htmlClassNames = [
+    fontDisplay.variable,
+  ].join(" ");
 
-    // const title = meta?.title || FALLBACK.title
-    // const description = meta?.description || FALLBACK.description
-    // const siteUrl = meta?.siteUrl || FALLBACK.siteUrl
-    // const ogImage = meta?.ogImage || FALLBACK.ogImage
-    // const twitterImage = meta?.twitterImage || FALLBACK.twitterImage
-    // const googleVerifyId = meta?.googleVerifyId || FALLBACK.googleVerifyId
-
-    const title = FALLBACK.title
-    const description = FALLBACK.description
-    const siteUrl = FALLBACK.siteUrl
-    const ogImage = FALLBACK.ogImage
-    const twitterImage = FALLBACK.twitterImage
-    const googleVerifyId = FALLBACK.googleVerifyId
-
-    return {
-        title,
-        description,
-        verification: {
-            google: googleVerifyId,
-        },
-        openGraph: {
-            title,
-            description,
-            url: siteUrl,
-            siteName: "Slafurry Studios",
-            images: [
-                {
-                    url: ogImage,
-                    width: 1200,
-                    height: 630,
-                    alt: "Slafurry Studios",
-                },
-            ],
-            locale: "id_ID",
-            type: "website",
-        },
-        twitter: {
-            card: "summary_large_image",
-            title,
-            description,
-            images: [twitterImage],
-        },
-    }
-}
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <html lang="en" className={`${bebas.variable} ${poppins.variable} scroll-smooth`}>
-            <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-            <link rel="shortcut icon" href="/favicon.ico" />
-            <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-            <link rel="manifest" href="/site.webmanifest" />
-            <body className="bg-white text-primary font-poppins">
-                {children}
-                <Analytics />
-            </body>
-        </html>
-    );
+  return (
+    <html lang="en" className={htmlClassNames}>
+      <body className="min-h-screen flex flex-col font-display bg-white text-neutral-900">
+        <SettingsProvider>{children}</SettingsProvider>
+      </body>
+    </html>
+  );
 }

@@ -1,0 +1,274 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Game {
+  id              String          @id @default(cuid())
+  slug            String          @unique
+  title           String
+  coverImage      String
+  coverImageAlt   String
+  shortDesc       String
+  longDesc        String
+  status          GameStatus      @default(IN_DEVELOPMENT)
+  featured        Boolean         @default(false)
+  order           Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  isHidden        Boolean         @default(false)
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  comments        Comment[]
+  montageVideos   MontageVideo[]
+  playLinks       PlayLink[]
+  pressKitAssets  PressKitAsset[]
+}
+
+model PlayLink {
+  id     String @id @default(cuid())
+  label  String
+  url    String
+  gameId String
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+}
+
+model MontageVideo {
+  id       String  @id @default(cuid())
+  label    String
+  videoUrl String
+  gameId   String?
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+  isHidden Boolean @default(false)
+  game     Game?   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id              String       @id @default(cuid())
+  slug            String       @unique
+  title           String
+  coverImage      String
+  coverImageAlt   String
+  excerpt         String
+  content         String
+  category        PostCategory
+  tags            String[]     @default([])
+  authorName      String       @default("Slafurry Studios")
+  status          PostStatus   @default(DRAFT)
+  publishedAt     DateTime?
+  autosavedAt     DateTime?
+  viewCount       Int          @default(0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  isHidden        Boolean      @default(false)
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  previewToken    String?      @unique
+  prevPostId      String?
+  nextPostId      String?
+  comments        Comment[]
+  nextPost        Post?        @relation("PostSequenceNext", fields: [nextPostId], references: [id])
+  nextOf          Post[]       @relation("PostSequenceNext")
+  prevPost        Post?        @relation("PostSequencePrev", fields: [prevPostId], references: [id])
+  prevOf          Post[]       @relation("PostSequencePrev")
+}
+
+model Comment {
+  id          String        @id @default(cuid())
+  postId      String?
+  authorName  String
+  authorEmail String
+  content     String
+  status      CommentStatus @default(PENDING)
+  ipHash      String?
+  createdAt   DateTime      @default(now())
+  gameId      String?
+  targetType  CommentTarget
+  game        Game?         @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  post        Post?         @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([targetType, postId])
+  @@index([targetType, gameId])
+}
+
+model PressRelease {
+  id          String   @id @default(cuid())
+  outlet      String
+  title       String
+  url         String
+  publishedAt DateTime @default(now())
+  isHidden    Boolean  @default(false)
+}
+
+model PressKitAsset {
+  id      String         @id @default(cuid())
+  label   String
+  type    PressAssetType
+  fileUrl String
+  isHidden Boolean        @default(false)
+  gameId  String?
+  game    Game?          @relation(fields: [gameId], references: [id], onDelete: Cascade)
+}
+
+model ContactMessage {
+  id        String          @id @default(cuid())
+  name      String
+  email     String
+  category  ContactCategory @default(GENERAL)
+  message   String
+  status    ContactStatus   @default(NEW)
+  ipHash    String?
+  createdAt DateTime        @default(now())
+}
+
+model Achievement {
+  id            String             @id @default(cuid())
+  key           String             @unique
+  title         String
+  description   String
+  hint          String?
+  icon          String             @default("/mascot-default.png")
+  triggerType   AchievementTrigger
+  triggerConfig Json
+  flagHash      String?
+  isSecret      Boolean            @default(false)
+  category      String?
+  order         Int                @default(0)
+  isActive      Boolean            @default(true)
+  isHidden      Boolean            @default(false)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+model SocialLink {
+  id       String      @id @default(cuid())
+  platform String
+  label    String
+  url      String
+  section  LinkSection
+  order    Int         @default(0)
+  isHidden Boolean     @default(false)
+}
+
+model Redirect {
+  id        String   @id @default(cuid())
+  from      String   @unique
+  to        String
+  createdAt DateTime @default(now())
+}
+
+model SiteSettings {
+  id                    Int      @id @default(1)
+  tagline               String
+  taglineSerious        String
+  aboutText             String
+  aboutTextSerious      String
+  contactHeading        String   @default("Get in touch")
+  contactHeadingSerious String   @default("Contact us")
+  contactIntro          String
+  contactIntroSerious   String
+  foundedAt             DateTime
+  contactEmail          String
+  businessEmail         String
+  defaultOgImage        String
+}
+
+model AdminUser {
+  id             String     @id @default(cuid())
+  supabaseUserId String     @unique
+  name           String
+  createdAt      DateTime   @default(now())
+  auditLogs      AuditLog[]
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  country   String?
+  device    String?
+  createdAt DateTime @default(now())
+
+  @@index([path, createdAt])
+}
+
+model AuditLog {
+  id          String    @id @default(cuid())
+  adminUserId String
+  action      String
+  entityType  String
+  entityId    String
+  changes     Json
+  createdAt   DateTime  @default(now())
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id])
+}
+
+enum GameStatus {
+  UPCOMING
+  RELEASED
+  IN_DEVELOPMENT
+}
+
+enum PostCategory {
+  DEVLOG
+  NEWS
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum CommentTarget {
+  POST
+  GAME
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PressAssetType {
+  LOGO
+  BANNER
+  CHARACTER
+}
+
+enum ContactCategory {
+  GENERAL
+  BUSINESS
+  PRESS
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  REPLIED
+}
+
+enum AchievementTrigger {
+  PAGE_VISIT
+  EVENT
+  VISIT_COUNT
+  SCROLL_DEPTH
+  TIME_ON_SITE
+  META_ALL
+  FLAG_CODE
+  CHEAT_DETECTED
+}
+
+enum LinkSection {
+  COMMUNITY
+  CONTACT
+  FOOTER
+}
