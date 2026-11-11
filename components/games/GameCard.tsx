@@ -30,7 +30,7 @@ export function GameCard({
       href={`/games/${game.slug}`}
       className="flex flex-col overflow-hidden pixel-border press-btn game-hover"
     >
-      <div className="-m-6 overflow-hidden">
+      <div className="-m-2 overflow-hidden">
         {game.coverImage ? (
           <img
             src={game.coverImage}
