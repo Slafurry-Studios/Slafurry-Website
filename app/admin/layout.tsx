@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ToastProviderWrapper from "@/components/ui/ToastProvider";
 import {
   IconLayoutDashboard,
   IconMessage,
@@ -126,7 +127,7 @@ export default function AdminLayout({
 
         {/* Page content */}
         <main className={`min-w-0 flex-1 ${isLoginPage ? "w-full" : ""}`}>
-          {children}
+          <ToastProviderWrapper>{children}</ToastProviderWrapper>
         </main>
       </div>
     </div>

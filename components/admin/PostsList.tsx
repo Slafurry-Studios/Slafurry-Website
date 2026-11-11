@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
+import { useToast } from "@/components/ui/Toast";
 
 const STATUS_STYLE: Record<string, string> = {
   PUBLISHED:
@@ -61,6 +62,7 @@ export function PostsList({
   posts: PostRow[];
 }) {
   const router = useRouter();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<"DEVLOG" | "NEWS">("DEVLOG");
   const [visibility, setVisibility] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
   const [statusFilter, setStatusFilter] = useState<"ALL" | "PUBLISHED" | "DRAFT">("ALL");
@@ -88,19 +90,45 @@ export function PostsList({
       });
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Failed to update post.");
+        toast({
+          title: "Error",
+          description: data.error || "Failed to update post.",
+          type: "error",
+        });
         return;
       }
+      toast({
+        title: isHidden ? "Post hidden" : "Post restored",
+        description: isHidden ? "The post is no longer visible on the site." : "The post is visible again.",
+        type: "success",
+      });
       router.refresh();
     } catch {
-      setError("Network error. Please try again.");
+      toast({
+        title: "Error",
+        description: "Network error. Please try again.",
+        type: "error",
+      });
     }
   }
 
   async function deletePost(id: string) {
     if (!confirm("Are you sure you want to permanently delete this post? This cannot be undone.")) return;
-    await fetch(`/api/admin/posts/${id}`, { method: "DELETE" });
-    router.refresh();
+    try {
+      await fetch(`/api/admin/posts/${id}`, { method: "DELETE" });
+      toast({
+        title: "Post deleted",
+        description: "The post has been permanently deleted.",
+        type: "success",
+      });
+      router.refresh();
+    } catch {
+      toast({
+        title: "Error",
+        description: "Failed to delete post.",
+        type: "error",
+      });
+    }
   }
 
   return (

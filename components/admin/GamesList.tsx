@@ -8,6 +8,7 @@ import { IconPlus, IconPencil, IconStar, IconGripVertical, IconEyeOff, IconEye, 
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
 import { getYoutubeEmbedUrl } from "@/lib/youtube";
+import { useToast } from "@/components/ui/Toast";
 
 const STATUS_STYLE: Record<string, string> = {
   RELEASED:
@@ -54,6 +55,7 @@ const FILTERS: DataTableFilter[] = [
 
 export function GamesList({ games }: { games: GameRow[] }) {
   const router = useRouter();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
 
   const visibleCount = games.filter((g) => !g.isHidden).length;
@@ -64,18 +66,44 @@ export function GamesList({ games }: { games: GameRow[] }) {
   );
 
   async function toggleHide(id: string, isHidden: boolean) {
-    await fetch(`/api/admin/games/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isHidden }),
-    });
-    router.refresh();
+    try {
+      await fetch(`/api/admin/games/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isHidden }),
+      });
+      toast({
+        title: isHidden ? "Game hidden" : "Game restored",
+        description: isHidden ? "The game is no longer visible on the site." : "The game is visible again.",
+        type: "success",
+      });
+      router.refresh();
+    } catch {
+      toast({
+        title: "Error",
+        description: "Failed to update game visibility.",
+        type: "error",
+      });
+    }
   }
 
   async function deleteGame(id: string) {
     if (!confirm("Are you sure you want to permanently delete this game? This cannot be undone.")) return;
-    await fetch(`/api/admin/games/${id}`, { method: "DELETE" });
-    router.refresh();
+    try {
+      await fetch(`/api/admin/games/${id}`, { method: "DELETE" });
+      toast({
+        title: "Game deleted",
+        description: "The game has been permanently deleted.",
+        type: "success",
+      });
+      router.refresh();
+    } catch {
+      toast({
+        title: "Error",
+        description: "Failed to delete game.",
+        type: "error",
+      });
+    }
   }
 
   return (

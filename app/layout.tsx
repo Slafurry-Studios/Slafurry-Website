@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { fontDisplay } from "@/lib/fonts";
 import { SettingsProvider } from "@/components/layout/SettingsContext";
+import ToastProviderWrapper from "@/components/ui/ToastProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -34,6 +35,7 @@ export default async function RootLayout({
     <html lang="en" className={htmlClassNames}>
       <body className="min-h-screen flex flex-col font-display bg-white text-neutral-900">
         <SettingsProvider>{children}</SettingsProvider>
+        <ToastProviderWrapper>{children}</ToastProviderWrapper>
       </body>
     </html>
   );

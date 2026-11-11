@@ -11,6 +11,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { ImageUploader } from "@/components/admin/ImageUploader";
+import { useToast } from "@/components/ui/Toast";
 import { getYoutubeEmbedUrl } from "@/lib/youtube";
 
 type PlayLinkRow = { id?: string; label: string; url: string };
@@ -57,6 +58,7 @@ function slugify(title: string): string {
 
 export function GameForm({ initial }: { initial?: GameData }) {
   const router = useRouter();
+  const { toast } = useToast();
   const isEdit = Boolean(initial?.id);
   const [game, setGame] = useState<GameData>(initial ?? EMPTY_GAME);
   const [error, setError] = useState("");
@@ -114,16 +116,32 @@ export function GameForm({ initial }: { initial?: GameData }) {
       const data = await res.json();
 
       if (!res.ok) {
+        const data = await res.json();
         setError(data.error || "Something went wrong.");
         setSaving(false);
+        toast({
+          title: "Error saving game",
+          description: data.error || "Failed to save the game.",
+          type: "error",
+        });
         return;
       }
 
+      toast({
+        title: isEdit ? "Game updated" : "Game created",
+        description: isEdit ? "The game has been updated successfully." : "The game has been created successfully.",
+        type: "success",
+      });
       router.push("/admin/games");
       router.refresh();
     } catch {
       setError("Network error. Please try again.");
       setSaving(false);
+      toast({
+        title: "Error",
+        description: "Network error while saving game.",
+        type: "error",
+      });
     }
   }
 

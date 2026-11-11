@@ -13,6 +13,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { ImageUploader } from "@/components/admin/ImageUploader";
+import { useToast } from "@/components/ui/Toast";
 
 const TiptapEditor = dynamic(
   () => import("@/components/admin/TiptapEditor").then((m) => m.TiptapEditor),
@@ -69,6 +70,7 @@ function slugify(title: string): string {
 
 export function PostForm({ initial }: { initial?: PostData }) {
   const router = useRouter();
+  const { toast } = useToast();
   const isEdit = Boolean(initial?.id);
   const [post, setPost] = useState<PostData>(initial ?? EMPTY_POST);
   const [error, setError] = useState("");
@@ -187,16 +189,32 @@ export function PostForm({ initial }: { initial?: PostData }) {
       const data = await res.json();
 
       if (!res.ok) {
+        const data = await res.json();
         setError(data.error || "Something went wrong.");
         setSaving(false);
+        toast({
+          title: "Error saving post",
+          description: data.error || "Failed to save the post.",
+          type: "error",
+        });
         return;
       }
 
+      toast({
+        title: isEdit ? "Post updated" : "Post created",
+        description: isEdit ? "The post has been updated successfully." : "The post has been created successfully.",
+        type: "success",
+      });
       router.push("/admin/posts");
       router.refresh();
     } catch {
       setError("Network error. Please try again.");
       setSaving(false);
+      toast({
+        title: "Error",
+        description: "Network error while saving post.",
+        type: "error",
+      });
     }
   }
 
