@@ -40,40 +40,40 @@ CREATE POLICY "PageView public read" ON "PageView" FOR SELECT USING (true);
 -- Admin write policies (auth.uid() matches AdminUser.supabaseUserId)
 -- ============================================
 CREATE POLICY "Game admin write" ON "Game" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "PlayLink admin write" ON "PlayLink" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "MontageVideo admin write" ON "MontageVideo" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "Post admin write" ON "Post" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "Comment admin write" ON "Comment" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "PressRelease admin write" ON "PressRelease" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "PressKitAsset admin write" ON "PressKitAsset" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "ContactMessage admin write" ON "ContactMessage" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "Achievement admin write" ON "Achievement" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "SocialLink admin write" ON "SocialLink" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "Redirect admin write" ON "Redirect" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 CREATE POLICY "SiteSettings admin write" ON "SiteSettings" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 
 -- ============================================
@@ -90,12 +90,12 @@ CREATE POLICY "PageView public insert" ON "PageView" FOR INSERT WITH CHECK (true
 -- AdminUser: admin read/write only
 -- ============================================
 CREATE POLICY "AdminUser admin read/write" ON "AdminUser" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
 
 -- ============================================
 -- AuditLog: admin read/write only
 -- ============================================
 CREATE POLICY "AuditLog admin read/write" ON "AuditLog" FOR ALL USING (
-  auth.uid() IN (SELECT "supabaseUserId" FROM "AdminUser")
+  auth.uid()::text IN (SELECT "supabaseUserId" FROM "AdminUser")
 );
