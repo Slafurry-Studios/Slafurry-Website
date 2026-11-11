@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
 /* Base type scale — 18px root, biar copy gak kekecilan. Semua ukuran rem
    (text-*, spacing, Tailwind breakpoints) ikut skala ~12% dari default 16px. */
@@ -67,14 +66,6 @@ main > *:nth-child(4) {
    karena themenya user-toggleable & disimpan di cookie/localStorage — lihat
    app/layout.tsx & lib/settings/. */
 @custom-variant dark (&:where(.dark, .dark *));
-
-  /* Register Branding Colors */
-  --color-primary: #2d2d2d;
-  --color-accent: #fed001;
-
-  /* Utility Animations (Optional) */
-  --animate-fade-in: fade-in 0.5s ease-out;
-}
 
 @theme inline {
   --color-background: var(--background);
