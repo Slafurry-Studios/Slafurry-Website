@@ -28,10 +28,10 @@ export async function Footer() {
 
           <Link
             href="/"
-            className="pixel-border-white flex h-12 items-center gap-2 px-4 text-white sm:h-14 sm:gap-3 sm:px-5"
+            className="pixel-border-white flex h-12 items-center gap-2 px-2 sm:px-5 text-white sm:h-14 sm:gap-3"
           >
             <SlafurryMark className="relative z-20 h-6 w-6 sm:h-7 sm:w-7" />
-            <span className="relative z-20 font-display text-base tracking-wide sm:text-xl">
+            <span className="relative z-20 font-display text-sm tracking-tight whitespace-nowrap sm:text-xl sm:tracking-wide">
               SLAFURRY STUDIOS
             </span>
           </Link>
