@@ -9,6 +9,13 @@ function slugify(title: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
+async function getNextGameOrder(): Promise<number> {
+  const max = await prisma.game.aggregate({
+    _max: { order: true },
+  });
+  return (max._max.order ?? -1) + 1;
+}
+
 export const POST = withAudit(
   async (request: Request) => {
     try {
@@ -29,6 +36,9 @@ export const POST = withAudit(
         return NextResponse.json({ error: "A game with this slug already exists." }, { status: 409 });
       }
 
+      const providedOrder = typeof body.order === "number" ? body.order : null;
+      const finalOrder = providedOrder ?? null;
+
       const game = await prisma.game.create({
         data: {
           slug,
@@ -39,7 +49,7 @@ export const POST = withAudit(
           longDesc: body.longDesc || "",
           status: body.status || "IN_DEVELOPMENT",
           featured: Boolean(body.featured),
-          order: typeof body.order === "number" ? body.order : 0,
+          order: finalOrder ?? (await getNextGameOrder()),
           metaTitle: body.metaTitle || null,
           metaDescription: body.metaDescription || null,
           ogImage: body.ogImage || null,
