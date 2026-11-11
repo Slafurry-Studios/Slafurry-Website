@@ -157,17 +157,18 @@ function ProjectCard({
         "transition-opacity duration-300 h-[28rem] w-[min(680px,80%)] hover:scale-[1.02] hover:shadow-md"
       }
     >
-      <div className="relative overflow-hidden aspect-[16/9] w-full">
+      <div className="relative overflow-hidden w-full">
         {project.coverImage ? (
           <Image
             src={project.coverImage}
             alt={project.coverImageAlt}
-            fill
+            width={1200}
+            height={675}
             sizes="(max-width: 768px) 80vw, 680px"
-            className="object-cover object-center"
+            className="w-full object-cover object-center"
           />
         ) : (
-          <PlaceholderImage label={project.title} className="h-full w-full" />
+          <PlaceholderImage label={project.title} className="w-full" />
         )}
       </div>
       <div className="p-4 transition-opacity duration-300 opacity-100">
