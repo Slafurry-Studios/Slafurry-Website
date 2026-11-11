@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
+import { getYoutubeEmbedUrl } from "@/lib/youtube";
 import type { GameData } from "@/lib/queries/games";
 
 const STATUS_STYLE: Record<GameData["status"], string> = {
@@ -9,11 +10,11 @@ const STATUS_STYLE: Record<GameData["status"], string> = {
 };
 
 function StatusBadge({ status }: { status: GameData["status"] }) {
-    return (
+  return (
     <span
-      className={`inline-block rounded-full px-2.5 py-0.5 font-ui text-xs font-medium ${STATUS_STYLE[status]}`}
+      className={`inline-block rounded-full px-2.5 py-0.5 font-display text-xs font-medium ${STATUS_STYLE[status]}`}
     >
-      {status.replace('_', ' ')}
+      {status.replace("_", " ")}
     </span>
   );
 }
@@ -25,23 +26,49 @@ export function GameCard({
   game: GameData;
   featured?: boolean;
 }) {
+  const youtubeEmbedUrl = getYoutubeEmbedUrl(game.playLinks);
+  const hasYoutube = Boolean(youtubeEmbedUrl);
+
   return (
     <Link
       href={`/games/${game.slug}`}
-      className="flex flex-col overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
+      className="flex flex-col overflow-hidden pixel-border press-btn game-hover"
     >
-      {game.coverImage ? (
-        <img
-          src={game.coverImage}
-          alt={game.coverImageAlt}
-          className={featured ? "aspect-[21/9] w-full object-cover" : "aspect-[16/9] w-full object-cover"}
-        />
-      ) : (
-        <PlaceholderImage
-          label={game.title}
-          className={featured ? "aspect-[21/9] w-full" : "aspect-[16/9] w-full"}
-        />
-      )}
+      <div className="-m-2 overflow-hidden relative group">
+        {/* Image — always rendered, mandatory fallback */}
+        {game.coverImage ? (
+          <img
+            src={game.coverImage}
+            alt={game.coverImageAlt}
+            className={
+              "w-full object-cover transition-opacity duration-300 " +
+              (hasYoutube ? "group-hover:opacity-30" : "") +
+              (featured ? "aspect-[21/9]" : "aspect-[16/9]")
+            }
+          />
+        ) : (
+          <PlaceholderImage
+            label={game.title}
+            className={
+              "w-full transition-opacity duration-300 " +
+              (hasYoutube ? "group-hover:opacity-30" : "") +
+              (featured ? "aspect-[21/9]" : "aspect-[16/9]")
+            }
+          />
+        )}
+
+        {/* YouTube preview — optional, auto-plays on hover; image stays as fallback */}
+        {hasYoutube && (
+          <iframe
+            className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in"
+            src={`${youtubeEmbedUrl}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0`}
+            title={`${game.title} preview`}
+            allow="autoplay; encrypted-media"
+            loading="lazy"
+            referrerPolicy="no-referrer"
+          />
+        )}
+      </div>
       <div className={featured ? "p-6" : "p-4"}>
         <h3 className={featured ? "font-display text-3xl tracking-wide" : "font-display text-2xl tracking-wide"}>
           {game.title}
@@ -50,7 +77,7 @@ export function GameCard({
           <StatusBadge status={game.status} />
         </div>
         <p
-          className={`mt-2 font-body text-neutral-600 dark:text-neutral-400 ${
+          className={`mt-2 font-display text-neutral-600 dark:text-neutral-400 ${
             featured ? "text-xl" : "line-clamp-2 text-xl"
           }`}
         >

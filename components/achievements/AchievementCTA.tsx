@@ -138,7 +138,7 @@ export function AchievementCTA() {
 
           {/* Unseen badge */}
           {unseenCount > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 flex min-w-[22px] items-center justify-center rounded-full bg-yellow-400 px-1.5 py-0.5 font-ui text-[11px] font-bold text-neutral-900 shadow-md">
+            <span className="absolute -top-1.5 -right-1.5 flex min-w-[22px] items-center justify-center rounded-full bg-yellow-400 px-1.5 py-0.5 font-display text-[11px] font-bold text-neutral-900 shadow-md">
               {unseenCount > 99 ? "99+" : unseenCount}
             </span>
           )}
@@ -211,7 +211,7 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
         <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
           <div>
             <h2 className="font-display text-xl leading-tight">"Achievements"</h2>
-            <p className="font-ui text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            <p className="font-display text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
               {totalUnlocked} / {totalAchievements}
             </p>
           </div>
@@ -229,7 +229,7 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
         <div className="flex-1 overflow-y-auto p-4 space-y-5">
           {Array.from(groups.entries()).map(([category, items]) => (
             <section key={category}>
-              <h3 className="font-ui text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-2.5 px-1">
+              <h3 className="font-display text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-2.5 px-1">
                 {category}
               </h3>
               <div className="space-y-2">
@@ -278,12 +278,12 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
                             {hidden ? "???" : achievement.title}
                           </p>
                           {isNew && (
-                            <span className="shrink-0 rounded-full bg-yellow-400 px-1.5 py-0.5 font-ui text-[10px] font-bold text-neutral-900">
+                            <span className="shrink-0 rounded-full bg-yellow-400 px-1.5 py-0.5 font-display text-[10px] font-bold text-neutral-900">
                               "NEW!"
                             </span>
                           )}
                         </div>
-                        <p className="font-body text-xs text-neutral-400 dark:text-neutral-500 truncate mt-0.5">
+                        <p className="font-display text-xs text-neutral-400 dark:text-neutral-500 truncate mt-0.5">
                           {hidden ? "???" : achievement.description}
                         </p>
                       </div>
@@ -308,7 +308,7 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
           ))}
 
           {achievements.length === 0 && (
-            <p className="text-center font-body text-sm text-neutral-400 dark:text-neutral-500 py-8">
+            <p className="text-center font-display text-sm text-neutral-400 dark:text-neutral-500 py-8">
               No achievements loaded yet.
             </p>
           )}
@@ -378,7 +378,7 @@ function RedeemSection() {
 
   return (
     <div className="border-t border-neutral-200 pt-4 dark:border-neutral-700">
-      <p className="font-ui text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-2.5 px-1">
+      <p className="font-display text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-2.5 px-1">
         "Got a code?"
       </p>
       <form onSubmit={handleSubmit} className="flex gap-2">
@@ -392,12 +392,12 @@ function RedeemSection() {
           }}
           placeholder="XXXX-XXXX-XXXX"
           disabled={status === "loading"}
-          className="flex-1 rounded-xl border border-neutral-300 bg-neutral-50 px-3 py-2 font-body text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-yellow-400 focus:outline-none focus:ring-1 focus:ring-yellow-400 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:placeholder:text-neutral-500 dark:focus:border-yellow-400"
+          className="flex-1 rounded-xl border border-neutral-300 bg-neutral-50 px-3 py-2 font-display text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-yellow-400 focus:outline-none focus:ring-1 focus:ring-yellow-400 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:placeholder:text-neutral-500 dark:focus:border-yellow-400"
         />
         <button
           type="submit"
           disabled={status === "loading" || !code.trim()}
-          className="shrink-0 rounded-xl bg-neutral-900 px-4 py-2 font-ui text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:opacity-50 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+          className="shrink-0 rounded-xl bg-neutral-900 px-4 py-2 font-display text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:opacity-50 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
           {status === "loading" ? "..." : "Redeem"}
         </button>
@@ -410,7 +410,7 @@ function RedeemSection() {
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
-            className={`mt-2 font-ui text-xs px-1 ${
+            className={`mt-2 font-display text-xs px-1 ${
               status === "success"
                 ? "text-green-600 dark:text-green-400"
                 : "text-red-500 dark:text-red-400"

@@ -15,20 +15,22 @@ export function PostCard({
   return (
     <Link
       href={`${basePath}/${post.slug}`}
-      className="block overflow-hidden rounded-xl border border-neutral-300 transition-shadow hover:shadow-md dark:border-neutral-700"
+      className="block overflow-hidden pixel-border transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
     >
-      {post.coverImage ? (
-        <img
-          src={post.coverImage}
-          alt={post.coverImageAlt}
-          className={compact ? "aspect-[16/9] w-full object-cover" : "aspect-[21/9] w-full object-cover"}
-        />
-      ) : (
-        <PlaceholderImage
-          label={post.title}
-          className={compact ? "aspect-[16/9] w-full" : "aspect-[21/9] w-full"}
-        />
-      )}
+      <div className="-mx-6 -mt-6 overflow-hidden">
+        {post.coverImage ? (
+          <img
+            src={post.coverImage}
+            alt={post.coverImageAlt}
+            className={compact ? "aspect-[16/9] w-full object-cover" : "aspect-[21/9] w-full object-cover"}
+          />
+        ) : (
+          <PlaceholderImage
+            label={post.title}
+            className={compact ? "aspect-[16/9] w-full" : "aspect-[21/9] w-full"}
+          />
+        )}
+      </div>
       <div className={compact ? "p-3" : "p-5"}>
         <h3
           className={
@@ -39,11 +41,11 @@ export function PostCard({
         >
           {post.title}
         </h3>
-        <p className="mt-1 font-ui text-xs text-neutral-500 dark:text-neutral-400">
+        <p className="mt-1 font-display text-xs text-neutral-500 dark:text-neutral-400">
           "by" {post.authorName} |{" "}
           {post.publishedAt ? formatDate(post.publishedAt) : ""} |{" "}
           {post.tags.map((tag) => (
-            <span key={tag} className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-xxs font-ui mr-1">
+            <span key={tag} className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-xxs font-display mr-1">
               {tag}
             </span>
           ))} | {post.commentCount} "Comments"
@@ -51,8 +53,8 @@ export function PostCard({
         <p
           className={
             compact
-              ? "mt-1.5 line-clamp-2 font-body text-xs text-neutral-600 dark:text-neutral-400"
-              : "mt-2 line-clamp-2 font-body text-xl text-neutral-600 dark:text-neutral-400"
+              ? "mt-1.5 line-clamp-2 font-display text-xs text-neutral-600 dark:text-neutral-400"
+              : "mt-2 line-clamp-2 font-display text-xl text-neutral-600 dark:text-neutral-400"
           }
         >
           {post.excerpt}

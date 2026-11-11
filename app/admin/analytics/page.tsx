@@ -106,7 +106,7 @@ export default async function AdminAnalyticsPage({
                     {label}
                   </a>
 
-                  <span className="ml-auto text-right font-ui text-sm dark:text-neutral-400">
+                  <span className="ml-auto text-right font-display text-sm dark:text-neutral-400">
                     {formatBytes(page.views)}
                   </span>
                 </li>
@@ -141,7 +141,7 @@ export default async function AdminAnalyticsPage({
                     {label}
                   </span>
 
-                  <span className="ml-auto text-right font-ui text-sm dark:text-neutral-400">
+                  <span className="ml-auto text-right font-display text-sm dark:text-neutral-400">
                     {formatBytes(ref.views)}
                   </span>
                 </li>
@@ -160,7 +160,7 @@ export default async function AdminAnalyticsPage({
                 <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">
                   {d.device}
                 </span>
-                <span className="text-right font-ui text-xs dark:text-neutral-400">
+                <span className="text-right font-display text-xs dark:text-neutral-400">
                   {formatBytes(d.count)}
                 </span>
               </div>

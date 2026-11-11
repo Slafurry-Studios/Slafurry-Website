@@ -43,14 +43,14 @@ export default async function Home() {
   );
 }
 
-// Pemisah section — garis handdrawn dari line_break.png
+// Pemisah section — garis handdrawn dari Linebreak.png
 function LineBreak() {
   return (
     <img
-      src="/line_break.png"
+      src="/Linebreak.png"
       alt=""
       aria-hidden="true"
-      className="mx-auto block w-full max-w-[90rem]"
+      className="-mx-4 md:-mx-8 my-8 block h-1 w-[calc(100%+2rem)] md:w-[calc(100%+4rem)] max-w-none [image-rendering:pixelated]"
     />
   );
 }

@@ -1,0 +1,40 @@
+
+> slafurry-studios@0.1.0 build
+> next build
+
+▲ Next.js 16.3.3 (Turbopack)
+- Environments: .env
+✓ Running next.config.ts took 30ms
+- Experiments (use with caution):
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.0s
+  Running TypeScript ...
+  Finished TypeScript in 4.7s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/39) ...
+Error occurred prerendering page "/admin/posts". Read more: https://nextjs.org/docs/messages/prerender-error
+Error [PrismaClientInitializationError]: 
+Invalid `prisma.post.findMany()` invocation:
+
+
+Can't reach database server at `localhost:54322`
+
+Please make sure your database server is running at `localhost:54322`.
+    at async e (app/admin/posts/page.tsx:5:17)
+  3 |
+  4 | export default async function AdminPostsPage() {
+> 5 |   const posts = await prisma.post.findMany({
+    |                 ^
+  6 |     orderBy: { createdAt: "desc" },
+  7 |     include: { _count: { select: { comments: true } } },
+  8 |   }); {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '4276859451'
+}
+Export encountered an error on /admin/posts/page: /admin/posts, exiting the build.
+Error occurred prerendering page "/". Read more: https://nextjs.org/docs/messages/prerender-error
+⨯ Next.js build worker exited with code: 1 and signal: null

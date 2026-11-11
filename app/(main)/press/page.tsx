@@ -40,7 +40,7 @@ export default async function PressPage() {
                         href={release.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="group flex items-start gap-1.5 font-ui text-lg text-neutral-700 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
+                        className="group flex items-start gap-1.5 font-display text-lg text-neutral-700 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
                       >
                         <IconExternalLink
                           size={14}
@@ -72,7 +72,7 @@ export default async function PressPage() {
                     <li key={label + asset.type}>
                       <a
                         href={asset.fileUrl}
-                        className="inline-flex items-center gap-1.5 font-ui text-lg text-neutral-700 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
+                        className="inline-flex items-center gap-1.5 font-display text-lg text-neutral-700 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
                       >
                         <IconDownload size={14} className="text-neutral-400" />
                         <span className="font-medium">{ASSET_TYPE_LABEL[asset.type]}:</span>
@@ -89,11 +89,11 @@ export default async function PressPage() {
         </div>
       </div>
 
-      <p className="mx-auto mt-16 max-w-7xl border-t border-neutral-200 pt-8 text-center font-body text-lg text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+      <p className="mx-auto mt-16 max-w-7xl border-t border-neutral-200 pt-8 text-center font-display text-lg text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
         "For press inquiries, contact us at"{" "}
         <a
           href={`mailto:${PRESS_CONTACT_EMAIL}`}
-          className="font-semibold text-neutral-900 underline underline-offset-2 dark:text-white"
+          className="break-all font-semibold text-neutral-900 underline underline-offset-2 dark:text-white"
         >
           {PRESS_CONTACT_EMAIL}
         </a>

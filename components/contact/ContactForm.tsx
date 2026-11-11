@@ -9,7 +9,7 @@ export function ContactForm() {
   const [state, formAction, isPending] = useActionState(submitContactMessage, null);
 
   return (
-    <div className="mt-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 dark:border-neutral-800 dark:bg-neutral-900/50">
+    <div className="mt-10 pixel-border bg-neutral-50 p-6 dark:bg-neutral-900/50">
       <h3 className="font-display text-xl font-semibold tracking-tight">
         Leave a message
       </h3>
@@ -18,14 +18,14 @@ export function ContactForm() {
       </p>
 
       {state?.ok === true && (
-        <div className="mt-4 flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-xl text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+        <div className="mt-4 toast-enter flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-xl text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
           <IconCheck size={16} />
           {state.message}
         </div>
       )}
 
       {state?.ok === false && (
-        <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-xl text-red-700 dark:bg-red-900/30 dark:text-red-300">
+        <div className="mt-4 toast-enter flex items-center gap-2 rounded-lg bg-red-50 p-3 text-xl text-red-700 dark:bg-red-900/30 dark:text-red-300">
           <IconAlertTriangle size={16} />
           {state.error}
         </div>
@@ -40,6 +40,7 @@ export function ContactForm() {
             autoComplete="off"
             className="absolute -left-[9999px] h-0 w-0 opacity-0"
             aria-hidden="true"
+            suppressHydrationWarning
           />
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -55,7 +56,7 @@ export function ContactForm() {
                 name="name"
                 required
                 maxLength={100}
-                className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-xl outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
+                className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
                 placeholder="Your name"
               />
             </div>
@@ -71,7 +72,7 @@ export function ContactForm() {
                 name="email"
                 required
                 type="email"
-                className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-xl outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
+                className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
                 placeholder="you@example.com"
               />
               <p className="mt-1 text-[10px] text-neutral-400 dark:text-neutral-500">
@@ -84,7 +85,7 @@ export function ContactForm() {
             name="message"
             rows={6}
             required
-            className="w-full resize-y rounded-lg border border-neutral-300 bg-white px-3 py-2 text-xl outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white dark:focus:ring-white"
+            className="w-full resize-y pixel-border-sm bg-white px-3 py-2 text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
             placeholder="Write your message..."
           />
 
@@ -99,7 +100,7 @@ export function ContactForm() {
               id="category"
               name="category"
               defaultValue="GENERAL"
-              className="w-full rounded-lg border border-neutral-300 bg-transparent px-4 py-2.5 font-body text-xl outline-none focus:border-neutral-900 dark:border-neutral-700 dark:focus:border-white"
+              className="w-full pixel-border-sm bg-transparent px-4 py-2.5 font-display text-xl outline-none input-focus focus:ring-1 focus:ring-neutral-900 dark:focus:ring-white"
             >
               <option value="GENERAL">General inquiry</option>
               <option value="BUSINESS">Business partnership</option>
@@ -108,9 +109,9 @@ export function ContactForm() {
           </div>
 
           <PillButton
+            size="sm"
             type="submit"
             disabled={isPending}
-            variant="solid"
             icon={<IconSend size={16} />}
             className="w-full sm:w-auto"
           >

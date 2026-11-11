@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { fontDisplay, fontBody } from "@/lib/fonts";
+import { fontDisplay } from "@/lib/fonts";
 
 // Safety net paling luar — nangkep error yang terjadi di dalam root layout
 // sendiri. Karena ini lapisan terakhir sebelum Next.js menampilkan error
@@ -21,7 +21,7 @@ export default function RootError({
     console.error(error);
   }, [error]);
 
-  const bodyClasses = [fontBody.variable, "font-body"].join(" ");
+  const bodyClasses = "font-display";
 
   return (
     <div

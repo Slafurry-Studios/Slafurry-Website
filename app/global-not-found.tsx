@@ -5,7 +5,7 @@
 // route apapun.
 import type { Metadata } from "next";
 
-import { fontDisplay, fontUI, fontBody } from "@/lib/fonts";
+import { fontDisplay } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: "404 - Page Not Found",
@@ -13,12 +13,12 @@ export const metadata: Metadata = {
 };
 
 export default function GlobalNotFound() {
-  const htmlClasses = [fontDisplay.variable, fontUI.variable, fontBody.variable].join(" ");
+  const htmlClasses = [fontDisplay.variable].join(" ");
 
   return (
     <html lang="en" className={htmlClasses}>
       <body
-        className="font-body"
+        className="font-display"
         style={{
           minHeight: "100vh",
           display: "flex",

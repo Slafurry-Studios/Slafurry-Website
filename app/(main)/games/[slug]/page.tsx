@@ -37,7 +37,7 @@ export default async function GameDetailPage({
         {game.title}
 
         <span
-          className={`inline-block rounded-full px-2.5 py-0.5 font-ui text-xs font-medium ${
+          className={`inline-block rounded-full px-2.5 py-0.5 font-display text-xs font-medium ${
             game.status === "RELEASED"
               ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
               : game.status === "UPCOMING"
@@ -85,7 +85,7 @@ export default async function GameDetailPage({
           href="/games"
           className="inline-flex items-center rounded-md bg-primary-600 px-4 py-2 text-xl font-medium text-white hover:bg-primary-700"
         >
-          ← Kembali ke daftar game
+          ← Back to game list
         </Link>
       </div>
 
@@ -109,7 +109,7 @@ export const generateMetadata = async ({
   }
 
   const settings = await getSiteSettings();
-  const ogImage = game.ogImage || (settings?.defaultOgImage || "/og/default-banner.png");
+  const ogImage = game.ogImage || (settings?.defaultOgImage || "/slafurry-logo.png");
 
   return {
     title: game.title,

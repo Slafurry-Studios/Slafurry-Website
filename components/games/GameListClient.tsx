@@ -30,6 +30,7 @@ export function GameListClient({
       {hasMore && (
         <div className="mt-10 flex justify-center">
           <PillButton
+            size="sm"
             icon={<IconChevronDown size={16} />}
             iconPosition="right"
             onClick={() => setVisibleCount((prev) => prev + 6)}

@@ -39,27 +39,27 @@ export function PostListClient({
   });
 
   const tagButtonClass = (tag: string, isActive: boolean) =>
-    `inline-flex items-center rounded-full border px-3 py-1.5 font-ui text-xl font-medium transition-colors ${
+    `inline-flex items-center pixel-border-sm px-3 py-1.5 font-display text-xl font-medium transition-colors ${
       isActive
-        ? "border-neutral-900 text-neutral-900 bg-neutral-100 dark:border-white dark:text-white dark:bg-neutral-800"
-        : "border-neutral-300 text-neutral-700 hover:bg-neutral-200 hover:text-neutral-900 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
+        ? "text-neutral-900 bg-neutral-100 dark:text-white dark:bg-neutral-800"
+        : "text-neutral-700 hover:bg-neutral-200 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800"
     }`;
 
   const allTagsClass =
     tagFilter === undefined
-      ? "border-neutral-600 text-neutral-600 dark:border-neutral-400 dark:text-neutral-400"
-      : "border-neutral-900 text-neutral-900 hover:bg-neutral-900 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900";
+      ? "text-neutral-600 dark:text-neutral-400"
+      : "text-neutral-900 hover:bg-neutral-900 hover:text-white dark:text-white dark:hover:bg-white dark:hover:text-neutral-900";
 
   return (
     <div className="px-6 py-16 md:px-10">
       <h1 className="text-center font-display text-5xl tracking-wide">
         {heading}
       </h1>
-      <p className="mx-auto mt-4 max-w-xl text-center font-body text-xl text-neutral-600 dark:text-neutral-400">
+      <p className="mx-auto mt-4 max-w-xl text-center font-display text-xl text-neutral-600 dark:text-neutral-400">
         {intro}
       </p>
       {subIntro && (
-        <p className="mx-auto mt-3 max-w-xl text-center font-body text-xl text-neutral-500 dark:text-neutral-500">
+        <p className="mx-auto mt-3 max-w-xl text-center font-display text-xl text-neutral-500 dark:text-neutral-500">
           {subIntro}
         </p>
       )}
@@ -68,7 +68,7 @@ export function PostListClient({
         <div className="flex flex-wrap gap-2 justify-center">
           <button
             onClick={() => setTagFilter(undefined)}
-            className={`inline-flex items-center rounded-full border px-3 py-1.5 font-ui text-xl font-medium transition-colors ${allTagsClass}`}
+            className={`inline-flex items-center pixel-border-sm px-3 py-1.5 font-display text-xl font-medium transition-colors ${allTagsClass}`}
           >
             All tags
           </button>
@@ -89,7 +89,7 @@ export function PostListClient({
             placeholder={searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 rounded border px-3 py-2 font-body text-xl dark:border-neutral-600 dark:bg-neutral-800 dark:text-white focus-outline"
+            className="flex-1 min-w-0 pixel-border-sm px-3 py-2 font-display text-xl dark:bg-neutral-800 dark:text-white focus-outline"
           />
         </div>
       </div>
@@ -106,7 +106,7 @@ export function PostListClient({
       </div>
 
       <div className="mt-10 flex justify-center">
-        <PillButton icon={<IconChevronDown size={16} />} iconPosition="right">
+        <PillButton size="sm" icon={<IconChevronDown size={16} />} iconPosition="right">
           More
         </PillButton>
       </div>

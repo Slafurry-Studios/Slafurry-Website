@@ -15,7 +15,7 @@ export function CommentList({ comments }: { comments: PublicComment[] }) {
         {comments.map((c) => (
           <div
             key={c.id}
-            className="rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-900/50"
+            className="pixel-border bg-neutral-50 p-4 dark:bg-neutral-900/50"
           >
             <div className="flex items-center gap-2">
               <span className="text-xl font-medium">{c.authorName}</span>

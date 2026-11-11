@@ -74,6 +74,8 @@ export default function AdminLayout({
 }: AdminLayoutProps) {
   const pathname = usePathname();
 
+  const isLoginPage = pathname === "/admin/login";
+
   const isActive = (href: string) => {
     // Dashboard hanya aktif tepat di /admin
     if (href === "/admin") {
@@ -87,41 +89,43 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-background">
       <div className="flex min-h-screen w-full">
-        {/* Sidebar */}
-        <nav className="sticky left-0 top-0 z-50 h-screen w-64 shrink-0 border-r border-neutral-800/50 bg-neutral-950">
-          <div className="h-full p-6">
-            <ul className="space-y-2 text-sm">
-              {NAV_ITEMS.map((item) => {
-                const active = isActive(item.href);
-                const Icon = item.icon;
+        {/* Sidebar — disembunyikan di halaman login */}
+        {!isLoginPage && (
+          <nav className="sticky left-0 top-0 z-50 h-screen w-64 shrink-0 border-r border-neutral-800/50 bg-neutral-950">
+            <div className="h-full p-6">
+              <ul className="space-y-2 text-sm">
+                {NAV_ITEMS.map((item) => {
+                  const active = isActive(item.href);
+                  const Icon = item.icon;
 
-                const href = item.href;
+                  const href = item.href;
 
-                return (
-                  <li key={item.label}>
-                    <Link
-                      href={href}
-                      className={`flex items-center gap-3 rounded-md px-3 py-2 transition-colors ${
-                        active
-                          ? "bg-neutral-900 text-white"
-                          : "text-neutral-400 hover:bg-neutral-900/50 hover:text-white"
-                      }`}
-                    >
-                      <Icon size={16} />
+                  return (
+                    <li key={item.label}>
+                      <Link
+                        href={href}
+                        className={`flex items-center gap-3 rounded-md px-3 py-2 transition-colors ${
+                          active
+                            ? "bg-neutral-900 text-white"
+                            : "text-neutral-400 hover:bg-neutral-900/50 hover:text-white"
+                        }`}
+                      >
+                        <Icon size={16} />
 
-                      <span className="font-ui font-medium">
-                        {item.label}
-                      </span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </nav>
+                        <span className="font-display font-medium">
+                          {item.label}
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </nav>
+        )}
 
         {/* Page content */}
-        <main className="min-w-0 flex-1">
+        <main className={`min-w-0 flex-1 ${isLoginPage ? "w-full" : ""}`}>
           {children}
         </main>
       </div>
