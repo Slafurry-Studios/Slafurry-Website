@@ -71,7 +71,9 @@ export const POST = withAudit(
           ? body.slug.trim()
           : slugify(title);
 
-      const existing = await prisma.post.findUnique({ where: { slug } });
+      const existing = await prisma.post.findFirst({
+        where: { slug, id: { not: body.id ?? undefined } },
+      });
       if (existing) {
         return NextResponse.json(
           { error: "A post with this slug already exists." },

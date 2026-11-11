@@ -1,11 +1,8 @@
 "use client";
 
-"use client";
-
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
-import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
 import {
@@ -71,10 +68,6 @@ export function TiptapEditor({
       }),
       Placeholder.configure({
         placeholder: "Write your post content here...",
-      }),
-      Link.configure({
-        openOnClick: false,
-        HTMLAttributes: { class: "text-blue-600 underline dark:text-blue-400" },
       }),
       Image.configure({
         HTMLAttributes: { class: "rounded-lg max-w-full" },
