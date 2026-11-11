@@ -35,29 +35,36 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
         </div>
 
         {upcomingGame && (
-          <div className="flex flex-col items-center">
-            <p className="font-display text-2xl text-center font-semibold uppercase tracking-wide underline underline-offset-4 sm:text-4xl">
+          <div className="flex flex-col items-center w-full sm:w-1/2">
+            <p className="font-display text-xl sm:text-2xl font-semibold tracking-wide uppercase text-neutral-500 dark:text-neutral-400 text-center sm:text-left">
               Upcoming Project
             </p>
-            <div className="relative mt-10 aspect-[16/9] w-full max-w-md pixel-frame overflow-hidden bg-white">
+            <div className="relative mt-6 overflow-hidden pixel-border bg-white dark:bg-neutral-900 w-full sm:w-[min(680px,90%)]">
               <Link href={`/games/${upcomingGame.slug}`}>
-                {upcomingGame.coverImage ? (
-                  <img
-                    src={upcomingGame.coverImage}
-                    alt={upcomingGame.coverImageAlt}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <PlaceholderImage
-                    label={upcomingGame.title}
-                    className="h-full w-full"
-                  />
-                )}
+                <div className="-mx-6 -mt-6 overflow-hidden">
+                  {upcomingGame.coverImage ? (
+                    <img
+                      src={upcomingGame.coverImage}
+                      alt={upcomingGame.coverImageAlt || upcomingGame.title}
+                      className="aspect-[16/9] w-full object-cover"
+                    />
+                  ) : (
+                    <PlaceholderImage
+                      label={upcomingGame.title}
+                      className="aspect-[16/9] w-full"
+                    />
+                  )}
+                </div>
+                <div className="p-4 sm:p-6">
+                  <h3 className="font-display text-xl sm:text-2xl font-semibold leading-snug text-neutral-900 dark:text-white">
+                    {upcomingGame.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-2 font-display text-sm sm:text-xl text-neutral-600 dark:text-neutral-400">
+                    {upcomingGame.shortDesc}
+                  </p>
+                </div>
               </Link>
             </div>
-            <h2 className="mt-4 font-display text-3xl tracking-wide sm:text-4xl">
-              {upcomingGame.title}
-            </h2>
           </div>
         )}
       </div>
