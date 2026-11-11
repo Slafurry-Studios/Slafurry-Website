@@ -25,6 +25,22 @@ export default async function GameDetailPage({
 
   return (
     <div className="prose lg:prose-xl max-w-2xl mx-auto px-4 py-12">
+      <h1 className="text-3xl font-display tracking-wide mb-6 mt-8">
+        {game.title}
+
+        <span
+          className={`inline-block rounded-full px-2.5 py-0.5 font-display text-xs font-medium ${
+            game.status === "RELEASED"
+              ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
+              : game.status === "UPCOMING"
+                ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                : "bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+          }`}
+        >
+          {game.status}
+        </span>
+      </h1>
+
       {game.coverImage && (
         <Image
           src={game.coverImage}
@@ -34,22 +50,6 @@ export default async function GameDetailPage({
           className="aspect-[16/9] w-full rounded-xl object-cover"
         />
       )}
-
-      <h1 className="text-3xl font-display tracking-wide mb-6 mt-8">
-        {game.title}
-
-        <span
-          className={`inline-block rounded-full px-2.5 py-0.5 font-display text-xs font-medium ${
-            game.status === "RELEASED"
-              ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
-              : game.status === "UPCOMING"
-              ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
-              : "bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
-          }`}
-        >
-          {game.status}
-        </span>
-      </h1>
 
       <div className="mt-8 space-y-5 font-display prose prose-neutral dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: game.longDesc || "" }} />
 
