@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, writeFileSync, unlinkSync } from "fs";
-import { join, basename } from "path";
+import { join, basename } from "path"; // turbopackIgnore: true
 import type { StorageProvider, StorageFile, UploadResult } from "./adapter";
 
 const ROOT = process.env.LOCAL_STORAGE_ROOT ?? "./.local-storage";
@@ -24,15 +24,15 @@ function parsePublicUrl(publicUrl: string): { bucket: string; path: string } | n
 }
 
 function diskPath(bucket: string, path: string): string {
-  return join(ROOT, bucket, path);
+  return `${ROOT}/${bucket}/${path}`;
 }
 
 export class LocalStorageProvider implements StorageProvider {
   async upload({ file, bucket, path }: { file: StorageFile; bucket: string; path?: string }): Promise<UploadResult> {
     const finalPath = path ?? `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${basename(file.name)}`;
     const full = diskPath(bucket, finalPath);
-    ensureDir(join(ROOT, bucket));
-    writeFileSync(full, file.buffer);
+    ensureDir(`${ROOT}/${bucket}`); // turbopackIgnore: true
+    writeFileSync(full, file.buffer); // turbopackIgnore: true
     return { url: publicUrl(bucket, finalPath), path: finalPath };
   }
 
@@ -44,10 +44,10 @@ export class LocalStorageProvider implements StorageProvider {
     if (!publicUrl) return false;
     const parsed = parsePublicUrl(publicUrl);
     if (!parsed) return false;
-    const full = diskPath(parsed.bucket, parsed.path);
-    if (!existsSync(full)) return false;
+    const full = diskPath(parsed.bucket, parsed.path); // turbopackIgnore: true
+    if (!existsSync(full)) return false; // turbopackIgnore: true
     try {
-      unlinkSync(full);
+      unlinkSync(full); // turbopackIgnore: true
       return true;
     } catch {
       return false;
