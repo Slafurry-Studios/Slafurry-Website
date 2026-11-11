@@ -157,7 +157,7 @@ function ProjectCard({
         "transition-opacity duration-300 h-[28rem] w-[min(680px,80%)] hover:scale-[1.02] hover:shadow-md"
       }
     >
-      <div className="relative -mx-6 -mt-6 overflow-hidden h-[200px] w-full">
+      <div className="relative overflow-hidden h-[200px] w-full">
         {project.coverImage ? (
           <Image
             src={project.coverImage}
