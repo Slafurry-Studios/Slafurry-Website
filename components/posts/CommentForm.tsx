@@ -1,25 +1,22 @@
 "use client";
 
-import { useActionState } from "react";
-import { submitComment } from "@/lib/actions/comment";
+import { useState } from "react";
 import { IconSend, IconLoader2, IconCheck, IconAlertTriangle } from "@tabler/icons-react";
+import { PillButton } from "@/components/ui/PillButton";
+import { Skeleton, SkeletonText, useLoadingState } from "@/components/ui/Skeleton";
 
-export function CommentForm({
-  postId,
-  gameId,
-}: {
-  postId?: string;
-  gameId?: string;
-}) {
-  const [state, formAction, isPending] = useActionState(submitComment, null);
+export function ContactForm() {
+  const [state, setState] = useState<{ ok?: boolean; message?: string; error?: string }>(null);
+  const [isPending, setIsPending] = useState(false);
+  const showPending = isPending;
 
   return (
-    <div className="mt-12 pixel-border bg-neutral-50 p-6 dark:bg-neutral-900/50">
+    <div className="mt-10 pixel-border bg-neutral-50 p-6 dark:bg-neutral-900/50">
       <h3 className="font-display text-xl font-semibold tracking-tight">
-        Leave a comment
+        Leave a message
       </h3>
       <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-        Comments are moderated before appearing on the page.
+        Messages are reviewed before responding.
       </p>
 
       {state?.ok === true && (
@@ -36,8 +33,8 @@ export function CommentForm({
         </div>
       )}
 
-      {state?.ok !== true && (
-        <form action={formAction} className="mt-4 space-y-4">
+      {isPending || state?.ok !== true ? (
+        <form action="#" className="mt-4 space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
             name="company"
@@ -45,15 +42,24 @@ export function CommentForm({
             autoComplete="off"
             className="absolute -left-[9999px] h-0 w-0 opacity-0"
             aria-hidden="true"
+            suppressHydrationWarning
           />
 
-          <input type="hidden" name="postId" value={postId ?? ""} />
-          <input type="hidden" name="gameId" value={gameId ?? ""} />
+          <input
+            type="hidden"
+            name="postId"
+            value=""
+          />
+          <input
+            type="hidden"
+            name="gameId"
+            value=""
+          />
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label
-                htmlFor="authorName"
+                htmlFor="name"
                 className="mb-1 block text-xs font-medium text-neutral-700 dark:text-neutral-300"
               >
                 Name
@@ -69,21 +75,21 @@ export function CommentForm({
             </div>
             <div>
               <label
-                htmlFor="authorEmail"
+                htmlFor="email"
                 className="mb-1 block text-xs font-medium text-neutral-700 dark:text-neutral-300"
               >
                 Email
               </label>
               <input
-                id="authorEmail"
-                name="authorEmail"
-                type="email"
+                id="email"
+                name="email"
                 required
+                type="email"
                 className="w-full pixel-border-sm bg-white px-3 py-2 text-xl outline-none transition-colors focus:ring-1 focus:ring-neutral-900 dark:bg-neutral-900 dark:focus:ring-white"
                 placeholder="you@example.com"
               />
               <p className="mt-1 text-[10px] text-neutral-400 dark:text-neutral-500">
-                Not published — used for moderation only.
+                Not published — used for contact only.
               </p>
             </div>
           </div>
@@ -106,20 +112,64 @@ export function CommentForm({
             />
           </div>
 
-          <button
+          <PillButton
+            size="sm"
             type="submit"
             disabled={isPending}
-            className="inline-flex items-center gap-2 pixel-border px-5 py-2 text-xl font-display font-medium text-neutral-900 transition-all hover:scale-105 disabled:opacity-50 dark:text-white"
+            icon={<IconSend size={16} />}
+            className="w-full sm:w-auto"
           >
             {isPending ? (
-              <IconLoader2 size={14} className="animate-spin" />
+              <>
+                <IconLoader2 size={16} className="animate-spin" />
+                Sending…
+              </>
             ) : (
-              <IconSend size={14} />
+              "Send message"
             )}
-            {isPending ? "Submitting..." : "Submit"}
-          </button>
+          </PillButton>
         </form>
+      ) : (
+        <div className="mt-6 space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-32" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-10 w-20" />
+          <PillButton size="sm" disabled className="w-full sm:w-auto">
+            Sending…
+          </PillButton>
+        </div>
       )}
     </div>
   );
+}
+
+async function handleSubmit(e: SubmitEvent) {
+  e.preventDefault();
+  const formData = new FormData(e.currentTarget);
+  
+  setIsPending(true);
+  setState(null);
+  
+  try {
+    const res = await fetch("/api/comments", {
+      method: "POST",
+      body: formData,
+    });
+    
+    const result = await res.json();
+    
+    if (!res.ok) {
+      setState({ ok: false, error: result.error || "Failed to submit comment." });
+      setIsPending(false);
+      return;
+    }
+    
+    setState({ ok: true, message: result.message || "Comment submitted! It will appear after moderation." });
+    setIsPending(false);
+    e.currentTarget.reset();
+  } catch {
+    setState({ ok: false, error: "Network error. Please try again." });
+    setIsPending(false);
+  }
 }

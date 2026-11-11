@@ -13,6 +13,12 @@ import Link from "next/link";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { useToast } from "@/components/ui/Toast";
 import { getYoutubeEmbedUrl } from "@/lib/youtube";
+import dynamic from "next/dynamic";
+
+const TiptapEditor = dynamic(
+  () => import("@/components/admin/TiptapEditor").then((m) => m.TiptapEditor),
+  { ssr: false }
+);
 
 type PlayLinkRow = { id?: string; label: string; url: string };
 
@@ -219,11 +225,9 @@ export function GameForm({ initial }: { initial?: GameData }) {
 
         <div className={hintClass}>
           <label className={labelClass}>Long Description</label>
-          <textarea
-            rows={5}
-            value={game.longDesc}
-            onChange={(e) => update("longDesc", e.target.value)}
-            className={inputClass}
+          <TiptapEditor
+            content={game.longDesc}
+            onChange={(html) => update("longDesc", html)}
           />
         </div>
       </section>

@@ -51,9 +51,7 @@ export default async function GameDetailPage({
         </span>
       </h1>
 
-      <p className="mb-6 text-neutral-600 dark:text-neutral-400 line-clamp-4">
-        {game.shortDesc}
-      </p>
+      <div className="mt-8 space-y-5 font-display prose prose-neutral dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: game.longDesc || "" }} />
 
       {game.playLinks.length > 0 && (
         <div className="mb-8">
