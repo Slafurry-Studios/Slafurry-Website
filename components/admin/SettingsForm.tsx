@@ -265,6 +265,114 @@ export function SettingsForm({
           </div>
         </section>
 
+        {/* ═══ SOCIAL LINKS ═══ */}
+        <section className="space-y-6">
+          <h2 className="font-display text-xl tracking-tight">Social Links</h2>
+
+          {SECTIONS.map((sec) => {
+            const sectionLinks = links.filter((l) => l.section === sec.key);
+            return (
+              <div key={sec.key}>
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
+                    {sec.label}
+                    <span className="ml-1.5 text-xs">({sectionLinks.length})</span>
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => addLink(sec.key)}
+                    className="inline-flex items-center gap-1 rounded-full border border-neutral-300 px-3 py-1 text-xs font-medium transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                  >
+                    <IconPlus size={12} />
+                    Add
+                  </button>
+                </div>
+
+                {sectionLinks.length === 0 && (
+                  <p className="rounded-lg border border-dashed border-neutral-300 py-4 text-center text-xs text-neutral-400 dark:border-neutral-700">
+                    No links in this section.
+                  </p>
+                )}
+
+                <div className="space-y-2">
+                  {sectionLinks.map((link) => {
+                    const IconComp = ICON_MAP[link.platform] || IconLink;
+                    return (
+                      <div
+                        key={link.id}
+                        className={`flex items-center gap-3 rounded-xl border p-3 ${
+                          link.isHidden 
+                            ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
+                            : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+                        }`}
+                      >
+                        <IconComp size={18} className="shrink-0 text-neutral-400" />
+
+                        <select
+                          value={link.platform}
+                          onChange={(e) => updateLink(link.id, "platform", e.target.value)}
+                          className="w-32 rounded-lg border border-neutral-300 bg-white px-2 py-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-900"
+                        >
+                          {PLATFORM_PRESETS.map((p) => (
+                            <option key={p.slug} value={p.slug}>
+                              {p.label}
+                            </option>
+                          ))}
+                          <option value="custom">Custom...</option>
+                        </select>
+
+                        <input
+                          type="text"
+                          placeholder="Label"
+                          value={link.label}
+                          onChange={(e) => updateLink(link.id, "label", e.target.value)}
+                          className={`${inputClass} !py-1.5 text-xs`}
+                        />
+
+                        <input
+                          type="url"
+                          placeholder="https://..."
+                          value={link.url}
+                          onChange={(e) => updateLink(link.id, "url", e.target.value)}
+                          className={`${inputClass} flex-1 !py-1.5 text-xs`}
+                        />
+
+                        <input
+                          type="number"
+                          value={link.order}
+                          onChange={(e) =>
+                            updateLink(link.id, "order", parseInt(e.target.value) || 0)
+                          }
+                          className={`${inputClass} !py-1.5 text-xs w-16`}
+                          title="Order"
+                        />
+
+                        <button
+                          type="button"
+                          onClick={() => updateLink(link.id, "isHidden", !link.isHidden)}
+                          className="shrink-0 rounded-lg p-2.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400"
+                        >
+                          <IconTrash size={16} />
+                        </button>
+
+                        {link.isHidden && (
+                          <button
+                            type="button"
+                            onClick={() => deleteLink(link.id)}
+                            className="shrink-0 rounded-lg p-2.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400"
+                          >
+                            <IconTrash size={14} />
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </section>
+
         <div className="flex items-center gap-3 border-t border-neutral-200 pt-6 dark:border-neutral-800">
           <button
             type="submit"
@@ -284,115 +392,6 @@ export function SettingsForm({
           </button>
         </div>
       </form>
-
-      {/* ═══ SOCIAL LINKS ═══ */}
-      <section className="space-y-6">
-        <h2 className="font-display text-xl tracking-tight">Social Links</h2>
-
-        {SECTIONS.map((sec) => {
-          const sectionLinks = links.filter((l) => l.section === sec.key);
-          return (
-            <div key={sec.key}>
-              <div className="mb-3 flex items-center justify-between">
-                <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
-                  {sec.label}
-                  <span className="ml-1.5 text-xs">({sectionLinks.length})</span>
-                </h3>
-                <button
-                  type="button"
-                  onClick={() => addLink(sec.key)}
-                  className="inline-flex items-center gap-1 rounded-full border border-neutral-300 px-3 py-1 text-xs font-medium transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
-                >
-                  <IconPlus size={12} />
-                  Add
-                </button>
-              </div>
-
-              {sectionLinks.length === 0 && (
-                <p className="rounded-lg border border-dashed border-neutral-300 py-4 text-center text-xs text-neutral-400 dark:border-neutral-700">
-                  No links in this section.
-                </p>
-              )}
-
-              <div className="space-y-2">
-                {sectionLinks.map((link) => {
-                  const IconComp = ICON_MAP[link.platform] || IconLink;
-                  return (
-                    <div
-                      key={link.id}
-                      className={`flex items-center gap-3 rounded-xl border p-3 ${
-                        link.isHidden 
-                          ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
-                          : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
-                      }`}
-                    >
-                      <IconComp size={18} className="shrink-0 text-neutral-400" />
-
-                      <select
-                        value={link.platform}
-                        onChange={(e) => updateLink(link.id, "platform", e.target.value)}
-                        className="w-32 rounded-lg border border-neutral-300 bg-white px-2 py-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-900"
-                      >
-                        {PLATFORM_PRESETS.map((p) => (
-                          <option key={p.slug} value={p.slug}>
-                            {p.label}
-                          </option>
-                        ))}
-                        <option value="custom">Custom...</option>
-                      </select>
-
-                      <input
-                        type="text"
-                        placeholder="Label"
-                        value={link.label}
-                        onChange={(e) => updateLink(link.id, "label", e.target.value)}
-                        className={`${inputClass} !py-1.5 text-xs`}
-                      />
-
-                      <input
-                        type="url"
-                        placeholder="https://..."
-                        value={link.url}
-                        onChange={(e) => updateLink(link.id, "url", e.target.value)}
-                        className={`${inputClass} flex-1 !py-1.5 text-xs`}
-                      />
-
-                      <input
-                        type="number"
-                        value={link.order}
-                        onChange={(e) =>
-                          updateLink(link.id, "order", parseInt(e.target.value) || 0)
-                        }
-                        className={`${inputClass} !py-1.5 text-xs w-16`}
-                        title="Order"
-                      />
-
-                      <button
-                        type="button"
-                        onClick={() => updateLink(link.id, "isHidden", !link.isHidden)}
-                        className="shrink-0 rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
-                        title={link.isHidden ? "Restore" : "Hide"}
-                      >
-                        {link.isHidden ? <IconEye size={16} /> : <IconEyeOff size={16} />}
-                      </button>
-
-                      {link.isHidden && (
-                        <button
-                          type="button"
-                          onClick={() => deleteLink(link.id)}
-                          className="shrink-0 rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400"
-                        >
-                          <IconTrash size={14} />
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </section>
     </div>
   );
 }

@@ -48,6 +48,7 @@ export function CommunityContact({
               <PillButton
                 key={link.id}
                 href={link.url}
+                size="sm"
                 icon={<BrandIcon slug={link.platform} className="h-6 w-6" />}
                 className={BTN_IMAGE_CLASSES[link.platform] ?? ""}
               >
@@ -64,6 +65,7 @@ export function CommunityContact({
               <PillButton
                 key={i}
                 href={item.href}
+                size="sm"
                 icon={item.icon}
                 className={item.className}
               >
