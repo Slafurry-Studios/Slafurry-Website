@@ -13,7 +13,7 @@ function isProduction(): boolean {
 
 function getSecret(): string {
   const secret = process.env.AUTH_LOCAL_SECRET;
-  if (!secret || secret === "dev-local-secret-placeholder") {
+  if (!secret || secret === "dev-local-secret-placeholder" || secret === "your-secret-here") {
     throw new Error("AUTH_LOCAL_SECRET not set (use `openssl rand -base64 32`).");
   }
   return secret;

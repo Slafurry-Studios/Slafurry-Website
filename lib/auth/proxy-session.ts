@@ -21,7 +21,7 @@ async function getLocalSession(cookies: CookieStore): Promise<SessionResult> {
     );
   }
   const secret = process.env.AUTH_LOCAL_SECRET;
-  if (!secret || secret === "dev-local-secret-placeholder") {
+  if (!secret || secret === "dev-local-secret-placeholder" || secret === "your-secret-here") {
     throw new Error("AUTH_LOCAL_SECRET not set (use `openssl rand -base64 32`).");
   }
   const value = cookies.getAll().find((c) => c.name === LOCAL_SESSION_NAME)?.value;
