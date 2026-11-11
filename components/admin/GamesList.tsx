@@ -57,6 +57,8 @@ export function GamesList({ games }: { games: GameRow[] }) {
   const router = useRouter();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   const visibleCount = games.filter((g) => !g.isHidden).length;
   const hiddenCount = games.filter((g) => g.isHidden).length;
@@ -65,7 +67,40 @@ export function GamesList({ games }: { games: GameRow[] }) {
     activeTab === "VISIBLE" ? !g.isHidden : g.isHidden
   );
 
-  async function toggleHide(id: string, isHidden: boolean) {
+  async function handleDragStart(e: DragEvent, id: string) {
+    setDraggedId(id);
+    e.dataTransfer?.setData("text/plain", id);
+  }
+
+  async function handleDragOver(e: DragEvent, id: string) {
+    e.preventDefault();
+    setDragOverId(id);
+  }
+
+  async function handleDragEnd(e: DragEvent, id: string) {
+    setDraggedId(null);
+    setDragOverId(null);
+
+    const targetId = e.currentTarget.getAttribute("data-id");
+    if (targetId && targetId !== id) {
+      await reorderGames(id, targetId);
+    }
+  }
+
+  async function reorderGames(draggedId: string, targetId: string) {
+    try {
+      const res = await fetch("/api/admin/games/reorder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ draggedId, targetId }),
+      });
+      if (res.ok) {
+        router.refresh();
+      }
+    } catch {
+      console.error("Failed to reorder games");
+    }
+  }
     try {
       await fetch(`/api/admin/games/${id}`, {
         method: "PUT",
@@ -157,13 +192,18 @@ export function GamesList({ games }: { games: GameRow[] }) {
           const youtubeEmbedUrl = getYoutubeEmbedUrl(game.playLinks);
           const hasYoutube = Boolean(youtubeEmbedUrl);
           return (
-            <div
-              key={game.id}
-              className={`flex items-center gap-4 rounded-xl border p-4 transition-shadow hover:shadow-sm ${
-                game.isHidden 
-                  ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
-                  : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
-              }`}
+              <div
+                key={game.id}
+                data-id={game.id}
+                draggable={true}
+                onDragStart={(e) => handleDragStart(e, game.id)}
+                onDragOver={(e) => handleDragOver(e, game.id)}
+                onDragEnd={(e) => handleDragEnd(e, game.id)}
+                className={`flex items-center gap-4 rounded-xl border p-4 transition-shadow hover:shadow-sm ${
+                  game.isHidden 
+                    ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
+                    : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+                }`}
             >
               <div className="relative shrink-0 aspect-[16/9] w-24 h-14 rounded-lg overflow-hidden">
                 {game.coverImage ? (
