@@ -1,0 +1,46 @@
+# Slafurry Studios — Website
+
+> Official website of Slafurry Studios — a small indie game studio built on rapid prototyping and unique ideas. Home to the game portfolio, devlog blog, press kit, contact form, and protected admin area. Built with Next.js 16 (App Router), Prisma 6 ORM, Supabase (Postgres + Auth + Storage), Tailwind v4, and Framer Motion. English only. Current version: 1.14.1.
+
+- Stack: Next.js 16 (App Router), Prisma 6, Supabase (Postgres + Auth + Storage), Tailwind v4, Framer Motion 13, TipTap (admin editor).
+- Data access: server queries in `lib/queries/*`, server actions in `lib/actions/*`, Prisma singleton `lib/prisma.ts`, audit logging `lib/audit.ts`.
+- Auth: Supabase email/password via `lib/auth/providers/supabase.ts`; local fallback in `lib/auth/providers/local.ts` (dev only, rejected in production). Provider chosen by `AUTH_PROVIDER` env var (`supabase` or `local`).
+- Storage: Supabase buckets (`game-covers`, `post-covers`, `press-kit`, `montage-videos`) via `lib/storage/supabase.ts`; local fallback `lib/storage/local.ts`. Provider chosen by `STORAGE_PROVIDER` env var.
+- Env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY` / `NEXT_PUBLIC_RESEND_API_KEY`, `AUTH_PROVIDER`, `STORAGE_PROVIDER`, `AUTH_LOCAL_SECRET` (local dev only).
+- Route groups: `app/layout.tsx` root layout; public pages in `app/(main)/`; admin UI in `app/admin/`; JSON endpoints `app/api/*`; RSS at `app/news/rss.xml/route.ts` and `app/devlog/rss.xml/route.ts`.
+- Middleware `proxy.ts`: Supabase session refresh → `/api/admin/*` guard (401 JSON) → `prisma.redirect` lookup (308) → `/admin/*` page guard (307 to login).
+- Fonts: Pixelify Sans (`font-display`), Geist Pixel (`font-ui`), Geist Sans (`font-body`) via `lib/fonts.ts`. `html { font-size: 18px }` in `app/globals.css` (intentional; breaks ~12% vs standard Tailwind breakpoints).
+- i18n removed — English only (`<html lang="en">`). Achievements disabled by comment; re-enable in `app/(main)/layout.tsx` and `app/(main)/not-found.tsx`.
+- Models: Game, PlayLink, MontageVideo, Post, Comment, PressRelease, PressKitAsset, ContactMessage, Achievement, SocialLink, Redirect, SiteSettings (singleton id=1), AdminUser, PageView, AuditLog.
+- Seed: `prisma/seed.ts` — SiteSettings/achievements/posts use `upsert`; games/playLinks/montage/social/press use plain `create` (re-running on seeded DB fails on duplicates).
+
+## Setup
+- [README.md](README.md): project overview, features, getting started, database, testing, team, versioning, license.
+- [SETUP.md](SETUP.md): step-by-step local setup (Next.js + Prisma + Supabase, env vars, docker compose postgres, deploy to Vercel).
+- [.env.example](.env.example): environment variable template with placeholder values (never commit real `.env`).
+
+## Database
+- [docs/DATABASE.md](docs/DATABASE.md): local PostgreSQL setup via Docker, switching between local and Supabase providers, schema structure, critical warnings (no `migrate reset`/`db push` on production Supabase).
+- [prisma/schema.prisma](prisma/schema.prisma): full Prisma schema with all models and enums.
+- [prisma/seed.ts](prisma/seed.ts): idempotent seed data for SiteSettings, achievements, posts, social links, etc.
+
+## Operations
+- [CHANGELOG.md](CHANGELOG.md): version history following Keep a Changelog + SemVer (MAJOR.MINOR.PATCH), current version 1.14.1.
+- [CONTRIBUTING.md](CONTRIBUTING.md): branch naming (`<type>/<issue-number>-<short-description>`), conventional commits, run `npm run build` before PR.
+- [SECURITY.md](SECURITY.md): vulnerability reporting scope, process, response timeline (acknowledge within 14 days), responsible disclosure rules.
+- [reports/SUPABASE-COUPLING.md](reports/SUPABASE-COUPLING.md): analysis of Supabase coupling in the codebase.
+- [reports/STABILIZATION.md](reports/STABILIZATION.md): stabilization notes for the codebase.
+
+## Typography & UX
+- [reports/typography-audit/audit-summary.md](reports/typography-audit/audit-summary.md): font utility mapping (`font-display`/`font-ui`/`font-body`), 9 violations detected and fixed, remaining issues.
+- [reports/typography-audit/changed-files.md](reports/typography-audit/changed-files.md): files modified during typography refresh.
+- [reports/typography-audit/font-coverage-matrix.md](reports/typography-audit/font-coverage-matrix.md): font coverage across components.
+- [reports/typography-audit/remaining-issues.md](reports/typography-audit/remaining-issues.md): pre-existing environment items not fixed.
+- [reports/typography-audit/verification-results.md](reports/typography-audit/verification-results.md): verification results after typography fixes.
+- [reports/typography-audit/violation-inventory.md](reports/typography-audit/violation-inventory.md): full inventory of typography violations found.
+- [ux-heuristic-review.md](ux-heuristic-review.md): Nielsen's 10-heuristic UX evaluation of the website with severity-rated findings and fixes.
+
+## Technical Reference
+- [Technical Specifications.md](Technical Specifications.md): detailed schema information and planned architecture.
+- [task.md](task.md): task tracking and roadmap items.
+- [AGENTS.md](AGENTS.md): agent instructions — commands, architecture, gotchas, contributing conventions (this file's twin `CLAUDE.md` is identical).
