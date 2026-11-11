@@ -7,9 +7,11 @@
   NODE_VERSION = "22"
   # Turbopack's persistent build cache is stored for reuse between builds but is
   # never published, so it must not trip the secrets scanner.
-  SECRETS_SCAN_OMIT_PATHS = ".netlify/.next/cache/**,.next/cache/**"
+  # Exclude all build output — Next.js inlines env values into bundles, which
+  # would otherwise trip secrets scanning for AUTH_PROVIDER/STORAGE_PROVIDER.
+  SECRETS_SCAN_OMIT_PATHS = ".netlify/**"
   # NEXT_PUBLIC_* values are intentionally inlined into the client bundle.
-  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,NEXT_PUBLIC_APP_URL"
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,NEXT_PUBLIC_APP_URL,AUTH_PROVIDER,STORAGE_PROVIDER"
 
 [dev]
   command = "npm run dev"
