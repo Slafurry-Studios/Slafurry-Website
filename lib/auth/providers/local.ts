@@ -1,11 +1,31 @@
-import { createHmac, timingSafeEqual } from "crypto";
 import { prisma } from "@/lib/prisma";
 import type { AuthProvider, CookieStore, SessionResult, AdminContext, AuthUser } from "../adapter";
+import {
+  LOCAL_SESSION_COOKIE,
+  LOCAL_SESSION_TTL_SECONDS,
+  isSessionFresh,
+  signSession,
+  verifySession,
+} from "../session";
 
-const SESSION_NAME = "slafurry_local_session";
 const LOCAL_ADMIN_EMAIL = "admin@slafurrystudios.local";
 const LOCAL_ADMIN_PASSWORD = "admin";
 const LOCAL_ADMIN_SUB = "local-admin-1";
+
+type LocalSessionClaims = {
+  id: string;
+  email?: string;
+  name?: string;
+  iat?: number;
+  exp?: number;
+};
+
+const SESSION_COOKIE_OPTIONS = {
+  path: "/",
+  httpOnly: true,
+  sameSite: "lax" as const,
+  secure: true,
+};
 
 function isProduction(): boolean {
   return process.env.NODE_ENV === "production" || !!process.env.VERCEL;
@@ -19,44 +39,12 @@ function getSecret(): string {
   return secret;
 }
 
-function signSession(payload: Record<string, unknown>): string {
-  const secret = getSecret();
-  const header = Buffer.from(JSON.stringify({ alg: "HS256", typ: "JWT" })).toString("base64url");
-  const body = Buffer.from(JSON.stringify(payload)).toString("base64url");
-  const sig = createHmac("sha256", secret).update(`${header}.${body}`).digest("base64url");
-  return `${header}.${body}.${sig}`;
-}
-
-function verifySession(value: string): { id: string; email: string; name: string } | null {
-  const parts = value.split(".");
-  if (parts.length !== 3) return null;
-  const [headerB64, bodyB64, sig] = parts;
-  const secret = getSecret();
-  const expected = createHmac("sha256", secret).update(`${headerB64}.${bodyB64}`).digest("base64url");
-  try {
-    if (!timingSafeEqual(Buffer.from(sig, "base64url"), Buffer.from(expected, "base64url"))) {
-      return null;
-    }
-  } catch {
-    return null;
-  }
-  try {
-    return JSON.parse(Buffer.from(bodyB64, "base64url").toString("utf8")) as {
-      id: string;
-      email: string;
-      name: string;
-    };
-  } catch {
-    return null;
-  }
-}
-
 function getCookie(store: CookieStore, name: string): string | undefined {
   return store.getAll().find((c) => c.name === name)?.value;
 }
 
 function clearCookie(store: CookieStore, name: string): void {
-  store.setAll([{ name, value: "", options: { path: "/", httpOnly: true, sameSite: "lax", secure: false, maxAge: 0 } }]);
+  store.setAll([{ name, value: "", options: { ...SESSION_COOKIE_OPTIONS, maxAge: 0 } }]);
 }
 
 export class LocalAuthProvider implements AuthProvider {
@@ -70,10 +58,10 @@ export class LocalAuthProvider implements AuthProvider {
 
   async getSession(cookies?: CookieStore): Promise<SessionResult> {
     const store = cookies ?? (await defaultCookies());
-    const value = getCookie(store, SESSION_NAME);
+    const value = getCookie(store, LOCAL_SESSION_COOKIE);
     if (!value) return { user: null };
-    const payload = verifySession(value);
-    if (!payload) return { user: null };
+    const payload = verifySession<LocalSessionClaims>(value, getSecret());
+    if (!payload || !isSessionFresh(payload)) return { user: null };
     return {
       user: { id: payload.id, email: payload.email ?? null, name: payload.name ?? null },
     };
@@ -99,7 +87,11 @@ export class LocalAuthProvider implements AuthProvider {
     return { user: session.user, adminUser: { id: adminUser.id, name: adminUser.name } };
   }
 
-  async signIn(email: string, password: string): Promise<{ ok: boolean; error?: string }> {
+  async signIn(
+    email: string,
+    password: string,
+    cookies?: CookieStore
+  ): Promise<{ ok: boolean; error?: string }> {
     if (isProduction()) {
       throw new Error("Local auth provider cannot be active in production.");
     }
@@ -116,17 +108,35 @@ export class LocalAuthProvider implements AuthProvider {
       });
     }
 
-  return { ok: true };
-}
+    const store = cookies ?? (await defaultCookies());
+    const session = this.sessionCookie({
+      id: LOCAL_ADMIN_SUB,
+      email,
+      name: adminUser.name,
+    });
+    store.setAll([session]);
+
+    return { ok: true };
+  }
 
   async signOut(cookies?: CookieStore): Promise<void> {
     const store = cookies ?? (await defaultCookies());
-    clearCookie(store, SESSION_NAME);
+    clearCookie(store, LOCAL_SESSION_COOKIE);
   }
 
   sessionCookie(user: AuthUser): { name: string; value: string; options: Record<string, unknown> } {
-    const value = signSession({ id: user.id, email: user.email ?? "", name: user.name ?? "" });
-    return { name: SESSION_NAME, value, options: { path: "/", httpOnly: true, sameSite: "lax", secure: false } };
+    const now = Math.floor(Date.now() / 1000);
+    const value = signSession(
+      {
+        id: user.id,
+        email: user.email ?? "",
+        name: user.name ?? "",
+        iat: now,
+        exp: now + LOCAL_SESSION_TTL_SECONDS,
+      },
+      getSecret()
+    );
+    return { name: LOCAL_SESSION_COOKIE, value, options: { ...SESSION_COOKIE_OPTIONS } };
   }
 }
 
