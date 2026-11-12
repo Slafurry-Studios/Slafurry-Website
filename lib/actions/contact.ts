@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { ContactStatus, ContactCategory } from "@prisma/client";
 import { checkHoneypot, checkRateLimit } from "@/lib/actions/form-guards";
+import { verifyTurnstile } from "@/lib/actions/turnstile";
 import { headers } from "next/headers";
 import { createHash } from "crypto";
 
@@ -35,6 +36,17 @@ export async function submitContactMessage(
   const honeypotResult = await checkHoneypot(formData, "company");
   if (honeypotResult.isBot) {
     return { ok: false, error: "Spam detected." };
+  }
+
+  // ─── Captcha (Turnstile) ───
+  const captcha = await verifyTurnstile(
+    String(formData.get("turnstileToken") ?? "").trim()
+  );
+  if (!captcha.success) {
+    return {
+      ok: false,
+      error: `Captcha verification failed.${captcha.error ? ` (${captcha.error})` : ""} Please try again.`,
+    };
   }
 
   // ─── Rate limit ───

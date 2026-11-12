@@ -1,10 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { submitComment } from "@/lib/actions/comment";
 import { IconSend, IconLoader2, IconCheck, IconAlertTriangle } from "@tabler/icons-react";
 import { PillButton } from "@/components/ui/PillButton";
 import { Skeleton, useLoadingState } from "@/components/ui/Skeleton";
+import { TurnstileWidget } from "@/components/captcha/TurnstileWidget";
 
 export function CommentForm({
   postId,
@@ -15,6 +16,24 @@ export function CommentForm({
 }) {
   const [state, formAction, isPending] = useActionState(submitComment, null);
   const showPending = useLoadingState(isPending, 600);
+  const [widgetKey, setWidgetKey] = useState(0);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const lastCaptchaError = useRef<string | null>(null);
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  useEffect(() => {
+    if (
+      state?.ok === false &&
+      state.error?.includes("Captcha") &&
+      state.error !== lastCaptchaError.current
+    ) {
+      lastCaptchaError.current = state.error;
+      setWidgetKey((k) => k + 1);
+      setTurnstileToken("");
+    } else if (state?.ok === true) {
+      lastCaptchaError.current = null;
+    }
+  }, [state]);
 
   return (
     <div className="mt-10 pixel-border bg-neutral-50 p-6 dark:bg-neutral-900/50">
@@ -63,6 +82,7 @@ export function CommentForm({
 
           <input type="hidden" name="postId" value={postId ?? ""} />
           <input type="hidden" name="gameId" value={gameId ?? ""} />
+          <input type="hidden" name="turnstileToken" value={turnstileToken} />
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
@@ -119,6 +139,14 @@ export function CommentForm({
               placeholder="Write your thoughts..."
             />
           </div>
+
+          {siteKey && (
+            <TurnstileWidget
+              siteKey={siteKey}
+              onVerify={setTurnstileToken}
+              resetKey={widgetKey}
+            />
+          )}
 
           <PillButton
             size="sm"

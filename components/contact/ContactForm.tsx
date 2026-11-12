@@ -1,14 +1,33 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { submitContactMessage } from "@/lib/actions/contact";
 import { IconSend, IconLoader2, IconCheck, IconAlertTriangle } from "@tabler/icons-react";
 import { PillButton } from "@/components/ui/PillButton";
 import { Skeleton, SkeletonText, useLoadingState } from "@/components/ui/Skeleton";
+import { TurnstileWidget } from "@/components/captcha/TurnstileWidget";
 
 export function ContactForm() {
   const [state, formAction, isPending] = useActionState(submitContactMessage, null);
   const showPending = useLoadingState(isPending, 600);
+  const [widgetKey, setWidgetKey] = useState(0);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const lastCaptchaError = useRef<string | null>(null);
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  useEffect(() => {
+    if (
+      state?.ok === false &&
+      state.error?.includes("Captcha") &&
+      state.error !== lastCaptchaError.current
+    ) {
+      lastCaptchaError.current = state.error;
+      setWidgetKey((k) => k + 1);
+      setTurnstileToken("");
+    } else if (state?.ok === true) {
+      lastCaptchaError.current = null;
+    }
+  }, [state]);
 
   return (
     <div className="mt-10 pixel-border bg-neutral-50 p-6 dark:bg-neutral-900/50">
@@ -164,6 +183,16 @@ export function ContactForm() {
               <option value="PRESS">Press/media</option>
             </select>
           </div>
+
+          <input type="hidden" name="turnstileToken" value={turnstileToken} />
+
+          {siteKey && (
+            <TurnstileWidget
+              siteKey={siteKey}
+              onVerify={setTurnstileToken}
+              resetKey={widgetKey}
+            />
+          )}
 
           <PillButton
             size="sm"
