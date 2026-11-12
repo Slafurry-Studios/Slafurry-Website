@@ -1,443 +1,122 @@
-# TASK: Complete Typography Consistency Audit & Remediation — Slafurry Studios
-
-You are a senior frontend engineer and typography QA specialist working on the Slafurry Studios website.
-
-Your task is to perform a COMPLETE typography audit across the entire codebase, identify every text element that does not follow the approved typography system, fix inconsistencies, and verify the results.
-
-This is an execution task. Do not stop after generating an audit report. Inspect, fix, and validate the actual implementation.
-
----
-
-# 1. PROJECT CONTEXT
-
-Project: Slafurry Studios Official Website
-
-Stack:
-- Next.js 16 App Router
-- React
-- TypeScript
-- Tailwind CSS v4
-- Framer Motion 13
-- Prisma 6
-- Supabase
-- TipTap
-
-Architecture:
-- Public pages: `app/(main)/`
-- Admin pages: `app/admin/`
-- API routes: `app/api/*`
-- Shared components: `components/`
-- Utilities: `lib/`
-- Global styling: inspect existing CSS configuration.
-- Font configuration: `lib/fonts.ts`
-- Root layout: `app/layout.tsx`
-
-Current branch:
-`feat/typography-refresh`
-
-# 2. APPROVED TYPOGRAPHY SYSTEM
-
-The website must consistently use these three fonts.
-
-## A. Pixelify Sans — Display Font
-
-Purpose: Brand identity and expressive display typography.
-
-Expected usage:
-- Hero titles.
-- Main page headings.
-- Section headings.
-- Game titles.
-- Featured content titles.
-- Large statistics.
-- Promotional headings.
-- Decorative display text.
-
-## B. Geist Pixel — UI Font
-
-Purpose: Pixel-inspired interface typography.
-
-Expected usage:
-- Navigation.
-- Sidebar labels.
-- Buttons.
-- Badges.
-- Tags.
-- Breadcrumbs.
-- Metadata.
-- Timestamps.
-- Small interface labels.
-- Compact dashboard elements.
-
-## C. Geist Sans — Body Font
-
-Purpose: Readability and information presentation.
-
-Expected usage:
-- Paragraphs.
-- Descriptions.
-- Article content.
-- Devlog body text.
-- Game descriptions.
-- Forms and inputs.
-- Textareas.
-- Dialog descriptions.
-- Data-heavy admin interfaces.
-- TipTap editor content.
-- Long-form content.
-
-IMPORTANT:
-Do not arbitrarily assign fonts based on individual preference. Follow this typography hierarchy consistently.
-
-# 3. AUDIT SCOPE — SEARCH EVERYTHING
-
-Perform a comprehensive search across the entire application.
-
-Inspect at minimum:
-
-### Application and Layout
-- `app/layout.tsx`
-- `app/globals.css`
-- `lib/fonts.ts`
-- All nested layouts.
-- Loading states.
-- Error boundaries.
-- Not-found pages.
-
-### Public Website
-- Homepage.
-- Navigation.
-- Mobile navigation.
-- Hero sections.
-- Games listing.
-- Game detail pages.
-- Devlog listing.
-- Devlog article pages.
-- Press pages.
-- About pages.
-- Contact pages.
-- Achievement components.
-- Montage/video sections.
-- Footer.
-- All public reusable components.
-
-### Admin Dashboard
-- Admin layout.
-- Sidebar.
-- Dashboard.
-- Analytics.
-- Games CRUD.
-- Posts CRUD.
-- Comments moderation.
-- Press management.
-- Contact inbox.
-- Achievement management.
-- Montage management.
-- Settings.
-- Media uploader.
-- Data tables.
-- Dialogs.
-- Dropdown menus.
-- Forms.
-- Buttons.
-- Pagination.
-- Empty states.
-- Toasts.
-- TipTap editor.
-- Confirmation dialogs.
-
-### Other Sources of Text
-- Dynamically rendered database content.
-- Form validation messages.
-- Error messages.
-- Accessibility labels where font styling applies.
-- Placeholder text.
-- Tooltip content.
-- Loading indicators.
-- Empty-state messages.
-- Markdown-rendered content.
-- Rich-text content.
-
-Do not overlook conditional rendering, responsive variants, or components used only on mobile.
-
-# 4. DETECT TYPOGRAPHY VIOLATIONS
-
-Search for all of the following:
-
-1. Old font references:
-   - Caveat
-   - Delicious Handrawn
-   - Any other previously used font.
-
-2. Hardcoded font declarations:
-   - `font-family`
-   - Inline `style={{ fontFamily: ... }}`
-   - CSS font-family declarations.
-   - Arbitrary Tailwind font-family utilities.
-
-3. Unmapped typography:
-   - `font-sans`
-   - `font-mono`
-   - `font-serif`
-   - Browser-default font rendering.
-   - Components without an intentional font assignment.
-   - Third-party components inheriting unintended fonts.
-
-4. Inconsistent Tailwind usage:
-   - Incorrect font utility classes.
-   - Conflicting font classes.
-   - Duplicate font declarations.
-   - Typography overrides that bypass global variables.
-
-5. Editor-specific problems:
-   - TipTap content using the wrong font.
-   - Editor placeholder using an inconsistent font.
-   - Prose styles overriding the approved font system.
-
-IMPORTANT:
-Not every `font-sans` or `font-mono` occurrence is automatically a violation. Inspect the actual computed font and the intended role before changing it.
-
-# 5. CLASSIFY EVERY VIOLATION
-
-For every detected issue, classify it:
-
-- CRITICAL: Old fonts still being used or incorrect font loading.
-- HIGH: Major headings, navigation, or important UI using the wrong font.
-- MEDIUM: Buttons, badges, forms, metadata, or descriptions using inconsistent fonts.
-- LOW: Minor decorative or isolated typography inconsistencies.
-
-Determine the correct font according to the approved typography hierarchy.
-
-# 6. IMPLEMENTATION RULES
-
-After identifying violations, fix them directly.
-
-Requirements:
-
-- Reuse the existing font definitions in `lib/fonts.ts`.
-- Reuse the CSS variables defined in the root layout.
-- Centralize typography rules.
-- Prefer semantic utility classes.
-- Avoid introducing additional font dependencies.
-- Avoid duplicate font declarations.
-- Preserve existing font weights and visual hierarchy where possible.
-- Preserve responsive behavior.
-- Ensure dynamically rendered text inherits the intended typography.
-- Ensure TipTap content uses Geist Sans.
-- Ensure form controls use Geist Sans unless intentionally classified as UI labels.
-- Ensure pixel fonts are not used for long-form reading.
-
-Do not perform an unnecessary redesign.
-
-Do not change:
-- Website colors.
-- Layout structure.
-- Spacing systems.
-- Animations.
-- Component behavior.
-- Database schema.
-- API behavior.
-- Authentication.
-- Storage implementation.
-
-The objective is typography consistency, not a visual redesign.
-
-# 7. SPECIAL ATTENTION: THIRD-PARTY COMPONENTS
-
-Inspect components that may not inherit typography correctly:
-
-- TipTap.
-- Radix UI components, if present.
-- Dialogs and popovers.
-- Dropdown menus.
-- Tooltips.
-- Select components.
-- Date pickers.
-- Toast notifications.
-- Native input elements.
-- Browser-rendered controls.
-
-Check pseudo-elements and placeholder styling where relevant.
-
-Ensure portal-rendered components inherit the correct typography.
-
-# 8. AUTOMATED VERIFICATION
-
-Use a combination of static analysis and browser inspection.
-
-## Static Analysis
-
-Search the repository using appropriate tools such as:
-
-- `rg`
-- AST-based inspection where useful.
-- CSS inspection.
-- TypeScript inspection.
-
-Produce a list of all font declarations and their locations.
-
-Verify that:
-- No obsolete font references remain in active application code.
-- No unintended hardcoded font-family declarations remain.
-- All three approved fonts are configured.
-- Typography utilities map to the correct font variables.
-- No accidental fallback overrides exist.
-
-Do not modify historical changelog entries or documentation merely to remove mentions of old font names.
-
-## Browser Verification
-
-Use Playwright with visible Chromium (headed mode).
-
-The human operator wants to observe the browser.
-
-Run the application and inspect:
-
-1. Homepage.
-2. Games listing.
-3. Game detail page.
-4. Devlog listing.
-5. Devlog detail page.
-6. Contact page.
-7. Navigation and mobile navigation.
-8. Admin login.
-9. Admin dashboard.
-10. At least two CRUD screens.
-11. TipTap editor.
-12. Dialogs and forms.
-
-Inspect desktop and mobile layouts.
-
-Use browser-computed styles to verify actual rendered fonts, not just CSS class names.
-
-Where possible, use:
-
-`getComputedStyle(element).fontFamily`
-
-Also verify that fonts are actually loaded using the browser Font Loading API.
-
-Do not claim a font renders correctly merely because its CSS variable exists.
-
-If authenticated admin access is unavailable, report those screens as BLOCKED rather than PASS.
-
-Do not use production credentials or modify real production content.
-
-# 9. REGRESSION CHECKS
-
-After changes, run:
-
-1. TypeScript:
-   `npx tsc --noEmit`
-
-2. Lint:
-   `npm run lint`
-
-3. Production build:
-   `npm run build`
-
-4. Tests:
-   `npm test`
-
-Build may require a running local PostgreSQL database.
-
-If build fails because the database is unavailable, classify it as an environment blocker. Do not misrepresent it as a typography regression.
-
-IMPORTANT:
-The existing ESLint baseline is 78 errors and 31 warnings.
-
-Do not introduce new lint errors.
-
-Compare against the existing baseline where available.
-
-# 10. FINAL REPORT
-
-Generate:
-
-`reports/typography-audit/`
-
-Include:
-
-### A. Audit Summary
-- Total files inspected.
-- Total font declarations found.
-- Total violations detected.
-- Total violations fixed.
-- Remaining violations.
-- Blocked verification areas.
-
-### B. Violation Inventory
-
-For each violation:
-- File path.
-- Line number.
-- Current font.
-- Expected font.
-- Severity.
-- Fix applied or reason for leaving unchanged.
-
-### C. Font Coverage Matrix
-
-| Area | Pixelify Sans | Geist Pixel | Geist Sans | Status |
-| Public website | | | | |
-| Navigation | | | | |
-| Games | | | | |
-| Devlog | | | | |
-| Forms | | | | |
-| Admin dashboard | | | | |
-| Admin CRUD | | | | |
-| TipTap editor | | | | |
-| Dialogs | | | | |
-| Mobile layouts | | | | |
-
-### D. Verification Results
-
-- TypeScript result.
-- Lint result and baseline comparison.
-- Build result.
-- Unit test result.
-- E2E result.
-- Browser-computed font verification.
-
-### E. Changed Files
-
-List every modified file and explain why it changed.
-
-### F. Remaining Issues
-
-Clearly identify anything that could not be verified or fixed.
-
-# 11. GIT SAFETY
-
-Before starting:
-- Run `git status --short`.
-- Inspect existing uncommitted changes.
-- Preserve all user work.
-
-After completion:
-- Run `git status --short` again.
-- Report changed and untracked files.
-- Do not stage files.
-- Do not commit.
-- Do not push.
-- Do not merge or rebase.
-- Do not switch branches.
-
-Do not overwrite existing reports or test artifacts.
-
-# FINAL EXECUTION REQUIREMENT
-
-This is a full repository-wide audit and remediation task.
-
-Do not simply search for old font names and stop.
-
-Inspect every relevant text-rendering area, including shared components, admin pages, public pages, dynamically rendered content, third-party components, and responsive layouts.
-
-Fix confirmed violations, verify actual rendered fonts in a visible browser, and provide an honest final report.
-
-A successful result means the entire active application consistently follows:
-
-- Pixelify Sans for display typography.
-- Geist Pixel for interface typography.
-- Geist Sans for readable body typography.
-
-Do not claim 100% completion if any relevant area remains uninspected or unverified.
+# Security fixes — Slafurry Studios Website
+
+Source: security audit against Next.js 16 + Supabase Auth/Storage + Prisma + Netlify.
+Execute in priority order. Each task is one commit.
+
+## Task 1 — Sanitize rendered rich text (XSS, highest priority)
+
+File: `app/(main)/games/[slug]/page.tsx`
+Line: 54
+Problem: `dangerouslySetInnerHTML={{ __html: game.longDesc || "" }}` renders TipTap content unsanitized. Stored XSS if admin content is compromised.
+Fix:
+- Import `isomorphic-dompurify` (already a dependency, unused).
+- Build an allowlist config: tags `p, br, strong, em, a, ul, ol, li, code, pre, blockquote, h1-h6, img`; attrs `href, title, src, alt`; strip `javascript:`/data URIs on href/src; enforce `rel="noopener noreferrer"` and `target="_blank"` on `target="_blank"` anchors.
+- Wrap `game.longDesc` through sanitizer at render, not on input.
+- Verify: payload `<img src=x onerror=alert(1)>`, `"><svg onload=alert(1)>`, `javascript:alert(1)`, `</script><script>alert(1)</script>` all render inert.
+
+## Task 2 — CSRF/Fetch-Metadata guard for admin API
+
+File: `proxy.ts`
+Lines: 24-33 (`isAdminApi` block)
+Problem: `app/api/admin/*` unsafe methods (POST/PUT/DELETE) protected only by session cookie. No Fetch-Metadata / Origin / token check. Authenticated admin lured to attacker site can trigger state-changing requests.
+Fix:
+- Add check inside `/api/admin/*` guard: reject unsafe methods (POST/PUT/PATCH/DELETE) when `sec-fetch-site` is `cross-site` and no valid same-origin `Origin` header. Allow `same-origin` / `none` / missing browser headers.
+- Alternative: create a route-handler wrapper and apply to every admin POST/PUT/DELETE route (21 routes under `app/api/admin/`).
+- Also set `serverActions.allowedOrigins` in `next.config.ts` if Server Actions are used behind Netlify proxy.
+Verify: curl from different origin with `Sec-Fetch-Site: cross-site` + `Origin: https://evil.test` and valid session cookie → 403. Same-origin request → 2xx.
+
+## Task 3 — Content Security Policy
+
+File: `netlify.toml`
+Lines: 27-32 (`[[headers]]` block)
+Problem: No CSP header. Combined with Task 1 XSS sink, impact unbounded.
+Fix:
+- Add `Content-Security-Policy-Report-Only` with strict baseline: `default-src 'self'`, `script-src 'self'`, `style-src 'self' 'unsafe-inline'` (Tailwind v4 may need inline style; audit first), `img-src 'self' data: https:`, `connect-src 'self' https: *.supabase.co`, `frame-ancestors 'none'`, `base-uri 'self'`, `object-src 'none'`, `report-to csp`.
+- Add `Reporting-Endpoints: csp="https://.../csp-reports"` (or keep report-uri for older browsers).
+- Run in report-only, collect violations, then switch to enforced `Content-Security-Policy`.
+- Add `Strict-Transport-Security: max-age=31536000; includeSubDomains` while here.
+Verify: DevTools shows header; no violations on core flows in report-only; enforced does not break login or image loading.
+
+## Task 4 — Cookie hardening (local provider dev fallback)
+
+File: `lib/auth/providers/local.ts`
+Lines: 59, 129 (`clearCookie`, `sessionCookie`)
+Problem: Session cookie lacks `__Host-` prefix, no `secure` in dev (acceptable dev-only), JWT has no `exp` — lives until browser clear. No idle/absolute timeout.
+Fix:
+- Add `__Host-` prefix to `slafurry_local_session` cookie in `signOut`/`sessionCookie`.
+- Add `exp` claim (e.g. 1 hour) to local session JWT in `signSession`/`verifySession`.
+- Enforce idle timeout server-side in `getSession`: compare `iat` against now; reject stale sessions.
+Verify: `Set-Cookie` shows `__Host-slafurry_local_session=...; Path=/; HttpOnly; Secure; SameSite=Lax`; expired JWT rejected; old cookie rejected after new login.
+
+## Task 5 — App-level rate limit on admin login
+
+File: `lib/auth/actions.ts`
+Lines: 24-28 (`signIn`)
+Problem: Login endpoint has no application-layer rate limit (Supabase has its own, but no app-level brute-force guard).
+Fix:
+- Reuse `checkRateLimit` from `lib/actions/form-guards.ts` keyed by IP hash in `signIn`, max 5 per 15 minutes. Return `error: "Too many attempts. Try again later."` when limited.
+Verify: 6 failed login attempts from same IP within window → rate-limited response, no Supabase call.
+
+## Task 6 — Failed-login audit logging
+
+File: `lib/auth/actions.ts`
+Lines: 24-28 (`signIn`) and/or `lib/audit.ts`
+Problem: AuditLog captures successful admin mutations only. Failed logins not recorded (OWASP A09).
+Fix:
+- Emit an audit-style record (or log to stdout with ipHash + timestamp + outcome) on every failed `signIn` attempt. Do not log passwords.
+Verify: failed login produces a log/audit entry containing ipHash and timestamp, no plaintext password.
+
+## Task 7 — Verify RLS production state (read-only)
+
+No file edit. Read-only verification.
+Problem: AGENTS.md says RLS enabled on all 15 tables via `prisma/migrations/rls_production_policies/migration.sql` applied to production Supabase only. Local migrations dir absent. Cannot verify locally.
+Action:
+- Confirm `relrowsecurity` and `relforcerowsecurity` true on all 15 tables in production Supabase (SQL Editor): `select relname, relrowsecurity, relforcerowsecurity from pg_class where relkind='r';`
+- Confirm policies exist per table: `select * from pg_policies;`
+- Confirm app never uses `createServiceRoleClient` for reads/writes except storage delete (server-only, intended).
+Record result in task.md comments; no code change unless a table lacks RLS.
+
+## Task 8 — Dependency audit
+
+No file edit unless a fix is found.
+Problem: `npm audit` / `osv-scanner` not run; dependency advisories unknown (OWASP A06).
+Action:
+- Run `npm audit --production` and `npx osv-scanner` (or equivalent). Record results. Upgrade any `high`/`critical` findings in a follow-up task.
+Verify: command output saved; no unfixed critical vulnerabilities.
+
+## Acceptance (all tasks)
+
+- `npm run build` passes.
+- `npm run lint` adds no new errors (baseline ~110 pre-existing).
+- `npm test` passes.
+- Task 1 payload test passes. Task 2 cross-origin 403 passes. Task 3 CSP header present in report-only. Task 4 cookie flags correct. Task 5 rate limit triggers. Task 6 failed-login logged. Task 7 RLS verified or remediation ticket filed. Task 8 audit recorded.
+
+## Verification results (2026-11-12)
+
+### Task 7 — RLS production state (read-only)
+
+Queried production Supabase through `DIRECT_URL` with
+`SET default_transaction_read_only=on`.
+
+- 15/15 public tables report `relrowsecurity = true`.
+- All 15 report `relforcerowsecurity = false`.
+- 28 policies exist in schema `public` (matches
+  `prisma/migrations/rls_production_policies/migration.sql`).
+- `createServiceRoleClient` is used only for Supabase Storage upload/delete
+  (`lib/storage/supabase.ts`, `lib/supabase/storage.ts`); no table reads or
+  writes bypass RLS.
+- Finding: RLS is enabled but not forced. The table owner (the Prisma/postgres
+  role) bypasses RLS. Supabase `anon`/`authenticated` roles are not owners, so
+  policies still apply to direct Supabase client access.
+- Follow-up: decide whether to `FORCE ROW LEVEL SECURITY`; if so, Prisma must
+  connect as a non-owner role or every query needs an RLS context.
+
+### Task 8 — Dependency audit
+
+- Before: `npm audit --production` reported 2 critical, 5 high.
+- Upgraded `next` 16.3.3 → 16.4.6 and `dompurify` 3.4.14 → 3.4.17.
+- Pinned `isomorphic-dompurify` 2.36.0 (jsdom 28) because 3.x pulls jsdom 30,
+  which requires Node >= 22.22 and breaks the Node 22.14 local toolchain.
+- After: 0 critical, 3 high (`prisma`, `@prisma/config`, `deepmerge-ts`). The
+  available fix is Prisma 7.10.1, a major upgrade.
+- Follow-up: plan the Prisma 7 migration; re-run the audit afterwards.
