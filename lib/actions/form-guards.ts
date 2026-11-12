@@ -31,14 +31,21 @@ export async function checkHoneypot(
 }
 
 /**
- * Cookie-based rate limiter.
- * Keys can be "comment" or "contact" — each gets its own cookie.
+ * In-memory sliding-window rate limiter keyed by `scope` + hashed client IP.
+ * Keys can be "comment", "contact" or "admin-login" — each has its own bucket.
  * `max` = max attempts, `windowMs` = time window in milliseconds.
  * Returns `{ allowed, remaining, reset, reason }`.
- * 
- * The cookie format: `form-rate-{key}-{hash}` where hash is a short IP hash
- * so we can rate-limit per visitor without tracking them identitively.
+ *
+ * The IP is hashed so buckets are per visitor without storing the address.
+ * Per-instance only: behind multiple serverless instances the effective limit
+ * is per instance, which is still a brute-force guard.
  */
+const rateLimitBuckets = new Map<string, number[]>();
+
+function hashIp(ip: string): string {
+  return createHash("sha256").update(ip).digest("hex").slice(0, 16);
+}
+
 export async function checkRateLimit(
   key: string,
   max = 3,
@@ -46,36 +53,41 @@ export async function checkRateLimit(
   ip?: string
 ): Promise<RateLimitResult> {
   "use server";
-  const headersList = ip ? null : await headers();
-  const resolvedIp = ip ?? headersList?.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  const ipShort = createHash("sha256").update(resolvedIp).digest("hex").slice(0, 8);
-  const cookieName = `form-rate-${key}-${ipShort}`;
-
-  const headersCookie = headersList?.get("cookie") || "";
-  const cookieMatch = headersCookie.match(new RegExp(`${cookieName}=([^;]+)`));
-  const existingCount = cookieMatch ? parseInt(cookieMatch[1], 10) : 0;
-
-  const now = Date.now();
-  const resetAt = now - windowMs;
-  const shouldReset = existingCount > 0 && existingCount <= resetAt;
-
-  let allowed: boolean;
-  let remaining: number;
-  let reason = "";
-
-  if (shouldReset) {
-    allowed = max > 0;
-    remaining = allowed ? max - 1 : 0;
-  } else {
-    const count = existingCount;
-    allowed = count < max;
-    remaining = max - 1 - count;
-    if (!allowed) {
-      reason = `Rate limited. Max ${max} per ${windowMs / 60000}min.`;
+  let resolvedIp = ip;
+  if (!resolvedIp) {
+    try {
+      const headersList = await headers();
+      resolvedIp =
+        headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+        headersList.get("x-real-ip") ??
+        "unknown";
+    } catch {
+      resolvedIp = "unknown";
     }
   }
 
-  const resetTime = Math.floor((now + windowMs) / 1000);
+  const bucketKey = `${key}:${hashIp(resolvedIp ?? "unknown")}`;
+  const now = Date.now();
+  const cutoff = now - windowMs;
+  const hits = (rateLimitBuckets.get(bucketKey) ?? []).filter((t) => t > cutoff);
 
-  return { allowed, remaining, reset: resetTime, reason };
+  const allowed = hits.length < max;
+  if (allowed) hits.push(now);
+  rateLimitBuckets.set(bucketKey, hits);
+
+  if (rateLimitBuckets.size > 10_000) {
+    for (const [bucket, timestamps] of rateLimitBuckets) {
+      const kept = timestamps.filter((t) => t > cutoff);
+      if (kept.length === 0) rateLimitBuckets.delete(bucket);
+      else rateLimitBuckets.set(bucket, kept);
+    }
+  }
+
+  const oldest = hits[0] ?? now;
+  return {
+    allowed,
+    remaining: Math.max(0, max - hits.length),
+    reset: Math.floor((oldest + windowMs) / 1000),
+    reason: allowed ? "" : `Rate limited. Max ${max} per ${windowMs / 60000}min.`,
+  };
 }

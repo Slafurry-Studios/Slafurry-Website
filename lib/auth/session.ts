@@ -1,5 +1,11 @@
 import { createHmac, timingSafeEqual } from "crypto";
 
+/** `__Host-` prefix requires Secure, Path=/ and no Domain attribute. */
+export const LOCAL_SESSION_COOKIE = "__Host-slafurry_local_session";
+
+/** Absolute lifetime of a local session token. There is no sliding refresh. */
+export const LOCAL_SESSION_TTL_SECONDS = 60 * 60;
+
 export function base64url(data: Buffer): string {
   return data.toString("base64url");
 }
@@ -38,4 +44,19 @@ export function verifySession<T = Record<string, unknown>>(
   } catch {
     return null;
   }
+}
+
+export type SessionTimeClaims = { iat?: number; exp?: number };
+
+/**
+ * A token is fresh when it carries both `iat` and `exp`, has not expired and
+ * was issued within the TTL window. Tokens without claims (issued before this
+ * hardening) are rejected so old cookies cannot outlive the change.
+ */
+export function isSessionFresh(claims: SessionTimeClaims, nowMs = Date.now()): boolean {
+  const now = Math.floor(nowMs / 1000);
+  if (typeof claims.iat !== "number" || typeof claims.exp !== "number") return false;
+  if (now >= claims.exp) return false;
+  if (now - claims.iat > LOCAL_SESSION_TTL_SECONDS) return false;
+  return true;
 }

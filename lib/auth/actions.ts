@@ -1,7 +1,40 @@
 "use server";
 
 import { getAuthProvider } from "@/lib/auth/adapter";
-import { cookies } from "next/headers";
+import { checkRateLimit } from "@/lib/actions/form-guards";
+import { createHash } from "crypto";
+import { cookies, headers } from "next/headers";
+
+const LOGIN_MAX_ATTEMPTS = 5;
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+
+function hashIp(ip: string): string {
+  return createHash("sha256").update(ip).digest("hex").slice(0, 16);
+}
+
+async function getClientIp(): Promise<string> {
+  try {
+    const headersList = await headers();
+    return (
+      headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      headersList.get("x-real-ip") ??
+      "unknown"
+    );
+  } catch {
+    return "unknown";
+  }
+}
+
+function logFailedLogin(ipHash: string, outcome: string): void {
+  console.warn(
+    JSON.stringify({
+      event: "admin_login_failed",
+      ipHash,
+      outcome,
+      timestamp: new Date().toISOString(),
+    })
+  );
+}
 
 function buildCookieStore(store: Awaited<ReturnType<typeof cookies>>) {
   return {
@@ -22,9 +55,24 @@ function buildCookieStore(store: Awaited<ReturnType<typeof cookies>>) {
 }
 
 export async function signIn(email: string, password: string) {
+  const ip = await getClientIp();
+  const ipHash = hashIp(ip);
+
+  const limit = await checkRateLimit("admin-login", LOGIN_MAX_ATTEMPTS, LOGIN_WINDOW_MS, ip);
+  if (!limit.allowed) {
+    logFailedLogin(ipHash, "rate_limited");
+    return { ok: false, error: "Too many attempts. Try again later." };
+  }
+
   const provider = getAuthProvider();
   const store = buildCookieStore(await cookies());
-  return provider.signIn(email, password, store);
+  const result = await provider.signIn(email, password, store);
+
+  if (!result.ok) {
+    logFailedLogin(ipHash, "invalid_credentials");
+  }
+
+  return result;
 }
 
 export async function signOut() {
