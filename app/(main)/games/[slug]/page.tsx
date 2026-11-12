@@ -7,6 +7,7 @@ import { getSiteSettings } from "@/lib/queries/home";
 import Link from "next/link";
 import { CommentForm } from "@/components/posts/CommentForm";
 import { CommentList } from "@/components/posts/CommentList";
+import { sanitizeRichText } from "@/lib/security/sanitize";
 
 export default async function GameDetailPage({
   params,
@@ -51,7 +52,7 @@ export default async function GameDetailPage({
         />
       )}
 
-      <div className="mt-8 space-y-5 font-display prose prose-neutral dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: game.longDesc || "" }} />
+      <div className="mt-8 space-y-5 font-display prose prose-neutral dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeRichText(game.longDesc) }} />
 
       {game.playLinks.length > 0 && (
         <div className="mb-8">

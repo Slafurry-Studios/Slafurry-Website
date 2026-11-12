@@ -2,6 +2,7 @@ import { IconChevronLeft, IconArrowLeft, IconArrowRight } from "@tabler/icons-re
 import Link from "next/link";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 import { formatDate } from "@/lib/format";
+import { sanitizeRichText } from "@/lib/security/sanitize";
 import { CommentForm } from "@/components/posts/CommentForm";
 import { CommentList } from "@/components/posts/CommentList";
 import type { PostArticleData, PostCardData } from "@/lib/queries/posts";
@@ -59,7 +60,7 @@ export function ArticleReader({
 
       <div
         className="mt-8 space-y-5 font-display prose prose-neutral dark:prose-invert max-w-none"
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: sanitizeRichText(post.content) }}
       />
 
       <CommentList comments={comments} />
