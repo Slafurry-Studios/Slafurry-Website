@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import type { CookieStore } from "@/lib/auth/adapter";
 // Must stay Prisma-free: Netlify can't bundle Prisma's native engine into middleware.
 import { getProxySession } from "@/lib/auth/proxy-session";
+import { isCrossSiteRequest, isUnsafeMethod } from "@/lib/security/csrf";
 
 function buildCookieStore(request: NextRequest, response: NextResponse): CookieStore {
   return {
@@ -29,6 +30,12 @@ export async function proxy(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    // CSRF guard: session cookies alone must not authorise cross-site writes.
+    if (isUnsafeMethod(request.method) && isCrossSiteRequest(request.headers)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     return response;
   }
 
