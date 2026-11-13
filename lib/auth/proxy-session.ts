@@ -38,15 +38,23 @@ async function getLocalSession(cookies: CookieStore): Promise<SessionResult> {
 }
 
 async function getSupabaseSession(cookies: CookieStore): Promise<SessionResult> {
-  const supabase = createClient(cookies);
-  const { data } = await supabase.auth.getUser();
-  return {
-    user: data.user ? { id: data.user.id, email: data.user.email ?? null, name: null } : null,
-  };
+  try {
+    const supabase = createClient(cookies);
+    const { data } = await supabase.auth.getUser();
+    return {
+      user: data.user ? { id: data.user.id, email: data.user.email ?? null, name: null } : null,
+    };
+  } catch {
+    return { user: null };
+  }
 }
 
-export function getProxySession(cookies: CookieStore): Promise<SessionResult> {
-  return process.env.AUTH_PROVIDER === "local"
-    ? getLocalSession(cookies)
-    : getSupabaseSession(cookies);
+export async function getProxySession(cookies: CookieStore): Promise<SessionResult> {
+  try {
+    return process.env.AUTH_PROVIDER === "local"
+      ? getLocalSession(cookies)
+      : getSupabaseSession(cookies);
+  } catch {
+    return { user: null };
+  }
 }
