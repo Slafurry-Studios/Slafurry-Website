@@ -68,13 +68,17 @@ function registerHook(): void {
 
 export function sanitizeRichText(html: string | null | undefined): string {
   if (!html) return "";
-  registerHook();
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    ALLOWED_URI_REGEXP: SAFE_URI,
-    ALLOW_DATA_ATTR: false,
-    FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "svg"],
-    FORBID_ATTR: ["style", "onerror", "onload", "onclick"],
-  });
+  try {
+    registerHook();
+    return DOMPurify.sanitize(html, {
+      ALLOWED_TAGS,
+      ALLOWED_ATTR,
+      ALLOWED_URI_REGEXP: SAFE_URI,
+      ALLOW_DATA_ATTR: false,
+      FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "svg"],
+      FORBID_ATTR: ["style", "onerror", "onload", "onclick"],
+    });
+  } catch {
+    return "";
+  }
 }
