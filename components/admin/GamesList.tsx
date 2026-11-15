@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, DragEvent } from "react";
+import { useState, useEffect, DragEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,6 +17,7 @@ import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
 import { getYoutubeEmbedUrl } from "@/lib/youtube";
 import { useToast } from "@/components/ui/Toast";
+import { shiftOrder } from "@/lib/reorder";
 
 const STATUS_STYLE: Record<string, string> = {
   RELEASED: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
@@ -64,11 +65,16 @@ export function GamesList({ games }: { games: GameRow[] }) {
   const [activeTab, setActiveTab] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>();
+  const [rows, setRows] = useState<GameRow[]>(games);
 
-  const visibleCount = games.filter((g) => !g.isHidden).length;
-  const hiddenCount = games.filter((g) => g.isHidden).length;
+  useEffect(() => {
+    setRows(games);
+  }, [games]);
 
-  const filteredGames = games.filter((g) =>
+  const visibleCount = rows.filter((g) => !g.isHidden).length;
+  const hiddenCount = rows.filter((g) => g.isHidden).length;
+
+  const filteredGames = rows.filter((g) =>
     activeTab === "VISIBLE" ? !g.isHidden : g.isHidden
   );
 
@@ -88,6 +94,7 @@ export function GamesList({ games }: { games: GameRow[] }) {
     const targetId = dragOverId;
     setDragOverId(null);
     if (targetId && targetId !== id) {
+      setRows((prev) => shiftOrder(prev, id, targetId));
       await reorderGames(id, targetId);
     }
   }
@@ -101,9 +108,21 @@ export function GamesList({ games }: { games: GameRow[] }) {
       });
       if (res.ok) {
         router.refresh();
+      } else {
+        setRows(games);
+        toast({
+          title: "Error",
+          description: "Failed to reorder games.",
+          type: "error",
+        });
       }
     } catch {
-      console.error("Failed to reorder games");
+      setRows(games);
+      toast({
+        title: "Error",
+        description: "Network error. Please try again.",
+        type: "error",
+      });
     }
   }
 

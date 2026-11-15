@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, DragEvent } from "react";
+import { useState, useEffect, DragEvent } from "react";
 import Link from "next/link";
 import {
   IconPlus,
@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
 import { useToast } from "@/components/ui/Toast";
+import { shiftOrder } from "@/lib/reorder";
 
 const STATUS_STYLE: Record<string, string> = {
   PUBLISHED:
@@ -72,11 +73,16 @@ export function PostsList({
   const [error, setError] = useState("");
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>();
+  const [rows, setRows] = useState<PostRow[]>(posts);
 
-  const visibleCount = posts.filter(p => p.category === activeTab && !p.isHidden).length;
-  const hiddenCount = posts.filter(p => p.category === activeTab && p.isHidden).length;
+  useEffect(() => {
+    setRows(posts);
+  }, [posts]);
 
-  const filteredPosts = posts.filter(
+  const visibleCount = rows.filter(p => p.category === activeTab && !p.isHidden).length;
+  const hiddenCount = rows.filter(p => p.category === activeTab && p.isHidden).length;
+
+  const filteredPosts = rows.filter(
     (p) => {
       if (p.category !== activeTab) return false;
       if (visibility === "VISIBLE" ? p.isHidden : !p.isHidden) return false;
@@ -102,6 +108,7 @@ export function PostsList({
     const targetId = dragOverId;
     setDragOverId(null);
     if (targetId && targetId !== id) {
+      setRows((prev) => shiftOrder(prev, id, targetId));
       await reorderPosts(id, targetId);
     }
   }
@@ -117,6 +124,7 @@ export function PostsList({
         router.refresh();
       } else {
         const data = await res.json();
+        setRows(posts);
         toast({
           title: "Error",
           description: data.error || "Failed to reorder posts.",
@@ -124,6 +132,7 @@ export function PostsList({
         });
       }
     } catch {
+      setRows(posts);
       toast({
         title: "Error",
         description: "Network error. Please try again.",

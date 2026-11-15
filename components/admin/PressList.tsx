@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, DragEvent } from "react";
+import { useState, useEffect, DragEvent } from "react";
 import {
   IconExternalLink,
   IconCalendar,
@@ -17,6 +17,7 @@ import { ReleaseForm } from "@/components/admin/ReleaseForm";
 import { AssetForm } from "@/components/admin/AssetForm";
 import { DataTable } from "@/components/admin/DataTable";
 import type { Column, DataTableFilter } from "@/components/admin/DataTable";
+import { shiftOrder } from "@/lib/reorder";
 
 const ASSET_TYPE_STYLE: Record<string, string> = {
   LOGO: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
@@ -89,14 +90,31 @@ export function PressList({
   const [visibility, setVisibility] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>();
+  const [releaseRows, setReleaseRows] = useState<ReleaseRow[]>(releases);
+  const [assetRows, setAssetRows] = useState<AssetRow[]>(assets);
 
-  const visibleReleases = releases.filter(r => !r.isHidden);
-  const hiddenReleases = releases.filter(r => r.isHidden);
-  const visibleAssets = assets.filter(a => !a.isHidden);
-  const hiddenAssets = assets.filter(a => a.isHidden);
+  useEffect(() => {
+    setReleaseRows(releases);
+  }, [releases]);
+  useEffect(() => {
+    setAssetRows(assets);
+  }, [assets]);
+
+  const visibleReleases = releaseRows.filter(r => !r.isHidden);
+  const hiddenReleases = releaseRows.filter(r => r.isHidden);
+  const visibleAssets = assetRows.filter(a => !a.isHidden);
+  const hiddenAssets = assetRows.filter(a => a.isHidden);
 
   const filteredReleases = visibility === "VISIBLE" ? visibleReleases : hiddenReleases;
   const filteredAssets = visibility === "VISIBLE" ? visibleAssets : hiddenAssets;
+
+  function revertRows(type: "releases" | "assets") {
+    if (type === "releases") {
+      setReleaseRows(releases);
+    } else {
+      setAssetRows(assets);
+    }
+  }
 
   function handleDragStart(e: DragEvent<HTMLDivElement>, id: string) {
     setDraggedId(id);
@@ -114,6 +132,11 @@ export function PressList({
     const targetId = dragOverId;
     setDragOverId(null);
     if (targetId && targetId !== id) {
+      if (type === "releases") {
+        setReleaseRows((prev) => shiftOrder(prev, id, targetId));
+      } else {
+        setAssetRows((prev) => shiftOrder(prev, id, targetId));
+      }
       void reorderItem(type, id, targetId);
     }
   }
@@ -127,8 +150,12 @@ export function PressList({
       });
       if (res.ok) {
         router.refresh();
+      } else {
+        revertRows(type);
+        console.error(`Failed to reorder ${type}`);
       }
     } catch {
+      revertRows(type);
       console.error(`Failed to reorder ${type}`);
     }
   }
