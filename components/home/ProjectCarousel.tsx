@@ -16,8 +16,6 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const count = projects.length;
 
-  if (count === 0) return null;
-
   const go = useCallback(
     (delta: number) => {
       setIndex((i) => (i + delta + count) % count);
@@ -44,6 +42,8 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
     };
   }, [index, count, startTimer, isTouching]);
 
+  if (count === 0) return null;
+
   function onTouchStart(e: React.TouchEvent) {
     setIsTouching(true);
     stopTimer();
@@ -68,57 +68,34 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
       </h2>
 
       <div
-        className="mx-auto mt-12 flex w-full max-w-7xl items-center justify-center gap-4"
+        className="mx-auto mt-12 grid w-full max-w-7xl"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        {count > 1 && (
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            aria-label="Previous project"
-            className="hidden h-10 w-10 shrink-0 items-center justify-center pixel-border-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:flex"
-          >
-            <IconChevronLeft size={20} />
-          </button>
-        )}
-
-        <div className="relative h-[28rem] w-full max-w-[900px] overflow-hidden">
-          {projects.map((project, i) => (
-            <ProjectCard
-              key={project.id ?? project.slug}
-              project={project}
-              isActive={i === index}
-              onSelect={() => go(i - index)}
-            />
-          ))}
-        </div>
-
-        {count > 1 && (
-          <button
-            type="button"
-            onClick={() => go(1)}
-            aria-label="Next project"
-            className="hidden h-10 w-10 shrink-0 items-center justify-center pixel-border-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:flex"
-          >
-            <IconChevronRight size={20} />
-          </button>
-        )}
+        {projects.map((project, i) => (
+          <ProjectCard
+            key={project.id ?? project.slug}
+            project={project}
+            isActive={i === index}
+          />
+        ))}
       </div>
 
       {count > 1 && (
-        <div className="mt-6 flex justify-center gap-3 sm:hidden">
+        <div className="mt-6 flex justify-center gap-3">
           <button
+            type="button"
             onClick={() => go(-1)}
             aria-label="Previous project"
-            className="flex h-10 w-10 items-center justify-center pixel-border-sm text-neutral-600 dark:text-neutral-300"
+            className="flex h-10 w-10 items-center justify-center pixel-border-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
           >
             <IconChevronLeft size={20} />
           </button>
           <button
+            type="button"
             onClick={() => go(1)}
             aria-label="Next project"
-            className="flex h-10 w-10 items-center justify-center pixel-border-sm text-neutral-600 dark:text-neutral-300"
+            className="flex h-10 w-10 items-center justify-center pixel-border-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
           >
             <IconChevronRight size={20} />
           </button>
@@ -131,51 +108,45 @@ export function ProjectCarousel({ projects }: { projects: Game[] }) {
 function ProjectCard({
   project,
   isActive,
-  onSelect,
 }: {
   project: Game;
   isActive: boolean;
-  onSelect: () => void;
 }) {
   return (
     <Link
       href={`/games/${project.slug}`}
       aria-hidden={!isActive}
       tabIndex={isActive ? 0 : -1}
-      onClick={(e) => {
-        if (!isActive) {
-          e.preventDefault();
-          onSelect();
-        }
-      }}
       style={{
         opacity: isActive ? 1 : 0,
         pointerEvents: isActive ? "auto" : "none",
       }}
-      className={
-        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden pixel-border bg-white dark:bg-neutral-900 " +
-        "transition-opacity duration-300 h-[28rem] w-[min(680px,80%)] hover:scale-[1.02] hover:shadow-md"
-      }
+      className="col-start-1 row-start-1 flex flex-col overflow-hidden pixel-border bg-white transition-all duration-300 hover:scale-[1.02] hover:shadow-md dark:bg-neutral-900"
     >
-      <div className="relative overflow-hidden w-full">
+      <div className="-mx-6 -mt-6 overflow-hidden">
         {project.coverImage ? (
-          <Image
-            src={project.coverImage}
-            alt={project.coverImageAlt}
-            width={1200}
-            height={675}
-            sizes="(max-width: 768px) 80vw, 680px"
-            className="w-full object-cover object-center"
-          />
+          <div className="relative aspect-video w-full">
+            <Image
+              src={project.coverImage}
+              alt={project.coverImageAlt || project.title}
+              fill
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="object-cover object-center"
+            />
+          </div>
         ) : (
-          <PlaceholderImage label={project.title} className="w-full" />
+          <PlaceholderImage
+            label={project.title}
+            className="aspect-video w-full"
+          />
         )}
       </div>
-      <div className="p-4 transition-opacity duration-300 opacity-100">
-        <h3 className="line-clamp-1 min-h-[2rem] font-display text-2xl tracking-wide">
+
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="font-display text-xl font-semibold leading-snug">
           {project.title}
         </h3>
-        <p className="mt-1 line-clamp-4 font-display text-xl text-neutral-600 dark:text-neutral-400">
+        <p className="mt-2 line-clamp-3 font-display text-xl text-neutral-600 dark:text-neutral-400">
           {project.shortDesc}
         </p>
       </div>
