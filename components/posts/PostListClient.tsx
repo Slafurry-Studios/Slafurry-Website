@@ -24,6 +24,7 @@ export function PostListClient({
 
   const [tagFilter, setTagFilter] = useState<string | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(6);
 
   const filtered = posts.filter((p) => {
     if (tagFilter && !p.tags.includes(tagFilter)) return false;
@@ -37,6 +38,9 @@ export function PostListClient({
     }
     return true;
   });
+
+  const visiblePosts = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
 
   const tagButtonClass = (tag: string, isActive: boolean) =>
     `inline-flex items-center pixel-border-sm px-3 py-1.5 font-display text-xl font-medium transition-colors ${
@@ -63,8 +67,9 @@ export function PostListClient({
           {subIntro}
         </p>
       )}
+      
 
-      <div className="mx-auto mb-10 max-w-4xl">
+      <div className="mx-auto mt-10 mb-10 max-w-4xl">
         <div className="flex flex-wrap gap-2 justify-center">
           <button
             onClick={() => setTagFilter(undefined)}
@@ -95,7 +100,7 @@ export function PostListClient({
       </div>
 
       <div className="mx-auto mt-10 flex max-w-4xl flex-col gap-8">
-        {filtered.map((post) => (
+        {visiblePosts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
         {filtered.length === 0 && (
@@ -105,11 +110,18 @@ export function PostListClient({
         )}
       </div>
 
-      <div className="mt-10 flex justify-center">
-        <PillButton size="sm" icon={<IconChevronDown size={16} />} iconPosition="right">
-          More
-        </PillButton>
-      </div>
+      {hasMore && (
+        <div className="mt-10 flex justify-center">
+          <PillButton
+            size="sm"
+            icon={<IconChevronDown size={16} />}
+            iconPosition="right"
+            onClick={() => setVisibleCount((prev) => prev + 6)}
+          >
+            More
+          </PillButton>
+        </div>
+      )}
     </div>
   );
 }

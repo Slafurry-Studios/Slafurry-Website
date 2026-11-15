@@ -348,6 +348,16 @@ export function PostForm({ initial }: { initial?: PostData }) {
               className={inputClass}
             />
           </div>
+          <div className={hintClass}>
+            <label className={labelClass}>Author Name</label>
+            <input
+              type="text"
+              value={post.authorName}
+              onChange={(e) => update("authorName", e.target.value)}
+              className={inputClass}
+              placeholder="Slafurry Studios"
+            />
+          </div>
           <div className="flex items-end pb-1">
             <label className="flex items-center gap-2 text-sm font-medium">
               <input
