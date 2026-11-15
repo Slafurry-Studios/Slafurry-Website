@@ -51,6 +51,7 @@ export function MontageForm({ games }: { games: GameOption[] }) {
       }
       setForm(EMPTY);
       router.refresh();
+      setSaving(false);
     } catch {
       setError("Network error.");
       setSaving(false);

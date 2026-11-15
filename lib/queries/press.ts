@@ -15,7 +15,8 @@ export async function getPressKitAssets() {
   try {
     return await prisma.pressKitAsset.findMany({
       where: { isHidden: false },
-      orderBy: { label: "asc", type: "asc" },
+      // Prisma 6 rejects multi-key object orderBy — must be array form.
+      orderBy: [{ label: "asc" }, { type: "asc" }],
     });
   } catch {
     return [];

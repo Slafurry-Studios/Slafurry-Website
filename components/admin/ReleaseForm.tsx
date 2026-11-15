@@ -52,6 +52,8 @@ export function ReleaseForm({ initial, onDone }: { initial?: ReleaseData; onDone
       }
       onDone?.();
       router.refresh();
+      setSaving(false);
+      if (!isEdit) setForm(EMPTY);
     } catch {
       setError("Network error.");
       setSaving(false);

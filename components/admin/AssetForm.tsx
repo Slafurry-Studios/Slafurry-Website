@@ -73,6 +73,11 @@ export function AssetForm({
       }
       onDone?.();
       router.refresh();
+      setSaving(false);
+      if (!isEdit) {
+        setForm(EMPTY);
+        setAssetImage(null);
+      }
     } catch {
       setError("Network error.");
       setSaving(false);
