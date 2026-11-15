@@ -4,7 +4,7 @@ import { ProjectCarousel } from "@/components/home/ProjectCarousel";
 import { CommunityContact } from "@/components/home/CommunityContact";
 import { NewsPreview } from "@/components/home/NewsPreview";
 import {
-  getFeaturedGame,
+  getUpcomingGame,
   getCarouselGames,
   getCommunityLinks,
   getLatestNewsPosts,
@@ -20,9 +20,9 @@ export const revalidate = 60;
 export default async function Home() {
   // Semua query jalan paralel (bukan await berurutan) — page load-nya
   // secepat query yang paling lambat, bukan total semuanya dijumlah.
-  const [featuredGame, carouselGames, communityLinks, newsPosts, settings] =
+  const [upcomingGame, carouselGames, communityLinks, newsPosts, settings] =
     await Promise.all([
-      getFeaturedGame(),
+      getUpcomingGame(),
       getCarouselGames(),
       getCommunityLinks(),
       getLatestNewsPosts(),
@@ -31,7 +31,7 @@ export default async function Home() {
 
   return (
     <>
-      <Hero upcomingGame={featuredGame} settings={settings} />
+      <Hero upcomingGame={upcomingGame} settings={settings} />
       <LineBreak />
       <AboutSection settings={settings} />
       <LineBreak />
