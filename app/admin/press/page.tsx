@@ -6,9 +6,11 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPressPage() {
   const [releases, assets, games] = await Promise.all([
-    prisma.pressRelease.findMany({ orderBy: { publishedAt: "desc" } }),
+    prisma.pressRelease.findMany({
+      orderBy: [{ order: "asc" }, { publishedAt: "desc" }],
+    }),
     prisma.pressKitAsset.findMany({
-      orderBy: { label: "asc" },
+      orderBy: [{ order: "asc" }, { label: "asc" }],
       include: { game: { select: { id: true, title: true } } },
     }),
     prisma.game.findMany({
@@ -26,6 +28,7 @@ export default async function AdminPressPage() {
         outlet: r.outlet,
         url: r.url,
         isHidden: r.isHidden,
+        order: r.order,
         publishedAt: r.publishedAt.toISOString(),
       }))}
       assets={assets.map((a) => ({
@@ -34,6 +37,7 @@ export default async function AdminPressPage() {
         type: a.type,
         fileUrl: a.fileUrl,
         isHidden: a.isHidden,
+        order: a.order,
         gameTitle: a.game?.title ?? null,
       }))}
     />

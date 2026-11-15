@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, DragEvent } from "react";
 import Link from "next/link";
 import {
   IconPlus,
   IconPencil,
   IconMessage,
   IconClock,
+  IconGripVertical,
   IconEyeOff,
   IconEye,
   IconTrash,
@@ -33,6 +34,7 @@ type PostRow = {
   publishedAt: string | null;
   tags: string[];
   isHidden: boolean;
+  order: number;
   commentCount: number;
 };
 
@@ -41,6 +43,7 @@ const COLUMNS: Column<PostRow>[] = [
   { key: "slug", label: "Slug" },
   { key: "status", label: "Status", sortable: true },
   { key: "publishedAt", label: "Published", sortable: true, sortAccessor: (r) => r.publishedAt ?? "" },
+  { key: "order", label: "Order", sortable: true, align: "right" },
   { key: "commentCount", label: "Comments", sortable: true, align: "right" },
 ];
 
@@ -67,6 +70,8 @@ export function PostsList({
   const [visibility, setVisibility] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
   const [statusFilter, setStatusFilter] = useState<"ALL" | "PUBLISHED" | "DRAFT">("ALL");
   const [error, setError] = useState("");
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>();
 
   const visibleCount = posts.filter(p => p.category === activeTab && !p.isHidden).length;
   const hiddenCount = posts.filter(p => p.category === activeTab && p.isHidden).length;
@@ -80,6 +85,52 @@ export function PostsList({
       return true;
     }
   );
+
+  async function handleDragStart(e: DragEvent<HTMLDivElement>, id: string) {
+    setDraggedId(id);
+    e.dataTransfer?.setData("text/plain", id);
+  }
+
+  async function handleDragOver(e: DragEvent<HTMLDivElement>, id: string) {
+    e.preventDefault();
+    setDragOverId(id);
+  }
+
+  async function handleDragEnd(e: DragEvent<HTMLDivElement>, id: string) {
+    setDraggedId(null);
+
+    const targetId = dragOverId;
+    setDragOverId(null);
+    if (targetId && targetId !== id) {
+      await reorderPosts(id, targetId);
+    }
+  }
+
+  async function reorderPosts(draggedId: string, targetId: string) {
+    try {
+      const res = await fetch("/api/admin/posts/reorder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ draggedId, targetId }),
+      });
+      if (res.ok) {
+        router.refresh();
+      } else {
+        const data = await res.json();
+        toast({
+          title: "Error",
+          description: data.error || "Failed to reorder posts.",
+          type: "error",
+        });
+      }
+    } catch {
+      toast({
+        title: "Error",
+        description: "Network error. Please try again.",
+        type: "error",
+      });
+    }
+  }
 
   async function toggleHide(id: string, isHidden: boolean) {
     try {
@@ -157,7 +208,7 @@ export function PostsList({
         searchKeys={["title", "slug"]}
         filters={FILTERS}
         columns={COLUMNS}
-        defaultSort={{ key: "publishedAt", direction: "desc" }}
+        defaultSort={{ key: "order", direction: "asc" }}
         emptyMessage={`No ${visibility.toLowerCase()} ${activeTab.toLowerCase()} posts yet.`}
         headerExtra={
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -211,12 +262,21 @@ export function PostsList({
         renderRow={(post) => (
           <div
             key={post.id}
+            data-id={post.id}
+            draggable={true}
+            onDragStart={(e) => handleDragStart(e, post.id)}
+            onDragOver={(e) => handleDragOver(e, post.id)}
+            onDragEnd={(e) => handleDragEnd(e, post.id)}
             className={`flex items-center gap-4 rounded-xl border p-4 transition-shadow hover:shadow-sm ${
               post.isHidden 
                 ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
                 : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
             }`}
           >
+            <IconGripVertical
+              size={16}
+              className="shrink-0 text-neutral-300 dark:text-neutral-600"
+            />
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
                 <span className="truncate text-sm font-medium">

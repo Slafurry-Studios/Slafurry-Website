@@ -67,7 +67,7 @@ export async function getPublishedPosts(
   try {
     const rows = await prisma.post.findMany({
       where: { category, status: PostStatus.PUBLISHED, isHidden: false },
-      orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
+      orderBy: [{ order: "asc" }, { publishedAt: "desc" }],
       select: {
         id: true,
         slug: true,
@@ -103,7 +103,7 @@ export async function getFeaturedPosts(
         isHidden: false,
         featured: true,
       },
-      orderBy: { publishedAt: "desc" },
+      orderBy: [{ order: "asc" }, { publishedAt: "desc" }],
       select: {
         id: true,
         slug: true,

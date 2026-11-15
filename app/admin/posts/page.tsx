@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPostsPage() {
   const posts = await prisma.post.findMany({
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ order: "asc" }, { publishedAt: "desc" }],
     include: { _count: { select: { comments: true } } },
   });
 
@@ -23,6 +23,7 @@ export default async function AdminPostsPage() {
         publishedAt: p.publishedAt?.toISOString() ?? null,
         tags: p.tags,
         isHidden: p.isHidden,
+        order: p.order,
         commentCount: p._count.comments,
       }))}
     />

@@ -5,13 +5,20 @@ import { withAudit } from "@/lib/audit";
 export async function GET() {
   try {
     const releases = await prisma.pressRelease.findMany({
-      orderBy: { publishedAt: "desc" },
+      orderBy: [{ order: "asc" }, { publishedAt: "desc" }],
     });
     return NextResponse.json(releases);
   } catch (error) {
     console.error("List press releases error:", error);
     return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
   }
+}
+
+async function getNextReleaseOrder(): Promise<number> {
+  const max = await prisma.pressRelease.aggregate({
+    _max: { order: true },
+  });
+  return (max._max.order ?? -1) + 1;
 }
 
 export const POST = withAudit(
@@ -36,6 +43,7 @@ export const POST = withAudit(
           title,
           url,
           publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
+          order: await getNextReleaseOrder(),
         },
       });
 
