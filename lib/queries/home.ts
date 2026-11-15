@@ -26,7 +26,7 @@ export async function getCarouselGames(limit = 6) {
   try {
     return await prisma.game.findMany({
       where: { isHidden: false },
-      orderBy: { order: "asc" },
+      orderBy: { order: "desc" },
       take: limit,
     });
   } catch {
