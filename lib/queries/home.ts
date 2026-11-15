@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { LinkSection, PostCategory, PostStatus } from "@prisma/client";
+import { GameStatus, LinkSection, PostCategory, PostStatus } from "@prisma/client";
 
 // All functions here are called from Server Pages (Server
 // Component), not from section components directly — keeps sections
@@ -11,10 +11,10 @@ import { LinkSection, PostCategory, PostStatus } from "@prisma/client";
 // When the database is up, behavior is identical; when it's down, empty data
 // is returned instead of crashing the entire build.
 
-export async function getFeaturedGame() {
+export async function getUpcomingGame() {
   try {
     return await prisma.game.findFirst({
-      where: { featured: true, isHidden: false },
+      where: { status: GameStatus.UPCOMING, isHidden: false },
       orderBy: { order: "asc" },
     });
   } catch {
