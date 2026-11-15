@@ -9,8 +9,6 @@ import {
   IconClock,
   IconMail,
   IconDeviceGamepad2,
-  IconTrophy,
-  IconPhone,
 } from "@tabler/icons-react";
 
 const NAV_ITEMS = [
@@ -45,25 +43,26 @@ const NAV_ITEMS = [
     icon: IconMail,
   },
   {
-    label: "Achievements",
-    href: "/admin/achievements",
-    icon: IconTrophy,
-  },
-  {
-    label: "Montage",
-    href: "/admin/montage",
-    icon: IconPhone,
-  },
-  {
     label: "Settings",
     href: "/admin/settings",
     icon: IconClock,
   },
-  {
-    label: "Analytics",
-    href: "/admin/analytics",
-    icon: IconLayoutDashboard,
-  },
+  // Hidden from nav (routes still live): uncomment to re-enable
+  // {
+  //   label: "Achievements",
+  //   href: "/admin/achievements",
+  //   icon: IconTrophy,
+  // },
+  // {
+  //   label: "Montage",
+  //   href: "/admin/montage",
+  //   icon: IconPhone,
+  // },
+  // {
+  //   label: "Analytics",
+  //   href: "/admin/analytics",
+  //   icon: IconLayoutDashboard,
+  // },
 ];
 
 type AdminLayoutProps = {

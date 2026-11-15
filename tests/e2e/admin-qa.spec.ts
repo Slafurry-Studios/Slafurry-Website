@@ -80,10 +80,7 @@ test.describe("Dashboard", () => {
       "Contacts",
       "Games",
       "Press",
-      "Achievements",
-      "Montage",
       "Settings",
-      "Analytics",
     ];
     for (const label of modules) {
       await page.getByRole("link", { name: label }).click();
