@@ -15,10 +15,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Contacts", href: "/admin/contacts", icon: "Mail" },
   { label: "Games", href: "/admin/games", icon: "DeviceGamepad" },
   { label: "Press", href: "/admin/press", icon: "Mail" },
-  { label: "Achievements", href: "/admin/achievements", icon: "Trophy" },
-  { label: "Montage", href: "/admin/montage", icon: "Phone" },
   { label: "Settings", href: "/admin/settings", icon: "Clock" },
-  { label: "Analytics", href: "/admin/analytics", icon: "Layout" },
 ];
 
 type IconMap = {
