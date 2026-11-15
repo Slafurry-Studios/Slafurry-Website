@@ -59,7 +59,7 @@ export function CommunityContact({
 
           <div className="flex flex-col items-start gap-8">
             <h2 className="font-display text-4xl tracking-wide sm:text-5xl lg:text-6xl">
-              Contact Us
+              <br></br>Contact Us
             </h2>
             {contactItems.map((item, i) => (
               <PillButton
