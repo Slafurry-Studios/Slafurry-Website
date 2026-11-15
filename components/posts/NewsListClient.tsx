@@ -5,6 +5,7 @@ import { IconChevronDown } from "@tabler/icons-react";
 import { PillButton } from "@/components/ui/PillButton";
 import { PostCard } from "@/components/posts/PostCard";
 import type { PostCardData } from "@/lib/queries/posts";
+import { LineBreak } from "../layout/LineBreak";
 
 export function NewsListClient({
   posts,
@@ -40,10 +41,9 @@ export function NewsListClient({
   });
 
   const tagButtonClass = (tag: string, isActive: boolean) =>
-    `inline-flex items-center pixel-border-sm px-3 py-1.5 font-display text-xl font-medium transition-colors ${
-      isActive
-        ? "text-neutral-900 bg-neutral-100 dark:text-white dark:bg-neutral-800"
-        : "text-neutral-700 hover:bg-neutral-200 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800"
+    `inline-flex items-center pixel-border-sm px-3 py-1.5 font-display text-xl font-medium transition-colors ${isActive
+      ? "text-neutral-900 bg-neutral-100 dark:text-white dark:bg-neutral-800"
+      : "text-neutral-700 hover:bg-neutral-200 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800"
     }`;
 
   const allTagsClass =
@@ -65,9 +65,9 @@ export function NewsListClient({
 
       {/* Featured posts */}
       {featuredPosts.length > 0 && (
-        <section className="my-20">
+        <section className="mt-5 mb-20">
           <h2 className="text-center font-display text-3xl tracking-wide mb-8">
-            Featured Stories
+            Featured News
           </h2>
           <div className="grid grid-cols-1 gap-6">
             {featuredPosts.map((post) => (
@@ -77,7 +77,12 @@ export function NewsListClient({
         </section>
       )}
 
+      <LineBreak />
+
       <div className="mx-auto mb-10 max-w-4xl">
+        <h2 className="text-center font-display text-3xl tracking-wide mb-8">
+          More News
+        </h2>
         <div className="flex flex-wrap gap-2 justify-center">
           <button
             onClick={() => setTagFilter(undefined)}
