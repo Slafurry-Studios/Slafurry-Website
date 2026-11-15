@@ -2,13 +2,13 @@
 The official (for now) website of Slafurry Studios — a small indie game studio built on rapid prototyping and unique ideas.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/bdfe1587-f5ea-417a-85e3-11a838b12b6a" width="100%" alt="Slafurry Studios Website banner" />
+  <img src="https://github.com/user-attachments/assets/45718cbb-a6ff-4df3-82b7-073562d35171" width="100%" alt="Slafurry Studios Website banner" />
 </p>
 <br>
 
 <p align="left">
   <img src="https://img.shields.io/badge/NEXT.JS-ffffff?style=for-the-badge&logo=nextdotjs&logoColor=000000" />
-  <img src="https://img.shields.io/badge/STATUS • IN DEVELOPMENT-000000?style=for-the-badge&logo=git&logoColor=ffffff" />
+  <img src="https://img.shields.io/badge/STATUS • RELEASED-000000?style=for-the-badge&logo=git&logoColor=ffffff" />
   <img src="https://img.shields.io/badge/MADE BY SLAFURRY STUDIOS-ffffff?style=for-the-badge&logo=gamepad&logoColor=000000" />
 </p>
 
@@ -25,27 +25,23 @@ The website for Slafurry Studios — home to our games, devlogs, and whatever el
 * Game portfolio
 * itch.io game catalog
 * Studio blog / devlog
-* English only
 * Supabase-backed data
 * Authentication
 * Protected admin area
-* Achievement system
-* Analytics
-* Audit logging
 
 ---
 
 ## GETTING STARTED
 
 ### Prerequisites
-- Node.js `[version]`
+- Node.js `24 LTS`
 - npm or pnpm
 - A Supabase project (URL + anon key)
 
 ### Setup
 ```bash
-git clone [repo-url]
-cd [repo-folder]
+git clone https://github.com/Slafurry-Studios/Slafurry-Website
+cd Slafurry-Website
 npm install
 ```
 
@@ -118,10 +114,12 @@ Admin QA tests that write data (Games, Posts, Press, Achievements, Montage, Sett
 ---
 
 ## TEAM
-| Role | Name |
+| Name | Role |
 |---|---|
-| [Role] | [Name] |
-| [Role] | [Name] |
+| Lord Zaini | Programmer |
+| Althaf2406 | Programmer |
+| csw | Emotional support pet |
+| Alter | QA |
 
 ---
 
