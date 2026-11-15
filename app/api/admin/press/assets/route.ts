@@ -5,7 +5,7 @@ import { withAudit } from "@/lib/audit";
 export async function GET() {
   try {
     const assets = await prisma.pressKitAsset.findMany({
-      orderBy: { label: "asc" },
+      orderBy: [{ order: "asc" }, { label: "asc" }],
       include: { game: { select: { id: true, title: true } } },
     });
     return NextResponse.json(assets);
@@ -13,6 +13,13 @@ export async function GET() {
     console.error("List press kit assets error:", error);
     return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
   }
+}
+
+async function getNextAssetOrder(): Promise<number> {
+  const max = await prisma.pressKitAsset.aggregate({
+    _max: { order: true },
+  });
+  return (max._max.order ?? -1) + 1;
 }
 
 export const POST = withAudit(
@@ -40,6 +47,7 @@ export const POST = withAudit(
           type,
           fileUrl,
           gameId: body.gameId || null,
+          order: await getNextAssetOrder(),
         },
         include: { game: { select: { id: true, title: true } } },
       });

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, DragEvent } from "react";
 import {
   IconExternalLink,
   IconCalendar,
   IconFileTypePdf,
   IconPhoto,
   IconStar,
+  IconGripVertical,
   IconEyeOff,
   IconEye,
   IconTrash,
@@ -31,6 +32,7 @@ type ReleaseRow = {
   outlet: string;
   url: string;
   isHidden: boolean;
+  order: number;
   publishedAt: string;
 };
 
@@ -40,6 +42,7 @@ type AssetRow = {
   type: string;
   fileUrl: string;
   isHidden: boolean;
+  order: number;
   gameTitle: string | null;
 };
 
@@ -49,12 +52,14 @@ const RELEASE_COLUMNS: Column<ReleaseRow>[] = [
   { key: "title", label: "Title", sortable: true },
   { key: "outlet", label: "Outlet", sortable: true },
   { key: "publishedAt", label: "Date", sortable: true },
+  { key: "order", label: "Order", sortable: true, align: "right" },
 ];
 
 const ASSET_COLUMNS: Column<AssetRow>[] = [
   { key: "label", label: "Label", sortable: true },
   { key: "type", label: "Type", sortable: true },
   { key: "gameTitle", label: "Game", sortable: true, sortAccessor: (r) => r.gameTitle ?? "" },
+  { key: "order", label: "Order", sortable: true, align: "right" },
 ];
 
 const ASSET_FILTERS: DataTableFilter[] = [
@@ -82,6 +87,8 @@ export function PressList({
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("releases");
   const [visibility, setVisibility] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>();
 
   const visibleReleases = releases.filter(r => !r.isHidden);
   const hiddenReleases = releases.filter(r => r.isHidden);
@@ -90,6 +97,41 @@ export function PressList({
 
   const filteredReleases = visibility === "VISIBLE" ? visibleReleases : hiddenReleases;
   const filteredAssets = visibility === "VISIBLE" ? visibleAssets : hiddenAssets;
+
+  function handleDragStart(e: DragEvent<HTMLDivElement>, id: string) {
+    setDraggedId(id);
+    e.dataTransfer?.setData("text/plain", id);
+  }
+
+  function handleDragOver(e: DragEvent<HTMLDivElement>, id: string) {
+    e.preventDefault();
+    setDragOverId(id);
+  }
+
+  function handleDragEnd(e: DragEvent<HTMLDivElement>, id: string, type: "releases" | "assets") {
+    setDraggedId(null);
+
+    const targetId = dragOverId;
+    setDragOverId(null);
+    if (targetId && targetId !== id) {
+      void reorderItem(type, id, targetId);
+    }
+  }
+
+  async function reorderItem(type: "releases" | "assets", draggedId: string, targetId: string) {
+    try {
+      const res = await fetch(`/api/admin/press/${type}/reorder`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ draggedId, targetId }),
+      });
+      if (res.ok) {
+        router.refresh();
+      }
+    } catch {
+      console.error(`Failed to reorder ${type}`);
+    }
+  }
 
   async function toggleHide(id: string, type: "releases" | "assets", isHidden: boolean) {
     await fetch(`/api/admin/press/${type}/${id}`, {
@@ -166,7 +208,7 @@ export function PressList({
           searchPlaceholder="Search releases..."
           searchKeys={["title", "outlet"]}
           columns={RELEASE_COLUMNS}
-          defaultSort={{ key: "publishedAt", direction: "desc" }}
+          defaultSort={{ key: "order", direction: "asc" }}
           emptyMessage={`No ${visibility.toLowerCase()} press releases.`}
           topContent={
             <div className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
@@ -177,12 +219,21 @@ export function PressList({
           renderRow={(r) => (
             <div
               key={r.id}
+              data-id={r.id}
+              draggable={true}
+              onDragStart={(e) => handleDragStart(e, r.id)}
+              onDragOver={(e) => handleDragOver(e, r.id)}
+              onDragEnd={(e) => handleDragEnd(e, r.id, "releases")}
               className={`flex items-center gap-4 rounded-xl border p-4 transition-shadow hover:shadow-sm ${
                 r.isHidden 
                   ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
                   : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
               }`}
             >
+              <IconGripVertical
+                size={16}
+                className="shrink-0 text-neutral-300 dark:text-neutral-600"
+              />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">{r.title}</span>
@@ -249,7 +300,7 @@ export function PressList({
           searchKeys={["label", "gameTitle"]}
           filters={ASSET_FILTERS}
           columns={ASSET_COLUMNS}
-          defaultSort={{ key: "label", direction: "asc" }}
+          defaultSort={{ key: "order", direction: "asc" }}
           emptyMessage={`No ${visibility.toLowerCase()} press kit assets.`}
           topContent={
             <div className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
@@ -260,12 +311,21 @@ export function PressList({
           renderRow={(a) => (
             <div
               key={a.id}
+              data-id={a.id}
+              draggable={true}
+              onDragStart={(e) => handleDragStart(e, a.id)}
+              onDragOver={(e) => handleDragOver(e, a.id)}
+              onDragEnd={(e) => handleDragEnd(e, a.id, "assets")}
               className={`flex items-center gap-4 rounded-xl border p-4 transition-shadow hover:shadow-sm ${
                 a.isHidden 
                   ? "border-neutral-200 bg-neutral-50 opacity-75 dark:border-neutral-800 dark:bg-neutral-900/50" 
                   : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
               }`}
             >
+              <IconGripVertical
+                size={16}
+                className="shrink-0 text-neutral-300 dark:text-neutral-600"
+              />
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800">
                 {a.type === "LOGO" ? (
                   <IconStar size={18} className="text-neutral-400" />

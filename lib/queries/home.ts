@@ -79,7 +79,7 @@ export async function getLatestNewsPosts(limit = 3) {
         status: PostStatus.PUBLISHED,
         isHidden: false,
       },
-      orderBy: { publishedAt: "desc" },
+      orderBy: [{ order: "asc" }, { publishedAt: "desc" }],
       take: limit,
     });
   } catch {

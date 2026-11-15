@@ -108,6 +108,7 @@ model PressRelease {
   url         String
   publishedAt DateTime @default(now())
   isHidden    Boolean  @default(false)
+  order       Int      @default(0)
 }
 
 model PressKitAsset {
@@ -116,6 +117,7 @@ model PressKitAsset {
   type    PressAssetType
   fileUrl String
   isHidden Boolean        @default(false)
+  order    Int            @default(0)
   gameId  String?
   game    Game?          @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }

@@ -18,6 +18,13 @@ function generatePreviewToken(): string {
     .slice(0, 24);
 }
 
+async function getNextPostOrder(): Promise<number> {
+  const max = await prisma.post.aggregate({
+    _max: { order: true },
+  });
+  return (max._max.order ?? -1) + 1;
+}
+
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
@@ -104,6 +111,7 @@ export const POST = withAudit(
           metaDescription: body.metaDescription || null,
           ogImage: body.ogImage || null,
           featured: body.featured ?? false,
+          order: await getNextPostOrder(),
           previewToken: generatePreviewToken(),
           prevPostId: body.prevPostId || null,
           nextPostId: body.nextPostId || null,
