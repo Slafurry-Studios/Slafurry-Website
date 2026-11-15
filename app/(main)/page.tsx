@@ -10,6 +10,7 @@ import {
   getLatestNewsPosts,
   getSiteSettings,
 } from "@/lib/queries/home";
+import { LineBreak } from "@/components/layout/LineBreak";
 
 // ISR: halaman ini nge-render data DB, tapi route-nya static (di-prerender
 // waktu build). Tanpa revalidate, edit dari admin baru kelihatan setelah
@@ -40,17 +41,5 @@ export default async function Home() {
       <LineBreak />
       <NewsPreview posts={newsPosts} />
     </>
-  );
-}
-
-// Pemisah section — garis handdrawn dari Linebreak.png
-function LineBreak() {
-  return (
-    <img
-      src="/Linebreak.png"
-      alt=""
-      aria-hidden="true"
-      className="-mx-4 md:-mx-8 my-8 block h-1 w-[calc(100%+2rem)] md:w-[calc(100%+4rem)] max-w-none [image-rendering:pixelated]"
-    />
   );
 }

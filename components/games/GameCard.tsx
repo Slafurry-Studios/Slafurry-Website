@@ -36,11 +36,11 @@ export function GameCard({
     >
       <div className="-m-2 overflow-hidden relative group">
         {/* Image — always rendered, mandatory fallback */}
-          <img
-            src={game.coverImage}
-            alt={game.coverImageAlt}
-            className={`w-full object-cover transition-opacity duration-300 ${hasYoutube ? "group-hover:opacity-30" : ""} aspect-[16/9]`}
-          />
+        <img
+          src={game.coverImage}
+          alt={game.coverImageAlt}
+          className={`w-full object-cover transition-opacity duration-300 ${hasYoutube ? "group-hover:opacity-30" : ""} aspect-[16/9]`}
+        />
 
         {/* YouTube preview — optional, auto-plays on hover; image stays as fallback */}
         {hasYoutube && (
@@ -61,8 +61,8 @@ export function GameCard({
           <StatusBadge status={game.status} />
         </div>
         <p
-          className={`mt-2 font-display text-neutral-600 dark:text-neutral-400 ${
-            featured ? "text-xl" : "line-clamp-2 text-xl"
+          className={`mt-2 font-display text-xl text-neutral-600 dark:text-neutral-400 ${
+            featured ? "line-clamp-3 md:line-clamp-5" : "line-clamp-2"
           }`}
         >
           {game.shortDesc}

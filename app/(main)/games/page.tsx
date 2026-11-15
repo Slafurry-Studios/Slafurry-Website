@@ -1,5 +1,6 @@
 import { GameCard } from "@/components/games/GameCard";
 import { GameListClient } from "@/components/games/GameListClient";
+import { LineBreak } from "@/components/layout/LineBreak";
 import { getActiveGames } from "@/lib/queries/games";
 
 // ISR: data DB, halaman static — tanpa ini, game baru/ubah status baru
@@ -44,7 +45,10 @@ export default async function GamesPage() {
         {featured && <GameCard game={featured} featured />}
       </div>
 
+      <LineBreak />
+
       <GameListClient games={rest} moreText="More" />
     </div>
   );
 }
+
