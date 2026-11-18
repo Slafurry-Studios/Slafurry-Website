@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 import { fontDisplay } from "@/lib/fonts";
 import { SettingsProvider } from "@/components/layout/SettingsContext";

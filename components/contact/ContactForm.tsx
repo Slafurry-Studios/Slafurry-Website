@@ -4,12 +4,11 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { submitContactMessage } from "@/lib/actions/contact";
 import { IconSend, IconLoader2, IconCheck, IconAlertTriangle } from "@tabler/icons-react";
 import { PillButton } from "@/components/ui/PillButton";
-import { Skeleton, SkeletonText, useLoadingState } from "@/components/ui/Skeleton";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { TurnstileWidget } from "@/components/captcha/TurnstileWidget";
 
 export function ContactForm() {
   const [state, formAction, isPending] = useActionState(submitContactMessage, null);
-  const showPending = useLoadingState(isPending, 600);
   const [widgetKey, setWidgetKey] = useState(0);
   const [turnstileToken, setTurnstileToken] = useState("");
   const lastCaptchaError = useRef<string | null>(null);

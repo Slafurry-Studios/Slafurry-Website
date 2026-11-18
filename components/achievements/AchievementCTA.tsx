@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useSettings } from "@/components/layout/SettingsContext";
+import Image from "next/image";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { getAchievements } from "@/lib/achievements/engine";
 import {
@@ -247,11 +247,15 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
                           !unlocked ? "grayscale" : ""
                         }`}
                       >
-                        <img
-                          src={hidden ? "" : achievement.icon}
-                          alt=""
-                          className="h-full w-full object-cover"
-                        />
+                        {hidden ? null : (
+                          <Image
+                            src={achievement.icon}
+                            alt=""
+                            fill
+                            sizes="40px"
+                            className="object-cover"
+                          />
+                        )}
                         {hidden && (
                           <span className="absolute inset-0 flex items-center justify-center font-display text-lg text-neutral-400 dark:text-neutral-500">
                             ?
@@ -339,7 +343,7 @@ function RedeemSection() {
 
         if (result.success) {
           // Persist unlock locally
-          const isNew = unlock(result.achievement.key);
+          unlock(result.achievement.key);
 
           // Show toast
           pushAchievementToast({

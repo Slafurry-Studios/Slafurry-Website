@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
   IconLoader2,
@@ -16,8 +16,6 @@ import {
   IconBrandGithub,
   IconMail,
   IconLink,
-  IconEye,
-  IconEyeOff,
 } from "@tabler/icons-react";
 import { useToast } from "@/components/ui/Toast";
 

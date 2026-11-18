@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { PillButton } from "@/components/ui/PillButton";
 
@@ -14,8 +13,6 @@ export default function ErrorPage({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const pathname = usePathname();
-
   useEffect(() => {
     // TODO (step 4+): kirim ke error tracking service kalau ada
     // (Sentry/dst). Untuk sekarang log ke console aja.

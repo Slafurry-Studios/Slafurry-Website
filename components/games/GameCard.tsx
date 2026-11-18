@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
+import Image from "next/image";
 import { getYoutubeEmbedUrl } from "@/lib/youtube";
 import type { GameData } from "@/lib/queries/games";
 
@@ -34,12 +34,14 @@ export function GameCard({
       href={`/games/${game.slug}`}
       className="flex flex-col overflow-visible pixel-border press-btn game-hover"
     >
-      <div className="-m-2 overflow-hidden relative group">
+      <div className="-m-2 overflow-hidden relative group aspect-[16/9]">
         {/* Image — always rendered, mandatory fallback */}
-        <img
+        <Image
           src={game.coverImage}
           alt={game.coverImageAlt}
-          className={`w-full object-cover transition-opacity duration-300 ${hasYoutube ? "group-hover:opacity-30" : ""} aspect-[16/9]`}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className={`object-cover transition-opacity duration-300 ${hasYoutube ? "group-hover:opacity-30" : ""}`}
         />
 
         {/* YouTube preview — optional, auto-plays on hover; image stays as fallback */}

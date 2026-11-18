@@ -195,7 +195,6 @@ export function PostForm({ initial }: { initial?: PostData }) {
       const data = await res.json();
 
       if (!res.ok) {
-        const data = await res.json();
         setError(data.error || "Something went wrong.");
         setSaving(false);
         toast({

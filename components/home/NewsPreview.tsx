@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Post } from "@prisma/client";
 import Link from "next/link";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
@@ -35,12 +36,14 @@ function NewsCard({ post, cardWidth }: { post: Post; cardWidth: string }) {
       href={`/news/${post.slug}`}
       className={`flex flex-col overflow-hidden pixel-border transition-all hover:scale-[1.02] hover:shadow-md ${cardWidth}`}
     >
-      <div className="-mx-6 -mt-6 overflow-hidden">
+      <div className="-mx-6 -mt-6 overflow-hidden relative aspect-[16/10]">
         {post.coverImage ? (
-          <img
+          <Image
             src={post.coverImage}
             alt={post.coverImageAlt || post.title}
-            className="aspect-[16/10] w-full object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, 400px"
+            className="object-cover"
           />
         ) : (
           <PlaceholderImage

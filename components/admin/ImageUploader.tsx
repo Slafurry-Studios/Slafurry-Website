@@ -3,7 +3,6 @@
 import { useState, useRef, useCallback, type DragEvent } from "react";
 import Image from "next/image";
 import {
-  IconUpload,
   IconX,
   IconLoader2,
   IconAlertCircle,

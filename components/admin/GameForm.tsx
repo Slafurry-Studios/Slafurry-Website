@@ -7,13 +7,13 @@ import {
   IconTrash,
   IconAlertCircle,
   IconLoader2,
-  IconArrowLeft,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { useToast } from "@/components/ui/Toast";
 import { getYoutubeEmbedUrl } from "@/lib/youtube";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 const TiptapEditor = dynamic(
   () => import("@/components/admin/TiptapEditor").then((m) => m.TiptapEditor),
@@ -122,7 +122,6 @@ export function GameForm({ initial }: { initial?: GameData }) {
       const data = await res.json();
 
       if (!res.ok) {
-        const data = await res.json();
         setError(data.error || "Something went wrong.");
         setSaving(false);
         toast({
@@ -322,10 +321,12 @@ export function GameForm({ initial }: { initial?: GameData }) {
         <h2 className="font-display text-xl tracking-tight">Preview</h2>
         <div className="relative aspect-[16/9] w-full max-w-md rounded-xl border p-1 overflow-hidden bg-neutral-50 dark:bg-neutral-900/50 group">
           {game.coverImage ? (
-            <img
+            <Image
               src={game.coverImage}
               alt={game.coverImageAlt || game.title}
-              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-30"
+              fill
+              sizes="(max-width: 768px) 100vw, 448px"
+              className="object-cover transition-opacity duration-300 group-hover:opacity-30"
             />
           ) : (
             <div className="w-full h-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-400 text-xs font-display">

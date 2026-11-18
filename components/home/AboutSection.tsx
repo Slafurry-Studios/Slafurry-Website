@@ -1,6 +1,5 @@
 import type { SiteSettings } from "@prisma/client";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
-import { formatDate } from "@/lib/format";
 import { StudioAgeCounter } from "./StudioAgeCounter";
 
 export function AboutSection({ settings }: { settings: SiteSettings | null }) {

@@ -63,7 +63,6 @@ export function GamesList({ games }: { games: GameRow[] }) {
   const router = useRouter();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
-  const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>();
   const [rows, setRows] = useState<GameRow[]>(games);
   const [prevGames, setPrevGames] = useState(games);
@@ -80,7 +79,6 @@ export function GamesList({ games }: { games: GameRow[] }) {
   );
 
   async function handleDragStart(e: DragEvent<HTMLDivElement>, id: string) {
-    setDraggedId(id);
     e.dataTransfer?.setData("text/plain", id);
   }
 
@@ -90,7 +88,6 @@ export function GamesList({ games }: { games: GameRow[] }) {
   }
 
   async function handleDragEnd(e: DragEvent<HTMLDivElement>, id: string) {
-    setDraggedId(null);
 
     const targetId = dragOverId;
     setDragOverId(null);
