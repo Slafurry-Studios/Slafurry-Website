@@ -22,18 +22,24 @@ export function TurnstileWidget({
 }: TurnstileWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<number | null>(null);
-  const [scriptReady, setScriptReady] = useState(false);
+  const [scriptReady, setScriptReady] = useState(
+    () => typeof window !== "undefined" && "turnstile" in window,
+  );
   const verify = useCallback((token: string) => onVerify(token), [onVerify]);
 
   // Load the Turnstile API script exactly once per page lifetime.
   useEffect(() => {
     if (scriptReady) return;
-    const already = document.querySelector(
-      'script[src*="challenges.cloudflare.com/turnstile/v0/api.js"]'
-    );
-    if (already) {
-      setScriptReady(true);
-      return;
+    const sel = 'script[src*="challenges.cloudflare.com/turnstile/v0/api.js"]';
+    const existing = document.querySelector<HTMLScriptElement>(sel);
+    if (existing) {
+      if ("turnstile" in window) {
+        queueMicrotask(() => setScriptReady(true));
+        return;
+      }
+      const onLoad = () => setScriptReady(true);
+      existing.addEventListener("load", onLoad, { once: true });
+      return () => existing.removeEventListener("load", onLoad);
     }
     const script = document.createElement("script");
     script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";

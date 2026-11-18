@@ -4,6 +4,7 @@
 // pemuatan font bermasalah. Digunakan untuk URL yang tidak cocok dengan
 // route apapun.
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { fontDisplay } from "@/lib/fonts";
 
@@ -43,7 +44,7 @@ export default function GlobalNotFound() {
           Looks like you&apos;re lost. Maybe this page got caught in a joke
           that went too far.
         </p>
-        <a
+        <Link
           href="/"
           style={{
             marginTop: "1.5rem",
@@ -57,7 +58,7 @@ export default function GlobalNotFound() {
           }}
         >
           Back to Home
-        </a>
+        </Link>
       </body>
     </html>
   );

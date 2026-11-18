@@ -26,7 +26,7 @@ type AchievementState = {
   eventCounts: Record<string, number>;
 };
 
-let state: AchievementState = {
+const state: AchievementState = {
   unlockedKeys: new Set(),
   unseenKeys: new Set(),
   visitCount: 0,

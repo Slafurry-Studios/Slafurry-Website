@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { IconMenu, IconX } from "@tabler/icons-react";
 import { SlafurryMark } from "@/components/icons/SlafurryMark";
 
@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   { href: "/contact", key: "contact" },
 ] as const;
 
-const itemVariants: any = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 8 },
   visible: {
     opacity: 1,
@@ -25,7 +25,7 @@ const itemVariants: any = {
   },
 };
 
-const menuVariants: any = {
+const menuVariants: Variants = {
   hidden: { opacity: 0, y: -10 },
   visible: {
     opacity: 1,

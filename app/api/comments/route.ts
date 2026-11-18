@@ -75,8 +75,9 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, commentId: comment.id }, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Something went wrong.";
     console.error("Comment submit error:", error);
-    return NextResponse.json({ error: error.message || "Something went wrong." }, { status: 500 });
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

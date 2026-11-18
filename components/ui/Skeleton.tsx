@@ -64,15 +64,18 @@ export function useLoadingState(
   isLoading: boolean,
   minMs: number = 500,
 ): boolean {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(isLoading);
+  const [prevIsLoading, setPrevIsLoading] = useState(isLoading);
+
+  if (isLoading !== prevIsLoading) {
+    setPrevIsLoading(isLoading);
+    setShow(isLoading);
+  }
 
   useEffect(() => {
-    if (isLoading) {
-      setShow(true);
-      const t = setTimeout(() => setShow(false), minMs);
-      return () => clearTimeout(t);
-    }
-    setShow(false);
+    if (!isLoading) return;
+    const t = setTimeout(() => setShow(false), minMs);
+    return () => clearTimeout(t);
   }, [isLoading, minMs]);
 
   return show;

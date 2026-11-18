@@ -9,13 +9,28 @@ function formatBytes(n: number) {
 const VALID_PERIODS = ["7d", "30d", "90d"] as const;
 type Period = (typeof VALID_PERIODS)[number];
 
+type TopPage = { path: string; views: number };
+type TopReferrer = { referrer: string | null; views: number };
+type DeviceBreakdownRow = { device: string; count: number };
+type AnalyticsData = {
+  topPages?: TopPage[];
+  topReferrers?: TopReferrer[];
+  deviceBreakdown?: DeviceBreakdownRow[];
+};
+
+const EMPTY_ANALYTICS: AnalyticsData = {
+  topPages: [],
+  topReferrers: [],
+  deviceBreakdown: [],
+};
+
 function normalizePeriod(value: string | undefined): Period {
   return (VALID_PERIODS as readonly string[]).includes(value ?? "")
     ? (value as Period)
     : "30d";
 }
 
-async function fetchAnalytics(period: string) {
+async function fetchAnalytics(period: string): Promise<AnalyticsData> {
   const headersList = await headers();
   const host = headersList.get("host");
   const protocol = headersList.get("x-forwarded-proto") ?? "https";
@@ -38,15 +53,15 @@ async function fetchAnalytics(period: string) {
     });
   } catch (err) {
     console.error("Analytics fetch network error:", err);
-    return { topPages: [], topReferrers: [], deviceBreakdown: [] };
+    return EMPTY_ANALYTICS;
   }
 
   if (!res.ok) {
     console.error(`Analytics fetch failed: ${res.status} ${res.statusText} (${url})`);
-    return { topPages: [], topReferrers: [], deviceBreakdown: [] };
+    return EMPTY_ANALYTICS;
   }
 
-  return res.json();
+  return res.json() as Promise<AnalyticsData>;
 }
 
 export default async function AdminAnalyticsPage({
@@ -87,7 +102,7 @@ export default async function AdminAnalyticsPage({
           <h2 className="mb-4 font-display text-lg font-medium">Top 10 Pages</h2>
 
           <ul className="space-y-2 text-sm">
-            {topPages.map((page: any, i: number) => {
+            {topPages.map((page, i) => {
               const path = page.path === "/" ? "Home" : page.path;
               const label = path.length > 30 ? `${path.slice(0, 27)}…` : path;
 
@@ -120,7 +135,7 @@ export default async function AdminAnalyticsPage({
           <h2 className="mb-4 font-display text-lg font-medium">Top Referrers</h2>
 
           <ul className="space-y-2 text-sm">
-            {topReferrers.map((ref: any, i: number) => {
+            {topReferrers.map((ref, i) => {
               let label = "Direct";
 
               if (ref.referrer) {
@@ -155,7 +170,7 @@ export default async function AdminAnalyticsPage({
           <h2 className="mb-4 font-display text-lg font-medium">Device Breakdown</h2>
 
           <div className="grid grid-cols-2 gap-2">
-            {deviceBreakdown.map((d: any) => (
+            {deviceBreakdown.map((d) => (
               <div key={d.device} className="flex items-center justify-between rounded-md px-3 py-1">
                 <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">
                   {d.device}

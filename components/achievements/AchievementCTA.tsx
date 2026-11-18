@@ -204,7 +204,7 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
           <div>
-            <h2 className="font-display text-xl leading-tight">"Achievements"</h2>
+            <h2 className="font-display text-xl leading-tight">&ldquo;Achievements&rdquo;</h2>
             <p className="font-display text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
               {totalUnlocked} / {totalAchievements}
             </p>
@@ -273,7 +273,7 @@ function AchievementPanel({ onClose }: { onClose: () => void }) {
                           </p>
                           {isNew && (
                             <span className="shrink-0 rounded-full bg-yellow-400 px-1.5 py-0.5 font-display text-[10px] font-bold text-neutral-900">
-                              "NEW!"
+                              &ldquo;NEW!&rdquo;
                             </span>
                           )}
                         </div>
@@ -373,7 +373,7 @@ function RedeemSection() {
   return (
     <div className="border-t border-neutral-200 pt-4 dark:border-neutral-700">
       <p className="font-display text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-2.5 px-1">
-        "Got a code?"
+        &ldquo;Got a code?&rdquo;
       </p>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input

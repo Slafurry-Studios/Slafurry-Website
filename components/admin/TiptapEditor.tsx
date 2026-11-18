@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditor, EditorContent } from "@tiptap/react";
+import type { EditorView } from "@tiptap/pm/view";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Image from "@tiptap/extension-image";
@@ -82,9 +83,8 @@ export function TiptapEditor({
         class:
           "prose prose-sm max-w-none min-h-[300px] px-4 py-3 font-display text-neutral-900 dark:text-neutral-100 focus:outline-none prose-headings:font-display prose-p:leading-relaxed prose-a:text-blue-600 prose-img:rounded-lg dark:prose-invert",
       },
-      handlePaste: (view: any, event: ClipboardEvent) => {
-        const items =
-          (event as any).clipboardData?.items;
+      handlePaste: (view: EditorView, event: ClipboardEvent) => {
+        const items = event.clipboardData?.items;
         if (!items) return false;
 
         for (let i = 0; i < items.length; i++) {
