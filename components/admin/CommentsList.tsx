@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { IconMessage, IconClock, IconMail, IconCheck, IconX, IconTrash, IconDeviceGamepad } from "@tabler/icons-react";
@@ -117,7 +117,7 @@ export function CommentsList({
   searchQuery?: string;
 }) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const bulkActions: BulkAction<CommentRow>[] = [
     {

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { IconChevronLeft, IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import Link from "next/link";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
@@ -41,12 +42,14 @@ export function ArticleReader({
         {post.tags[0] ?? "update"} | {post.commentCount} &ldquo;Comments&rdquo;
       </p>
 
-      <div className="mt-6 overflow-hidden rounded-xl">
+      <div className="mt-6 overflow-hidden rounded-xl relative aspect-[16/9]">
         {post.coverImage ? (
-          <img
+          <Image
             src={post.coverImage}
             alt={post.coverImageAlt}
-            className="aspect-[16/9] w-full object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, 800px"
+            className="object-cover"
           />
         ) : (
           <PlaceholderImage label={post.title} className="aspect-[16/9] w-full" />

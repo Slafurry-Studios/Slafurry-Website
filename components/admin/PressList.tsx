@@ -88,7 +88,6 @@ export function PressList({
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("releases");
   const [visibility, setVisibility] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
-  const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>();
   const [releaseRows, setReleaseRows] = useState<ReleaseRow[]>(releases);
   const [assetRows, setAssetRows] = useState<AssetRow[]>(assets);
@@ -120,7 +119,6 @@ export function PressList({
   }
 
   function handleDragStart(e: DragEvent<HTMLDivElement>, id: string) {
-    setDraggedId(id);
     e.dataTransfer?.setData("text/plain", id);
   }
 
@@ -130,7 +128,6 @@ export function PressList({
   }
 
   function handleDragEnd(e: DragEvent<HTMLDivElement>, id: string, type: "releases" | "assets") {
-    setDraggedId(null);
 
     const targetId = dragOverId;
     setDragOverId(null);

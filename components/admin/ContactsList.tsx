@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { IconClock, IconMailOpened, IconCheck, IconTrash } from "@tabler/icons-react";
@@ -102,7 +102,7 @@ export function ContactsList({
   searchQuery?: string;
 }) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   function statusHref(s: string) {
     return `/admin/contacts?status=${s}${activeCategory !== "ALL" ? `&category=${activeCategory}` : ""}${searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : ""}`;

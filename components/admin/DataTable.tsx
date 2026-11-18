@@ -96,8 +96,11 @@ export function DataTable<T extends Record<string, unknown>>({
 
   const enableSelection = Boolean(bulkActions && bulkActions.length > 0 && getRowId);
 
-  // Safe fallback so downstream code can always call getRowId when selection is enabled
-  const getId = getRowId ?? ((item: T) => String(item.id ?? ""));
+  // Stable identity so useMemo deps don't change every render
+  const getId = useCallback(
+    (item: T) => (getRowId ? getRowId(item) : String((item as { id?: unknown }).id ?? "")),
+    [getRowId]
+  );
 
   // ─── Sort ────────────────────────────────────────────────────
   function handleSort(key: string) {

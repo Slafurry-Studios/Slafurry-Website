@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { CommentStatus } from "@prisma/client";
 import { checkHoneypot, checkRateLimit } from "@/lib/actions/form-guards";
 import { verifyTurnstile } from "@/lib/actions/turnstile";
 import { headers } from "next/headers";

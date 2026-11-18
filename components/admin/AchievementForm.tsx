@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import {
   IconAlertCircle,
   IconLoader2,
-  IconEye,
-  IconEyeOff,
   IconLock,
 } from "@tabler/icons-react";
 import Link from "next/link";

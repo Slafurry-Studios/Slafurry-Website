@@ -3,7 +3,6 @@
 import { createHash } from "crypto";
 import { headers } from "next/headers";
 
-import { ContactCategory } from "@prisma/client";
 
 type HoneypotResult = { isBot: boolean; reason: string };
 type RateLimitResult = { allowed: boolean; remaining: number; reset: number; reason: string };

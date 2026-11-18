@@ -11,7 +11,6 @@ import {
   IconEyeOff,
   IconEye,
   IconTrash,
-  IconAlertCircle,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/admin/DataTable";
@@ -70,8 +69,6 @@ export function PostsList({
   const [activeTab, setActiveTab] = useState<"DEVLOG" | "NEWS">("DEVLOG");
   const [visibility, setVisibility] = useState<"VISIBLE" | "HIDDEN">("VISIBLE");
   const [statusFilter, setStatusFilter] = useState<"ALL" | "PUBLISHED" | "DRAFT">("ALL");
-  const [error, setError] = useState("");
-  const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>();
   const [rows, setRows] = useState<PostRow[]>(posts);
   const [prevPosts, setPrevPosts] = useState(posts);
@@ -94,7 +91,6 @@ export function PostsList({
   );
 
   async function handleDragStart(e: DragEvent<HTMLDivElement>, id: string) {
-    setDraggedId(id);
     e.dataTransfer?.setData("text/plain", id);
   }
 
@@ -104,7 +100,6 @@ export function PostsList({
   }
 
   async function handleDragEnd(e: DragEvent<HTMLDivElement>, id: string) {
-    setDraggedId(null);
 
     const targetId = dragOverId;
     setDragOverId(null);
@@ -205,18 +200,17 @@ export function PostsList({
         </Link>
       </div>
 
-      {error && (
-        <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300">
-          <IconAlertCircle size={18} className="shrink-0" />
-          {error}
-        </div>
-      )}
-
       <DataTable
         data={filteredPosts}
         searchPlaceholder="Search posts..."
         searchKeys={["title", "slug"]}
         filters={FILTERS}
+        activeFilters={{ status: statusFilter }}
+        onFilterChange={(key, value) => {
+          if (key === "status" && (value === "ALL" || value === "PUBLISHED" || value === "DRAFT")) {
+            setStatusFilter(value);
+          }
+        }}
         columns={COLUMNS}
         defaultSort={{ key: "order", direction: "asc" }}
         emptyMessage={`No ${visibility.toLowerCase()} ${activeTab.toLowerCase()} posts yet.`}

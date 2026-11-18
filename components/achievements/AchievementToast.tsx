@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import { useSettings } from "@/components/layout/SettingsContext";
 import { playUnlockSound } from "@/lib/achievements/sound";
 import { markSeen } from "@/lib/achievements/storage";
@@ -46,11 +47,6 @@ function getSnapshot(): { current: ToastEntry | null; queued: number } {
 // ---------------------------------------------------------------------------
 // Mobile detection (1 visible on mobile, 3 on desktop)
 // ---------------------------------------------------------------------------
-
-function isMobile(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(max-width: 640px)").matches;
-}
 
 // ---------------------------------------------------------------------------
 // Toast display duration
@@ -114,9 +110,11 @@ function AchievementToast({
     >
       {/* Achievement icon */}
       <div className="relative shrink-0">
-        <img
+        <Image
           src={entry.icon}
           alt=""
+          width={48}
+          height={48}
           className="w-12 h-12 rounded-xl object-cover bg-neutral-800 dark:bg-neutral-200"
         />
         {/* Sparkle indicator */}
@@ -163,7 +161,6 @@ function AchievementToast({
 export function AchievementToastContainer() {
   const [, forceUpdate] = useState(0);
   const { current, queued } = getSnapshot();
-  const hideTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   // Subscribe to queue changes
   useEffect(() => {
@@ -183,9 +180,7 @@ export function AchievementToastContainer() {
     emitChange();
   }, []);
 
-  // If on mobile and there are queued items, defer extras
   const visible = current;
-  const maxVisible = isMobile() ? 1 : 3;
 
   return (
     <div

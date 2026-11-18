@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconCheck, IconLoader2, IconAlertCircle, IconInbox } from "@tabler/icons-react";
 
@@ -58,7 +58,7 @@ export { ToastContext, useToast };
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toastList, setToastList] = useState<Toast[]>(toasts);
 
-  useCallback(() => {
+  useEffect(() => {
     const unsub = listen(setToastList);
     return unsub;
   }, []);
@@ -91,11 +91,11 @@ const ICON_MAP: Record<ToastType, React.ReactNode> = {
 function ToastItem({ toast }: { toast: Toast }) {
   const [isRemoving, setIsRemoving] = useState(false);
 
-  useCallback(() => {
+  useEffect(() => {
     if (toast.type === "loading") return;
     const t = setTimeout(() => setIsRemoving(true), toast.duration! - 300);
     return () => clearTimeout(t);
-  }, [toast.id, toast.duration]);
+  }, [toast.type, toast.id, toast.duration]);
 
   return (
     <motion.div

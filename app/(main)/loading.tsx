@@ -1,7 +1,6 @@
 "use client";
 
 import { SkeletonImage, SkeletonText } from "@/components/ui/Skeleton";
-import Link from "next/link";
 
 export default function MainLoading() {
   return (

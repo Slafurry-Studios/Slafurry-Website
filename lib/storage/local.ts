@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, writeFileSync, unlinkSync } from "fs";
-import { join, basename } from "path"; // turbopackIgnore: true
+import { basename } from "path"; // turbopackIgnore: true
 import type { StorageProvider, StorageFile, UploadResult } from "./adapter";
 
 const ROOT = process.env.LOCAL_STORAGE_ROOT ?? "./.local-storage";

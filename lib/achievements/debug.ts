@@ -76,7 +76,7 @@ export function initDebugAPI(): void {
         const data = await res.json();
 
         if (data.success) {
-          const isNew = unlock(data.achievement.key);
+          unlock(data.achievement.key);
           pushAchievementToast({
             key: data.achievement.key,
             title: data.achievement.title,

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
 import { formatDate } from "@/lib/format";
@@ -17,16 +18,16 @@ export function PostCard({
       href={`${basePath}/${post.slug}`}
       className="block overflow-hidden pixel-border transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
     >
-      <div className="-mx-6 -mt-6 overflow-hidden">
+      <div className={`-mx-6 -mt-6 overflow-hidden relative ${compact ? "aspect-[16/9]" : "aspect-[21/9]"}`}>
         {post.coverImage ? (
-          <img
+          <Image
             src={post.coverImage}
             alt={post.coverImageAlt}
-            className={compact ? "aspect-[16/9] w-full object-cover" : "aspect-[21/9] w-full object-cover"}
-            onError={(e) => {
-              console.error("Image failed to load:", post.coverImage, e);
-              (e.target as HTMLImageElement).onerror = null;
-              (e.target as HTMLImageElement).src = "";
+            fill
+            sizes="(max-width: 768px) 100vw, 400px"
+            className="object-cover"
+            onError={() => {
+              console.error("Image failed to load:", post.coverImage);
             }}
           />
         ) : (

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Game, SiteSettings } from "@prisma/client";
 import { PillButton } from "@/components/ui/PillButton";
 import { PlaceholderImage } from "@/components/ui/PlaceholderMedia";
@@ -43,10 +44,12 @@ export function Hero({ upcomingGame, settings }: { upcomingGame: Game | null; se
               <Link href={`/games/${upcomingGame.slug}`}>
                 <div className="relative aspect-[16/9] w-full overflow-hidden">
                   {upcomingGame.coverImage ? (
-                    <img
+                    <Image
                       src={upcomingGame.coverImage}
                       alt={upcomingGame.coverImageAlt}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 448px"
+                      className="object-cover"
                     />
                   ) : (
                     <PlaceholderImage
