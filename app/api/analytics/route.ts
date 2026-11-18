@@ -51,17 +51,17 @@ export async function GET(request: Request) {
       "": "Other",
     };
 
-    const formattedDeviceBreakdown = (deviceBreakdown as any[]).map((row: any) => ({
-      device: deviceLabels[row.device] || row.device || "Other",
+    const formattedDeviceBreakdown = deviceBreakdown.map((row) => ({
+      device: deviceLabels[row.device ?? ""] || row.device || "Other",
       count: row._count.path,
     }));
 
     return NextResponse.json({
-      topPages: topPages.map((row: any) => ({
+      topPages: topPages.map((row) => ({
         path: row.path,
         views: row._count.path,
       })),
-      topReferrers: topReferrers.map((row: any) => ({
+      topReferrers: topReferrers.map((row) => ({
         referrer: row.referrer,
         views: row._count.path,
       })),

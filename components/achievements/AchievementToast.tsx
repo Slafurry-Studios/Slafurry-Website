@@ -131,13 +131,13 @@ function AchievementToast({
       {/* Text */}
       <div className="min-w-0 flex-1">
         <p className="text-[11px] font-display font-semibold uppercase tracking-wider text-yellow-400 dark:text-yellow-500 mb-0.5">
-          "NEW!"
+          &ldquo;NEW!&rdquo;
         </p>
         <p className="font-display text-lg leading-tight truncate">
           {entry.title}
         </p>
         <p className="text-xs text-neutral-400 dark:text-neutral-500 font-display mt-0.5">
-          "Unlocked"
+          &ldquo;Unlocked&rdquo;
         </p>
       </div>
 

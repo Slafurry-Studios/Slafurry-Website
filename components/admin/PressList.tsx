@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, DragEvent } from "react";
+import { useState, DragEvent } from "react";
 import {
   IconExternalLink,
   IconCalendar,
@@ -92,13 +92,16 @@ export function PressList({
   const [dragOverId, setDragOverId] = useState<string | null>();
   const [releaseRows, setReleaseRows] = useState<ReleaseRow[]>(releases);
   const [assetRows, setAssetRows] = useState<AssetRow[]>(assets);
-
-  useEffect(() => {
+  const [prevReleases, setPrevReleases] = useState(releases);
+  const [prevAssets, setPrevAssets] = useState(assets);
+  if (prevReleases !== releases) {
+    setPrevReleases(releases);
     setReleaseRows(releases);
-  }, [releases]);
-  useEffect(() => {
+  }
+  if (prevAssets !== assets) {
+    setPrevAssets(assets);
     setAssetRows(assets);
-  }, [assets]);
+  }
 
   const visibleReleases = releaseRows.filter(r => !r.isHidden);
   const hiddenReleases = releaseRows.filter(r => r.isHidden);

@@ -56,14 +56,15 @@ export async function PUT(request: Request) {
     });
 
     return NextResponse.json(settings);
-  } catch (error: any) {
+  } catch (error) {
+    const err = error as { message?: string; code?: string; meta?: unknown };
     console.error("Update settings error:", {
-      message: error.message,
-      code: error.code,
-      meta: error.meta,
+      message: err.message,
+      code: err.code,
+      meta: err.meta,
     });
     return NextResponse.json(
-      { error: error.message || "Something went wrong." },
+      { error: err.message || "Something went wrong." },
       { status: 500 }
     );
   }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, DragEvent } from "react";
+import { useState, DragEvent } from "react";
 import Link from "next/link";
 import {
   IconPlus,
@@ -74,10 +74,11 @@ export function PostsList({
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>();
   const [rows, setRows] = useState<PostRow[]>(posts);
-
-  useEffect(() => {
+  const [prevPosts, setPrevPosts] = useState(posts);
+  if (prevPosts !== posts) {
+    setPrevPosts(posts);
     setRows(posts);
-  }, [posts]);
+  }
 
   const visibleCount = rows.filter(p => p.category === activeTab && !p.isHidden).length;
   const hiddenCount = rows.filter(p => p.category === activeTab && p.isHidden).length;

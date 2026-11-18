@@ -276,18 +276,17 @@ test.describe("Media", () => {
     await page.getByRole("link", { name: "Games" }).click();
     await page.getByRole("link", { name: "New Game" }).click();
 
-    const file = await page.evaluateHandle(() => {
+    const base64 = await page.evaluate(() => {
       const canvas = document.createElement("canvas");
       canvas.width = 10;
       canvas.height = 10;
-      const url = canvas.toDataURL("image/png");
-      const byteString = atob(url.split(",")[1]);
-      const ab = new ArrayBuffer(byteString.length);
-      const ia = new Uint8Array(ab);
-      for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
-      return new File([ab], "qa-test.png", { type: "image/png" });
+      return canvas.toDataURL("image/png").split(",")[1];
     });
-    await page.setInputFiles('input[type="file"][accept*="image"]', file as any);
+    await page.setInputFiles('input[type="file"][accept*="image"]', {
+      name: "qa-test.png",
+      mimeType: "image/png",
+      buffer: Buffer.from(base64, "base64"),
+    });
     await expect(page.getByRole("button", { name: /Create Game/ })).toBeVisible();
   });
 });

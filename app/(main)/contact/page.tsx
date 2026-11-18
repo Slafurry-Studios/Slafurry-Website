@@ -23,9 +23,9 @@ export default async function ContactPage() {
           className="pixel-border p-4 transition-all hover:scale-[1.02]"
         >
           <IconMail size={20} className="text-neutral-700 dark:text-neutral-300" />
-          <p className="mt-2 font-display text-lg font-semibold">"Say Hello"</p>
+          <p className="mt-2 font-display text-lg font-semibold">&ldquo;Say Hello&rdquo;</p>
           <p className="mt-0.5 font-display text-xs text-neutral-500 dark:text-neutral-400">
-            "General questions, fan mail"
+            &ldquo;General questions, fan mail&rdquo;
           </p>
         </a>
         <a
@@ -33,16 +33,16 @@ export default async function ContactPage() {
           className="pixel-border p-4 transition-all hover:scale-[1.02]"
         >
           <IconBriefcase size={20} className="text-neutral-700 dark:text-neutral-300" />
-          <p className="mt-2 font-display text-lg font-semibold">"Business Inquiries"</p>
+          <p className="mt-2 font-display text-lg font-semibold">&ldquo;Business Inquiries&rdquo;</p>
           <p className="mt-0.5 font-display text-xs text-neutral-500 dark:text-neutral-400">
-            "Partnerships, press, publishing"
+            &ldquo;Partnerships, press, publishing&rdquo;
           </p>
         </a>
       </div>
 
       <div className="mt-10 border-t border-neutral-200 pt-8 dark:border-neutral-800">
         <p className="mb-4 font-display text-lg text-neutral-500 dark:text-neutral-400">
-          "Or send a message directly"
+          &ldquo;Or send a message directly&rdquo;
         </p>
         <ContactForm />
       </div>

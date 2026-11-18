@@ -29,14 +29,14 @@ export default async function NotFound() {
       <h1 className="mt-1 font-display text-3xl tracking-wide">Page not found</h1>
 
       <p className="joke-only mt-3 max-w-sm font-display text-xl text-neutral-500 dark:text-neutral-400">
-        "Looks like you're lost. Maybe this page got caught in a joke that went too far."
+        &ldquo;Looks like you&apos;re lost. Maybe this page got caught in a joke that went too far.&rdquo;
       </p>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <PillButton href="/" variant="solid">
-          "Back to Home"
+          &ldquo;Back to Home&rdquo;
         </PillButton>
-        <PillButton href="/games">"View Our Games"</PillButton>
+        <PillButton href="/games">&ldquo;View Our Games&rdquo;</PillButton>
       </div>
     </div>
   );

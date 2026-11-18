@@ -55,14 +55,15 @@ export async function POST(request: Request) {
       bucket,
       filename: path,
     });
-  } catch (error: any) {
+  } catch (error) {
+    const err = error as { message?: string; status?: number };
     console.error("Upload route error:", {
-      message: error.message,
-      status: error.status,
+      message: err.message,
+      status: err.status,
     });
     return NextResponse.json(
-      { error: error.message || "Upload failed." },
-      { status: error.status ?? 500 }
+      { error: err.message || "Upload failed." },
+      { status: err.status ?? 500 }
     );
   }
 }

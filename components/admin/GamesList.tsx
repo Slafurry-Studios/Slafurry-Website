@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, DragEvent } from "react";
+import { useState, DragEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -66,10 +66,11 @@ export function GamesList({ games }: { games: GameRow[] }) {
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>();
   const [rows, setRows] = useState<GameRow[]>(games);
-
-  useEffect(() => {
+  const [prevGames, setPrevGames] = useState(games);
+  if (prevGames !== games) {
+    setPrevGames(games);
     setRows(games);
-  }, [games]);
+  }
 
   const visibleCount = rows.filter((g) => !g.isHidden).length;
   const hiddenCount = rows.filter((g) => g.isHidden).length;

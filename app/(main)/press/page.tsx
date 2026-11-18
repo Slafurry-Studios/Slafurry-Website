@@ -62,7 +62,7 @@ export default async function PressPage() {
         </div>
 
         <div>
-          <h1 className="font-display text-4xl tracking-wide">"Press Kit"</h1>
+          <h1 className="font-display text-4xl tracking-wide">&ldquo;Press Kit&rdquo;</h1>
           <div className="mt-6 space-y-8">
             {Object.entries(assetsByLabel).map(([label, assets]) => (
               <div key={label}>
@@ -77,7 +77,7 @@ export default async function PressPage() {
                         <IconDownload size={14} className="text-neutral-400" />
                         <span className="font-medium">{ASSET_TYPE_LABEL[asset.type]}:</span>
                         <span className="text-neutral-500 dark:text-neutral-400">
-                          "Download"
+                          &ldquo;Download&rdquo;
                         </span>
                       </a>
                     </li>
@@ -90,7 +90,7 @@ export default async function PressPage() {
       </div>
 
       <p className="mx-auto mt-16 max-w-7xl border-t border-neutral-200 pt-8 text-center font-display text-lg text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-        "For press inquiries, contact us at"{" "}
+        &ldquo;For press inquiries, contact us at&rdquo;{" "}
         <a
           href={`mailto:${PRESS_CONTACT_EMAIL}`}
           className="break-all font-semibold text-neutral-900 underline underline-offset-2 dark:text-white"
