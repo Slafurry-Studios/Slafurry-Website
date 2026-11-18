@@ -1,25 +1,32 @@
 import { IconMail, IconBriefcase } from "@tabler/icons-react";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { getSiteSettings } from "@/lib/queries/home";
 
-// TODO (step 4): heading/intro dan email tarik dari SiteSettings
-// (contactHeading/contactIntro, contactEmail, businessEmail).
-const CONTACT_EMAIL = "hello@slafurrystudios.com";
-const BUSINESS_EMAIL = "business@slafurrystudios.com";
-const MOCK_INTRO =
+const FALLBACK_CONTACT_EMAIL = "hello@slafurrystudios.com";
+const FALLBACK_BUSINESS_EMAIL = "business@slafurrystudios.com";
+const FALLBACK_INTRO =
   "Got a question, a business proposal, or just want to say the joke worked? Pick a channel below.";
 
+// ISR: edit SiteSettings dari admin muncul tanpa rebuild (maks. 60 detik).
+export const revalidate = 60;
+
 export default async function ContactPage() {
-  
+  const settings = await getSiteSettings();
+  const heading = settings?.contactHeading || "Contact Us";
+  const intro = settings?.contactIntro || FALLBACK_INTRO;
+  const contactEmail = settings?.contactEmail || FALLBACK_CONTACT_EMAIL;
+  const businessEmail = settings?.businessEmail || FALLBACK_BUSINESS_EMAIL;
+
   return (
     <div className="mx-auto max-w-4xl px-6 py-16 md:px-10">
-      <h1 className="font-display text-5xl tracking-wide">Contact Us</h1>
+      <h1 className="font-display text-5xl tracking-wide">{heading}</h1>
       <p className="mt-3 font-display text-lg text-neutral-600 dark:text-neutral-400">
-        {MOCK_INTRO}
+        {intro}
       </p>
 
       <div className="mt-8 grid gap-3 sm:grid-cols-2">
         <a
-          href={`mailto:${CONTACT_EMAIL}`}
+          href={`mailto:${contactEmail}`}
           className="pixel-border p-4 transition-all hover:scale-[1.02]"
         >
           <IconMail size={20} className="text-neutral-700 dark:text-neutral-300" />
@@ -29,7 +36,7 @@ export default async function ContactPage() {
           </p>
         </a>
         <a
-          href={`mailto:${BUSINESS_EMAIL}`}
+          href={`mailto:${businessEmail}`}
           className="pixel-border p-4 transition-all hover:scale-[1.02]"
         >
           <IconBriefcase size={20} className="text-neutral-700 dark:text-neutral-300" />

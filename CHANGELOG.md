@@ -8,16 +8,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Local PostgreSQL (Docker) with auth and storage adapters; provider (`local` | `supabase`) chosen via env vars (`AUTH_PROVIDER`, `STORAGE_PROVIDER`); portable migrations via `prisma migrate` (no auth/storage schema, RLS, triggers, or Supabase functions).
-- Auth adapter (`getSession`, `requireAdmin`, `signIn`, `signOut`) and storage adapter (`upload`, `getUrl`, `delete`) with local and Supabase implementations.
-- Website typography refresh: Pixelify Sans for display headings, Geist Pixel for UI (nav, buttons, badges, metadata), Geist Sans for body/reading text; replaces Caveat and Delicious Handrawn.
+- Contact and press pages pull heading, intro, and emails from `SiteSettings` (admin-editable; ISR 60s).
 
 ### Changed
 ### Deprecated
 ### Removed
-- `messages/en.json` and remaining next-intl/i18n code; site is single language (English), URLs unchanged.
 ### Fixed
+- Post “more” button no longer spawns when there is no more content ([#156](https://github.com/Slafurry-Studios/Slafurry-Website/pull/156)).
+- Upcoming games no longer take featured slots ([#157](https://github.com/Slafurry-Studios/Slafurry-Website/pull/157)).
 ### Security
+
+## [v1.15.1] - 2026-11-15
+
+### Added
+- Draggable ordering for admin lists and project carousel ([#151](https://github.com/Slafurry-Studios/Slafurry-Website/pull/151)).
+
+### Changed
+- Public page layout and line-break components ([#154](https://github.com/Slafurry-Studios/Slafurry-Website/pull/154)).
+- README refresh ([#155](https://github.com/Slafurry-Studios/Slafurry-Website/pull/155)).
+
+### Deprecated
+### Removed
+### Fixed
+- Project carousel container and image size ([#150](https://github.com/Slafurry-Studios/Slafurry-Website/pull/150)).
+- Admin login/forgot-password layout ([#152](https://github.com/Slafurry-Studios/Slafurry-Website/pull/152)).
+- Draggable reorder delay ([#153](https://github.com/Slafurry-Studios/Slafurry-Website/pull/153)).
+### Security
+
+## [v1.15.0] - 2026-11-15
+
+### Added
+- Local PostgreSQL (Docker) with auth and storage adapters; provider (`local` | `supabase`) chosen via env vars (`AUTH_PROVIDER`, `STORAGE_PROVIDER`); portable migrations via `prisma migrate` (no auth/storage schema, RLS, triggers, or Supabase functions).
+- Auth adapter (`getSession`, `requireAdmin`, `signIn`, `signOut`) and storage adapter (`upload`, `getUrl`, `delete`) with local and Supabase implementations.
+- Website typography refresh: Pixelify Sans for display headings, Geist Pixel for UI (nav, buttons, badges, metadata), Geist Sans for body/reading text; replaces Caveat and Delicious Handrawn.
+- UX heuristic fixes, animations, YouTube preview, admin panel support ([#140](https://github.com/Slafurry-Studios/Slafurry-Website/pull/140)).
+- Cloudflare Turnstile captcha on comment and contact forms.
+
+### Changed
+- Project carousel order reversed ([#148](https://github.com/Slafurry-Studios/Slafurry-Website/pull/148)).
+- Incomplete admin-panel feature removed ([#147](https://github.com/Slafurry-Studios/Slafurry-Website/pull/147)).
+- Prisma removed from Next.js middleware to fix deploy ([#141](https://github.com/Slafurry-Studios/Slafurry-Website/pull/141), [#142](https://github.com/Slafurry-Studios/Slafurry-Website/pull/142)).
+
+### Deprecated
+### Removed
+- `messages/en.json` and remaining next-intl/i18n code; site is single language (English), URLs unchanged.
+
+### Fixed
+- Stale press-kit assets ([#149](https://github.com/Slafurry-Studios/Slafurry-Website/pull/149)).
+- Home project-carousel image sizing and game-page order issues.
+
+### Security
+- Security hardening Tasks 1–8 ([#143](https://github.com/Slafurry-Studios/Slafurry-Website/pull/143)).
+- `sanitizeRichText` never throws on server; jsdom-based sanitizer replaced to fix serverless 500s on slug pages ([#144](https://github.com/Slafurry-Studios/Slafurry-Website/pull/144), [#145](https://github.com/Slafurry-Studios/Slafurry-Website/pull/145)).
 
 ## [v1.14.1] - 2026-11-06
 
@@ -34,5 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-[unreleased]: https://github.com/Slafurry-Studios/Slafurry-Website/compare/v1.14.1...HEAD
+[unreleased]: https://github.com/Slafurry-Studios/Slafurry-Website/compare/v1.15.1-release...HEAD
+[v1.15.1]: https://github.com/Slafurry-Studios/Slafurry-Website/compare/v1.15.0-release...v1.15.1-release
+[v1.15.0]: https://github.com/Slafurry-Studios/Slafurry-Website/compare/v1.14.1...v1.15.0-release
 [v1.14.1]: https://github.com/Slafurry-Studios/Slafurry-Website/compare/v1.14.0-alpha...v1.14.1
