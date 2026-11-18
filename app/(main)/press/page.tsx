@@ -1,9 +1,9 @@
 import { IconExternalLink, IconDownload } from "@tabler/icons-react";
 import { formatDate } from "@/lib/format";
 import { getPressReleases, getPressKitAssets } from "@/lib/queries/press";
+import { getSiteSettings } from "@/lib/queries/home";
 
-// TODO: contactEmail dari SiteSettings pas step 4 (hook database).
-const PRESS_CONTACT_EMAIL = "press@slafurrystudios.com";
+const FALLBACK_PRESS_EMAIL = "press@slafurrystudios.com";
 
 const ASSET_TYPE_LABEL: Record<string, string> = {
   LOGO: "Logo",
@@ -16,10 +16,12 @@ export const revalidate = 60;
 
 export default async function PressPage() {
   
-  const [releases, assets] = await Promise.all([
+  const [releases, assets, settings] = await Promise.all([
     getPressReleases(),
     getPressKitAssets(),
+    getSiteSettings(),
   ]);
+  const pressEmail = settings?.contactEmail || FALLBACK_PRESS_EMAIL;
 
   const releasesByOutlet = groupBy(releases, (r) => r.outlet);
   const assetsByLabel = groupBy(assets, (a) => a.label);
@@ -92,10 +94,10 @@ export default async function PressPage() {
       <p className="mx-auto mt-16 max-w-7xl border-t border-neutral-200 pt-8 text-center font-display text-lg text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
         "For press inquiries, contact us at"{" "}
         <a
-          href={`mailto:${PRESS_CONTACT_EMAIL}`}
+          href={`mailto:${pressEmail}`}
           className="break-all font-semibold text-neutral-900 underline underline-offset-2 dark:text-white"
         >
-          {PRESS_CONTACT_EMAIL}
+          {pressEmail}
         </a>
       </p>
     </div>
