@@ -1,5 +1,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { ConsentBanner } from "@/components/analytics/ConsentBanner";
+import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 // Achievements feature disabled sementara — balikin komponen di bawah
 // kalau mau nyalain lagi.
 // import { AchievementToastContainer } from "@/components/achievements/AchievementToast";
@@ -20,6 +22,8 @@ export default function MainLayout({
           dapet clearance yang bener dari padding ini. */}
       <main className="flex-1 pt-24 mx-auto w-full max-w-7xl px-4 md:px-8">{children}</main>
       <Footer />
+      <ConsentBanner />
+      <PageViewTracker />
       {/* Achievement feature disabled sementara — jangan render dulu. */}
       {/* <AchievementToastContainer /> */}
       {/* <AchievementCTA /> */}

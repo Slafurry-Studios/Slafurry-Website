@@ -39,6 +39,12 @@ There are three layers. Each new admin surface needs the right one:
 
 Don't add `loading.tsx` (or a `<Suspense>` fallback that renders above the page) to `app/(main)/`. Either one starts streaming before `notFound()` or `permanentRedirect()` runs, which locks the response to `200` and turns 404s into soft-404s. `tests/e2e/not-found.spec.ts` guards this. If a page needs a skeleton, put the `<Suspense>` inside that page, below any `notFound()` check.
 
+## Analytics
+
+- Tracking is opt-in. `components/analytics/ConsentBanner.tsx` writes the `analytics_consent` cookie (`lib/analytics/consent.ts`). `PageViewTracker` sends a beacon per route change only when that cookie is `granted`, and `/api/analytics/track` checks the cookie again server-side.
+- The track endpoint stores only the path (allowlisted in `lib/analytics/track.ts`), referring hostname, device class and the `x-vercel-ip-country` header. Keep it that way: no IPs or full referrer URLs.
+- Admin reads go through `lib/queries/analytics.ts`, used by both `/admin/analytics` and `GET /api/analytics`.
+
 ## Security headers
 
 Headers are set in `next.config.ts` `headers()`. The CSP is still `Content-Security-Policy-Report-Only`, with violations logged by `/api/csp-reports`.

@@ -3,6 +3,7 @@ import { SlafurryMark } from "@/components/icons/SlafurryMark";
 import { BrandIcon } from "@/components/icons/BrandIcon";
 import { getFooterLinks } from "@/lib/queries/home";
 import type { SocialLink } from "@prisma/client";
+import { CookieSettingsButton } from "@/components/analytics/CookieSettingsButton";
 
 export async function Footer() {
   const links: SocialLink[] = await getFooterLinks();
@@ -39,6 +40,8 @@ export async function Footer() {
 
         <p className="pt-6 text-center font-display text-xs text-neutral-400">
           © {new Date().getFullYear()} Slafurry Studios. All Rights Reserved.
+          <span aria-hidden="true"> · </span>
+          <CookieSettingsButton />
         </p>
       </footer>
     </div>

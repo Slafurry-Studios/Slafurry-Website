@@ -9,6 +9,7 @@ import {
   IconClock,
   IconMail,
   IconDeviceGamepad2,
+  IconChartBar,
 } from "@tabler/icons-react";
 
 const NAV_ITEMS = [
@@ -58,11 +59,11 @@ const NAV_ITEMS = [
   //   href: "/admin/montage",
   //   icon: IconPhone,
   // },
-  // {
-  //   label: "Analytics",
-  //   href: "/admin/analytics",
-  //   icon: IconLayoutDashboard,
-  // },
+  {
+    label: "Analytics",
+    href: "/admin/analytics",
+    icon: IconChartBar,
+  },
 ];
 
 type AdminLayoutProps = {

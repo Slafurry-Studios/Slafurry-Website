@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Analytics consent banner (pixel-frame style) with a "Cookie settings" link in the footer to change the choice; respects Global Privacy Control.
+- Page-view tracking for public pages, sent only after the visitor accepts. Stores path, referring site hostname, device class and country (from Vercel's header); no IPs, no full referrer URLs.
+- Admin analytics page is back in the admin nav, with total views and empty states.
 - Contact and press pages pull heading, intro, and emails from `SiteSettings` (admin-editable; ISR 60s).
 
 ### Changed
@@ -17,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unused `POST /api/comments` route, which skipped the Turnstile check the comment form's server action enforces.
 - `app/(main)/loading.tsx` (see Fixed).
 ### Fixed
+- Admin analytics page links no longer render as `//games` (protocol-relative to another host), and it queries the DB directly instead of fetching its own API.
 - RSS feed links no longer point at the removed `/en/` prefix, and the fallback domain typo (`slafurystudios.com`) is fixed.
 - `metadataBase` is set, so Open Graph/Twitter image URLs resolve to the site domain instead of localhost.
 - Analytics tracking accepts the current page paths (it still listed the old `/en/...` paths).
@@ -24,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Post “more” button no longer spawns when there is no more content ([#156](https://github.com/Slafurry-Studios/Slafurry-Website/pull/156)).
 - Upcoming games no longer take featured slots ([#157](https://github.com/Slafurry-Studios/Slafurry-Website/pull/157)).
 ### Security
+- `/api/analytics/track` checks the consent cookie server-side, derives device and country itself instead of trusting the client, skips bots, and rate-limits per IP on the server (the old limit was a cookie the client could delete).
+- New migration `rls_production_policies_2_pageview_admin_read` restricts direct `PageView` reads to admins (it was publicly readable via the Supabase API). Not applied automatically.
 - Plaintext achievement flag code removed from `app/(main)/not-found.tsx` comments.
 - Admin API routes and server-rendered admin pages now check the `AdminUser` allowlist; previously reorder, autosave, upload, settings, social links, read endpoints and admin pages only required *any* signed-in Supabase account. `/api/analytics` now requires admin too.
 - Rich-text sanitizer replaced with DOMPurify; the hand-rolled one let entity-encoded `javascript:` links and unclosed tags through.
