@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 /**
  * Looks up a stored Redirect for `pathname` and issues a 308 if one exists.
  * Called right before `notFound()` so stale slugs resolve to their new URL.
- * (This used to live in proxy.ts, but middleware cannot use Prisma on Netlify.)
+ * (This used to live in proxy.ts, but middleware cannot use Prisma.)
  */
 export async function followStoredRedirect(pathname: string): Promise<void> {
   let to: string | null = null;

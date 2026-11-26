@@ -41,4 +41,4 @@ Don't add `loading.tsx` (or a `<Suspense>` fallback that renders above the page)
 
 ## Security headers
 
-Headers are set in `next.config.ts` `headers()`, not in `netlify.toml`, because Vercel ignores that file. The CSP is still `Content-Security-Policy-Report-Only`, with violations logged by `/api/csp-reports`.
+Headers are set in `next.config.ts` `headers()`. The CSP is still `Content-Security-Policy-Report-Only`, with violations logged by `/api/csp-reports`.

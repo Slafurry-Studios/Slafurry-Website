@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { defaultCookies } from "../adapter";
 import type { AuthProvider, CookieStore, SessionResult, AdminContext } from "../adapter";
 
 export class SupabaseAuthProvider implements AuthProvider {
@@ -56,25 +57,4 @@ export class SupabaseAuthProvider implements AuthProvider {
     const supabase = createClient(store);
     await supabase.auth.signOut();
   }
-}
-
-async function defaultCookies(): Promise<CookieStore> {
-  const { cookies } = await import("next/headers");
-  const store = await cookies();
-  return {
-    getAll: () => store.getAll(),
-    setAll: (cookiesToSet) => {
-      const storeAny = store as unknown as {
-        setAll?: (c: { name: string; value: string; options?: Record<string, unknown> }[]) => void;
-        set?: (n: string, v: string, o?: unknown) => void;
-      };
-      if (typeof storeAny.setAll === "function") {
-        storeAny.setAll(cookiesToSet);
-      } else if (typeof storeAny.set === "function") {
-        for (const { name, value, options } of cookiesToSet) {
-          storeAny.set(name, value, options);
-        }
-      }
-    },
-  };
 }

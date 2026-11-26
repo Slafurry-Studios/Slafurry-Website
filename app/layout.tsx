@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 
 import { fontDisplay } from "@/lib/fonts";
 import { SettingsProvider } from "@/components/layout/SettingsContext";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Slafurry Studios",
   description: "Indie game developers. The joke went too far. Now we are going professional.",
   icons: {

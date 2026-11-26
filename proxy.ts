@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import type { CookieStore } from "@/lib/auth/adapter";
-// Must stay Prisma-free: Netlify can't bundle Prisma's native engine into middleware.
+// Must stay Prisma-free: Prisma's native engine can't load in middleware.
 import { getProxySession } from "@/lib/auth/proxy-session";
 import { isCrossSiteRequest, isUnsafeMethod } from "@/lib/security/csrf";
 

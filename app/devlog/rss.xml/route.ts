@@ -1,7 +1,7 @@
 import { getPublishedPosts } from "@/lib/queries/posts";
 import { NextResponse } from "next/server";
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://slafurystudios.com";
+import { SITE_URL } from "@/lib/site";
 
 export async function GET() {
   const posts = await getPublishedPosts("DEVLOG", 20);
@@ -12,8 +12,8 @@ export async function GET() {
     <item>
       <title>${post.title}</title>
       <description>${post.excerpt}</description>
-      <link>${SITE_URL}/en/devlog/${post.slug}</link>
-      <guid>${SITE_URL}/en/devlog/${post.slug}</guid>
+      <link>${SITE_URL}/devlog/${post.slug}</link>
+      <guid>${SITE_URL}/devlog/${post.slug}</guid>
       <pubDate>${post.publishedAt ? new Date(post.publishedAt).toUTCString() : new Date().toUTCString()}</pubDate>
     </item>`
     )
@@ -24,7 +24,7 @@ export async function GET() {
       <channel>
         <title>Slafurry Studios - Devlog</title>
         <description>Development blog for Slafurry Studios games</description>
-        <link>${SITE_URL}/en/devlog</link>
+        <link>${SITE_URL}/devlog</link>
         <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
         ${items}
       </channel>

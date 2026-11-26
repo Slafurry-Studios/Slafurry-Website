@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { defaultCookies } from "../adapter";
 import type { AuthProvider, CookieStore, SessionResult, AdminContext, AuthUser } from "../adapter";
 import {
   LOCAL_SESSION_COOKIE,
@@ -138,25 +139,4 @@ export class LocalAuthProvider implements AuthProvider {
     );
     return { name: LOCAL_SESSION_COOKIE, value, options: { ...SESSION_COOKIE_OPTIONS } };
   }
-}
-
-async function defaultCookies(): Promise<CookieStore> {
-  const { cookies } = await import("next/headers");
-  const store = await cookies();
-  return {
-    getAll: () => store.getAll(),
-    setAll: (cookiesToSet) => {
-      const storeAny = store as unknown as {
-        setAll?: (c: { name: string; value: string; options?: Record<string, unknown> }[]) => void;
-        set?: (n: string, v: string, o?: unknown) => void;
-      };
-      if (typeof storeAny.setAll === "function") {
-        storeAny.setAll(cookiesToSet);
-      } else if (typeof storeAny.set === "function") {
-        for (const { name, value, options } of cookiesToSet) {
-          storeAny.set(name, value, options);
-        }
-      }
-    },
-  };
 }

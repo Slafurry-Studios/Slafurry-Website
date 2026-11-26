@@ -1,7 +1,7 @@
 // Prisma-free session lookup for `proxy.ts` (Next.js middleware).
 //
 // Middleware is bundled separately and must not pull in Prisma: its native
-// query engine (.node addon) is unsupported in middleware on Netlify. The full
+// query engine (.node addon) is unsupported in middleware. The full
 // auth providers in ./providers/* import Prisma (for AdminUser lookups), so the
 // proxy uses this module instead. Keep it free of any `@/lib/prisma` import.
 import { createClient } from "@/lib/supabase/server";
