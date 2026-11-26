@@ -41,7 +41,11 @@ export async function Footer() {
         <p className="pt-6 text-center font-display text-xs text-neutral-400">
           © {new Date().getFullYear()} Slafurry Studios. All Rights Reserved.
           <span aria-hidden="true"> · </span>
-          <CookieSettingsButton />
+          <Link href="/privacy" className="underline underline-offset-2 hover:text-white">
+            Privacy
+          </Link>
+          <span aria-hidden="true"> · </span>
+          <CookieSettingsButton className="hover:text-white" />
         </p>
       </footer>
     </div>

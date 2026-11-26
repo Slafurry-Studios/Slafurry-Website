@@ -4,7 +4,7 @@ export function getYoutubeEmbedUrl(playLinks: { label: string; url: string }[]):
   const youtubeLink = playLinks.find((l) => YOUTUBE_REGEX.test(l.url));
   if (!youtubeLink) return null;
   const id = youtubeLink.url.match(YOUTUBE_REGEX)?.[1];
-  return id ? `https://www.youtube.com/embed/${id}` : null;
+  return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
 }
 
 export function isYoutubeUrl(url: string): boolean {

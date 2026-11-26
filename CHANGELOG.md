@@ -8,12 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `/privacy` page describing what the site collects (opt-in analytics, comments, contact form, Turnstile, YouTube, hosting), linked from the footer and the consent banner.
+- `ADMIN_EMAILS` env var: comma-separated emails that are provisioned as admin on first sign-in.
+- Shared rate limiting: counters live in a new `RateLimit` table in production, so limits hold across serverless instances (migration `20261126120000_add_rate_limit`).
+- E2E test `admin-authz.spec.ts` for unauthenticated and signed-in non-admin access (needs `NON_ADMIN_TEST_EMAIL` / `NON_ADMIN_TEST_PASSWORD`).
 - Analytics consent banner (pixel-frame style) with a "Cookie settings" link in the footer to change the choice; respects Global Privacy Control.
 - Page-view tracking for public pages, sent only after the visitor accepts. Stores path, referring site hostname, device class and country (from Vercel's header); no IPs, no full referrer URLs.
 - Admin analytics page is back in the admin nav, with total views and empty states.
 - Contact and press pages pull heading, intro, and emails from `SiteSettings` (admin-editable; ISR 60s).
 
 ### Changed
+- YouTube trailers use the privacy-enhanced `youtube-nocookie.com` player.
 ### Deprecated
 ### Removed
 - Netlify leftovers: `netlify.toml` and the `@netlify/plugin-nextjs` dev dependency (production is Vercel).
@@ -28,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Post “more” button no longer spawns when there is no more content ([#156](https://github.com/Slafurry-Studios/Slafurry-Website/pull/156)).
 - Upcoming games no longer take featured slots ([#157](https://github.com/Slafurry-Studios/Slafurry-Website/pull/157)).
 ### Security
+- **BREAKING:** removed the "first signed-in user becomes admin when the AdminUser table is empty" fallback (it lived in the admin guard and in both auth providers). Existing admins are unaffected; new admins need their email in `ADMIN_EMAILS`.
 - `/api/analytics/track` checks the consent cookie server-side, derives device and country itself instead of trusting the client, skips bots, and rate-limits per IP on the server (the old limit was a cookie the client could delete).
 - New migration `rls_production_policies_2_pageview_admin_read` restricts direct `PageView` reads to admins (it was publicly readable via the Supabase API). Not applied automatically.
 - Plaintext achievement flag code removed from `app/(main)/not-found.tsx` comments.

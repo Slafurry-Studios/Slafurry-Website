@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { defaultCookies } from "../adapter";
+import { resolveAdminUser } from "../admin-users";
 import type { AuthProvider, CookieStore, SessionResult, AdminContext, AuthUser } from "../adapter";
 import {
   LOCAL_SESSION_COOKIE,
@@ -71,21 +72,8 @@ export class LocalAuthProvider implements AuthProvider {
   async requireAdmin(cookies?: CookieStore): Promise<AdminContext> {
     const session = await this.getSession(cookies);
     if (!session.user) return null;
-
-    let adminUser = await prisma.adminUser.findUnique({
-      where: { supabaseUserId: session.user.id },
-    });
-    if (!adminUser) {
-      const adminCount = await prisma.adminUser.count();
-      if (adminCount === 0) {
-        adminUser = await prisma.adminUser.create({
-          data: { supabaseUserId: session.user.id, name: session.user.name ?? "Admin" },
-        });
-      } else {
-        return null;
-      }
-    }
-    return { user: session.user, adminUser: { id: adminUser.id, name: adminUser.name } };
+    const adminUser = await resolveAdminUser(session.user);
+    return adminUser ? { user: session.user, adminUser } : null;
   }
 
   async signIn(

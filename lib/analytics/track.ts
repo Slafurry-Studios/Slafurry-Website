@@ -1,7 +1,7 @@
 // Pure helpers for /api/analytics/track, kept separate so they are unit-tested.
 
 // Public pages worth counting. i18n was removed, so there is no `/en` prefix.
-const TRACKED_PATH = /^\/(?:(?:games|devlog|news)(?:\/[a-z0-9-]+)?|press|contact)?$/;
+const TRACKED_PATH = /^\/(?:(?:games|devlog|news)(?:\/[a-z0-9-]+)?|press|contact|privacy)?$/;
 
 export function normalizePath(pathname: string): string {
   return pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;

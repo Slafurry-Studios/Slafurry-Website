@@ -3,7 +3,7 @@ import { classifyDevice, isBot, isTrackedPath, normalizePath, referrerHost } fro
 
 describe("isTrackedPath", () => {
   it("accepts current public pages", () => {
-    for (const p of ["/", "/games", "/games/an-unfinished-game", "/news/x-y", "/devlog", "/press", "/contact"]) {
+    for (const p of ["/", "/games", "/games/an-unfinished-game", "/news/x-y", "/devlog", "/press", "/contact", "/privacy"]) {
       expect(isTrackedPath(normalizePath(p))).toBe(true);
     }
     expect(isTrackedPath(normalizePath("/games/"))).toBe(true);

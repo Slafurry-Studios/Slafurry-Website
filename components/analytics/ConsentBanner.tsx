@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
+import Link from "next/link";
 import {
   CONSENT_CHANGE_EVENT,
   CONSENT_OPEN_EVENT,
@@ -53,8 +54,11 @@ export function ConsentBanner() {
         </p>
         <p className="mt-2 text-sm leading-relaxed text-neutral-300">
           We&apos;d like to record which pages get visited, the site that sent you here and your
-          device type (phone, tablet or desktop). No accounts, no ad trackers, no third parties.
-          You can change this anytime from &ldquo;Cookie settings&rdquo; in the footer.
+          device type (phone, tablet or desktop). No IP addresses, nothing shared with advertisers.
+          Change it anytime from &ldquo;Cookie settings&rdquo; in the footer.{" "}
+          <Link href="/privacy" className="underline underline-offset-2 hover:text-white">
+            Privacy details
+          </Link>
         </p>
         <div className="mt-4 flex gap-3">
           <button
