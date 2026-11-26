@@ -49,9 +49,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts",
-    "scripts/generate-sitemap.cjs",
-    "app/data/articles.ts"
+    "**/*.mts"
   ],
   "exclude": [
     "node_modules"

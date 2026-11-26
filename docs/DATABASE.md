@@ -1,4 +1,4 @@
-# Panduan Database Lokal (Fase 2B)
+# Panduan Database Lokal
 
 Proyek ini bisa dijalankan sepenuhnya pada PostgreSQL lokal (Docker) tanpa akun
 Supabase. Prisma adalah satu-satunya jalur akses data. Semua koneksi diatur
