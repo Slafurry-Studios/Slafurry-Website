@@ -1,68 +1,25 @@
-import { PillButton } from "@/components/ui/PillButton";
-import { headers, cookies } from "next/headers";
 import Link from "next/link";
 import { requireAdminPage } from "@/lib/auth/admin-guard";
+import {
+  ANALYTICS_PERIODS,
+  getAnalyticsSummary,
+  normalizePeriod,
+  type AnalyticsSummary,
+} from "@/lib/queries/analytics";
 
-function formatBytes(n: number) {
-  return `${n} views`;
-}
+export const dynamic = "force-dynamic";
 
-const VALID_PERIODS = ["7d", "30d", "90d"] as const;
-type Period = (typeof VALID_PERIODS)[number];
+const PERIOD_LABELS: Record<string, string> = { "7d": "7 days", "30d": "30 days", "90d": "90 days" };
 
-type TopPage = { path: string; views: number };
-type TopReferrer = { referrer: string | null; views: number };
-type DeviceBreakdownRow = { device: string; count: number };
-type AnalyticsData = {
-  topPages?: TopPage[];
-  topReferrers?: TopReferrer[];
-  deviceBreakdown?: DeviceBreakdownRow[];
-};
+const views = (n: number) => `${n.toLocaleString("en")} ${n === 1 ? "view" : "views"}`;
 
-const EMPTY_ANALYTICS: AnalyticsData = {
-  topPages: [],
-  topReferrers: [],
-  deviceBreakdown: [],
-};
-
-function normalizePeriod(value: string | undefined): Period {
-  return (VALID_PERIODS as readonly string[]).includes(value ?? "")
-    ? (value as Period)
-    : "30d";
-}
-
-async function fetchAnalytics(period: string): Promise<AnalyticsData> {
-  const headersList = await headers();
-  const host = headersList.get("host");
-  const protocol = headersList.get("x-forwarded-proto") ?? "https";
-
-  const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL || (host ? `${protocol}://${host}` : "http://localhost:3000");
-
-  const url = `${baseUrl}/api/analytics?period=${encodeURIComponent(period)}`;
-
-  const cookieHeader = (await cookies()).toString();
-
-  let res: Response;
-  try {
-    res = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
-      },
-      cache: "no-store",
-    });
-  } catch (err) {
-    console.error("Analytics fetch network error:", err);
-    return EMPTY_ANALYTICS;
-  }
-
-  if (!res.ok) {
-    console.error(`Analytics fetch failed: ${res.status} ${res.statusText} (${url})`);
-    return EMPTY_ANALYTICS;
-  }
-
-  return res.json() as Promise<AnalyticsData>;
+function Card({ title, empty, children }: { title: string; empty: boolean; children: React.ReactNode }) {
+  return (
+    <section className="rounded-xl border border-neutral-200 bg-white p-6">
+      <h2 className="mb-4 font-display text-lg font-medium">{title}</h2>
+      {empty ? <p className="text-sm text-neutral-500">No visits recorded in this period.</p> : children}
+    </section>
+  );
 }
 
 export default async function AdminAnalyticsPage({
@@ -72,120 +29,99 @@ export default async function AdminAnalyticsPage({
 }) {
   await requireAdminPage();
 
-  const params = await searchParams;
-  const period = normalizePeriod(params.period);
+  const period = normalizePeriod((await searchParams).period);
 
-  const analytics = await fetchAnalytics(period);
-
-  const topPages = analytics.topPages ?? [];
-  const topReferrers = analytics.topReferrers ?? [];
-  const deviceBreakdown = analytics.deviceBreakdown ?? [];
+  let data: AnalyticsSummary | null = null;
+  try {
+    data = await getAnalyticsSummary(period);
+  } catch (error) {
+    console.error("Analytics query failed:", error);
+  }
 
   return (
     <div className="mx-auto max-w-7xl space-y-8 px-4 py-10">
-      <h1 className="font-display text-3xl tracking-tight">Analytics</h1>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl tracking-tight">Analytics</h1>
+          <p className="mt-1 text-sm text-neutral-500">
+            Only visitors who accepted the analytics banner are counted, so these numbers undercount real traffic.
+          </p>
+        </div>
 
-      {/* Period selector */}
-      <div className="grid gap-2 sm:grid-cols-4 md:grid-cols-5">
-        {VALID_PERIODS.map((p) => (
-          <Link key={p} href={`?period=${p}`} scroll={false}>
-            <PillButton
-              variant="outline"
-              className={period === p ? "w-full bg-neutral-900 text-white" : "w-full"}
+        <nav aria-label="Period" className="flex gap-2">
+          {Object.keys(ANALYTICS_PERIODS).map((p) => (
+            <Link
+              key={p}
+              href={`?period=${p}`}
+              scroll={false}
+              aria-current={period === p ? "page" : undefined}
+              className={`rounded-md border px-4 py-2 font-display text-sm ${
+                period === p
+                  ? "border-neutral-900 bg-neutral-900 text-white"
+                  : "border-neutral-300 hover:bg-neutral-100"
+              }`}
             >
-              {p}
-            </PillButton>
-          </Link>
-        ))}
+              {PERIOD_LABELS[p]}
+            </Link>
+          ))}
+        </nav>
       </div>
 
-      {/* Top 10 pages */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
-          <h2 className="mb-4 font-display text-lg font-medium">Top 10 Pages</h2>
+      {!data ? (
+        <p className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+          Couldn&apos;t load analytics right now. Try again in a moment.
+        </p>
+      ) : (
+        <>
+          <p className="font-display text-xl">
+            {views(data.totalViews)} <span className="text-neutral-500">in the last {PERIOD_LABELS[period]}</span>
+          </p>
 
-          <ul className="space-y-2 text-sm">
-            {topPages.map((page, i) => {
-              const path = page.path === "/" ? "Home" : page.path;
-              const label = path.length > 30 ? `${path.slice(0, 27)}…` : path;
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Card title="Top pages" empty={data.topPages.length === 0}>
+              <ol className="space-y-2 text-sm">
+                {data.topPages.map((page, i) => (
+                  <li key={page.path} className="flex items-center gap-2">
+                    <span className="w-6 text-xs text-neutral-500">#{i + 1}</span>
+                    <a
+                      href={page.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="min-w-0 truncate font-medium hover:underline"
+                    >
+                      {page.path === "/" ? "Home" : page.path}
+                    </a>
+                    <span className="ml-auto shrink-0 text-neutral-600">{views(page.views)}</span>
+                  </li>
+                ))}
+              </ol>
+            </Card>
 
-              return (
-                <li key={i} className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
-                    #{i + 1}
-                  </span>
+            <Card title="Top referrers" empty={data.topReferrers.length === 0}>
+              <ol className="space-y-2 text-sm">
+                {data.topReferrers.map((ref, i) => (
+                  <li key={ref.referrer ?? "direct"} className="flex items-center gap-2">
+                    <span className="w-6 text-xs text-neutral-500">#{i + 1}</span>
+                    <span className="min-w-0 truncate">{ref.referrer ?? "Direct / unknown"}</span>
+                    <span className="ml-auto shrink-0 text-neutral-600">{views(ref.views)}</span>
+                  </li>
+                ))}
+              </ol>
+            </Card>
 
-                  <a
-                    href={`/${page.path === "/" ? "" : page.path}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-primary-600 hover:underline dark:text-primary-400"
-                  >
-                    {label}
-                  </a>
-
-                  <span className="ml-auto text-right font-display text-sm dark:text-neutral-400">
-                    {formatBytes(page.views)}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-
-        {/* Top Referrers */}
-        <div className="rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
-          <h2 className="mb-4 font-display text-lg font-medium">Top Referrers</h2>
-
-          <ul className="space-y-2 text-sm">
-            {topReferrers.map((ref, i) => {
-              let label = "Direct";
-
-              if (ref.referrer) {
-                try {
-                  label = new URL(ref.referrer).hostname;
-                } catch {
-                  label = ref.referrer;
-                }
-              }
-
-              return (
-                <li key={i} className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
-                    #{i + 1}
-                  </span>
-
-                  <span className="max-w-xs truncate text-primary-600 dark:text-primary-400">
-                    {label}
-                  </span>
-
-                  <span className="ml-auto text-right font-display text-sm dark:text-neutral-400">
-                    {formatBytes(ref.views)}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-
-        {/* Device Breakdown */}
-        <div className="rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
-          <h2 className="mb-4 font-display text-lg font-medium">Device Breakdown</h2>
-
-          <div className="grid grid-cols-2 gap-2">
-            {deviceBreakdown.map((d) => (
-              <div key={d.device} className="flex items-center justify-between rounded-md px-3 py-1">
-                <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">
-                  {d.device}
-                </span>
-                <span className="text-right font-display text-xs dark:text-neutral-400">
-                  {formatBytes(d.count)}
-                </span>
-              </div>
-            ))}
+            <Card title="Devices" empty={data.deviceBreakdown.length === 0}>
+              <ul className="space-y-2 text-sm">
+                {data.deviceBreakdown.map((d, i) => (
+                  <li key={`${d.device}-${i}`} className="flex items-center justify-between">
+                    <span>{d.device}</span>
+                    <span className="text-neutral-600">{views(d.count)}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }

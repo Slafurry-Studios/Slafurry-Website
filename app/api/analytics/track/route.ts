@@ -1,82 +1,47 @@
 import { NextResponse } from "next/server";
-import { createHash } from "crypto";
-import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit } from "@/lib/actions/form-guards";
+import { CONSENT_COOKIE } from "@/lib/analytics/consent";
+import { classifyDevice, isBot, isTrackedPath, normalizePath, referrerHost } from "@/lib/analytics/track";
 
-// Public pages worth counting. i18n was removed, so there is no `/en` prefix.
-const TRACKED_PATH = /^\/(?:(?:games|devlog|news)(?:\/[a-z0-9-]+)?|press|contact)?$/;
+const MAX_PER_HOUR = 100;
 
-function normalizePath(pathname: string): string {
-  return pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
-}
-
-function isWhitelisted(pathname: string): boolean {
-  return TRACKED_PATH.test(pathname);
-}
-
-const MAX_FIELD_LEN = 512;
-function clip(value: string | undefined, max = MAX_FIELD_LEN) {
-  return value ? value.slice(0, max) : value;
-}
+// Always answer 204 for skipped pings: the client doesn't care, and a uniform
+// response doesn't tell scripts which check they failed.
+const skipped = () => new NextResponse(null, { status: 204 });
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    // Consent is enforced here, not just in the browser.
+    const cookieHeader = request.headers.get("cookie") ?? "";
+    const consent = cookieHeader
+      .split(/;\s*/)
+      .find((c) => c.startsWith(`${CONSENT_COOKIE}=`))
+      ?.split("=")[1];
+    if (consent !== "granted") return skipped();
 
+    const userAgent = request.headers.get("user-agent");
+    if (isBot(userAgent)) return skipped();
+
+    const body = (await request.json().catch(() => null)) as { path?: unknown; referrer?: unknown } | null;
     const path = normalizePath(String(body?.path ?? "").trim());
-    const referrer = clip(String(body?.referrer ?? "").trim() || undefined);
-    const country = clip(body?.country ? String(body.country).trim() : undefined, 8);
-    const device = clip(body?.device ? String(body.device).trim() : undefined, 32);
+    if (!isTrackedPath(path)) return skipped();
 
-    if (!path) {
-      return NextResponse.json({ error: "Path is required." }, { status: 400 });
-    }
-
-    if (!isWhitelisted(path)) {
-      return NextResponse.json({ error: "Path not tracked." }, { status: 403 });
-    }
-
-    // Rate limit: max 100 pings per IP per hour
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-    const ipHash = createHash("sha256").update(ip).digest("hex").slice(0, 16);
+    const limit = await checkRateLimit("track-visit", MAX_PER_HOUR, 60 * 60 * 1000, ip);
+    if (!limit.allowed) return new NextResponse(null, { status: 429 });
 
-    const rateKey = `track-visit-${ipHash}`;
-    const windowMs = 60 * 60 * 1000; // 1 hour
-    const maxAttempts = 100;
+    const siteHost = request.headers.get("host");
+    const referrer = referrerHost(typeof body?.referrer === "string" ? body.referrer : "", siteHost);
+    // Set by Vercel; absent locally.
+    const country = request.headers.get("x-vercel-ip-country")?.slice(0, 2).toUpperCase() || null;
 
-    const cookieStore = await cookies();
-    const cookieValue = cookieStore.get(rateKey)?.value;
-    const cookieCount = cookieValue ? parseInt(cookieValue, 10) : 0;
-
-    const allowed = cookieCount < maxAttempts;
-    const reason = allowed ? "" : "Rate limited.";
-
-    if (allowed) {
-      await prisma.pageView.create({
-        data: { path, referrer, country, device },
-      });
-    }
-
-    const newCount = allowed ? cookieCount + 1 : cookieCount;
-    const remaining = Math.max(0, maxAttempts - newCount);
-
-    const response = NextResponse.json(
-      { ok: allowed, remaining, reason },
-      { status: allowed ? 200 : 429 }
-    );
-
-    // Set/refresh the counter cookie directly on the response.
-    response.cookies.set(rateKey, String(newCount), {
-      expires: new Date(Date.now() + windowMs),
-      path: "/",
-      sameSite: "strict",
-      secure: true,
-      httpOnly: true, // client JS doesn't need to read this
+    await prisma.pageView.create({
+      data: { path, referrer, country, device: classifyDevice(userAgent) },
     });
-
-    return response;
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error("Analytics track error:", error);
-    return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
+    return new NextResponse(null, { status: 500 });
   }
 }
