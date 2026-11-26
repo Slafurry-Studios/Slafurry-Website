@@ -4,14 +4,13 @@ import { PillButton } from "@/components/ui/PillButton";
 // Achievement flag-hunting hook DISABLED sementara — jangan render hint
 // flag ke user (kode bocor lewat page source). Balikin span-nya di bawah
 // kalau feature nyalain lagi.
-// Code seed: slafury-flag-2024
-// Hash: sha256("slafury-flag-2024") = 258f2a81a07cdd569249d1606f9da76de201f74b0b6f707bbb37f730bcd439f1
-// Diverifikasi server-side lewat /api/achievements/redeem.
+// Jangan tulis kode flag asli di repo (repo-nya publik). Ganti <FLAG_CODE>
+// waktu re-enable; hash-nya dicek di /api/achievements/redeem (EXPECTED_HASH).
 // const FLAG_HINT_COMMENT = {
 //   __html:
-//     "<p><strong>Flag code:</strong> <code>slafury-flag-2024</code></p>" +
+//     "<p><strong>Flag code:</strong> <code><FLAG_CODE></code></p>" +
 //     "<p><strong>How to redeem:</strong> Masukkan kode di panel Achievement (AchievementCTA → tab Redeem) " +
-//     "atau melalui <code>/api/achievements/redeem</code> POST dengan body <code>{ code: \"slafury-flag-2024\" }</code>." +
+//     "atau melalui <code>/api/achievements/redeem</code> POST dengan body <code>{ code: \"<FLAG_CODE>\" }</code>." +
 //     "<p>Jika berhasil, akan mendapatkan achievement <em>Flag Hunter</em> dan notifikasi toast.</p>",
 // };
 

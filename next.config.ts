@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 
-// Served by Next itself so they apply on Vercel (netlify.toml headers are not).
+// Served by Next itself so they apply on Vercel.
 // CSP stays report-only until /api/csp-reports shows no legitimate violations;
 // promote it to `Content-Security-Policy` after that.
 const CSP_REPORT_ONLY = [

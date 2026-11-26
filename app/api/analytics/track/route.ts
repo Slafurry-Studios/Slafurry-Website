@@ -3,20 +3,15 @@ import { createHash } from "crypto";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
-const WHITELISTED_PATHS = [
-  "/en/games",
-  "/en/devlog",
-  "/en/devlog/",
-  "/en/news",
-  "/en/news/",
-  "/en/games/",
-  "/",
-  "/en",
-];
+// Public pages worth counting. i18n was removed, so there is no `/en` prefix.
+const TRACKED_PATH = /^\/(?:(?:games|devlog|news)(?:\/[a-z0-9-]+)?|press|contact)?$/;
+
+function normalizePath(pathname: string): string {
+  return pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+}
 
 function isWhitelisted(pathname: string): boolean {
-  const normalized = pathname.replace(/\/+$/, "");
-  return WHITELISTED_PATHS.some((p) => p.replace(/\/+$/, "") === normalized);
+  return TRACKED_PATH.test(pathname);
 }
 
 const MAX_FIELD_LEN = 512;
@@ -28,7 +23,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const path = String(body?.path ?? "").trim();
+    const path = normalizePath(String(body?.path ?? "").trim());
     const referrer = clip(String(body?.referrer ?? "").trim() || undefined);
     const country = clip(body?.country ? String(body.country).trim() : undefined, 8);
     const device = clip(body?.device ? String(body.device).trim() : undefined, 32);

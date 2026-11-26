@@ -40,7 +40,7 @@ npm test             # vitest run (tests/unit) && playwright test (tests/e2e)
 Keys use Supabase's newer naming (not `anon`/`service_role`): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`. Plus `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY` / `NEXT_PUBLIC_RESEND_API_KEY`, `TURNSTILE_SECRET_KEY` / `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (Cloudflare Turnstile for comments + contact), `AUTH_PROVIDER`, `STORAGE_PROVIDER`, `AUTH_LOCAL_SECRET` (local dev only).
 
 - `AUTH_PROVIDER=supabase` in production; `local` is refused in production (`lib/auth/proxy-session.ts` throws when `NODE_ENV=production` or `VERCEL` set).
-- Vercel: set env vars in Project Settings → Environment Variables, never in repo. `netlify.toml` + `@netlify/plugin-nextjs` in the repo are legacy leftovers from an earlier Netlify deploy — production serves Vercel (verified via response headers); don't edit them for deploy config.
+- Vercel: set env vars in Project Settings → Environment Variables, never in repo. Production is Vercel; the earlier Netlify config has been removed.
 
 ## Architecture
 
@@ -99,8 +99,7 @@ Buckets must exist: `game-covers`, `post-covers`, `post-covers`, `press-kit` (pu
 
 - Deployed on **Vercel** (zero-config Next.js; no `vercel.json` in repo). Live response headers: `server: Vercel`, `x-vercel-id`.
 - Custom domain: `slafurrystudios.com` (primary) + `www.slafurrystudios.com` redirect (308 at apex). HTTPS auto-provisioned by Vercel.
-- `netlify.toml`, `@netlify/plugin-nextjs`, and `SECRETS_SCAN_OMIT_*` settings are **stale Netlify leftovers** — not used by production.
-- **⚠️ Security headers in `netlify.toml` (CSP, X-Frame-Options, Referrer-Policy) are NOT served in production** — verified live: only Vercel's default HSTS returns. To restore, move them to `next.config.ts` `headers()` (or Vercel dashboard). The report-only CSP + `/api/csp-reports` endpoint currently collect nothing.
+- Security headers (nosniff, frame denial, referrer/permissions policy, report-only CSP) are set in `next.config.ts` `headers()`; violations go to `/api/csp-reports`.
 
 ## Contributing
 
