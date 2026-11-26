@@ -18,13 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Contact and press pages pull heading, intro, and emails from `SiteSettings` (admin-editable; ISR 60s).
 
 ### Changed
+- CI lint step now fails on any ESLint error or warning (was: up to 78 errors). The old step also passed silently if ESLint crashed.
 - YouTube trailers use the privacy-enhanced `youtube-nocookie.com` player.
 ### Deprecated
 ### Removed
+- Static `public/sitemap.xml` and `public/robots.txt` (replaced by generated ones, see Fixed).
 - Netlify leftovers: `netlify.toml` and the `@netlify/plugin-nextjs` dev dependency (production is Vercel).
 - Unused `POST /api/comments` route, which skipped the Turnstile check the comment form's server action enforces.
 - `app/(main)/loading.tsx` (see Fixed).
 ### Fixed
+- Sitemap and robots.txt pointed at a misspelled domain (`slafurystudios.com`) and dead `/en/...` URLs, and listed no games or posts. They are now generated (`app/sitemap.ts`, `app/robots.ts`) from visible games and published posts on the canonical `www` origin, refreshed hourly.
 - Admin analytics page links no longer render as `//games` (protocol-relative to another host), and it queries the DB directly instead of fetching its own API.
 - RSS feed links no longer point at the removed `/en/` prefix, and the fallback domain typo (`slafurystudios.com`) is fixed.
 - `metadataBase` is set, so Open Graph/Twitter image URLs resolve to the site domain instead of localhost.

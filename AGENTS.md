@@ -32,7 +32,7 @@ npm test             # vitest run (tests/unit) && playwright test (tests/e2e)
 - `postinstall` runs `prisma generate`.
 - **Command order:** `npm run build` before `npm test` — Playwright starts `npm run start`, which serves `.next`; e2e fails on a missing build.
 - **Build is flaky, not broken.** `next build` prerenders `/admin/*` against the live DB; transient `PrismaClientKnownRequestError` / "build worker exited with code 1" happens. Re-run before investigating.
-- **Lint baseline is dirty**: ~72 errors / ~51 warnings pre-existing (CI gates at max 78 errors). Don't fix them all; just don't add new ones.
+- **Lint is clean** (0 errors, 0 warnings). CI runs `npm run lint -- --max-warnings 0`, so any new error or warning fails the build.
 - **`.env.example` exists** — copy to `.env`, fill real Supabase credentials. `.env*` is gitignored; never commit it.
 
 ## Environment
