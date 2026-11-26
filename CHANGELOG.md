@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Data retention: a daily Vercel Cron (`vercel.json` → `/api/cron/cleanup`, protected by `CRON_SECRET`) deletes page views older than 13 months and expired rate-limit rows. The privacy page states the period.
 - `/privacy` page describing what the site collects (opt-in analytics, comments, contact form, Turnstile, YouTube, hosting), linked from the footer and the consent banner.
 - `ADMIN_EMAILS` env var: comma-separated emails that are provisioned as admin on first sign-in.
 - Shared rate limiting: counters live in a new `RateLimit` table in production, so limits hold across serverless instances (migration `20261126120000_add_rate_limit`).
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Contact and press pages pull heading, intro, and emails from `SiteSettings` (admin-editable; ISR 60s).
 
 ### Changed
+- `prisma` (the CLI) moved to `devDependencies`; only `@prisma/client` is needed at runtime.
 - CI lint step now fails on any ESLint error or warning (was: up to 78 errors). The old step also passed silently if ESLint crashed.
 - YouTube trailers use the privacy-enhanced `youtube-nocookie.com` player.
 ### Deprecated

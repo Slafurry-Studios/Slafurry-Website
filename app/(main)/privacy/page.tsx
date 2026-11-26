@@ -54,7 +54,7 @@ export default async function PrivacyPage() {
         </ul>
         <p>
           We don&apos;t store your IP address, and these counts aren&apos;t linked to you or to any
-          account. If you click &ldquo;No thanks&rdquo;, or your browser sends a Global Privacy
+          account. Visit records are deleted automatically after 13 months. If you click &ldquo;No thanks&rdquo;, or your browser sends a Global Privacy
           Control signal, nothing is counted.
         </p>
         <p>

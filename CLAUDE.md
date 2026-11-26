@@ -45,6 +45,7 @@ Don't add `loading.tsx` (or a `<Suspense>` fallback that renders above the page)
 
 - Tracking is opt-in. `components/analytics/ConsentBanner.tsx` writes the `analytics_consent` cookie (`lib/analytics/consent.ts`). `PageViewTracker` sends a beacon per route change only when that cookie is `granted`, and `/api/analytics/track` checks the cookie again server-side.
 - `/privacy` (`app/(main)/privacy/page.tsx`) describes what the site collects. Update it when you change analytics, comments, the contact form or third-party embeds.
+- Page views are deleted after 13 months by the daily Vercel Cron `/api/cron/cleanup` (`lib/retention.ts`, `vercel.json`), which also clears stale `RateLimit` rows. The route requires `CRON_SECRET`. If you change the retention period, update `/privacy` too.
 - The track endpoint stores only the path (allowlisted in `lib/analytics/track.ts`), referring hostname, device class and the `x-vercel-ip-country` header. Keep it that way: no IPs or full referrer URLs.
 - Admin reads go through `lib/queries/analytics.ts`, used by both `/admin/analytics` and `GET /api/analytics`.
 
