@@ -1,12 +1,15 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { AchievementForm } from "@/components/admin/AchievementForm";
+import { requireAdminPage } from "@/lib/auth/admin-guard";
 
 export default async function EditAchievementPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireAdminPage();
+
   const { id } = await params;
 
   const achievement = await prisma.achievement.findUnique({ where: { id } });

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { authorizeAdmin } from "@/lib/auth/admin-guard";
 
 const PERIOD_DAYS: Record<string, number> = {
   "7d": 7,
@@ -8,6 +9,9 @@ const PERIOD_DAYS: Record<string, number> = {
 };
 
 export async function GET(request: Request) {
+  const auth = await authorizeAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const periodParam = searchParams.get("period") || "30d";

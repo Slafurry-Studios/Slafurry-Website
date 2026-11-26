@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { authorizeAdmin } from "@/lib/auth/admin-guard";
 
 export async function GET() {
+  const auth = await authorizeAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const links = await prisma.socialLink.findMany({
       orderBy: [{ section: "asc" }, { order: "asc" }],
@@ -14,6 +18,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const auth = await authorizeAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await request.json();
 

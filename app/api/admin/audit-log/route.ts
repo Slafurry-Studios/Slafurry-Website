@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { authorizeAdmin } from "@/lib/auth/admin-guard";
 
 export async function GET(request: Request) {
+  const auth = await authorizeAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const url = new URL(request.url);
     const adminUserId = url.searchParams.get("adminUserId");

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStorageProvider } from "@/lib/storage/adapter";
+import { authorizeAdmin } from "@/lib/auth/admin-guard";
 
 const ALLOWED_BUCKETS = [
   "game-covers",
@@ -16,7 +17,15 @@ function isValidBucket(v: string): v is Bucket {
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
+// Files land in public buckets, so refuse anything a browser would execute
+// when opened directly (HTML/SVG/XML can carry script).
+const BLOCKED_EXTENSIONS = new Set(["html", "htm", "xhtml", "svg", "svgz", "xml", "js", "mjs"]);
+const BLOCKED_TYPE = /(html|svg|xml|javascript|ecmascript)/i;
+
 export async function POST(request: Request) {
+  const auth = await authorizeAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
@@ -39,7 +48,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const ext = file.name.split(".").pop() || "bin";
+    const rawExt = file.name.includes(".") ? file.name.split(".").pop()!.toLowerCase() : "";
+    const ext = /^[a-z0-9]{1,10}$/.test(rawExt) ? rawExt : "bin";
+    if (BLOCKED_EXTENSIONS.has(ext) || BLOCKED_TYPE.test(file.type)) {
+      return NextResponse.json({ error: "This file type is not allowed." }, { status: 400 });
+    }
     const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
     const path = filename;
 

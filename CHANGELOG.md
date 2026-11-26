@@ -13,10 +13,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Deprecated
 ### Removed
+- Unused `POST /api/comments` route, which skipped the Turnstile check the comment form's server action enforces.
+- `app/(main)/loading.tsx` (see Fixed).
 ### Fixed
+- Missing pages and unknown game/news/devlog slugs now return HTTP 404 instead of a 200 soft-404. The `(main)` route-group `loading.tsx` started streaming before `notFound()` ran, which locked the status to 200. Stored redirects now return a real 308.
 - Post “more” button no longer spawns when there is no more content ([#156](https://github.com/Slafurry-Studios/Slafurry-Website/pull/156)).
 - Upcoming games no longer take featured slots ([#157](https://github.com/Slafurry-Studios/Slafurry-Website/pull/157)).
 ### Security
+- Admin API routes and server-rendered admin pages now check the `AdminUser` allowlist; previously reorder, autosave, upload, settings, social links, read endpoints and admin pages only required *any* signed-in Supabase account. `/api/analytics` now requires admin too.
+- Rich-text sanitizer replaced with DOMPurify; the hand-rolled one let entity-encoded `javascript:` links and unclosed tags through.
+- Turnstile verification fails closed in production when `TURNSTILE_SECRET_KEY` is missing.
+- `form-guards.ts` and `turnstile.ts` are no longer `"use server"` modules (they were exposed as callable server actions).
+- Security headers (nosniff, frame denial, referrer and permissions policy, report-only CSP) are now served from `next.config.ts`, so they apply on Vercel.
+- Local storage read route rejects unknown buckets (`..` escaped the storage root); uploads reject HTML/SVG/XML/JS and sanitize the file extension.
 
 ## [v1.15.1] - 2026-11-15
 

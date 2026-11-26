@@ -1,12 +1,15 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { GameForm } from "@/components/admin/GameForm";
+import { requireAdminPage } from "@/lib/auth/admin-guard";
 
 export default async function EditGamePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireAdminPage();
+
   const { id } = await params;
 
   const game = await prisma.game.findUnique({

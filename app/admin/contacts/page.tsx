@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma, ContactStatus, ContactCategory } from "@prisma/client";
 import { ContactsList } from "@/components/admin/ContactsList";
+import { requireAdminPage } from "@/lib/auth/admin-guard";
 
 // Admin halaman memerlukan sesi — jangan prerender statis waktu build.
 export const dynamic = "force-dynamic";
@@ -8,6 +9,8 @@ export const dynamic = "force-dynamic";
 export default async function AdminContactsPage(props: {
   searchParams: Promise<{ page?: string; status?: string; category?: string; search?: string }>;
 }) {
+  await requireAdminPage();
+
   const { page, status: rawStatus, category: rawCategory, search } = await props.searchParams;
   const parsedPage = Number.parseInt(page ?? "1", 10);
   const currentPage = Number.isFinite(parsedPage) ? Math.max(1, parsedPage) : 1;

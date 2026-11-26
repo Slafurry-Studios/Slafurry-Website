@@ -1,10 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { AchievementsList } from "@/components/admin/AchievementsList";
+import { requireAdminPage } from "@/lib/auth/admin-guard";
 
 // Admin halaman memerlukan sesi — jangan prerender statis waktu build.
 export const dynamic = "force-dynamic";
 
 export default async function AdminAchievementsPage() {
+  await requireAdminPage();
+
   const achievements = await prisma.achievement.findMany({
     orderBy: [{ category: "asc" }, { order: "asc" }, { title: "asc" }],
     select: {

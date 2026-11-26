@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { PostsList } from "@/components/admin/PostsList";
+import { requireAdminPage } from "@/lib/auth/admin-guard";
 
 // Admin halaman ini memerlukan sesi (dilindungi middleware), jangan
 // di-prerender statis waktu build agar tidak memanggil database tanpa DB
@@ -7,6 +8,8 @@ import { PostsList } from "@/components/admin/PostsList";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPostsPage() {
+  await requireAdminPage();
+
   const posts = await prisma.post.findMany({
     orderBy: [{ order: "asc" }, { publishedAt: "desc" }],
     include: { _count: { select: { comments: true } } },

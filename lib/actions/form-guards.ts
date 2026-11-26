@@ -1,5 +1,5 @@
-"use server";
-
+// Plain server-only helpers. Deliberately not a "use server" module: that would
+// expose checkRateLimit (which accepts an arbitrary IP) as a callable action.
 import { createHash } from "crypto";
 import { headers } from "next/headers";
 
@@ -21,7 +21,6 @@ export async function checkHoneypot(
   formData: FormData,
   honeypotField = "company"
 ): Promise<HoneypotResult> {
-  "use server";
   const value = formData.get(honeypotField)?.toString().trim();
   if (value && value !== "") {
     return { isBot: true, reason: "Honeypot field filled." };
@@ -51,7 +50,6 @@ export async function checkRateLimit(
   windowMs = 60 * 60 * 1000,
   ip?: string
 ): Promise<RateLimitResult> {
-  "use server";
   let resolvedIp = ip;
   if (!resolvedIp) {
     try {
