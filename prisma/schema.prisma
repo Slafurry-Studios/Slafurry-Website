@@ -272,3 +272,12 @@ enum LinkSection {
   CONTACT
   FOOTER
 }
+
+/// Shared rate-limit counters (lib/security/rate-limit.ts). key = scope + IP hash.
+model RateLimit {
+  key     String   @id
+  count   Int
+  resetAt DateTime
+
+  @@index([resetAt])
+}

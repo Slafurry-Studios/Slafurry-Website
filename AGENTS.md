@@ -37,7 +37,7 @@ npm test             # vitest run (tests/unit) && playwright test (tests/e2e)
 
 ## Environment
 
-Keys use Supabase's newer naming (not `anon`/`service_role`): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`. Plus `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY` / `NEXT_PUBLIC_RESEND_API_KEY`, `TURNSTILE_SECRET_KEY` / `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (Cloudflare Turnstile for comments + contact), `AUTH_PROVIDER`, `STORAGE_PROVIDER`, `AUTH_LOCAL_SECRET` (local dev only).
+Keys use Supabase's newer naming (not `anon`/`service_role`): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`. Plus `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY` / `NEXT_PUBLIC_RESEND_API_KEY`, `TURNSTILE_SECRET_KEY` / `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (Cloudflare Turnstile for comments + contact), `AUTH_PROVIDER`, `STORAGE_PROVIDER`, `AUTH_LOCAL_SECRET` (local dev only), `ADMIN_EMAILS` (comma-separated emails allowed to become admin), `RATE_LIMIT_STORE` (optional; `postgres` in production by default).
 
 - `AUTH_PROVIDER=supabase` in production; `local` is refused in production (`lib/auth/proxy-session.ts` throws when `NODE_ENV=production` or `VERCEL` set).
 - Vercel: set env vars in Project Settings → Environment Variables, never in repo. Production is Vercel; the earlier Netlify config has been removed.

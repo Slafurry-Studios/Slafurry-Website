@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { notFound, redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { resolveAdminUser } from "@/lib/auth/admin-users";
 import { getAuthProvider, defaultCookies } from "@/lib/auth/adapter";
 
 export type AdminAuthResult =
@@ -14,39 +14,31 @@ export type AdminAuthResult =
  * passes it. Admin rights come from the `AdminUser` allowlist, which needs
  * Prisma and so can only be checked here, never in middleware.
  *
- * Bootstrap: while the AdminUser table is empty, the first signed-in user is
- * provisioned as admin (the seed creates one, so this only matters on a fresh DB).
+ * New admins are provisioned only from the ADMIN_EMAILS allowlist; see
+ * lib/auth/admin-users.ts.
  */
 export async function authorizeAdmin(): Promise<AdminAuthResult> {
-  let userId: string | null = null;
+  let user: { id: string; email: string | null } | null = null;
   try {
-    const session = await getAuthProvider().getSession(await defaultCookies());
-    userId = session.user?.id ?? null;
+    user = (await getAuthProvider().getSession(await defaultCookies())).user;
   } catch {
-    userId = null;
+    user = null;
   }
-  if (!userId) {
+  if (!user) {
     return { ok: false, response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
   }
 
-  let adminUser = await prisma.adminUser.findUnique({ where: { supabaseUserId: userId } });
+  const adminUser = await resolveAdminUser(user);
   if (!adminUser) {
-    const adminCount = await prisma.adminUser.count();
-    if (adminCount !== 0) {
-      return {
-        ok: false,
-        response: NextResponse.json(
-          { error: "Forbidden: User is not an authorized administrator" },
-          { status: 403 }
-        ),
-      };
-    }
-    adminUser = await prisma.adminUser.create({
-      data: { supabaseUserId: userId, name: "Initial Admin" },
-    });
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { error: "Forbidden: User is not an authorized administrator" },
+        { status: 403 }
+      ),
+    };
   }
-
-  return { ok: true, userId, adminUser: { id: adminUser.id, name: adminUser.name } };
+  return { ok: true, userId: user.id, adminUser };
 }
 
 /**

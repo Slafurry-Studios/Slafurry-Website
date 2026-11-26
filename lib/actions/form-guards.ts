@@ -2,6 +2,7 @@
 // expose checkRateLimit (which accepts an arbitrary IP) as a callable action.
 import { createHash } from "crypto";
 import { headers } from "next/headers";
+import { hit } from "@/lib/security/rate-limit";
 
 
 type HoneypotResult = { isBot: boolean; reason: string };
@@ -29,17 +30,14 @@ export async function checkHoneypot(
 }
 
 /**
- * In-memory sliding-window rate limiter keyed by `scope` + hashed client IP.
- * Keys can be "comment", "contact" or "admin-login" — each has its own bucket.
- * `max` = max attempts, `windowMs` = time window in milliseconds.
- * Returns `{ allowed, remaining, reset, reason }`.
+ * Rate limiter keyed by `scope` + hashed client IP ("comment", "contact",
+ * "admin-login", "track-visit" each get their own bucket). `max` attempts per
+ * `windowMs`. Returns `{ allowed, remaining, reset, reason }`.
  *
- * The IP is hashed so buckets are per visitor without storing the address.
- * Per-instance only: behind multiple serverless instances the effective limit
- * is per instance, which is still a brute-force guard.
+ * Counts live in Postgres in production (shared across serverless instances)
+ * and in memory in dev/tests; see lib/security/rate-limit.ts. Only the IP's
+ * hash is used as a key, never the address itself.
  */
-const rateLimitBuckets = new Map<string, number[]>();
-
 function hashIp(ip: string): string {
   return createHash("sha256").update(ip).digest("hex").slice(0, 16);
 }
@@ -64,27 +62,13 @@ export async function checkRateLimit(
   }
 
   const bucketKey = `${key}:${hashIp(resolvedIp ?? "unknown")}`;
-  const now = Date.now();
-  const cutoff = now - windowMs;
-  const hits = (rateLimitBuckets.get(bucketKey) ?? []).filter((t) => t > cutoff);
+  const { count, resetAtMs } = await hit(bucketKey, max, windowMs);
+  const allowed = count <= max;
 
-  const allowed = hits.length < max;
-  if (allowed) hits.push(now);
-  rateLimitBuckets.set(bucketKey, hits);
-
-  if (rateLimitBuckets.size > 10_000) {
-    for (const [bucket, timestamps] of rateLimitBuckets) {
-      const kept = timestamps.filter((t) => t > cutoff);
-      if (kept.length === 0) rateLimitBuckets.delete(bucket);
-      else rateLimitBuckets.set(bucket, kept);
-    }
-  }
-
-  const oldest = hits[0] ?? now;
   return {
     allowed,
-    remaining: Math.max(0, max - hits.length),
-    reset: Math.floor((oldest + windowMs) / 1000),
+    remaining: Math.max(0, max - count),
+    reset: Math.floor(resetAtMs / 1000),
     reason: allowed ? "" : `Rate limited. Max ${max} per ${windowMs / 60000}min.`,
   };
 }

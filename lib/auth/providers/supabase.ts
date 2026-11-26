@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { prisma } from "@/lib/prisma";
 import { defaultCookies } from "../adapter";
+import { resolveAdminUser } from "../admin-users";
 import type { AuthProvider, CookieStore, SessionResult, AdminContext } from "../adapter";
 
 export class SupabaseAuthProvider implements AuthProvider {
@@ -18,26 +18,8 @@ export class SupabaseAuthProvider implements AuthProvider {
   async requireAdmin(cookies?: CookieStore): Promise<AdminContext> {
     const session = await this.getSession(cookies);
     if (!session.user) return null;
-
-    let adminUser = await prisma.adminUser.findUnique({
-      where: { supabaseUserId: session.user.id },
-    });
-
-    if (!adminUser) {
-      const adminCount = await prisma.adminUser.count();
-      if (adminCount === 0) {
-        adminUser = await prisma.adminUser.create({
-          data: { supabaseUserId: session.user.id, name: session.user.email ?? "Admin" },
-        });
-      } else {
-        return null;
-      }
-    }
-
-    return {
-      user: session.user,
-      adminUser: { id: adminUser.id, name: adminUser.name },
-    };
+    const adminUser = await resolveAdminUser(session.user);
+    return adminUser ? { user: session.user, adminUser } : null;
   }
 
   async signIn(
