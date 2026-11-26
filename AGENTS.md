@@ -37,7 +37,7 @@ npm test             # vitest run (tests/unit) && playwright test (tests/e2e)
 
 ## Environment
 
-Keys use Supabase's newer naming (not `anon`/`service_role`): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`. Plus `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY` / `NEXT_PUBLIC_RESEND_API_KEY`, `TURNSTILE_SECRET_KEY` / `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (Cloudflare Turnstile for comments + contact), `AUTH_PROVIDER`, `STORAGE_PROVIDER`, `AUTH_LOCAL_SECRET` (local dev only), `ADMIN_EMAILS` (comma-separated emails allowed to become admin), `RATE_LIMIT_STORE` (optional; `postgres` in production by default).
+Keys use Supabase's newer naming (not `anon`/`service_role`): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`. Plus `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY` / `NEXT_PUBLIC_RESEND_API_KEY`, `TURNSTILE_SECRET_KEY` / `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (Cloudflare Turnstile for comments + contact), `AUTH_PROVIDER`, `STORAGE_PROVIDER`, `AUTH_LOCAL_SECRET` (local dev only), `ADMIN_EMAILS` (comma-separated emails allowed to become admin), `RATE_LIMIT_STORE` (optional; `postgres` in production by default), `CRON_SECRET` (required for the daily `/api/cron/cleanup` job in `vercel.json`; without it the job refuses to run).
 
 - `AUTH_PROVIDER=supabase` in production; `local` is refused in production (`lib/auth/proxy-session.ts` throws when `NODE_ENV=production` or `VERCEL` set).
 - Vercel: set env vars in Project Settings → Environment Variables, never in repo. Production is Vercel; the earlier Netlify config has been removed.
@@ -73,7 +73,7 @@ Models (`prisma/schema.prisma`): Game, PlayLink, MontageVideo, Post, Comment, Pr
 - Local DB: `npm run db:up` (docker compose postgres:15 on `localhost:5432`, db `slafurry`); `npm run test:db` uses `slafurry_test`.
 - Schema changes locally: `prisma migrate dev`. Production: `npx prisma migrate deploy`.
 - **Do NOT** run `prisma migrate reset` or `db push` against production Supabase — it deletes data. After first production deploy, run `npx prisma db push && npm run db:seed` once against production DB.
-- **Seed** (`prisma/seed.ts`): SiteSettings/achievements/posts use `upsert`; games/playLinks/montage/social/press use plain `create` — re-running on an already-seeded DB fails on duplicates.
+- **Seed** (`prisma/seed.ts`) is safe to re-run: every section either upserts or checks for an existing row first (verified: two runs give identical row counts). It only inserts missing rows; it never updates existing ones, so edits made in the admin panel survive a re-seed.
 - **RLS**: enabled on all tables via `prisma/migrations/rls_production_policies/migration.sql` (applied to production Supabase). Public read for content; admin-only writes via `auth.uid()::text` = `AdminUser.supabaseUserId`; public insert for contact form and analytics.
 
 ## Storage
