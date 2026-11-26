@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- README rewritten with one screenshot per feature (`docs/screenshots/`), plus deployment and testing sections.
 - Data retention: a daily Vercel Cron (`vercel.json` → `/api/cron/cleanup`, protected by `CRON_SECRET`) deletes page views older than 13 months and expired rate-limit rows. The privacy page states the period.
 - `/privacy` page describing what the site collects (opt-in analytics, comments, contact form, Turnstile, YouTube, hosting), linked from the footer and the consent banner.
 - `ADMIN_EMAILS` env var: comma-separated emails that are provisioned as admin on first sign-in.
@@ -24,11 +25,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - YouTube trailers use the privacy-enhanced `youtube-nocookie.com` player.
 ### Deprecated
 ### Removed
+- Stale docs and one-off artifacts: `Technical Specifications.md`, `SETUP.md`, `llms.txt`, `reports/` (audits and build logs), `ux-heuristic-review.md`, `ux-review/` screenshots and `scripts/ux-capture.ts`; plus dead `tsconfig.json` includes. Playwright `test-results/` is now gitignored.
 - Static `public/sitemap.xml` and `public/robots.txt` (replaced by generated ones, see Fixed).
 - Netlify leftovers: `netlify.toml` and the `@netlify/plugin-nextjs` dev dependency (production is Vercel).
 - Unused `POST /api/comments` route, which skipped the Turnstile check the comment form's server action enforces.
 - `app/(main)/loading.tsx` (see Fixed).
 ### Fixed
+- Admin dashboard "Quick Links" no longer say comment management and analytics are "coming soon"; they link to both, with the pending comment count.
+- Game and article pages returned HTTP 500 on Vercel. The rich-text sanitizer now uses `xss` (js-xss) instead of `isomorphic-dompurify`, whose jsdom dependency failed in Vercel's serverless runtime. Same tag/attribute allowlist; `dompurify` and `isomorphic-dompurify` removed.
 - Sitemap and robots.txt pointed at a misspelled domain (`slafurystudios.com`) and dead `/en/...` URLs, and listed no games or posts. They are now generated (`app/sitemap.ts`, `app/robots.ts`) from visible games and published posts on the canonical `www` origin, refreshed hourly.
 - Admin analytics page links no longer render as `//games` (protocol-relative to another host), and it queries the DB directly instead of fetching its own API.
 - RSS feed links no longer point at the removed `/en/` prefix, and the fallback domain typo (`slafurystudios.com`) is fixed.

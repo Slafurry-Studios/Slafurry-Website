@@ -147,25 +147,16 @@ export default async function AdminDashboardPage() {
 
         <ul className="space-y-1 text-sm text-neutral-600 dark:text-neutral-400">
           <li>
-            Pending comments require moderation —{" "}
-            <span className="text-neutral-400">
-              Comment management coming soon
-            </span>
+            <Link href="/admin/comments" className="underline hover:text-neutral-900">
+              Moderate comments
+            </Link>{" "}
+            — {pendingCommentCount === 0 ? "nothing waiting" : `${pendingCommentCount} waiting for review`}
           </li>
-
           <li>
-            Achievement unlock data is tracked client-side
-            (localStorage) — server-side analytics not yet
-            implemented
-          </li>
-
-          <li>
-            <Link
-              href="/admin/analytics"
-              className="text-primary-600 underline hover:text-primary-400 dark:text-primary-400 dark:hover:text-primary-200"
-            >
-              Analytics dashboard
-            </Link>
+            <Link href="/admin/analytics" className="underline hover:text-neutral-900">
+              Analytics
+            </Link>{" "}
+            — page views from visitors who accepted the consent banner
           </li>
         </ul>
       </div>

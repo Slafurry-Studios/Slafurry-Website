@@ -32,7 +32,7 @@ Who counts as admin is decided in one place, `resolveAdminUser()` in `lib/auth/a
 
 ## Untrusted HTML and public input
 
-- Rich text (posts, `Game.longDesc`) is rendered with `dangerouslySetInnerHTML` and must go through `sanitizeRichText()` in `lib/security/sanitize.ts`, which uses DOMPurify. Don't replace it with a hand-rolled parser. The previous one was bypassable, and `tests/unit/sanitize.test.ts` has the regressions.
+- Rich text (posts, `Game.longDesc`) is rendered with `dangerouslySetInnerHTML` and must go through `sanitizeRichText()` in `lib/security/sanitize.ts`, which uses the `xss` package (js-xss). Don't switch it to DOMPurify/`isomorphic-dompurify`: on the server that needs jsdom, which made every game and article page return 500 on Vercel even though it worked locally. Don't hand-roll a parser either; `tests/unit/sanitize.test.ts` has the bypass regressions.
 - Public write paths are server actions in `lib/actions/` (`submitComment`, `submitContactMessage`). They chain honeypot → Turnstile → rate limit. Turnstile fails closed in production when `TURNSTILE_SECRET_KEY` is missing.
 - `lib/actions/form-guards.ts` and `lib/actions/turnstile.ts` are plain helpers, not `"use server"` modules. Keep it that way: every export of a `"use server"` file becomes a publicly callable endpoint.
 - Rate limiting (`checkRateLimit` → `lib/security/rate-limit.ts`) uses the `RateLimit` Postgres table in production, so limits are shared across serverless instances. Dev and tests use memory. Override with `RATE_LIMIT_STORE=postgres|memory`. If Postgres errors, it falls back to memory instead of blocking logins. `tests/unit/rate-limit-postgres.test.ts` runs only under `npm run test:db`.

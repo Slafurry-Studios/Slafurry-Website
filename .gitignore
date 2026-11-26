@@ -43,3 +43,7 @@ docker-entrypoint-initdb.d/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Playwright output
+/test-results/
+/playwright-report/
