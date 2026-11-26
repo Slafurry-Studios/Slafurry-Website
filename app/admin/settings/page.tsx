@@ -1,10 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { SettingsForm } from "@/components/admin/SettingsForm";
+import { requireAdminPage } from "@/lib/auth/admin-guard";
 
 // Admin halaman memerlukan sesi — jangan prerender statis waktu build.
 export const dynamic = "force-dynamic";
 
 export default async function AdminSettingsPage() {
+  await requireAdminPage();
+
   const [settingsRaw, links] = await Promise.all([
     prisma.siteSettings.findUnique({ where: { id: 1 } }),
     prisma.socialLink.findMany({

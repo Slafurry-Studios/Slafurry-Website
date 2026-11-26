@@ -12,7 +12,7 @@ type RedeemFailure = {
 type RedeemResponse = RedeemSuccess | RedeemFailure;
 
 // Hardcoded flag code — no DB query needed.
-const EXPECTED_HASH = "d69819f2523f6f081845590e45c1959a49307a8f51fbd7cbe4beeda1383853f1"; // sha256("slafury-flag-2024")
+const EXPECTED_HASH = "d69819f2523f6f081845590e45c1959a49307a8f51fbd7cbe4beeda1383853f1"; // sha256 of the flag code
 const ACHIEVEMENT = {
   key: "cheating",
   title: "Flag Hunter",

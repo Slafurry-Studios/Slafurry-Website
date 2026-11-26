@@ -1,6 +1,7 @@
 import { PillButton } from "@/components/ui/PillButton";
 import { headers, cookies } from "next/headers";
 import Link from "next/link";
+import { requireAdminPage } from "@/lib/auth/admin-guard";
 
 function formatBytes(n: number) {
   return `${n} views`;
@@ -69,6 +70,8 @@ export default async function AdminAnalyticsPage({
 }: {
   searchParams: Promise<{ period?: string }>;
 }) {
+  await requireAdminPage();
+
   const params = await searchParams;
   const period = normalizePeriod(params.period);
 

@@ -1,10 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { PressList } from "@/components/admin/PressList";
+import { requireAdminPage } from "@/lib/auth/admin-guard";
 
 // Admin halaman memerlukan sesi — jangan prerender statis waktu build.
 export const dynamic = "force-dynamic";
 
 export default async function AdminPressPage() {
+  await requireAdminPage();
+
   const [releases, assets, games] = await Promise.all([
     prisma.pressRelease.findMany({
       orderBy: [{ order: "asc" }, { publishedAt: "desc" }],

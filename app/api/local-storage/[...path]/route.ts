@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { existsSync, readFileSync } from "fs";
-import { join } from "path";
+import { resolve, sep } from "path";
 import { LOCAL_STORAGE_ROOT } from "@/lib/storage/adapter";
+
+// Without this allowlist, bucket=".." resolved to the repo root (e.g. .env).
+const ALLOWED_BUCKETS = new Set(["game-covers", "post-covers", "press-kit", "montage-videos"]);
 
 export const GET = async (
   _request: Request,
@@ -17,12 +20,14 @@ export const GET = async (
     return new NextResponse(null, { status: 404 });
   }
 
-  const filePath = rest.join("/");
-  const full = join(LOCAL_STORAGE_ROOT, bucket, filePath);
+  if (!ALLOWED_BUCKETS.has(bucket)) {
+    return new NextResponse(null, { status: 404 });
+  }
 
   // Traversal guard: resolved path must stay inside the bucket dir.
-  const bucketDir = join(LOCAL_STORAGE_ROOT, bucket);
-  if (!full.startsWith(bucketDir + "/") && full !== bucketDir) {
+  const bucketDir = resolve(LOCAL_STORAGE_ROOT, bucket);
+  const full = resolve(bucketDir, rest.join("/"));
+  if (!full.startsWith(bucketDir + sep)) {
     return new NextResponse(null, { status: 403 });
   }
 

@@ -2,8 +2,12 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createHash } from "crypto";
 import { withAudit } from "@/lib/audit";
+import { authorizeAdmin } from "@/lib/auth/admin-guard";
 
 export async function GET() {
+  const auth = await authorizeAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const achievements = await prisma.achievement.findMany({
       orderBy: [{ category: "asc" }, { order: "asc" }, { title: "asc" }],

@@ -7,11 +7,13 @@ import {
   IconClock,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import { requireAdminPage } from "@/lib/auth/admin-guard";
 
 // Admin halaman memerlukan sesi — jangan prerender statis waktu build.
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
+  await requireAdminPage();
 
   const [
     pendingCommentCount,

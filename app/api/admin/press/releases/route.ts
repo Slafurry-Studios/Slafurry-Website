@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { withAudit } from "@/lib/audit";
+import { authorizeAdmin } from "@/lib/auth/admin-guard";
 
 export async function GET() {
+  const auth = await authorizeAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const releases = await prisma.pressRelease.findMany({
       orderBy: [{ order: "asc" }, { publishedAt: "desc" }],

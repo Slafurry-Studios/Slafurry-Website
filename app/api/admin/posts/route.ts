@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { PostCategory } from "@prisma/client";
 import { createHash } from "crypto";
 import { withAudit } from "@/lib/audit";
+import { authorizeAdmin } from "@/lib/auth/admin-guard";
 
 function slugify(title: string): string {
   return title
@@ -26,6 +27,9 @@ async function getNextPostOrder(): Promise<number> {
 }
 
 export async function GET(request: Request) {
+  const auth = await authorizeAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const url = new URL(request.url);
     const category = url.searchParams.get("category");

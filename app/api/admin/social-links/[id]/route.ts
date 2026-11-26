@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { authorizeAdmin } from "@/lib/auth/admin-guard";
 
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await authorizeAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const { id } = await params;
     const body = await request.json();
@@ -42,6 +46,9 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await authorizeAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const { id } = await params;
 

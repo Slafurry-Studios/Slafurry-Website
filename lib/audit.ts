@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getAuthProvider, defaultCookies } from "@/lib/auth/adapter";
+import { authorizeAdmin } from "@/lib/auth/admin-guard";
 import type { Prisma } from "@prisma/client";
 
 // ─── Types ──────────────────────────────────────────────────────
@@ -40,26 +40,6 @@ export type WithAuditOptions = {
 };
 
 // ─── Helpers ────────────────────────────────────────────────────
-
-/** Get the current admin user ID from the session via the auth adapter. */
-async function getSupabaseUserId(): Promise<string | null> {
-  try {
-    const provider = getAuthProvider();
-    const session = await provider.getSession(await defaultCookies());
-    return session.user?.id ?? null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Find the AdminUser record by Supabase user ID.
- */
-async function getAdminUser(supabaseUserId: string) {
-  return await prisma.adminUser.findUnique({
-    where: { supabaseUserId },
-  });
-}
 
 /** Shallow-compute a diff between two objects. Only includes changed keys. */
 function computeDiff(
@@ -134,32 +114,10 @@ export function withAudit<TContext>(
     request: Request,
     context?: TContext
   ): Promise<NextResponse> => {
-    // 0. Enforce authorization IMMEDIATELY before doing anything else
-    const supabaseUserId = await getSupabaseUserId();
-    if (!supabaseUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // 0.1 Check admin allowlist (AdminUser table)
-    let adminUser = await getAdminUser(supabaseUserId);
-
-    if (!adminUser) {
-      const adminCount = await prisma.adminUser.count();
-      if (adminCount === 0) {
-        // Provision the first administrator automatically
-        adminUser = await prisma.adminUser.create({
-          data: {
-            supabaseUserId,
-            name: "Initial Admin",
-          },
-        });
-      } else {
-        return NextResponse.json(
-          { error: "Forbidden: User is not an authorized administrator" },
-          { status: 403 }
-        );
-      }
-    }
+    // 0. Enforce the admin allowlist before doing anything else.
+    const auth = await authorizeAdmin();
+    if (!auth.ok) return auth.response;
+    const adminUser = auth.adminUser;
 
     const { action, entityType, getBefore, getAfter, getEntityId } = options;
 

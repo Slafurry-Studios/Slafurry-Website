@@ -1,5 +1,3 @@
-"use server";
-
 export type TurnstileVerifyResult =
   | { success: true }
   | { success: false; error: string };
@@ -7,7 +5,12 @@ export type TurnstileVerifyResult =
 /**
  * Verify a Cloudflare Turnstile token server-side.
  * Skips verification (allows) when TURNSTILE_SECRET_KEY is not set so local
- * development keeps working without captcha credentials.
+ * development keeps working without captcha credentials. In production a
+ * missing key fails closed, so a misconfigured deploy can't silently drop the
+ * captcha from the comment and contact forms.
+ *
+ * Plain server-only helper, deliberately not a "use server" module: that would
+ * expose it as a callable server action.
  */
 export async function verifyTurnstile(
   token: string
@@ -15,6 +18,10 @@ export async function verifyTurnstile(
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
   if (!secretKey) {
+    if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
+      console.error("[turnstile] TURNSTILE_SECRET_KEY not set in production — rejecting.");
+      return { success: false, error: "captcha-not-configured" };
+    }
     console.warn(
       "[turnstile] TURNSTILE_SECRET_KEY not set — skipping captcha verification."
     );
